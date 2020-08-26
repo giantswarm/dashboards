@@ -1,0 +1,16 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.15.0
+    steps:
+      - run: go get github.com/google/go-jsonnet/cmd/jsonnet
+      - run: mkdir -p ~/go/src/github.com/grafana/
+      - run: cd ~/go/src/github.com/grafana/ && git clone https://github.com/grafana/grafonnet-lib.git
+      - checkout
+      - run: ./scripts/make-dashboards.sh
+      - run:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./scripts/upload-dashboards.sh
+            fi
