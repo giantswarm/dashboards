@@ -11,3 +11,8 @@ To upload the dashboards, run:
 ```
 ./scripts/upload-dashboards.sh
 ```
+
+To upload a dashboard while editing, run:
+```
+./scripts/upload-dashboard.sh metrics.json
+```
