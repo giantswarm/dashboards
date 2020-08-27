@@ -3,7 +3,7 @@
 set -eu
 
 GRAFANA_URL="https://giantswarm.grafana.net"
-FOLDER_ID="40"
+FOLDER_ID="40"  # Official folder
 OUTPUT_DIRECTORY="./output"
 
 if [ -z $GRAFANA_API_KEY ]; then
