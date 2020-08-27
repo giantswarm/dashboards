@@ -38,7 +38,7 @@ for dashboard in $OUTPUT_DIRECTORY/*; do
         --header "Authorization: Bearer $GRAFANA_API_KEY" \
         --header "Content-Type: application/json" \
         --request "POST" \
-        --data "{\"dashboard\": $dashboard_data, \"folderId\": $FOLDER_ID}" \
+        --data "{\"dashboard\": $dashboard_data, \"folderId\": $FOLDER_ID, \"overwrite\": true}" \
         $GRAFANA_URL/api/dashboards/db
     echo
 
