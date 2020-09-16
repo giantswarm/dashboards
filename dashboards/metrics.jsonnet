@@ -1,77 +1,5 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
-
-local singleSeriesChart(title, query, legend, format='short') =
-  grafana.graphPanel.new(
-    title,
-    fill=0,
-    format=format,
-    legend_show=false,
-    min=0,
-  )
-  .addTarget(
-    grafana.prometheus.target(
-      query,
-      legendFormat=legend,
-    )
-  );
-
-local multiSeriesChart(title, query, legend, format='short') =
-  grafana.graphPanel.new(
-    title,
-    fill=0,
-    format=format,
-    legend_current=true,
-    legend_alignAsTable=true,
-    legend_rightSide=true,
-    legend_show=true,
-    legend_sort="current",
-    legend_sortDesc=true,
-    legend_values=true,
-    min=0,
-    shared_tooltip=false,
-  )
-  .addTarget(
-    grafana.prometheus.target(
-      query,
-      legendFormat=legend,
-    )
-  );
-
-local stackedPercentageChart(title, query, legend) =
-  grafana.graphPanel.new(
-    title,
-    fill=10,
-    format='percentunit',
-    legend_current=true,
-    legend_alignAsTable=true,
-    legend_rightSide=true,
-    legend_show=true,
-    legend_sort="current",
-    legend_sortDesc=true,
-    legend_values=true,
-    max=100,
-    min=0,
-    percentage=true,
-    shared_tooltip=false,
-    stack=true,
-  )
-  .addTarget(
-    grafana.prometheus.target(
-      query,
-      legendFormat=legend,
-    )
-  );
-
-local variable(name, label, query) =
-  grafana.template.new(
-    datasource='Cortex',
-    includeAll=true,
-    label=label,
-    name=name,
-    query=query,
-    refresh='load',
-    sort='1',
-  );
+local stdlib = import 'stdlib.jsonnet';
 
 grafana.dashboard.new(
   'Metrics',
@@ -82,14 +10,14 @@ grafana.dashboard.new(
 )
 
 .addTemplate(
-  variable('customer', 'Customer', 'label_values(prometheus_tsdb_head_series, customer)')
+  stdlib.variable('customer', 'Customer', 'label_values(prometheus_tsdb_head_series, customer)')
 )
 .addTemplate(
-  variable('control_plane', 'Control Plane', 'label_values(prometheus_tsdb_head_series{customer=~"$customer"}, installation)')
+  stdlib.variable('control_plane', 'Control Plane', 'label_values(prometheus_tsdb_head_series{customer=~"$customer"}, installation)')
 )
 
 .addPanel(
-  singleSeriesChart(
+  stdlib.singleSeriesChart(
     'Number of Time Series In Prometheus (Total)',
     'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"})',
     'Time Series',
@@ -97,7 +25,7 @@ grafana.dashboard.new(
   gridPos={x: 0, y: 0, h: 8},
 )
 .addPanel(
-  multiSeriesChart(
+  stdlib.multiSeriesChart(
     'Number of Time Series In Prometheus (Per Control Plane)',
     'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer, cluster_id)) by (cluster_id)',
     '{{cluster_id}}',
@@ -105,7 +33,7 @@ grafana.dashboard.new(
   gridPos={x: 6, y: 0, h: 8}
 )
 .addPanel(
-  multiSeriesChart(
+  stdlib.multiSeriesChart(
     'Number of Time Series In Prometheus (Per Customer)',
     'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer, cluster_id)) by (customer)',
     '{{customer}}',
@@ -114,7 +42,7 @@ grafana.dashboard.new(
 )
 
 .addPanel(
-  singleSeriesChart(
+  stdlib.singleSeriesChart(
     'Memory Usage Of Prometheus (Total)',
     'sum(aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"})',
     'Memory',
@@ -123,7 +51,7 @@ grafana.dashboard.new(
   gridPos={x: 0, y: 8, h: 8},
 )
 .addPanel(
-  multiSeriesChart(
+  stdlib.multiSeriesChart(
     'Memory Usage Of Prometheus (Per Control Plane)',
     'aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"}',
     '{{cluster_id}}',
@@ -132,7 +60,7 @@ grafana.dashboard.new(
   gridPos={x: 6, y: 8, h: 8}
 )
 .addPanel(
-  multiSeriesChart(
+  stdlib.multiSeriesChart(
     'Percentage Of Node Memory (Per Control Plane)',
     'aggregation:prometheus:memory_percentage{customer=~"$customer", cluster_id=~"$control_plane"}',
     '{{cluster_id}}',
@@ -142,7 +70,7 @@ grafana.dashboard.new(
 )
 
 .addPanel(
-  stackedPercentageChart(
+  stdlib.stackedPercentageChart(
     'Percentage Time Series (Per Control Plane)',
     'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (cluster_id) / scalar(sum(prometheus_tsdb_head_series{cluster_id!=""}))',
     '{{cluster_id}}',
@@ -150,7 +78,7 @@ grafana.dashboard.new(
   gridPos={x: 0, y: 16, h: 8}
 )
 .addPanel(
-  stackedPercentageChart(
+  stdlib.stackedPercentageChart(
     'Percentage Time Series (Per Customer)',
     'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer) / scalar(sum(prometheus_tsdb_head_series{customer!=""}))',
     '{{cluster_id}}',
@@ -158,7 +86,7 @@ grafana.dashboard.new(
   gridPos={x: 6, y: 16, h: 8}
 )
 .addPanel(
-  stackedPercentageChart(
+  stdlib.stackedPercentageChart(
     'Percentage Memory (Per Control Plane)',
     'sum(aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"}) by (cluster_id) / scalar(sum(aggregation:prometheus:memory_usage{cluster_id!=""}))',
     '{{cluster_id}}',
