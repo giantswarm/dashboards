@@ -12,6 +12,10 @@ for dashboard in $DASHBOARD_DIRECTORY/*; do
     dashboard=$(basename $dashboard)
     dashboard=${dashboard%.*}
 
+    if [ "$dashboard" = "stdlib" ]; then
+        continue
+    fi
+
     echo "Making dashboard $dashboard.jsonnet"
 
     jsonnet \
