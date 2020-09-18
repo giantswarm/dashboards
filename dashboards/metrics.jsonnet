@@ -1,12 +1,11 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 local stdlib = import 'stdlib.jsonnet';
 
-grafana.dashboard.new(
+stdlib.dashboard(
   'Metrics',
-  schemaVersion=16,
-  tags=['atlas'],
+  'metrics',
+  ['atlas'],
   time_from='now-7d',
-  uid='metrics',
 )
 
 .addTemplate(
@@ -22,7 +21,7 @@ grafana.dashboard.new(
     'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"})',
     'Time Series',
   ),
-  gridPos={x: 0, y: 0, h: 8},
+  gridPos={x: 0, y: 0, w: 8, h: 9},
 )
 .addPanel(
   stdlib.multiSeriesChart(
@@ -30,7 +29,7 @@ grafana.dashboard.new(
     'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer, cluster_id)) by (cluster_id)',
     '{{cluster_id}}',
   ),
-  gridPos={x: 6, y: 0, h: 8}
+  gridPos={x: 8, y: 0, w: 8, h: 9}
 )
 .addPanel(
   stdlib.multiSeriesChart(
@@ -38,7 +37,7 @@ grafana.dashboard.new(
     'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer, cluster_id)) by (customer)',
     '{{customer}}',
   ),
-  gridPos={x: 12, y: 0, h: 8}
+  gridPos={x: 16, y: 0, w: 8, h: 9}
 )
 
 .addPanel(
@@ -48,7 +47,7 @@ grafana.dashboard.new(
     'Memory',
     format='decbytes',
   ),
-  gridPos={x: 0, y: 8, h: 8},
+  gridPos={x: 0, y: 9, w: 8, h: 9},
 )
 .addPanel(
   stdlib.multiSeriesChart(
@@ -57,7 +56,7 @@ grafana.dashboard.new(
     '{{cluster_id}}',
     format='decbytes',
   ),
-  gridPos={x: 6, y: 8, h: 8}
+  gridPos={x: 8, y: 9, w: 8, h: 9}
 )
 .addPanel(
   stdlib.multiSeriesChart(
@@ -66,7 +65,7 @@ grafana.dashboard.new(
     '{{cluster_id}}',
     format='percent',
   ),
-  gridPos={x: 12, y: 8, h: 8}
+  gridPos={x: 16, y: 9, w: 8, h: 9}
 )
 
 .addPanel(
@@ -75,7 +74,7 @@ grafana.dashboard.new(
     'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (cluster_id) / scalar(sum(prometheus_tsdb_head_series{cluster_id!=""}))',
     '{{cluster_id}}',
   ),
-  gridPos={x: 0, y: 16, h: 8}
+  gridPos={x: 0, y: 18, w: 8, h: 9}
 )
 .addPanel(
   stdlib.stackedPercentageChart(
@@ -83,7 +82,7 @@ grafana.dashboard.new(
     'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer) / scalar(sum(prometheus_tsdb_head_series{customer!=""}))',
     '{{cluster_id}}',
   ),
-  gridPos={x: 6, y: 16, h: 8}
+  gridPos={x: 8, y: 18, w: 8, h: 9}
 )
 .addPanel(
   stdlib.stackedPercentageChart(
@@ -91,5 +90,5 @@ grafana.dashboard.new(
     'sum(aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"}) by (cluster_id) / scalar(sum(aggregation:prometheus:memory_usage{cluster_id!=""}))',
     '{{cluster_id}}',
   ),
-  gridPos={x: 12, y: 16, h: 8}
+  gridPos={x: 16, y: 18, w: 8, h: 9}
 )

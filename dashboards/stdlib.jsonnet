@@ -1,6 +1,17 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 
 {
+  dashboard(title, uid, tags, time_from='now-1h', refresh='1m')::
+    grafana.dashboard.new(
+      title,
+      schemaVersion=16,
+      tags=tags,
+      timezone='utc',
+      time_from=time_from,
+      refresh=refresh,
+      uid=uid,
+    ),
+
   singleSeriesChart(title, query, legend, format='short')::
     grafana.graphPanel.new(
       title,
@@ -25,7 +36,7 @@ local grafana = import 'grafonnet/grafana.libsonnet';
       legend_alignAsTable=true,
       legend_rightSide=true,
       legend_show=true,
-      legend_sort="current",
+      legend_sort='current',
       legend_sortDesc=true,
       legend_values=true,
       min=0,
@@ -65,6 +76,7 @@ local grafana = import 'grafonnet/grafana.libsonnet';
 
   variable(name, label, query)::
     grafana.template.new(
+      allValues='.*',
       datasource='Cortex',
       includeAll=true,
       label=label,
