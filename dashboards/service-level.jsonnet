@@ -35,10 +35,11 @@ stdlib.dashboard(
 )
 
 .addTemplates([
-    stdlib.variable('service', 'Service', 'label_values(slo_requests{pipeline="stable"}, service)'),
-    stdlib.variable('customer', 'Customer', 'label_values(slo_requests{pipeline="stable"}, customer)'),
-    stdlib.variable('installation', 'Installation', 'label_values(slo_requests{pipeline="stable", customer=~"$customer"}, installation)'),
-    stdlib.variable('cluster_id', 'Cluster ID', 'label_values(slo_requests{pipeline="stable", installation=~"$installation", customer=~"$customer"}, cluster_id)'),
+    stdlib.variable('pipeline', 'Pipeline', 'label_values(slo_requests, pipeline)', current='stable'),
+    stdlib.variable('service', 'Service', 'label_values(slo_requests{pipeline=~"$pipeline"}, service)'),
+    stdlib.variable('customer', 'Customer', 'label_values(slo_requests{pipeline=~"$pipeline"}, customer)'),
+    stdlib.variable('installation', 'Installation', 'label_values(slo_requests{pipeline=~"$pipeline", customer=~"$customer"}, installation)'),
+    stdlib.variable('cluster_id', 'Cluster ID', 'label_values(slo_requests{pipeline=~"$pipeline", installation=~"$installation", customer=~"$customer"}, cluster_id)'),
 ])
 
 .addPanel(
@@ -48,13 +49,13 @@ stdlib.dashboard(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum(slo_errors_per_request:ratio_rate1h{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+      'sum(slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
       and
-      slo_errors_per_request:ratio_rate5m{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+      slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
       or
-      slo_errors_per_request:ratio_rate6h{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001
+      slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001
       and
-      slo_errors_per_request:ratio_rate30m{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001) by (cluster_id, customer, installation, service)',
+      slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001) by (cluster_id, customer, installation, service)',
       format='table',
       instant=true,
     )
@@ -89,13 +90,13 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Alert',
-    'sum(slo_errors_per_request:ratio_rate1h{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+    'sum(slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
     and
-    slo_errors_per_request:ratio_rate5m{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+    slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
     or
-    slo_errors_per_request:ratio_rate6h{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001
+    slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001
     and
-    slo_errors_per_request:ratio_rate30m{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001) by (service, installation, cluster_id)',
+    slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001) by (service, installation, cluster_id)',
     '{{service}} / {{installation}} / {{cluster_id}}',
     format='none',
   ),
@@ -105,7 +106,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Requests',
-    'slo_requests{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
+    'slo_requests{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
     '{{service}} / {{installation}} / {{cluster_id}}',
     format='none',
   ),
@@ -114,7 +115,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Errors',
-    'slo_errors{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
+    'slo_errors{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
     '{{service}} / {{installation}} / {{cluster_id}}',
     format='none',
   ),
@@ -126,11 +127,11 @@ stdlib.dashboard(
     'High Burn Rate',
     [
       {
-        query: 'slo_errors_per_request:ratio_rate5m{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
+        query: 'slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
         legend: '{{service}} / {{installation}} / {{cluster_id}} (5m)',
       },
       {
-        query: 'slo_errors_per_request:ratio_rate1h{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
+        query: 'slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
         legend: '{{service}} / {{installation}} / {{cluster_id}} (1h)',
       }
     ],
@@ -145,11 +146,11 @@ stdlib.dashboard(
     'Low Burn Rate',
     [
       {
-        query: 'slo_errors_per_request:ratio_rate30m{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
+        query: 'slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
         legend: '{{service}} / {{installation}} / {{cluster_id}} (30m)',
       },
       {
-        query: 'slo_errors_per_request:ratio_rate6h{pipeline="stable", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
+        query: 'slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
         legend: '{{service}} / {{installation}} / {{cluster_id}} (6h)',
       }
     ],

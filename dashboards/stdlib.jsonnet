@@ -74,9 +74,10 @@ local grafana = import 'grafonnet/grafana.libsonnet';
       )
     ),
 
-  variable(name, label, query)::
+  variable(name, label, query, current='null')::
     grafana.template.new(
       allValues='.*',
+      current=current,
       datasource='Cortex',
       includeAll=true,
       label=label,
