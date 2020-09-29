@@ -1,9 +1,10 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 
 {
-  dashboard(title, uid, tags, time_from='now-1h', refresh='1m')::
+  dashboard(title, uid, tags, time_from='now-1h', refresh='1m', graphTooltip='shared_crosshair')::
     grafana.dashboard.new(
       title,
+      graphTooltip=graphTooltip,
       schemaVersion=16,
       tags=tags,
       timezone='utc',
