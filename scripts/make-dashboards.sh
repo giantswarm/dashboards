@@ -19,7 +19,7 @@ for dashboard in $DASHBOARD_DIRECTORY/*; do
     echo "Making dashboard $dashboard.jsonnet"
 
     jsonnet \
-        --jpath $GOPATH/src/github.com/grafana/grafonnet-lib/ \
+        --jpath ~/go/src/github.com/grafana/grafonnet-lib/ \
         $DASHBOARD_DIRECTORY/$dashboard.jsonnet > $OUTPUT_DIRECTORY/$dashboard.json
 done
 
