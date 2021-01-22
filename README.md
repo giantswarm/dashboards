@@ -16,3 +16,8 @@ To upload a dashboard while editing, run:
 ```
 ./scripts/upload-dashboard.sh metrics.json
 ```
+
+## Requirements
+
+* jsonnet: https://github.com/google/jsonnet
+* grafonnet: https://github.com/grafana/grafonnet-lib
