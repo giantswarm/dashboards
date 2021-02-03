@@ -72,7 +72,7 @@ stdlib.dashboard(
   stdlib.stackedPercentageChart(
     'Percentage Time Series (Per Management Cluster)',
     'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (installation) / scalar(sum(prometheus_tsdb_head_series{installation!=""}))',
-    '{{cluster_id}}',
+    '{{installation}}',
   ),
   gridPos={x: 0, y: 18, w: 8, h: 9}
 )
