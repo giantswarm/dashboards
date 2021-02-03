@@ -26,7 +26,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Number of Time Series In Prometheus (Per Installation)',
-    'sum(avg(prometheus_tsdb_head_series{customer=~".*", installation=~".*"}) by (customer, installation)) by (installation)',
+    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer, installation)) by (installation)',
     '{{cluster_id}}',
   ),
   gridPos={x: 8, y: 0, w: 8, h: 9}
@@ -71,7 +71,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.stackedPercentageChart(
     'Percentage Time Series (Per Management Cluster)',
-    'sum(prometheus_tsdb_head_series{customer=~".*", installation=~".*"}) by (installation) / scalar(sum(prometheus_tsdb_head_series{installation!=""}))',
+    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (installation) / scalar(sum(prometheus_tsdb_head_series{installation!=""}))',
     '{{cluster_id}}',
   ),
   gridPos={x: 0, y: 18, w: 8, h: 9}
