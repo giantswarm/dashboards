@@ -27,7 +27,7 @@ stdlib.dashboard(
   stdlib.multiSeriesChart(
     'Number of Time Series In Prometheus (Per Installation)',
     'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer, installation)) by (installation)',
-    '{{cluster_id}}',
+    '{{installation}}',
   ),
   gridPos={x: 8, y: 0, w: 8, h: 9}
 )
@@ -53,7 +53,7 @@ stdlib.dashboard(
   stdlib.multiSeriesChart(
     'Memory Usage Of Prometheus (Per Management Cluster)',
     'aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster"}',
-    '{{cluster_id}}',
+    '{{installation}}',
     format='decbytes',
   ),
   gridPos={x: 8, y: 9, w: 8, h: 9}
@@ -62,7 +62,7 @@ stdlib.dashboard(
   stdlib.multiSeriesChart(
     'Percentage Of Node Memory (Per Management Cluster)',
     'aggregation:prometheus:memory_percentage{customer=~"$customer", installation=~"$management_cluster"}',
-    '{{cluster_id}}',
+    '{{installation}}',
     format='percent',
   ),
   gridPos={x: 16, y: 9, w: 8, h: 9}
