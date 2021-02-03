@@ -34,7 +34,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Number of Time Series In Prometheus (Per Customer)',
-    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer, cluster_id)) by (customer)',
+    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer, installation)) by (customer)',
     '{{customer}}',
   ),
   gridPos={x: 16, y: 0, w: 8, h: 9}
