@@ -20,5 +20,6 @@ HTTP_CODE=$(curl --output "$OUTPUT" --write '%{http_code}' --silent --show-error
 if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
 	echo -n "HTTP $HTTP_CODE "
 	cat "$OUTPUT"
+	echo
 	exit 1
 fi
