@@ -34,6 +34,7 @@ fi
 if [ -n "$2" ]; then
 	mkdir -p "$2"
 	OUTPUT="$2/$1.json"
+	jq . "$TMP" > "$OUTPUT"
+else
+	cat "$TMP" > "$OUTPUT"
 fi
-
-cat "$TMP" > "$OUTPUT"
