@@ -51,18 +51,18 @@ stdlib.dashboard(
 )
 .addPanel(
   stdlib.multiSeriesChart(
-    'Memory Usage Of Prometheus (Per Management Cluster)',
-    'aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster"}',
-    '{{installation}}',
+    'Memory Usage Of Prometheus (Per Cluster)',
+    'aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster", cluster_id=~".*"}',
+    '{{installation}} - {{cluster_id}}',
     format='decbytes',
   ),
   gridPos={x: 8, y: 9, w: 8, h: 9}
 )
 .addPanel(
   stdlib.multiSeriesChart(
-    'Percentage Of Node Memory (Per Management Cluster)',
-    'aggregation:prometheus:memory_percentage{customer=~"$customer", installation=~"$management_cluster"}',
-    '{{installation}}',
+    'Percentage Of Node Memory (Per Cluster)',
+    'aggregation:prometheus:memory_percentage{customer=~"$customer", installation=~"$management_cluster", cluster_id=~".*"}',
+    '{{installation}} - {{cluster_id}}',
     format='percent',
   ),
   gridPos={x: 16, y: 9, w: 8, h: 9}
