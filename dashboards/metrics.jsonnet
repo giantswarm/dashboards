@@ -12,29 +12,29 @@ stdlib.dashboard(
   stdlib.variable('customer', 'Customer', 'label_values(prometheus_tsdb_head_series, customer)')
 )
 .addTemplate(
-  stdlib.variable('control_plane', 'Control Plane', 'label_values(prometheus_tsdb_head_series{customer=~"$customer"}, installation)')
+  stdlib.variable('management_cluster', 'Management Cluster', 'label_values(prometheus_tsdb_head_series{customer=~"$customer"}, installation)')
 )
 
 .addPanel(
   stdlib.singleSeriesChart(
     'Number of Time Series In Prometheus (Total)',
-    'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"})',
+    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',
     'Time Series',
   ),
   gridPos={x: 0, y: 0, w: 8, h: 9},
 )
 .addPanel(
   stdlib.multiSeriesChart(
-    'Number of Time Series In Prometheus (Per Control Plane)',
-    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer, cluster_id)) by (cluster_id)',
-    '{{cluster_id}}',
+    'Number of Time Series In Prometheus (Per Installation)',
+    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer, installation)) by (installation)',
+    '{{installation}}',
   ),
   gridPos={x: 8, y: 0, w: 8, h: 9}
 )
 .addPanel(
   stdlib.multiSeriesChart(
     'Number of Time Series In Prometheus (Per Customer)',
-    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer, cluster_id)) by (customer)',
+    'sum(avg(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer, installation)) by (customer)',
     '{{customer}}',
   ),
   gridPos={x: 16, y: 0, w: 8, h: 9}
@@ -43,7 +43,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.singleSeriesChart(
     'Memory Usage Of Prometheus (Total)',
-    'sum(aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"})',
+    'sum(aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster"})',
     'Memory',
     format='decbytes',
   ),
@@ -51,18 +51,18 @@ stdlib.dashboard(
 )
 .addPanel(
   stdlib.multiSeriesChart(
-    'Memory Usage Of Prometheus (Per Control Plane)',
-    'aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"}',
-    '{{cluster_id}}',
+    'Memory Usage Of Prometheus (Per Cluster)',
+    'aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster", cluster_id=~".*"}',
+    '{{installation}} - {{cluster_id}}',
     format='decbytes',
   ),
   gridPos={x: 8, y: 9, w: 8, h: 9}
 )
 .addPanel(
   stdlib.multiSeriesChart(
-    'Percentage Of Node Memory (Per Control Plane)',
-    'aggregation:prometheus:memory_percentage{customer=~"$customer", cluster_id=~"$control_plane"}',
-    '{{cluster_id}}',
+    'Percentage Of Node Memory (Per Cluster)',
+    'aggregation:prometheus:memory_percentage{customer=~"$customer", installation=~"$management_cluster", cluster_id=~".*"}',
+    '{{installation}} - {{cluster_id}}',
     format='percent',
   ),
   gridPos={x: 16, y: 9, w: 8, h: 9}
@@ -70,25 +70,25 @@ stdlib.dashboard(
 
 .addPanel(
   stdlib.stackedPercentageChart(
-    'Percentage Time Series (Per Control Plane)',
-    'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (cluster_id) / scalar(sum(prometheus_tsdb_head_series{cluster_id!=""}))',
-    '{{cluster_id}}',
+    'Percentage Time Series (Per Installation)',
+    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (installation) / scalar(sum(prometheus_tsdb_head_series{installation!=""}))',
+    '{{installation}}',
   ),
   gridPos={x: 0, y: 18, w: 8, h: 9}
 )
 .addPanel(
   stdlib.stackedPercentageChart(
     'Percentage Time Series (Per Customer)',
-    'sum(prometheus_tsdb_head_series{customer=~"$customer", cluster_id=~"$control_plane"}) by (customer) / scalar(sum(prometheus_tsdb_head_series{customer!=""}))',
-    '{{cluster_id}}',
+    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"}) by (customer) / scalar(sum(prometheus_tsdb_head_series{customer!=""}))',
+    '{{installation}}',
   ),
   gridPos={x: 8, y: 18, w: 8, h: 9}
 )
 .addPanel(
   stdlib.stackedPercentageChart(
-    'Percentage Memory (Per Control Plane)',
-    'sum(aggregation:prometheus:memory_usage{customer=~"$customer", cluster_id=~"$control_plane"}) by (cluster_id) / scalar(sum(aggregation:prometheus:memory_usage{cluster_id!=""}))',
-    '{{cluster_id}}',
+    'Percentage Memory (Per Installation)',
+    'sum(aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster"}) by (installation) / scalar(sum(aggregation:prometheus:memory_usage{installation!=""}))',
+    '{{installation}}',
   ),
   gridPos={x: 16, y: 18, w: 8, h: 9}
 )
