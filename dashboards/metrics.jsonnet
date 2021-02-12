@@ -86,7 +86,7 @@ stdlib.dashboard(
 )
 .addPanel(
   stdlib.stackedPercentageChart(
-    'Percentage Memory (Per Management Cluster)',
+    'Percentage Memory (Per Installation)',
     'sum(aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster"}) by (installation) / scalar(sum(aggregation:prometheus:memory_usage{installation!=""}))',
     '{{installation}}',
   ),
