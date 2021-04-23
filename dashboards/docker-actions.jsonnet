@@ -26,7 +26,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.singleSeriesChart(
     'Rate of Docker Pulls (Total)',
-    'sum(rate(aggregation:docker:action_count{customer=~"$customer", installation=~"$management_cluster", action="pull"}[1h]))',
+    'sum(rate(aggregation:docker:action_count{customer=~"$customer", installation=~"$management_cluster", action="pull"}[24h]))',
     'Pulls',
   ),
   gridPos={x: 12, y: 0, w: 12, h: 9},
@@ -68,7 +68,7 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Average Rate of Docker Pulls Per Node',
-    'sum(rate(aggregation:docker:action_count{customer=~"$customer", installation=~"$management_cluster", action="pull"}[1h])) by (installation, cluster_id) / sum(aggregation:kubernetes:node_total{customer=~"$customer", installation=~"$management_cluster"}) by (installation, cluster_id)',
+    'sum(rate(aggregation:docker:action_count{customer=~"$customer", installation=~"$management_cluster", action="pull"}[24h])) by (installation, cluster_id) / sum(aggregation:kubernetes:node_total{customer=~"$customer", installation=~"$management_cluster"}) by (installation, cluster_id)',
     '{{installation}} - {{cluster_id}}',
   ),
   gridPos={x: 8, y: 9, w: 8, h: 9},
