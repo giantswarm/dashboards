@@ -15,14 +15,7 @@ local burnRateChart(title, queries, threshold) =
     legend_values=true,
     min=0,
     shared_tooltip=false,
-    thresholds=[{
-      colorMode: "critical",
-      fill: true,
-      line: true,
-      op: "gt",
-      value: threshold,
-      yaxis: 'left',
-    }],
+    thresholds=[],
   )
   .addTargets(
     [grafana.prometheus.target(q.query, legendFormat=q.legend) for q in queries],
@@ -133,12 +126,17 @@ stdlib.dashboard(
       {
         query: 'slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
         legend: '{{service}} / {{installation}} / {{cluster_id}} (1h)',
+      },
+      {
+        query: 'min(slo_target_high{service=~"$service", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
+        legend: 'SLO High Threshold - {{service}}',
       }
     ],
     0.036
   )
   .addSeriesOverride({alias: "/.*(5m)/", color: "#8AB8FF"})
-  .addSeriesOverride({alias: "/.*(1h)/", color: "#1250B0"}),
+  .addSeriesOverride({alias: "/.*(1h)/", color: "#1250B0"})
+  .addSeriesOverride({alias: "/.*(SLO High Threshold)/", color: "#E02F44"}),
   gridPos={x:0, y: 9, w: 12, h: 9},
 )
 .addPanel(
@@ -152,11 +150,16 @@ stdlib.dashboard(
       {
         query: 'slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}',
         legend: '{{service}} / {{installation}} / {{cluster_id}} (6h)',
+      },
+      {
+        query: 'min(slo_target_low{service=~"$service", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
+        legend: 'SLO Low Threshold - {{service}}',
       }
     ],
     0.012
   )
   .addSeriesOverride({alias: "/.*(30m)/", color: "#CA95E5"})
-  .addSeriesOverride({alias: "/.*(6h)/", color: "#7C2EA3"}),
+  .addSeriesOverride({alias: "/.*(6h)/", color: "#7C2EA3"})
+  .addSeriesOverride({alias: "/.*(SLO Low Threshold)/", color: "#E02F44"}),
   gridPos={x:12, y: 9, w: 12, h: 9},
 )
