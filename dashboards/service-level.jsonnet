@@ -163,3 +163,26 @@ stdlib.dashboard(
   .addSeriesOverride({alias: "/.*(SLO Low Threshold)/", color: "#E02F44", linewidth: 3}),
   gridPos={x:12, y: 9, w: 12, h: 9},
 )
+.addPanel(
+  grafana.gaugePanel.new(
+    'SLO targets',
+    min=null,
+    max=null,
+    pluginVersion='7.5.7',
+    reducerFunction='lastNotNull',
+    thresholdsMode='percentage',
+    unit='percentunit'
+  )
+  .addThresholds([
+    { color: 'red', value: 0 },
+    { color: '#EAB839', value: 90 },
+    { color: 'green', value: 99 },
+  ])
+  .addTarget(
+    grafana.prometheus.target(
+      '1- min(slo_target) by (service)',
+      legendFormat='',
+    )
+  ),
+  gridPos={x:0, y: 27, w: 24, h: 5},
+)
