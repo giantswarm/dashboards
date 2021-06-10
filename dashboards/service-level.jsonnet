@@ -128,7 +128,7 @@ stdlib.dashboard(
         legend: '{{service}} / {{installation}} / {{cluster_id}} (1h)',
       },
       {
-        query: 'min(slo_target_high{service=~"$service", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
+        query: 'min(slo_threshold_high{service=~"$service", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
         legend: 'SLO High Threshold - {{service}}',
       }
     ],
@@ -152,7 +152,7 @@ stdlib.dashboard(
         legend: '{{service}} / {{installation}} / {{cluster_id}} (6h)',
       },
       {
-        query: 'min(slo_target_low{service=~"$service", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
+        query: 'min(slo_threshold_low{service=~"$service", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
         legend: 'SLO Low Threshold - {{service}}',
       }
     ],
