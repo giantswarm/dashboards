@@ -25,4 +25,4 @@ To upload a dashboard while editing, run:
 
 * grafonnet: https://github.com/grafana/grafonnet-lib
 
-`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana`
+`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
