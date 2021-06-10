@@ -136,7 +136,7 @@ stdlib.dashboard(
   )
   .addSeriesOverride({alias: "/.*(5m)/", color: "#8AB8FF"})
   .addSeriesOverride({alias: "/.*(1h)/", color: "#1250B0"})
-  .addSeriesOverride({alias: "/.*(SLO High Threshold)/", color: "#E02F44"}),
+  .addSeriesOverride({alias: "/.*(SLO High Threshold)/", color: "#E02F44", linewidth: 2}),
   gridPos={x:0, y: 9, w: 12, h: 9},
 )
 .addPanel(
@@ -160,6 +160,6 @@ stdlib.dashboard(
   )
   .addSeriesOverride({alias: "/.*(30m)/", color: "#CA95E5"})
   .addSeriesOverride({alias: "/.*(6h)/", color: "#7C2EA3"})
-  .addSeriesOverride({alias: "/.*(SLO Low Threshold)/", color: "#E02F44"}),
+  .addSeriesOverride({alias: "/.*(SLO Low Threshold)/", color: "#E02F44", linewidth: 2}),
   gridPos={x:12, y: 9, w: 12, h: 9},
 )
