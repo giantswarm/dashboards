@@ -180,7 +180,7 @@ stdlib.dashboard(
   ])
   .addTarget(
     grafana.prometheus.target(
-      '1- min(slo_target) by (service)',
+      '1- min(slo_target{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service)',
       legendFormat='',
     )
   ),
