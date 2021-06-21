@@ -42,13 +42,13 @@ stdlib.dashboard(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum(slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+      'sum(slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_high{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}
       and
-      slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+      slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_high{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}
       or
-      slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001
+      slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_low{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}
       and
-      slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001) by (cluster_id, customer, installation, service)',
+      slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_low{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service, customer, installation, cluster_id)',
       format='table',
       instant=true,
     )
@@ -83,13 +83,13 @@ stdlib.dashboard(
 .addPanel(
   stdlib.multiSeriesChart(
     'Alert',
-    'sum(slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+    'sum(slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_high{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}
     and
-    slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 36 * 0.001
+    slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_high{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}
     or
-    slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001
+    slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_low{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}
     and
-    slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > 12 * 0.001) by (service, installation, cluster_id)',
+    slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service) group_left (cluster_type, cluster_id, class) slo_threshold_low{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"}) by (service, customer, installation, cluster_id)',
     '{{service}} / {{installation}} / {{cluster_id}}',
     format='none',
   ),
