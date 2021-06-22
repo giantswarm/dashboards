@@ -1,7 +1,7 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 local stdlib = import 'stdlib.jsonnet';
 
-local burnRateChart(title, queries, threshold) =
+local burnRateChart(title, queries) =
   grafana.graphPanel.new(
     title,
     fill=0,
@@ -136,7 +136,6 @@ stdlib.dashboard(
         legend: 'SLO High Threshold - {{service}}',
       }
     ],
-    0.036
   )
   .addSeriesOverride({alias: "/.*(5m)/", color: "#8AB8FF"})
   .addSeriesOverride({alias: "/.*(1h)/", color: "#1250B0"})
@@ -160,7 +159,6 @@ stdlib.dashboard(
         legend: 'SLO Low Threshold - {{service}}',
       }
     ],
-    0.012
   )
   .addSeriesOverride({alias: "/.*(30m)/", color: "#CA95E5"})
   .addSeriesOverride({alias: "/.*(6h)/", color: "#7C2EA3"})
