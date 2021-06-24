@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-shared
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/shared/*").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-mixin
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/mixin/*").AsConfig | indent 2 }}
+---
+{{- if eq .Values.Installation.V1.Provider.Kind "aws" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-aws
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/aws/*").AsConfig | indent 2 }}
+---
+{{- end }}
+{{- if eq .Values.Installation.V1.Provider.Kind "azure" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-azure
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/azure/*").AsConfig | indent 2 }}
+---
+{{- end }}
+{{ if eq .Values.Installation.V1.Provider.Kind "kvm" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-kvm
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/kvm/*").AsConfig | indent 2 }}
+---
+{{- end }}
+{{ if eq .Values.Installation.V1.Provider.Kind "vmware" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-vmware
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/vmware/*").AsConfig | indent 2 }}
+---
+{{- end }}
