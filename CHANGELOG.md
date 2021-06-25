@@ -7,4 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add public grafana dashboards.
+
 [Unreleased]: https://github.com/giantswarm/dashboards/tree/master
