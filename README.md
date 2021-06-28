@@ -2,14 +2,16 @@
 
 This project currently contains Giant Swarm public dashboards.
 
+The goal of this repository is to have both public and cortex dashboards defined in one place and in the same format.
+
+## Management cluster's dashboards
+
 The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana and are accessible by the customer.
 Those dashboards are currently in JSON and will eventually be replaced to jsonnet format.
 
-The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Cortex.
-
-The goal of this repository is to have both public and cortex dashboards defined in one place and in the same format.
-
 ## Cortex dashboards
+
+The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Cortex.
 
 To build and upload the Cortex Dashboards hosted in Grafana Cloud, here is what you need to do:
 
