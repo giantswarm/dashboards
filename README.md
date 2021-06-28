@@ -7,7 +7,7 @@ Those dashboards are currently in JSON and will eventually be replaced to jsonne
 
 The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Cortex.
 
-The goal of this repository is to have both public and cortex dashboards defined in one place and in the same format
+The goal of this repository is to have both public and cortex dashboards defined in one place and in the same format.
 
 ## Cortex dashboards
 
