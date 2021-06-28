@@ -3,22 +3,17 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.resource.default.name }}-reload
-  namespace: {{ .Values.resource.default.namespace }}
-  labels:
-    app: {{ .Values.resource.default.name }}
+  name: grafana-dashboards-reload
+  namespace: {{ .Values.namespace }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
   template:
-    metadata:
-      labels:
-        app: {{ .Values.resource.default.name }}
     spec:
       containers:
-      - name: {{ .Values.resource.default.name }}-reload
+      - name: grafana-dashboards-reload
         command:
           - /bin/sh
         args:
