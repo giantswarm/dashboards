@@ -1,0 +1,42 @@
+# This post-install job is in charge of loading the dashboard changes into
+# grafana.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.resource.default.name }}-reload
+  namespace: {{ .Values.resource.default.namespace }}
+  labels:
+    app: {{ .Values.resource.default.name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.resource.default.name }}
+    spec:
+      containers:
+      - name: {{ .Values.resource.default.name }}-reload
+        command:
+          - /bin/sh
+        args:
+          - -c
+          - |
+            wget -qO- -T 3 -Y off --post-data "{}" http://admin:${GF_SECURITY_ADMIN_PASSWORD}@grafana.{{ .Values.resource.default.namespace }}.svc:3000/api/admin/provisioning/dashboards/reload | grep "Dashboards config reloaded"
+        env:
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: AdminPassword
+                name: {{ .Values.resource.default.name }}-secret
+                optional: false
+        image: giantswarm/alpine:3.12.0
+        resources:
+          limits:
+            memory: 100Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+      restartPolicy: OnFailure
