@@ -3,7 +3,7 @@
 This project currently contains Giant Swarm public dashboards.
 
 The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana and are accessible by the customer.
-Those dashboards are currently in json and will eventually be replaced to jsonnet format
+Those dashboards are currently in JSON and will eventually be replaced to jsonnet format.
 
 The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Cortex.
 
