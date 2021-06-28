@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update the Alerts dashboard to use Grafana 8 time series instead of graph panels.
 - Update Home dashboard to only show release notes related to dashboards.
 
+### Fixed
+
+- A typo in the alerts dashboard.
+
 ## [0.1.1] - 2021-06-25
 
 ### Fixed
