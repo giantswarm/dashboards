@@ -9,13 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add new service level dashboard.
+- Add the Service Level dashboards.
+
+# [0.1.2] - 2021-06-29
 
 ### Changed
 
 - Update the Nodes Overview dashboard to use Grafana 8 time series instead of graph panels.
 - Update the Alerts dashboard to use Grafana 8 time series instead of graph panels.
 - Update Home dashboard to only show release notes related to dashboards.
+
+### Fixed
+
+- A typo in the alerts dashboard.
 
 ## [0.1.1] - 2021-06-25
 
@@ -29,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/giantswarm/dashboards/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/giantswarm/dashboards/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/giantswarm/dashboards/releases/tag/v0.1.0
