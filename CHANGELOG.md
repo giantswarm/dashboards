@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+### Added
 
+- Add new service level dashboard.
+
+### Changed
 
 - Update the Nodes Overview dashboard to use Grafana 8 time series instead of graph panels.
 - Update the Alerts dashboard to use Grafana 8 time series instead of graph panels.
