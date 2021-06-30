@@ -548,6 +548,109 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 13,
+      "title": "Clusters not covered",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "description": "If there are clusters listed in this table, they are not covered by the deprecation data shown above.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 11,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kubernetes_build_info{cluster_type=\"workload_cluster\",major=\"1\",minor=~\"14|15|16|17|18\"}) by (cluster_id, git_version, major, minor)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Clusters using Kubernetes versions before v1.19",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "__name__": true,
+              "app": true,
+              "build_date": true,
+              "cluster_type": true,
+              "compiler": true,
+              "container": true,
+              "git_commit": true,
+              "git_tree_state": true,
+              "go_version": true,
+              "installation": true,
+              "instance": true,
+              "job": true,
+              "namespace": true,
+              "node": true,
+              "platform": true,
+              "pod": true,
+              "provider": true,
+              "role": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "cluster_id": "Cluster ID",
+              "git_version": "Kubernetes version",
+              "major": "Major version",
+              "minor": "Minor version"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "schemaVersion": 30,
@@ -582,5 +685,5 @@
   "timezone": "utc",
   "title": "Deprecated APIs in workload clusters",
   "uid": "BUGj80z7z",
-  "version": 1
+  "version": 2
 }
