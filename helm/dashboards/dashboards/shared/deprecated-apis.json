@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 64,
+  "iteration": 1625667540438,
   "links": [],
   "panels": [
     {
@@ -95,14 +95,14 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"})",
+          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\",cluster_id=\"$cluster_id\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Deprecated APIs",
+      "title": "Deprecated APIs requested",
       "type": "stat"
     },
     {
@@ -171,7 +171,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"}) by (cluster_id)",
+          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\",cluster_id=\"$cluster_id\"}) by (cluster_id)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -179,7 +179,7 @@
           "refId": "A"
         }
       ],
-      "title": "Deprecated APIs by cluster",
+      "title": "Deprecated APIs requested by cluster",
       "transformations": [
         {
           "id": "reduce",
@@ -272,7 +272,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"}) by (group)",
+          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\",cluster_id=\"$cluster_id\"}) by (group)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -280,7 +280,7 @@
           "refId": "A"
         }
       ],
-      "title": "Deprecated APIs by group",
+      "title": "Deprecated APIs requested by group",
       "transformations": [
         {
           "id": "reduce",
@@ -373,7 +373,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"}) by (group, resource, version)",
+          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\",cluster_id=\"$cluster_id\"}) by (group, resource, version)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -381,7 +381,7 @@
           "refId": "A"
         }
       ],
-      "title": "Deprecated APIs by resource and version",
+      "title": "Deprecated APIs requested by resource and version",
       "transformations": [
         {
           "id": "reduce",
@@ -489,7 +489,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"}) without (app, cluster_type, installation, instance, job, role, subresource, provider)",
+          "expr": "sum(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\",cluster_id=\"$cluster_id\"}) without (app, cluster_type, installation, instance, job, role, subresource, provider)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -497,7 +497,7 @@
           "refId": "A"
         }
       ],
-      "title": "Full list",
+      "title": "Full list of deprecated APIs requested",
       "transformations": [
         {
           "id": "organize",
@@ -519,7 +519,7 @@
               "Value": "Number of resources",
               "cluster_id": "Cluster ID",
               "group": "API group",
-              "removed_release": "Removed in release",
+              "removed_release": "To be removed in release",
               "resource": "Resource name",
               "version": "Version"
             }
@@ -663,7 +663,39 @@
     "owner:team-ludacris"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": [
+            "m0m2h"
+          ],
+          "value": [
+            "m0m2h"
+          ]
+        },
+        "datasource": null,
+        "definition": "label_values(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"}, cluster_id)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Cluster",
+        "multi": true,
+        "name": "cluster_id",
+        "options": [],
+        "query": {
+          "query": "label_values(apiserver_requested_deprecated_apis{cluster_type=\"workload_cluster\"}, cluster_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -686,7 +718,7 @@
     ]
   },
   "timezone": "utc",
-  "title": "Deprecated APIs in workload clusters",
+  "title": "Deprecated APIs requested",
   "uid": "BUGj80z7z",
-  "version": 2
+  "version": 1
 }
