@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New dashboard to expose KVM information, helping with capacity planning and observability.
+
 ### Fixed
 
 - Updated the link to the source repo of the Prometheus rules and alerts in the Alerts dashboard.
