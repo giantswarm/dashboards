@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2021-07-26
+
 - Moved KVM dashboard to a provider dedicated folder.
 
 ## [0.1.3] - 2021-07-23
@@ -43,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/giantswarm/dashboards/compare/v0.1.3...v1.0.4
 [0.1.3]: https://github.com/giantswarm/dashboards/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/giantswarm/dashboards/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/giantswarm/dashboards/compare/v0.1.0...v0.1.1
