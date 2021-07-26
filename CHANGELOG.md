@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Moved KVM dashboard to a provider dedicated folder.
+
 ## [0.1.3] - 2021-07-23
 
 ### Added
