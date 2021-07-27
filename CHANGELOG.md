@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Several updates to the KVM Resource Usage dashboard:
+  - Change graph (old) to Grafana 8 time series panels
+  - Change graphs for CPUs and memory left from absolute numbers to percentage
+
 ## [1.0.4] - 2021-07-26
 
 - Moved KVM dashboard to a provider dedicated folder.
