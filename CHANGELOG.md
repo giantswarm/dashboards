@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add kvm dashboards the home KVM home page and allow templating in dashboards.
+
 ## [1.0.5] - 2021-07-27
 
 - Several updates to the KVM Resource Usage dashboard:
