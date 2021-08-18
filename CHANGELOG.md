@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added macropower-analytics-panel to public dashboards.
+
 ## [1.2.0] - 2021-08-13
 
 ### Changed
