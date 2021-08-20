@@ -16,18 +16,48 @@ stdlib.dashboard(
 )
 
 .addPanel(
-  stdlib.multiSeriesChart(
-    'Sessions by Dashboards',
-    'sum by (dashboard_name) (sum_over_time(aggregation:grafana_analytics_sessions_total{customer=~"$customer", installation=~"$management_cluster"}[$__interval]))',
-    '{{dashboard_name}}',
+  grafana.text.new(
+    title='Notes',
+    content='This dashboard reports Grafana dashboard sessions.\n\nTo generate some activity, head over to and installation Grafana dashboard.\n\nIt may take around a minute for activity to begin to show.',
+    mode='markdown',
   ),
-  gridPos={x: 0, y: 0, w: 12, h: 12}
+  gridPos={'x':0, 'y':0, 'w':24, 'h': 4}
 )
+
 .addPanel(
-  stdlib.multiSeriesChart(
-    'Sessions by Installation',
-    'sum by (installation) (sum_over_time(aggregation:grafana_analytics_sessions_total{customer=~"$customer", installation=~"$management_cluster"}[$__interval]))',
-    '{{installation}}',
+  grafana.graphPanel.new(
+    title='Sessions by Dashboards',
+    bars=true,
+    fill=1,
+    lines=false,
+    maxDataPoints=40,
+    pointradius=2,
+    format='short',
+    min=0,
+  ).addTarget(
+    grafana.prometheus.target(
+      'sum by (dashboard_name) (sum_over_time(aggregation:grafana_analytics_sessions_total{customer=~"$customer", installation=~"$management_cluster"}[$__interval]))',
+      legendFormat='{{dashboard_name}}',
+    )
   ),
-  gridPos={x: 12, y: 0, w: 12, h: 12}
+  gridPos={x: 0, y: 4, w: 12, h: 12}
+)
+
+.addPanel(
+  grafana.graphPanel.new(
+    title='Sessions by Installation',
+    bars=true,
+    fill=1,
+    lines=false,
+    maxDataPoints=40,
+    pointradius=2,
+    format='short',
+    min=0,
+  ).addTarget(
+    grafana.prometheus.target(
+      'sum by (installation) (sum_over_time(aggregation:grafana_analytics_sessions_total{customer=~"$customer", installation=~"$management_cluster"}[$__interval]))',
+      legendFormat='{{installation}}',
+    )
+  ),
+  gridPos={x: 12, y: 4, w: 12, h: 12}
 )
