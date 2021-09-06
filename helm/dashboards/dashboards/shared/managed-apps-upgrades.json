@@ -1,0 +1,294 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 238,
+  "iteration": 1630919511512,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 35,
+      "options": {
+        "analyticsOptions": {
+          "dashboard": "$__dashboard",
+          "flatten": false,
+          "heartbeatAlways": false,
+          "heartbeatInterval": 60,
+          "postEnd": false,
+          "postHeartbeat": false,
+          "postStart": true,
+          "server": "/analytics-plugin/write",
+          "showDetails": false
+        }
+      },
+      "title": "  ",
+      "transparent": true,
+      "type": "macropower-analytics-panel"
+    },
+    {
+      "datasource": null,
+      "description": "Count of how many App CRs exist for each App that are not using the latest version. Pre-installed Apps are not present since they are upgraded with the Workload Cluster.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(204, 204, 204)",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 22,
+        "x": 0,
+        "y": 0
+      },
+      "id": 30,
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (app) (aggregation:giantswarm:app_upgrade_available{customer=~\"$customer\"})",
+          "interval": "",
+          "legendFormat": "{{app}}",
+          "refId": "A"
+        }
+      ],
+      "title": "App installations with an upgrade available",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "description": "List of App CRs with an upgrade available. If an App is installed in a cluster multiple times this is shown in the App Count column.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 6,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (app, catalog, customer, installation, latest_version, namespace, version) (aggregation:giantswarm:app_upgrade_available{customer=~\"$customer\"})",
+          "format": "table",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "App installations with an upgrade available",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "app",
+                "catalog",
+                "customer",
+                "installation",
+                "latest_version",
+                "namespace",
+                "version",
+                "Value #A"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "Value #A": 7,
+              "app": 4,
+              "catalog": 3,
+              "customer": 0,
+              "installation": 1,
+              "latest_version": 6,
+              "namespace": 2,
+              "version": 5
+            },
+            "renameByName": {
+              "Value #A": "App Count",
+              "app": "App",
+              "catalog": "Catalog",
+              "customer": "Customer",
+              "installation": "Installation",
+              "latest_version": "Latest Version",
+              "namespace": "Cluster",
+              "version": "Version"
+            }
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "App": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "App Count": {
+                "aggregations": [
+                  "max"
+                ],
+                "operation": "aggregate"
+              },
+              "Catalog": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Cluster": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Count": {
+                "aggregations": [
+                  "max"
+                ],
+                "operation": "aggregate"
+              },
+              "Customer": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Installation": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Latest Version": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Version": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [],
+  "tags": [
+    "owner:team-batman",
+    "topic:workload-cluster"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": null,
+        "definition": "label_values(customer)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Customer",
+        "multi": false,
+        "name": "customer",
+        "options": [],
+        "query": {
+          "query": "label_values(customer)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Managed Apps Upgrades",
+  "uid": "6LDk8YVnk",
+  "version": 18
+}
