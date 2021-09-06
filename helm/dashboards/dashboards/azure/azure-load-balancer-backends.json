@@ -1,0 +1,202 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 64,
+  "iteration": 1630933117890,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "analyticsOptions": {
+          "dashboard": "$__dashboard",
+          "flatten": false,
+          "heartbeatAlways": false,
+          "heartbeatInterval": 60,
+          "postEnd": false,
+          "postHeartbeat": false,
+          "postStart": true,
+          "server": "/analytics-plugin/write",
+          "showDetails": false
+        }
+      },
+      "title": "  ",
+      "transparent": true,
+      "type": "macropower-analytics-panel"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "repeat": "cluster_id",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count (kube_node_info{cluster_id=\"$cluster_id\",role=\"worker\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Number of worker nodes",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "azure_operator_load_balancer_backend_pool_instances_count{cluster_id=\"$cluster_id\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Load balancer instances",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "count (kube_node_info{cluster_id=\"$cluster_id\",role=\"worker\"}) - on () azure_operator_load_balancer_backend_pool_instances_count{cluster_id=\"$cluster_id\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Diff",
+          "refId": "C"
+        }
+      ],
+      "title": "$cluster_id - Node count vs Load balancer instances",
+      "type": "timeseries"
+    }
+  ],
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [
+    "provider:azure",
+    "owner:team-celestial",
+    "topic:management-cluster",
+    "topic:workload-cluster"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": null,
+        "definition": "label_values(azure_operator_load_balancer_backend_pool_instances_count, cluster_id)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Cluster ID",
+        "multi": true,
+        "name": "cluster_id",
+        "options": [],
+        "query": {
+          "query": "label_values(azure_operator_load_balancer_backend_pool_instances_count, cluster_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Azure Load Balancer Backend Pool Instances",
+  "uid": "u0NHFgSnz",
+  "version": 2
+}
