@@ -1,6 +1,8 @@
 GRR := go run github.com/grafana/grizzly/cmd/grr
 JB := go run github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
 JSONNET := go run github.com/google/go-jsonnet/cmd/jsonnet
+YQ := go run github.com/mikefarah/yq/v4
+
 OUTDIR := output
 
 # Make Go ignore the `vendor/` dir as it is a jsonnet-bundler dir
@@ -55,6 +57,5 @@ $(GCOUTDIR):
 
 # a rule that tells make how to produce a YAML file in GCOUTDIR from a source
 # Jsonnet filie in GCSRCDIR
-# TODO: replace the use of `yq` as it's not an explicit dependency
 $(GCOUTDIR)/%.yaml: $(GCSRCDIR)/%.jsonnet
-	$(JSONNET) --jpath vendor $< | yq --yaml-output '.' > $@
+	$(JSONNET) --jpath vendor $< | $(YQ) eval --prettyPrint '.' - > $@

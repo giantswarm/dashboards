@@ -6,6 +6,7 @@ require (
 	github.com/google/go-jsonnet v0.17.0
 	github.com/grafana/grizzly v0.1.1-0.20210907160355-7ed8cc64c664
 	github.com/jsonnet-bundler/jsonnet-bundler v0.4.0
+	github.com/mikefarah/yq/v4 v4.12.2
 )
 
 replace (

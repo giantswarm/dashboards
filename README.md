@@ -67,6 +67,8 @@ For completeness, the list of tools used:
 
 * [jsonnet-libs][cgh-grjl]
 
+* [yq][cgh-mfy] (for converting JSON to YAML)
+
 ## Hacking
 
 `make vendor` triggers [jsonnet-bundler][cgh-jbjb] to populate `vendor/`
@@ -126,6 +128,7 @@ as the last thing in the file.
 [cgh-grgl]: https://github.com/grafana/grafonnet-lib
 [cgh-grjl]: https://github.com/grafana/jsonnet-libs
 [cgh-jbjb]: https://github.com/jsonnet-bundler/jsonnet-bundler
+[cgh-mfy]: https://github.com/mikefarah/yq
 [cgr-dgcrcak]: https://grafana.com/docs/grafana-cloud/reference/create-api-key/
 [cgr-dglhas]: https://grafana.com/docs/grafana/latest/http_api/snapshot/
 [cgr-pc]: https://grafana.com/products/cloud/
