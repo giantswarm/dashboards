@@ -16,19 +16,33 @@ The dashboards located under `dashboards` are the dashboards hosted on Giant Swa
 To build and upload the Cortex Dashboards hosted in Grafana Cloud, here is what you need to do:
 
 To make the dashboards, run:
+
+``` sh
+make gc-resources
 ```
-./scripts/make-dashboards.sh
+
+To see a diff of what's changed comparing to what's in Grafana Cloud:
+
+``` sh
+make gc-diff
 ```
 
 To upload the dashboards, run:
-```
-./scripts/upload-dashboards.sh
+
+``` sh
+make gc-apply
 ```
 
-To upload a dashboard while editing, run:
+To preview a dashboard while editing, run:
+
+``` sh
+make gc-preview
 ```
-./scripts/upload-dashboard.sh metrics.json
-```
+
+This figures out which dashboards have changed locally and uploads them as
+[snapshots][cgr-dglhas] that expire after 10 minutes (by default, can be set
+with `make gc-preview GCPREVIEW_EXPIRE=X` where `X` is time in seconds) and are
+automatically cleaned up.
 
 ## Requirements
 
@@ -46,6 +60,8 @@ For completeness, the list of tools used:
 * [Jsonnet](https://github.com/google/go-jsonnet)
 
 * [jsonnet-bundler][cgh-jbjb]
+
+* [Grizzly][cgh-grgr]
 
 * [Grafonnet](https://github.com/grafana/grafonnet-lib)
 
@@ -73,4 +89,27 @@ Use `jb install repo/path`, e.g.:
 go run github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb install github.com/grafana/grafonnet-lib/grafonnet
 ```
 
+### Using Grafana Cloud targets
+
+[Grizzly][cgh-grgr] needs to have two env variables set to work:
+
+* `GRAFANA_URL` set to the root URL of your tenant in [Grafana Cloud][cgr-pc]
+* `GRAFANA_TOKEN` set to an API token to authenticate with the above, can be
+  created in the cloud portal, see [Create a Grafana Cloud API key][cgr-dgcrcak]
+
+Note that grizzly's `pull` and `push` commands also operate on
+`PrometheusRuleGroup` and `SyntheticMonitoringCheck` resources which need
+additional variables defined for Cortex and Synthetic Monitoring products, if
+using them you can use
+
+``` sh
+GOFLAGS=-mod=mod go run github.com/grafana/grizzly/cmd/grr pull -d tmp/dashboards-pulled --target 'DashboardFolder/*' --target 'Dashboard/*' --target 'Datasource/*'
+```
+
+to limit to only pulling Grafana resources.
+
+[cgh-grgr]: https://github.com/grafana/grizzly
 [cgh-jbjb]: https://github.com/jsonnet-bundler/jsonnet-bundler
+[cgr-dgcrcak]: https://grafana.com/docs/grafana-cloud/reference/create-api-key/
+[cgr-dglhas]: https://grafana.com/docs/grafana/latest/http_api/snapshot/
+[cgr-pc]: https://grafana.com/products/cloud/
