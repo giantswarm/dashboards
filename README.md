@@ -32,10 +32,45 @@ To upload a dashboard while editing, run:
 
 ## Requirements
 
-* jsonnet: https://github.com/google/jsonnet
+Makefile will take care of pulling in requirements as needed, we use [tool
+dependency
+tracking](https://github.com/golang/go/wiki/Modules#how-can-i-track-tool-dependencies-for-a-module)
+technique so all Go dependencies are defined in `tools.go` and `go.mod`. Jsonnet
+dependencies are pulled using [jsonnet-bundler][cgh-jbjb] which populates the
+`vendor/` directory according to dependencies defined in `jsonnetfile.json`
+file. All in all, that means you only need Go on the host machine, everything
+else will be fetched automatically.
 
-`pip install jsonnet`
+For completeness, the list of tools used:
 
-* grafonnet: https://github.com/grafana/grafonnet-lib
+* [Jsonnet](https://github.com/google/go-jsonnet)
 
-`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
+* [jsonnet-bundler][cgh-jbjb]
+
+* [Grafonnet](https://github.com/grafana/grafonnet-lib)
+
+## Hacking
+
+`make vendor` triggers [jsonnet-bundler][cgh-jbjb] to populate `vendor/`
+directory with Jsonnet libraries as defined in `jsonnetfile.json`. This usually
+isn't updated unless dependencies change, but can be done manually by just
+deleting the directory and re-running `make vendor`.
+
+One side-effect of using a `vendor/` directory is that Go tooling has to be told
+to ignore it (usually when it exists Go tools assume `-mod=vendor` option and
+try to use the directory but as it's not used for Go deps this causes problems),
+which can be done with `GOLAGS="-mod=mod"` environment variable.
+
+The Makefile already does this so all Go tools that run from make are fine, but
+when running any commands outside (like below) remember to run `export
+GOLAGS="-mod=mod"` first.
+
+### Adding a new Jsonnet dependency
+
+Use `jb install repo/path`, e.g.:
+
+``` sh
+go run github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb install github.com/grafana/grafonnet-lib/grafonnet
+```
+
+[cgh-jbjb]: https://github.com/jsonnet-bundler/jsonnet-bundler
