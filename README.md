@@ -63,7 +63,9 @@ For completeness, the list of tools used:
 
 * [Grizzly][cgh-grgr]
 
-* [Grafonnet](https://github.com/grafana/grafonnet-lib)
+* [Grafonnet][cgh-grgl]
+
+* [jsonnet-libs][cgh-grjl]
 
 ## Hacking
 
@@ -108,7 +110,21 @@ GOFLAGS=-mod=mod go run github.com/grafana/grizzly/cmd/grr pull -d tmp/dashboard
 
 to limit to only pulling Grafana resources.
 
+For dashboards to work with [Grizzly][cgh-grgr] they need to be formatted as
+Kubernetes-style resources that `grr` tool expects. Regular
+[Grafonnet][cgh-grgl] dashboards can be converted using [jsonnet-libs][cgh-grjl]
+library, and this is hooked in to our [stdlib](./dashboards/stdlib.jsonnet)
+helper so in the dashboard `.jsonnet` file it's sufficient to call:
+
+``` jsonnet
+.toResource()
+```
+
+as the last thing in the file.
+
 [cgh-grgr]: https://github.com/grafana/grizzly
+[cgh-grgl]: https://github.com/grafana/grafonnet-lib
+[cgh-grjl]: https://github.com/grafana/jsonnet-libs
 [cgh-jbjb]: https://github.com/jsonnet-bundler/jsonnet-bundler
 [cgr-dgcrcak]: https://grafana.com/docs/grafana-cloud/reference/create-api-key/
 [cgr-dglhas]: https://grafana.com/docs/grafana/latest/http_api/snapshot/

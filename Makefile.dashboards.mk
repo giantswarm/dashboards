@@ -9,7 +9,7 @@ export GOFLAGS = -mod=mod
 # Grafana Cloud
 GCSRCDIR := dashboards
 GCOUTDIR := $(OUTDIR)/gc/dashboards
-GCDASHBOARDS := $(addprefix $(GCOUTDIR)/, grafana-analytics-test.yaml)
+GCDASHBOARDS := $(addprefix $(GCOUTDIR)/, grafana-analytics.yaml)
 GCPREVIEW_EXPIRE ?= 600
 
 .PHONY: clean deps gc-apply gc-diff gc-resources

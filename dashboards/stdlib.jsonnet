@@ -1,4 +1,5 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
+local grr = import 'grizzly/grizzly.libsonnet';
 
 {
   dashboard(title, uid, tags, time_from='now-1h', refresh='1m', graphTooltip='shared_crosshair')::
@@ -11,7 +12,17 @@ local grafana = import 'grafonnet/grafana.libsonnet';
       time_from=time_from,
       refresh=refresh,
       uid=uid,
-    ),
+    ) + {
+      // Extend grafonnet `dashboard` object to add a method
+
+      // toResource: converts a grafonnet dashboard object into a Grizzly
+      // resource, so it can be operated on (applied, diffed, previewed, etc.)
+      // with `grr`. Generated dashboards are put in the `Official` folder by
+      // default.
+      toResource(folder='bm_2ocRGz')::
+        grr.dashboard.new(self.uid, self)
+        + grr.resource.addMetadata('folder', folder)
+    },
 
   singleSeriesChart(title, query, legend, format='short')::
     grafana.graphPanel.new(
