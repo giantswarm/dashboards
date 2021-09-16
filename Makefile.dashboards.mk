@@ -10,8 +10,9 @@ export GOFLAGS = -mod=mod
 
 # Grafana Cloud
 GCSRCDIR := dashboards
-GCOUTDIR := $(OUTDIR)/gc/dashboards
-GCDASHBOARDS := $(addprefix $(GCOUTDIR)/, grafana-analytics.yaml)
+GCOUTDIR := $(OUTDIR)/gc
+GC_DASHBOARDS_SRC := $(wildcard $(GCSRCDIR)/*.jsonnet)
+GC_DASHBOARDS_OUT := $(addprefix $(GCOUTDIR)/,$(GC_DASHBOARDS_SRC:.jsonnet=.yaml))
 GCPREVIEW_EXPIRE ?= 600
 
 .PHONY: clean deps gc-apply gc-diff gc-resources
@@ -24,38 +25,31 @@ vendor: ## Fetch Jsonnet dependencies
 
 # main target for Grafana Cloud resources, will cause all resources to be
 # generated through dependencies (vendor so we have Jsonnet libs, and
-# GCDASHBOARDS depends on all dashboard resource YAML files)
-gc-resources: vendor $(GCDASHBOARDS) ## Grafana Cloud resources
+# GC_DASHBOARDS_OUT depends on all dashboard resource YAML files)
+gc-resources: vendor $(GC_DASHBOARDS_OUT) ## Grafana Cloud resources
 
 # target that shows a diff between locally generated resources and the state on
 # Grafana Cloud
-gc-diff: $(GCDASHBOARDS) | gc-resources
+gc-diff: $(GC_DASHBOARDS_OUT) | gc-resources
 	for resource in $^; do \
 		$(GRR) diff "$${resource}"; \
 	done
 
 # target that applies (uploads) the generated resources to Grafana Cloud
-gc-apply: $(GCDASHBOARDS) | gc-resources
+gc-apply: $(GC_DASHBOARDS_OUT) | gc-resources
 	for resource in $^; do \
 		$(GRR) apply "$${resource}"; \
 	done
 
 # target that uses a dashboard snapshot to generate a "preview" dashboard
 # Used to preview changes to generated dashboards before applying them.
-gc-preview: $(GCDASHBOARDS) | gc-resources
+gc-preview: $(GC_DASHBOARDS_OUT) | gc-resources
 	for resource in $^; do \
 		$(GRR) preview --expires $(GCPREVIEW_EXPIRE) "$${resource}"; \
 	done
 
-# dashboard YAML files depend on the output directory but as an order-only
-# dependency (i.e. it needs to be done before the dashboards but updating itit
-# should not trigger rebuilds)
-$(GCDASHBOARDS): | $(GCOUTDIR)
-
-$(GCOUTDIR):
-	mkdir -p $@
-
-# a rule that tells make how to produce a YAML file in GCOUTDIR from a source
-# Jsonnet filie in GCSRCDIR
-$(GCOUTDIR)/%.yaml: $(GCSRCDIR)/%.jsonnet
+# a rule that tells make how to produce a YAML files in GCOUTDIR from a source
+# Jsonnet files
+$(GCOUTDIR)/%.yaml: %.jsonnet
+	@mkdir -p $(dir $@)
 	$(JSONNET) --jpath vendor $< | $(YQ) eval --prettyPrint '.' - > $@
