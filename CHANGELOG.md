@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add AWS Cluster Status Dashboard
 - Add Managed Apps dashboard.
 
 ## [1.4.0] - 2021-09-06
