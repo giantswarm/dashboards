@@ -1,5 +1,5 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
-local stdlib = import 'stdlib.jsonnet';
+local stdlib = import 'stdlib.libsonnet';
 
 stdlib.dashboard(
   'Grafana Analytics',
