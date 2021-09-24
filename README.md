@@ -44,6 +44,20 @@ This figures out which dashboards have changed locally and uploads them as
 with `make gc-preview GCPREVIEW_EXPIRE=X` where `X` is time in seconds) and are
 automatically cleaned up.
 
+These targets by default operate on all dashboards matching the
+`dashboards/*.jsonnet` pattern (i.e. all `.jsonnet` files in `dashboards`
+directory) but this can be overridden using `DASHBOARD` variable which can be
+set to a file path or glob, e.g.:
+
+``` sh
+# preview `dashboards/metrics.jsonnet` dashboard
+make gc-preview DASHBOARD=dashboards/metrics.jsonnet
+
+# apply all dashboards matching a glob, note the quoting to prevent the glob
+# from being expanded by the shell (as Makefile does this internally)
+make gc-apply DASHBOARD='dashboards/m*.jsonnet`
+```
+
 ## Requirements
 
 Makefile will take care of pulling in requirements as needed, we use [tool

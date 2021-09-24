@@ -11,7 +11,8 @@ export GOFLAGS = -mod=mod
 # Grafana Cloud
 GCSRCDIR := dashboards
 GCOUTDIR := $(OUTDIR)/gc
-GC_DASHBOARDS_SRC := $(wildcard $(GCSRCDIR)/*.jsonnet)
+DASHBOARD ?= $(GCSRCDIR)/*.jsonnet
+GC_DASHBOARDS_SRC := $(wildcard $(DASHBOARD))
 GC_DASHBOARDS_OUT := $(addprefix $(GCOUTDIR)/,$(GC_DASHBOARDS_SRC:.jsonnet=.yaml))
 GCPREVIEW_EXPIRE ?= 600
 
