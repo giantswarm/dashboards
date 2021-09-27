@@ -16,7 +16,7 @@ GC_DASHBOARDS_SRC := $(wildcard $(DASHBOARD))
 GC_DASHBOARDS_OUT := $(addprefix $(GCOUTDIR)/,$(GC_DASHBOARDS_SRC:.jsonnet=.yaml))
 GCPREVIEW_EXPIRE ?= 600
 
-.PHONY: clean deps gc-apply gc-diff gc-resources
+.PHONY: clean gc-apply gc-diff gc-preview gc-resources
 
 clean: ## Clean (delete) all outputs
 	rm -rf $(OUTDIR)
