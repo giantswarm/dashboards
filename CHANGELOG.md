@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2021-11-09
+
 ### Added
 
 - Add FluxCD dashboards.
@@ -95,7 +97,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/giantswarm/dashboards/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/giantswarm/dashboards/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/giantswarm/dashboards/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/giantswarm/dashboards/compare/v1.3.0...v1.4.0
