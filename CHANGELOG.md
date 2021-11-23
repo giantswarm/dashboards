@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add new dashboard to visualize API audit metrics
+
 ## [1.6.0] - 2021-11-09
 
 ### Added
