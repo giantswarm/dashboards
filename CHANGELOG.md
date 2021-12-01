@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Deleted
 
-- Fix query for Azure Load Balancer Backend Nodes dashboard.
+- Delete Azure Load Balancer Backend Nodes dashboard.
 
 ## [1.7.0] - 2021-11-24
 
