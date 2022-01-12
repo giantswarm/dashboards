@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add a new dashboard showing success and error responses for SSO via `dex`.
+
+
 ## [1.8.1] - 2021-12-02
 
 ### Fixed
