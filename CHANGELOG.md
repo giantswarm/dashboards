@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add new panel to Dex dashboard to show requests with more details.
+- Dex dashboard:
+  - Add new panel to show requests with more details.
+  - Exclude health check requests (handler `/healthz`) from the successful requests graph.
 
 ## [1.9.0] - 2022-01-13
 
