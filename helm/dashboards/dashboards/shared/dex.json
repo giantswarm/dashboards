@@ -22,9 +22,9 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 16,
   "iteration": 1642588229858,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "gridPos": {
@@ -103,7 +103,6 @@
       "type": "stat"
     },
     {
-      "datasource": "Promxy",
       "description": "Successful dex responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -211,6 +210,10 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
           "exemplar": true,
           "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\",handler!=\"/healthz\"}[5m]))by (code)",
           "format": "time_series",
@@ -220,6 +223,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
           "expr": "health",
           "format": "time_series",
           "intervalFactor": 1,
@@ -494,7 +501,7 @@
             "uid": "P685D3FF52274927C"
           },
           "exemplar": true,
-          "expr": "sum(increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\",handler!=\"/healthz\"}[1m])) by (handler, method, code) > 0",
+          "expr": "sum(increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\",handler!=\"/healthz\"}[1m])) by (handler, method, code)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -521,8 +528,9 @@
     "list": [
       {
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": false,
+          "text": "talos",
+          "value": "talos"
         },
         "definition": "label_values(http_requests_total{service=\"dex\"}, cluster_id)",
         "hide": 0,
