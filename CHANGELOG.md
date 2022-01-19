@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add new panel to Dex dashboard to show requests with more details.
+
 ## [1.9.0] - 2022-01-13
 
 ### Added
 
 - Add a new dashboard showing success and error responses for SSO via `dex`.
-
 
 ## [1.8.1] - 2021-12-02
 
