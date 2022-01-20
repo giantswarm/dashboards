@@ -22,9 +22,9 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 16,
-  "iteration": 1641987763525,
+  "iteration": 1642588229858,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "gridPos": {
@@ -103,7 +103,6 @@
       "type": "stat"
     },
     {
-      "datasource": "Promxy",
       "description": "Successful dex responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -211,8 +210,12 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
           "exemplar": true,
-          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\"}[5m]))by (code)",
+          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\",handler!=\"/healthz\"}[5m]))by (code)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -220,6 +223,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
           "expr": "health",
           "format": "time_series",
           "intervalFactor": 1,
@@ -404,6 +411,106 @@
       ],
       "title": "Dex Error Response Codes",
       "type": "timeseries"
+    },
+    {
+      "description": "Excluding health checks to /healthz",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 23,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": true,
+          "expr": "sum(increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\",handler!=\"/healthz\"}[1m])) by (handler, method, code)",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{ method }} {{ handler }} - status {{ code }}",
+          "refId": "A"
+        }
+      ],
+      "title": "All Dex requests",
+      "type": "timeseries"
     }
   ],
   "refresh": "",
@@ -421,8 +528,9 @@
     "list": [
       {
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": false,
+          "text": "talos",
+          "value": "talos"
         },
         "definition": "label_values(http_requests_total{service=\"dex\"}, cluster_id)",
         "hide": 0,
@@ -475,6 +583,6 @@
   "timezone": "UTC",
   "title": "Dex",
   "uid": "w7T9TUtnz",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

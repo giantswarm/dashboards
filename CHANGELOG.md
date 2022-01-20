@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Dex dashboard:
+  - Add new panel to show requests with more details.
+  - Exclude health check requests (handler `/healthz`) from the successful requests graph.
+
 ## [1.9.0] - 2022-01-13
 
 ### Added
 
 - Add a new dashboard showing success and error responses for SSO via `dex`.
-
 
 ## [1.8.1] - 2021-12-02
 
