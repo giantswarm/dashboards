@@ -11,12 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for arbitrary providers instead of hardcoding dashboard settings per provider.
 
+## [1.9.1] - 2022-01-20
+
+### Changed
+
+- Dex dashboard:
+  - Add new panel to show requests with more details.
+  - Exclude health check requests (handler `/healthz`) from the successful requests graph.
+
 ## [1.9.0] - 2022-01-13
 
 ### Added
 
 - Add a new dashboard showing success and error responses for SSO via `dex`.
-
 
 ## [1.8.1] - 2021-12-02
 
@@ -126,7 +133,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.9.1...HEAD
+[1.9.1]: https://github.com/giantswarm/dashboards/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/giantswarm/dashboards/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/giantswarm/dashboards/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/giantswarm/dashboards/compare/v1.7.0...v1.8.0
