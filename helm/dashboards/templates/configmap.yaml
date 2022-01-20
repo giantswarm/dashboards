@@ -19,51 +19,13 @@ metadata:
 data:
 {{ (.Files.Glob "dashboards/mixin/*").AsConfig | indent 2 }}
 ---
-{{- if eq .Values.provider.kind "aws" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
     {{- include "labels.common" . | nindent 4 }}  
-  name: grafana-dashboards-public-aws
+  name: grafana-dashboards-public-{{ .Values.provider.kind }}
   namespace: {{ .Values.namespace  }}
 data:
-{{ (.Files.Glob "dashboards/aws/*").AsConfig | indent 2 }}
----
-{{- end }}
-{{- if eq .Values.provider.kind "azure" }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    {{- include "labels.common" . | nindent 4 }}  
-  name: grafana-dashboards-public-azure
-  namespace: {{ .Values.namespace  }}
-data:
-{{ (.Files.Glob "dashboards/azure/*").AsConfig | indent 2 }}
----
-{{- end }}
-{{ if eq .Values.provider.kind "kvm" }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    {{- include "labels.common" . | nindent 4 }}  
-  name: grafana-dashboards-public-kvm
-  namespace: {{ .Values.namespace  }}
-data:
-{{ (.Files.Glob "dashboards/kvm/*").AsConfig | indent 2 }}
----
-{{- end }}
-{{ if eq .Values.provider.kind "vmware" }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    {{- include "labels.common" . | nindent 4 }}  
-  name: grafana-dashboards-public-vmware
-  namespace: {{ .Values.namespace  }}
-data:
-{{ (.Files.Glob "dashboards/vmware/*").AsConfig | indent 2 }}
----
-{{- end }}
+{{- $pattern := printf "dashboards/%s/*" .Values.provider.kind }}
+{{ (.Files.Glob $pattern).AsConfig | indent 2 }}
