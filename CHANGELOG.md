@@ -11,6 +11,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix `kube_node_status_capacity_` metrics.
 
+## [1.10.0] - 2022-02-23
+
+### Added
+
+- Add support for arbitrary providers instead of hardcoding dashboard settings per provider.
+
+## [1.9.1] - 2022-01-20
+
+### Changed
+
+- Dex dashboard:
+  - Add new panel to show requests with more details.
+  - Exclude health check requests (handler `/healthz`) from the successful requests graph.
+
+## [1.9.0] - 2022-01-13
+
+### Added
+
+- Add a new dashboard showing success and error responses for SSO via `dex`.
+
+## [1.8.1] - 2021-12-02
+
+### Fixed
+
+- Fix metrics dashboard showing incorrect values for number of time series per installation and customer.
+
+## [1.8.0] - 2021-12-01
+
+### Deleted
+
+- Delete Azure Load Balancer Backend Nodes dashboard.
+
+## [1.7.0] - 2021-11-24
+
+### Added
+
+- Add new dashboard to visualize API audit metrics
+
+## [1.6.0] - 2021-11-09
+
+### Added
+
+- Add FluxCD dashboards.
+
+## [1.5.1] - 2021-10-20
+
+### Changed
+
+- Update description and icon
+
 ## [1.5.0] - 2021-09-17
 
 ### Added
@@ -89,7 +139,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/giantswarm/dashboards/compare/v1.9.1...v1.10.0
+[1.9.1]: https://github.com/giantswarm/dashboards/compare/v1.9.0...v1.9.1
+[1.9.0]: https://github.com/giantswarm/dashboards/compare/v1.8.1...v1.9.0
+[1.8.1]: https://github.com/giantswarm/dashboards/compare/v1.8.0...v1.8.1
+[1.8.0]: https://github.com/giantswarm/dashboards/compare/v1.7.0...v1.8.0
+[1.7.0]: https://github.com/giantswarm/dashboards/compare/v1.6.0...v1.7.0
+[1.6.0]: https://github.com/giantswarm/dashboards/compare/v1.5.1...v1.6.0
+[1.5.1]: https://github.com/giantswarm/dashboards/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/giantswarm/dashboards/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/giantswarm/dashboards/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/giantswarm/dashboards/compare/v1.2.0...v1.3.0
