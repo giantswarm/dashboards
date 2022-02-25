@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix `kube_node_status_capacity_` metrics.
+
 ## [1.5.0] - 2021-09-17
 
 ### Added
