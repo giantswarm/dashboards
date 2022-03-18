@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix query in `AWS Cluster Status` dashboard.
+
 ## [1.10.1] - 2022-02-28
 
 ### Fixed
