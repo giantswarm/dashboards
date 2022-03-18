@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.2] - 2022-03-18
+
 ### Fixed
 
 - Fix query in `AWS Cluster Status` dashboard.
@@ -145,7 +147,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.10.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.10.2...HEAD
+[1.10.2]: https://github.com/giantswarm/dashboards/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/giantswarm/dashboards/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/giantswarm/dashboards/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/giantswarm/dashboards/compare/v1.9.0...v1.9.1
