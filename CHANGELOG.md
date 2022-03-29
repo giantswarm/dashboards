@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2022-03-29
+
 ### Added 
 
 - Add a dashboard for `kube-proxy`.
@@ -151,7 +153,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.10.2...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/giantswarm/dashboards/compare/v1.10.2...v1.11.0
 [1.10.2]: https://github.com/giantswarm/dashboards/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/giantswarm/dashboards/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/giantswarm/dashboards/compare/v1.9.1...v1.10.0
