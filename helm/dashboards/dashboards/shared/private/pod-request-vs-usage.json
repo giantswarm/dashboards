@@ -8,19 +8,45 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 44,
-  "iteration": 1594971916340,
+  "id": 27,
+  "iteration": 1648652538156,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "datasource": "Promxy",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 4,
+          "links": [],
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
@@ -30,48 +56,55 @@
       "id": 5,
       "options": {
         "displayMode": "basic",
-        "fieldOptions": {
+        "orientation": "horizontal",
+        "reduceOptions": {
           "calcs": [
             "mean"
           ],
-          "defaults": {
-            "decimals": 4,
-            "links": [],
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": [],
+          "fields": "",
           "values": false
         },
-        "orientation": "horizontal",
         "showUnfilled": true
       },
-      "pluginVersion": "6.7.4",
+      "pluginVersion": "8.3.2",
       "targets": [
         {
-          "expr": "sort(bottomk(10,sum(label_replace(rate(process_cpu_seconds_total{cluster_id=\"$cluster\"}[2h]),\"container\",\"$1\",\"app\",\"(.*)\"))by(container)/ on(container)avg(avg_over_time(kube_pod_container_resource_requests_cpu_cores{cluster_id=\"$cluster\"}[1d]))by(container)*100))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": false,
+          "expr": "sort(bottomk(10,sum(label_replace(rate(process_cpu_seconds_total{cluster_id=\"$cluster\"}[2h]),\"container\",\"$1\",\"app\",\"(.*)\"))by(container)/ on(container)avg(avg_over_time(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\",unit=\"core\"}[1d]))by(container)*100))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{ container }}",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Top10 lowest % requested CPU over real usage",
       "type": "bargauge"
     },
     {
-      "datasource": "Promxy",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 4,
+          "links": [],
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
@@ -81,35 +114,25 @@
       "id": 6,
       "options": {
         "displayMode": "basic",
-        "fieldOptions": {
+        "orientation": "horizontal",
+        "reduceOptions": {
           "calcs": [
             "mean"
           ],
-          "defaults": {
-            "decimals": 4,
-            "links": [],
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": [],
+          "fields": "",
           "values": false
         },
-        "orientation": "horizontal",
         "showUnfilled": true
       },
-      "pluginVersion": "6.7.4",
+      "pluginVersion": "8.3.2",
       "targets": [
         {
-          "expr": "sort(bottomk(10,avg(label_replace(avg_over_time(process_resident_memory_bytes{cluster_id=\"$cluster\"}[1w]),\"container\",\"$1\",\"app\",\"(.*)\"))by(container)/ on(container)avg(avg_over_time(kube_pod_container_resource_requests_memory_bytes{cluster_id=\"$cluster\"}[1w]))by(container)*100))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": false,
+          "expr": "sort(bottomk(10,avg(label_replace(avg_over_time(process_resident_memory_bytes{cluster_id=\"$cluster\"}[1w]),\"container\",\"$1\",\"app\",\"(.*)\"))by(container)/ on(container)avg(avg_over_time(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\", unit=\"byte\"}[1w]))by(container)*100))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -117,8 +140,6 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Top10 lowest % requested memory over real usage",
       "type": "bargauge"
     },
@@ -127,7 +148,12 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Promxy",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -153,9 +179,10 @@
       "linewidth": 2,
       "nullPointMode": "null as zero",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "8.3.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -165,7 +192,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_requests_cpu_cores{cluster_id=\"$cluster\",container=\"$container\"})",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": true,
+          "expr": "avg(kube_pod_container_resource_requests{container=\"$container\",cluster_id=\"$cluster\",resource=\"cpu\",unit=\"core\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -173,6 +205,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
           "expr": "avg(rate(process_cpu_seconds_total{cluster_id=\"$cluster\",app=\"$container\"}[2h]))",
           "hide": false,
           "instant": false,
@@ -182,9 +218,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "CPU request vs usage (Y-axis: log2 scale)",
       "tooltip": {
         "shared": true,
@@ -193,34 +227,27 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
+          "$$hashKey": "object:66",
           "decimals": 4,
           "format": "none",
-          "label": null,
           "logBase": 2,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
+          "$$hashKey": "object:67",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -228,7 +255,12 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Promxy",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -254,10 +286,10 @@
       "linewidth": 2,
       "nullPointMode": "null as zero",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "6.7.4",
+      "pluginVersion": "8.3.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -267,7 +299,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_requests_memory_bytes{cluster_id=\"$cluster\",container=\"$container\"})",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": true,
+          "expr": "avg(kube_pod_container_resource_requests{container=\"$container\",cluster_id=\"$cluster\",resource=\"memory\", unit=\"byte\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -275,6 +312,11 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": true,
           "expr": "avg(avg_over_time(process_resident_memory_bytes{cluster_id=\"$cluster\",app=\"$container\"}[2h]))",
           "interval": "",
           "legendFormat": "usage",
@@ -282,9 +324,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Memory request vs usage",
       "tooltip": {
         "shared": true,
@@ -293,37 +333,31 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
+          "$$hashKey": "object:148",
           "format": "bytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
+          "$$hashKey": "object:149",
           "format": "bytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     }
   ],
-  "schemaVersion": 22,
+  "refresh": "",
+  "schemaVersion": 33,
   "style": "dark",
   "tags": [
     "owner:team-atlas"
@@ -331,53 +365,61 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": false,
+          "text": "5jka7",
+          "value": "5jka7"
         },
-        "datasource": "Promxy",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P685D3FF52274927C"
+        },
         "definition": "label_values(process_cpu_seconds_total, cluster_id)",
         "hide": 0,
         "includeAll": false,
-        "index": -1,
         "label": "Cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
-        "query": "label_values(process_cpu_seconds_total, cluster_id)",
+        "query": {
+          "query": "label_values(process_cpu_seconds_total, cluster_id)",
+          "refId": "Promxy-cluster-Variable-Query"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": "kube-proxy",
+          "value": "kube-proxy"
         },
-        "datasource": "Promxy",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P685D3FF52274927C"
+        },
         "definition": "label_values(process_cpu_seconds_total{cluster_id=\"$cluster\"},app)",
         "hide": 0,
         "includeAll": false,
-        "index": -1,
         "label": "Container",
         "multi": false,
         "name": "container",
         "options": [],
-        "query": "label_values(process_cpu_seconds_total{cluster_id=\"$cluster\"},app)",
+        "query": {
+          "query": "label_values(process_cpu_seconds_total{cluster_id=\"$cluster\"},app)",
+          "refId": "Promxy-container-Variable-Query"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -385,7 +427,7 @@
     ]
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -405,5 +447,6 @@
   "timezone": "UTC",
   "title": "Pod request vs usage",
   "uid": "fg1jVyMMz",
-  "version": 5
+  "version": 1,
+  "weekStart": ""
 }

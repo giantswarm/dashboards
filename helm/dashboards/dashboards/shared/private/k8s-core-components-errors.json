@@ -21,27 +21,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 63,
-  "iteration": 1648107706755,
+  "id": 4,
+  "iteration": 1639738690096,
   "links": [],
   "liveNow": false,
   "panels": [
-    {
-      "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 5,
-      "options": {
-        "content": "Install the [etcd-kubernetes-resources-count-exporter](https://github.com/giantswarm/etcd-kubernetes-resources-count-exporter) app from the Playground catalog.",
-        "mode": "markdown"
-      },
-      "pluginVersion": "8.3.2",
-      "title": "How to get the charts filled with data.",
-      "type": "text"
-    },
     {
       "fieldConfig": {
         "defaults": {
@@ -51,6 +35,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -94,17 +79,17 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 17,
-        "w": 24,
+        "h": 19,
+        "w": 12,
         "x": 0,
-        "y": 2
+        "y": 0
       },
       "id": 2,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "table",
-          "placement": "right"
+          "displayMode": "list",
+          "placement": "bottom"
         },
         "tooltip": {
           "mode": "single"
@@ -117,17 +102,17 @@
             "uid": "P685D3FF52274927C"
           },
           "exemplar": true,
-          "expr": "sum (etcd_kubernetes_resources_count{cluster_id=\"$cluster\", namespace=~\"$namespace\", kind=~\"$kind\"}) by (kind)",
+          "expr": "sum(increase(rest_client_requests_total{app=~\"kube-controller-manager|kube-proxy|kube-scheduler|kubelet\", code=~\"5..|<error>\", cluster_id=\"$cluster_id\"}[5m])) by (app)",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{kind}}",
-          "refId": "A"
+          "legendFormat": "{{app}}",
+          "refId": "C"
         }
       ],
-      "title": "$cluster - Kubernetes objects by Kind",
+      "title": "Number of rest errors by component",
       "type": "timeseries"
     },
     {
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -136,6 +121,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -179,17 +165,17 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
-        "w": 24,
-        "x": 0,
-        "y": 19
+        "h": 19,
+        "w": 12,
+        "x": 12,
+        "y": 0
       },
-      "id": 6,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "table",
-          "placement": "right"
+          "displayMode": "list",
+          "placement": "bottom"
         },
         "tooltip": {
           "mode": "single"
@@ -202,95 +188,51 @@
             "uid": "P685D3FF52274927C"
           },
           "exemplar": true,
-          "expr": "sum (etcd_kubernetes_resources_count{cluster_id=\"$cluster\", namespace=~\"$namespace\", kind=~\"$kind\"}) by (namespace)",
+          "expr": "sum(increase(cloudprovider_azure_api_request_errors{app=~\"kube-controller-manager|kube-scheduler\", cluster_id=\"$cluster_id\"}[5m])) by (app)",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{namespace}}",
+          "legendFormat": "{{app}} (Azure)",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P685D3FF52274927C"
+          },
+          "exemplar": true,
+          "expr": "sum(increase(cloudprovider_aws_api_request_errors{app=~\"kube-controller-manager|kube-scheduler\", cluster_id=\"$cluster_id\"}[5m])) by (app)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{app}} (AWS)",
+          "refId": "B"
         }
       ],
-      "title": "$cluster - Kubernetes objects by Namespace",
+      "title": "Cloud provider API errors",
       "type": "timeseries"
     }
   ],
-  "refresh": false,
   "schemaVersion": 33,
   "style": "dark",
   "tags": [
-    "owner:team-phoenix"
+    "phoenix"
   ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": true,
-          "text": "deu01",
-          "value": "deu01"
+          "text": "gollum",
+          "value": "gollum"
         },
-        "definition": "label_values(etcd_kubernetes_resources_count, cluster_id)",
+        "definition": "label_values(rest_client_requests_total, cluster_id)",
+        "description": "Cluster ID",
         "hide": 0,
         "includeAll": false,
-        "label": "Cluster ID",
         "multi": false,
-        "name": "cluster",
+        "name": "cluster_id",
         "options": [],
         "query": {
-          "query": "label_values(etcd_kubernetes_resources_count, cluster_id)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "definition": "label_values(etcd_kubernetes_resources_count, namespace)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Namespace",
-        "multi": true,
-        "name": "namespace",
-        "options": [],
-        "query": {
-          "query": "label_values(etcd_kubernetes_resources_count, namespace)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "definition": "label_values(etcd_kubernetes_resources_count, kind)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Kind",
-        "multi": true,
-        "name": "kind",
-        "options": [],
-        "query": {
-          "query": "label_values(etcd_kubernetes_resources_count, kind)",
+          "query": "label_values(rest_client_requests_total, cluster_id)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -302,13 +244,13 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "UTC",
-  "title": "Kubernetes Resources Count",
-  "uid": "4FZgOJtnk",
-  "version": 6,
+  "timezone": "",
+  "title": "Kubernetes - Core components error rates",
+  "uid": "NkWvCWonk",
+  "version": 1,
   "weekStart": ""
 }
