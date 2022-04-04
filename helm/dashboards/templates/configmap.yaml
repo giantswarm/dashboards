@@ -1,20 +1,24 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    {{- include "labels.common" . | nindent 4 }}  
-  name: grafana-dashboards-public-shared
-  namespace: {{ .Values.namespace  }}
-data:
-  home.json: {{ (tpl (.Files.Get "dashboards/home.json") . ) | quote }}
-{{ (.Files.Glob "dashboards/shared/*").AsConfig | indent 2 }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public"
   labels:
     {{- include "labels.common" . | nindent 4 }}  
-  name: grafana-dashboards-public-mixin
+  name: grafana-home-dashboard
+  namespace: {{ .Values.namespace  }}
+data:
+  home.json: {{ (tpl (.Files.Get "dashboards/home.json") .) | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public/mixin"
+  labels:
+    {{- include "labels.common" . | nindent 4 }}
+  name: grafana-dashboards-mixin
   namespace: {{ .Values.namespace  }}
 data:
 {{ (.Files.Glob "dashboards/mixin/*").AsConfig | indent 2 }}
@@ -22,10 +26,49 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public/shared"
   labels:
     {{- include "labels.common" . | nindent 4 }}  
+  name: grafana-dashboards-public-shared
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/shared/public/*").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public/{{ .Values.provider.kind }}"
+  labels:
+    {{- include "labels.common" . | nindent 4 }}
   name: grafana-dashboards-public-{{ .Values.provider.kind }}
   namespace: {{ .Values.namespace  }}
 data:
-{{- $pattern := printf "dashboards/%s/*" .Values.provider.kind }}
+{{- $pattern := printf "dashboards/%s/public/*" .Values.provider.kind }}
+{{ (.Files.Glob $pattern).AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/private/shared"
+  labels:
+    {{- include "labels.common" . | nindent 4 }}
+  name: grafana-dashboards-private-shared
+  namespace: {{ .Values.namespace  }}
+data:
+{{ (.Files.Glob "dashboards/shared/private/*").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/private/{{ .Values.provider.kind }}"
+  labels:
+    {{- include "labels.common" . | nindent 4 }}
+  name: grafana-dashboards-private-{{ .Values.provider.kind }}
+  namespace: {{ .Values.namespace  }}
+data:
+{{- $pattern := printf "dashboards/%s/private/*" .Values.provider.kind }}
 {{ (.Files.Glob $pattern).AsConfig | indent 2 }}

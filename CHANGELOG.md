@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add all dashboards from g8s-grafana.
+- Add grafana sidecar annotation to all configmaps.
+
 ## [1.11.0] - 2022-03-29
 
 ### Added 

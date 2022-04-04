@@ -25,4 +25,5 @@ app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 helm.sh/chart: {{ include "chart" . | quote }}
 giantswarm.io/service-type: {{ .Values.serviceType }}
+app.giantswarm.io/kind: "dashboard"
 {{- end -}}
