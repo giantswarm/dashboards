@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Split each dashboards into specific configmaps.
+
 ## [2.0.0] - 2022-04-04
 
 ### Added
