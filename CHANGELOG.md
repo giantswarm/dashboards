@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2022-04-05
+
 ### Changed
 
 - Split each dashboards into specific configmaps
@@ -166,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/giantswarm/dashboards/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/giantswarm/dashboards/compare/v1.11.0...v2.0.0
 [1.11.0]: https://github.com/giantswarm/dashboards/compare/v1.10.2...v1.11.0
 [1.10.2]: https://github.com/giantswarm/dashboards/compare/v1.10.1...v1.10.2
