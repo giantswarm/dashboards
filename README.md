@@ -39,3 +39,22 @@ To upload a dashboard while editing, run:
 * grafonnet: https://github.com/grafana/grafonnet-lib
 
 `git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
+
+## Update mixins
+
+Upstream dashboards are generated in the
+[giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
+repository. These are then duplicated into this repository in order to ensure
+they are only changed when we want them to be.
+
+To sync the master branch, run this script with no arguments:
+
+```bash
+./sync-mixin.sh
+```
+
+To sync a different branch, pass the branch name to the script:
+
+```bash
+./sync-mixins.sh my-fancy-branch
+```
