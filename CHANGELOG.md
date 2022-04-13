@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Make `kube-proxy` dashboard UX compliant.
+- Fix `ceph-cluster` dashboard datasource.
 
 ## [2.1.0] - 2022-04-05
 
