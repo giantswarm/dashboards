@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2022-05-04
+
 ### Added
 
 - Add new dashboard 'K8s API performance'.
@@ -191,7 +193,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/giantswarm/dashboards/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/giantswarm/dashboards/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/giantswarm/dashboards/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/giantswarm/dashboards/compare/v2.1.0...v2.1.1
