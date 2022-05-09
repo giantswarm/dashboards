@@ -21,7 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1651739755525,
+  "id": 55,
+  "iteration": 1652099384555,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -187,10 +188,22 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(etcd_debugging_store_reads_total{cluster_id=\"$cluster_id\"}) by (action)",
+          "expr": "sum(rate(etcd_debugging_store_reads_total{cluster_id=\"$cluster_id\"}[$__rate_interval])) by (action)",
           "interval": "",
           "legendFormat": "{{ action }}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(etcd_debugging_store_writes_total{cluster_id=\"$cluster_id\"}) by (action)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{ action }}",
+          "refId": "B"
         }
       ],
       "title": "Number of etcd read actions",
@@ -290,7 +303,6 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -339,7 +351,7 @@
         "x": 12,
         "y": 8
       },
-      "id": 8,
+      "id": 16,
       "options": {
         "legend": {
           "calcs": [],
@@ -358,13 +370,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(etcd_debugging_store_writes_total{cluster_id=\"$cluster_id\"}) by (action)",
+          "expr": "avg(etcd_debugging_mvcc_keys_total{cluster_id=\"$cluster_id\"}) by (ip)",
           "interval": "",
-          "legendFormat": "{{ action }}",
+          "legendFormat": "{{ ip }}",
           "refId": "A"
         }
       ],
-      "title": "Number of etcd write actions",
+      "title": "Number of keys in ETCD by member",
       "type": "timeseries"
     },
     {
@@ -465,7 +477,7 @@
       "dataFormat": "tsbuckets",
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 6,
         "x": 12,
         "y": 16
       },
@@ -563,9 +575,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 24
+        "w": 6,
+        "x": 18,
+        "y": 16
       },
       "id": 4,
       "options": {
@@ -608,8 +620,8 @@
       {
         "current": {
           "selected": true,
-          "text": "peu01",
-          "value": "peu01"
+          "text": "deu01",
+          "value": "deu01"
         },
         "definition": "label_values(up, cluster_id)",
         "hide": 0,
@@ -631,13 +643,13 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "K8s API performance",
   "uid": "PfJBoO_7z",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
