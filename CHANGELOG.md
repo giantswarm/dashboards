@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improve `K8s API performance` dashboard.
+
 ## [2.5.0] - 2022-05-09
 
 ### Changed
