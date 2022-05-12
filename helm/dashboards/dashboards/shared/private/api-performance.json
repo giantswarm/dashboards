@@ -21,7 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1652166850533,
+  "id": 55,
+  "iteration": 1652344146978,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -121,7 +122,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total rate of API requests",
+      "title": "Rate of API requests",
       "type": "timeseries"
     },
     {
@@ -464,9 +465,9 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(etcd_debugging_store_reads_total{cluster_id=\"$cluster_id\"}[$__rate_interval])) by (action)",
+          "expr": "sum(rate(etcd_mvcc_put_total{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{ action }}",
+          "legendFormat": "PUT",
           "refId": "A"
         },
         {
@@ -475,14 +476,38 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(etcd_debugging_store_writes_total{cluster_id=\"$cluster_id\"}) by (action)",
+          "expr": "sum(rate(etcd_mvcc_delete_total{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{ action }}",
+          "legendFormat": "DELETE",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(etcd_mvcc_range_total{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "RANGE",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(etcd_mvcc_txn_total{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "TXN",
+          "refId": "D"
         }
       ],
-      "title": "Number of etcd read actions",
+      "title": "Number of etcd actions",
       "type": "timeseries"
     },
     {
@@ -689,7 +714,7 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "hidden",
+          "displayMode": "list",
           "placement": "bottom"
         },
         "tooltip": {
@@ -706,8 +731,20 @@
           "exemplar": true,
           "expr": "etcd_db_total_size_in_bytes{cluster_id=\"$cluster_id\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Real size on disk",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "etcd_mvcc_db_total_size_in_use_in_bytes{cluster_id=\"$cluster_id\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Used size (excludes fragmentation) {{ip}}",
+          "refId": "B"
         }
       ],
       "title": "Total etcd DB size",
@@ -735,6 +772,8 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMax": 100,
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -773,7 +812,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -846,6 +886,8 @@
             }
           },
           "mappings": [],
+          "max": 1,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -858,7 +900,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percentunit"
         },
         "overrides": []
       },
@@ -932,13 +975,13 @@
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "K8s API performance",
   "uid": "PfJBoO_7z",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
