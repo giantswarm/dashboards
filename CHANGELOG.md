@@ -7,15 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
 ## [2.9.0] - 2022-05-18
 
 ### Added
 
+- Add dashboard for Fluentbit.
+
+## [2.8.0] - 2022-05-17
+
+
+### Added
+
 - Add new dashboard 'Webhook Health'.
+- Add dashboard for Fluentbit.
 
 ## Changed
 
 - Fixes and updates to `grafana` dashboard.
+- Improve `K8s API performance` dashboard.
 
 ## [2.7.0] - 2022-05-12
 
@@ -233,8 +243,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
+
 [Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.9.0...HEAD
-[2.9.0]: https://github.com/giantswarm/dashboards/compare/v2.7.0...v2.9.0
+[2.9.0]: https://github.com/giantswarm/dashboards/compare/v2.8.0...v2.9.0
+[2.8.0]: https://github.com/giantswarm/dashboards/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/giantswarm/dashboards/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/giantswarm/dashboards/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/giantswarm/dashboards/compare/v2.4.2...v2.5.0
