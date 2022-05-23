@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add etcd response times istogram.
+
 ### Changed
 
 - Improve `Etcd k8s events and resources` dashboard
