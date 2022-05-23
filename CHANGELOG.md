@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Update `etcd-k8s-resources-count` to `etcd-k8s-events-and-resources-count`
+
 
 ## [2.9.0] - 2022-05-18
 
