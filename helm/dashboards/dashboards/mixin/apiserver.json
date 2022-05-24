@@ -28,7 +28,7 @@
          "type": "text"
       }
    ],
-   "refresh": "1m",
+   "refresh": "10s",
    "rows": [
       {
          "collapse": false,
@@ -56,7 +56,11 @@
                },
                "gridPos": { },
                "id": 3,
-               "interval": null,
+               "interval": "1m",
+               "legend": {
+                  "alignAsTable": true,
+                  "rightSide": true
+               },
                "links": [ ],
                "mappingType": 1,
                "mappingTypes": [
@@ -93,7 +97,7 @@
                "tableColumn": "",
                "targets": [
                   {
-                     "expr": "apiserver_request:availability30d{verb=\"all\", cluster_id=\"$cluster\"}",
+                     "expr": "apiserver_request:availability30d{verb=\"all\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "",
@@ -128,13 +132,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 4,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -156,7 +161,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "100 * (apiserver_request:availability30d{verb=\"all\", cluster_id=\"$cluster\"} - 0.990000)",
+                     "expr": "100 * (apiserver_request:availability30d{verb=\"all\", cluster=\"$cluster\"} - 0.990000)",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "errorbudget",
@@ -236,7 +241,11 @@
                },
                "gridPos": { },
                "id": 5,
-               "interval": null,
+               "interval": "1m",
+               "legend": {
+                  "alignAsTable": true,
+                  "rightSide": true
+               },
                "links": [ ],
                "mappingType": 1,
                "mappingTypes": [
@@ -273,7 +282,7 @@
                "tableColumn": "",
                "targets": [
                   {
-                     "expr": "apiserver_request:availability30d{verb=\"read\", cluster_id=\"$cluster\"}",
+                     "expr": "apiserver_request:availability30d{verb=\"read\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "",
@@ -307,13 +316,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 6,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -352,7 +362,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (code) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster_id=\"$cluster\"})",
+                     "expr": "sum by (code) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster=\"$cluster\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{ code }}",
@@ -406,13 +416,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 7,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -434,7 +445,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\",code=~\"5..\", cluster_id=\"$cluster\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster_id=\"$cluster\"})",
+                     "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\",code=~\"5..\", cluster=\"$cluster\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster=\"$cluster\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{ resource }}",
@@ -488,13 +499,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 8,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -516,7 +528,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{verb=\"read\", cluster_id=\"$cluster\"}",
+                     "expr": "cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb=\"read\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{ resource }}",
@@ -594,7 +606,11 @@
                },
                "gridPos": { },
                "id": 9,
-               "interval": null,
+               "interval": "1m",
+               "legend": {
+                  "alignAsTable": true,
+                  "rightSide": true
+               },
                "links": [ ],
                "mappingType": 1,
                "mappingTypes": [
@@ -631,7 +647,7 @@
                "tableColumn": "",
                "targets": [
                   {
-                     "expr": "apiserver_request:availability30d{verb=\"write\", cluster_id=\"$cluster\"}",
+                     "expr": "apiserver_request:availability30d{verb=\"write\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "",
@@ -665,13 +681,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 10,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -710,7 +727,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (code) (code_resource:apiserver_request_total:rate5m{verb=\"write\", cluster_id=\"$cluster\"})",
+                     "expr": "sum by (code) (code_resource:apiserver_request_total:rate5m{verb=\"write\", cluster=\"$cluster\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{ code }}",
@@ -764,13 +781,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 11,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -792,7 +810,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\",code=~\"5..\", cluster_id=\"$cluster\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\", cluster_id=\"$cluster\"})",
+                     "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\",code=~\"5..\", cluster=\"$cluster\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\", cluster=\"$cluster\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{ resource }}",
@@ -846,13 +864,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 12,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -874,7 +893,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{verb=\"write\", cluster_id=\"$cluster\"}",
+                     "expr": "cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb=\"write\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{ resource }}",
@@ -940,13 +959,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 13,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": false,
                   "sideWidth": null,
                   "total": false,
@@ -968,7 +988,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum(rate(workqueue_adds_total{app=\"kube-apiserver\", instance=~\"$instance\", cluster_id=\"$cluster\"}[5m])) by (instance, name)",
+                     "expr": "sum(rate(workqueue_adds_total{job=\"kube-apiserver\", instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])) by (instance, name)",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}} {{name}}",
@@ -1021,13 +1041,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 14,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": false,
                   "sideWidth": null,
                   "total": false,
@@ -1049,7 +1070,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum(rate(workqueue_depth{app=\"kube-apiserver\", instance=~\"$instance\", cluster_id=\"$cluster\"}[5m])) by (instance, name)",
+                     "expr": "sum(rate(workqueue_depth{job=\"kube-apiserver\", instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])) by (instance, name)",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}} {{name}}",
@@ -1102,6 +1123,7 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 15,
+               "interval": "1m",
                "legend": {
                   "alignAsTable": true,
                   "avg": false,
@@ -1130,7 +1152,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{app=\"kube-apiserver\", instance=~\"$instance\", cluster_id=\"$cluster\"}[5m])) by (instance, name, le))",
+                     "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{job=\"kube-apiserver\", instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])) by (instance, name, le))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}} {{name}}",
@@ -1196,13 +1218,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 16,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -1224,7 +1247,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "process_resident_memory_bytes{app=\"kube-apiserver\",instance=~\"$instance\", cluster_id=\"$cluster\"}",
+                     "expr": "process_resident_memory_bytes{job=\"kube-apiserver\",instance=~\"$instance\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -1277,13 +1300,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 17,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -1305,7 +1329,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "rate(process_cpu_seconds_total{app=\"kube-apiserver\",instance=~\"$instance\", cluster_id=\"$cluster\"}[5m])",
+                     "expr": "rate(process_cpu_seconds_total{job=\"kube-apiserver\",instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -1358,13 +1382,14 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 18,
+               "interval": "1m",
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": false,
+                  "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -1386,7 +1411,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "go_goroutines{app=\"kube-apiserver\",instance=~\"$instance\", cluster_id=\"$cluster\"}",
+                     "expr": "go_goroutines{job=\"kube-apiserver\",instance=~\"$instance\", cluster=\"$cluster\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -1442,8 +1467,7 @@
    "schemaVersion": 14,
    "style": "dark",
    "tags": [
-      "origin:kubernetes-mixin",
-      "owner:team-ludacris"
+      "kubernetes-mixin"
    ],
    "templating": {
       "list": [
@@ -1453,7 +1477,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": null,
+            "label": "Data Source",
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",
@@ -1465,13 +1489,13 @@
             "allValue": null,
             "current": { },
             "datasource": "$datasource",
-            "hide": 0,
+            "hide": 2,
             "includeAll": false,
             "label": "cluster",
             "multi": false,
             "name": "cluster",
             "options": [ ],
-            "query": "label_values(apiserver_request_total, cluster_id)",
+            "query": "label_values(up{job=\"kube-apiserver\"}, cluster)",
             "refresh": 2,
             "regex": "",
             "sort": 1,
@@ -1491,7 +1515,7 @@
             "multi": false,
             "name": "instance",
             "options": [ ],
-            "query": "label_values(apiserver_request_total{app=\"kube-apiserver\", cluster_id=\"$cluster\"}, instance)",
+            "query": "label_values(up{job=\"kube-apiserver\", cluster=\"$cluster\"}, instance)",
             "refresh": 2,
             "regex": "",
             "sort": 1,
