@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Updated mixin dashboards
+
 ## [2.9.2] - 2022-05-26
 
 ### Added
@@ -17,8 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve `Etcd k8s events and resources` dashboard
 - Fix KVM usage dashboard
-
-- Updated mixin dashboards
 
 ## [2.9.1] - 2022-05-23
 
