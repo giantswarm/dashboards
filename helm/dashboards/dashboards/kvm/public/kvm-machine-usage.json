@@ -353,7 +353,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "count(sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",container=\"k8s-kvm\"}) by (namespace))",
+          "expr": "count(sum(kube_pod_container_info{cluster_type=~\"management_cluster\",container=\"k8s-kvm\"}) by (namespace))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -428,7 +428,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",node=\"\"})",
+          "expr": "aggregation:node:cpu_cores_total{cluster_type=\"management_cluster\"}",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -503,7 +503,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",node=\"\"})",
+          "expr": "aggregation:node:memory_memtotal_bytes_total{cluster_type=\"management_cluster\"}",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -600,7 +600,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(aggregation:node:cpu_cores_total{cluster_type=~\"management_cluster\"}) - sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\"})",
+          "expr": "sum(aggregation:node:cpu_cores_total{cluster_type=~\"management_cluster\"}) - sum(kube_pod_container_resource_requests{cluster_type=\"management_cluster\", unit=\"core\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -689,7 +689,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum(aggregation:node:cpu_cores_total{cluster_type=\"management_cluster\"}) - sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=\"management_cluster\"})) / sum(aggregation:node:cpu_cores_total{cluster_type=\"management_cluster\"})",
+          "expr": "(sum(aggregation:node:cpu_cores_total{cluster_type=\"management_cluster\"}) - sum(kube_pod_container_resource_requests{cluster_type=\"management_cluster\", unit=\"core\"})) / sum(aggregation:node:cpu_cores_total{cluster_type=\"management_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -770,7 +770,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(aggregation:kubernetes:node_allocatable_memory_bytes{cluster_type=~\"management_cluster\"}) - sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\"})",
+          "expr": "sum(aggregation:node:memory_memtotal_bytes_total{cluster_type=\"management_cluster\"}) - sum(kube_pod_container_resource_requests{cluster_type=\"management_cluster\", unit=\"byte\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -860,7 +860,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum(aggregation:kubernetes:node_allocatable_memory_bytes{cluster_type=\"management_cluster\"}) - sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=\"management_cluster\"})) / sum(aggregation:kubernetes:node_allocatable_memory_bytes{cluster_type=\"management_cluster\"})",
+          "expr": "(sum(aggregation:node:memory_memtotal_bytes_total{cluster_type=\"management_cluster\"}) - sum(kube_pod_container_resource_requests{cluster_type=\"management_cluster\", unit=\"byte\"})) / sum(aggregation:node:memory_memtotal_bytes_total{cluster_type=\"management_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1184,7 +1184,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"core\"}) by (node)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ node }}",
@@ -1275,7 +1275,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\"}) by (namespace)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"core\"}) by (namespace)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ namespace }}",
@@ -1356,7 +1356,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"core\"}) by (node)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -1456,7 +1456,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\"}) by (namespace)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"core\"}) by (namespace)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -1577,7 +1577,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"byte\"}) by (node)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -1677,7 +1677,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\"}) by (namespace)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"byte\"}) by (namespace)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -1794,7 +1794,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\",unit=\"core\"}) by (node)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -1894,7 +1894,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\"}) by (namespace)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\",unit=\"core\"}) by (namespace)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -2011,7 +2011,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\",unit=\"byte\"}) by (node)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -2109,7 +2109,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\"}) by (namespace)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",container!=\"k8s-kvm\",unit=\"byte\"}) by (namespace)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 2,
@@ -2260,7 +2260,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",node!=\"\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",node!=\"\",unit=\"core\"}) by (node)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ node }}",
@@ -2351,7 +2351,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",node!=\"\"}) by (node)",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",node!=\"\",unit=\"byte\"}) by (node)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ node }}",
@@ -2568,7 +2568,7 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",namespace=\"$cluster\"}) by (node)",
+              "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"core\",namespace=\"$cluster\"}) by (node)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -2657,7 +2657,7 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",namespace=\"$cluster\"}) by (node)",
+              "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",pod=~\"worker.*\",node!=\"\",unit=\"byte\",namespace=\"$cluster\"}) by (node)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -2769,7 +2769,7 @@
           "pluginVersion": "8.0.3",
           "targets": [
             {
-              "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",node=\"\",namespace=\"$cluster\"})",
+              "expr": "sum(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",node=\"\",namespace=\"$cluster\",unit=\"core\"})",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -2897,7 +2897,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "100 *  sum by (pod) (label_replace(node_memory_Active_bytes{cluster_id=\"$cluster\", cluster_type=\"workload_cluster\"}, \"pod\", \"$1\", \"node\", \"(.*)\")) / on (pod) sum by (pod) (kube_pod_container_resource_limits_memory_bytes{cluster_type=\"management_cluster\", namespace=\"$cluster\", pod=~\"worker.*\"})",
+              "expr": "100 *  sum by (pod) (label_replace(node_memory_Active_bytes{cluster_id=\"$cluster\", cluster_type=\"workload_cluster\"}, \"pod\", \"$1\", \"node\", \"(.*)\")) / on (pod) sum by (pod) (kube_pod_container_resource_limits{cluster_type=\"management_cluster\",unit=\"byte\",namespace=\"$cluster\",pod=~\"worker.*\"})",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -2996,7 +2996,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(kube_pod_container_resource_requests_cpu_cores{cluster_type=~\"management_cluster\",container=\"k8s-kvm\"}, namespace)",
+          "query": "label_values(kube_pod_container_resource_requests{cluster_type=~\"management_cluster\",container=\"k8s-kvm\",unit=\"core\"}, namespace)",
           "refId": "Promxy-cluster-Variable-Query"
         },
         "refresh": 2,

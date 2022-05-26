@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve `Etcd k8s events and resources` dashboard
+- Fix KVM usage dashboard
 
 ## [2.9.1] - 2022-05-23
 
