@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed query for the Fairness and Priority charts in the `K8s API Performance` dashboard.
+
 ## [2.11.0] - 2022-05-30
 
 ### Changed
