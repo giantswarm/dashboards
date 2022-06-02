@@ -8,7 +8,7 @@ set -o pipefail
 TMPDIR=$(mktemp --directory)
 trap "rm -f $TMPDIR" EXIT
 MIXIN_REPO="git@github.com:giantswarm/giantswarm-kubernetes-mixin.git"
-# clone a branch if provided
+# clone a branch of tag if provided
 BRANCH=${1:-""}
 
 if [ -z "${BRANCH}" ]; then
@@ -16,8 +16,8 @@ if [ -z "${BRANCH}" ]; then
     echo -e "\nCloning master branch:\n"
     git clone --single-branch ${MIXIN_REPO} ${TMPDIR}/mixins
 else
-    # clone the mixins repo branch
-    echo -e "\nCloning branch '${BRANCH}':\n"
+    # clone the mixins repo branch or tag
+    echo -e "\nCloning branch or tag '${BRANCH}':\n"
     git clone --branch ${BRANCH} --single-branch ${MIXIN_REPO} ${TMPDIR}/mixins
 fi
 
