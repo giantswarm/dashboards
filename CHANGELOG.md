@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add sync mixin scripts.
+
 ## [2.11.2] - 2022-05-31
 
 ### Fixed

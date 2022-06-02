@@ -40,38 +40,9 @@ To upload a dashboard while editing, run:
 
 `git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
 
+### Mixins
 
+To Update the `kubernetes-mixin` dashboards:
 
-### Mixin
-
-To Update `kubernetes-mixin` dashboards:
-
-* After Checking a suitable release in the [upstream](https://github.com/kubernetes-monitoring/kubernetes-mixin#releases) and updating [mixins.rules](https://github.com/giantswarm/prometheus-rules/blob/master/helm/prometheus-rules/templates/recording-rules/kubernetes-mixins.rules.yml)
-
-* follow those [instructions](https://github.com/kubernetes-monitoring/kubernetes-mixin#generate-config-files)
-
-* Copy the content of `dashboards_out/` to `helm/dashboards/dashboards/mixin` and overwrite dashboards with same name.
-
-* Adjust labels in the dashboards
-
-```
-cluster=                   =>  cluster_id=
-
-job="apiserver"            =>  app="kubernetes"
-
-job="cadvisor"             =>  app="cadvisor"
-
-job="kube-state-metrics"   =>  app="kube-state-metrics"
-
-job="kube-scheduler"       =>  app="kube-scheduler"
-
-job="node-exporter"        =>  app="node-exporter"
-
-job="kubelet"              =>  app="kubelet"
-```
-
-Don't forget to change labelvalues grafana function as follow:
-
-```
-label_values(up{app=\"cadvisor\"}, cluster)   =>  label_values(up{app=\"cadvisor\"}, cluster_id)
-```
+* Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
+* Run `./scripts/sync-mixins.sh (?my-fancy-branch-or-tag)` to updated the `helm/dashboards/dashboards/mixin` folder.
