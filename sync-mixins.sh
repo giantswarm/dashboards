@@ -18,7 +18,7 @@ if [ -z "${BRANCH}" ]; then
 else
     # clone the mixins repo branch
     echo -e "\nCloning branch '${BRANCH}':\n"
-    git clone -b ${BRANCH} --single-branch ${MIXIN_REPO} ${TMPDIR}/mixins
+    git clone --branch ${BRANCH} --single-branch ${MIXIN_REPO} ${TMPDIR}/mixins
 fi
 
 # get the current commit of the mixin repo
