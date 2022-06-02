@@ -14,7 +14,7 @@ BRANCH=${1:-""}
 if [ -z "${BRANCH}" ]; then
     # clone the mixins repo
     echo -e "\nCloning master branch:\n"
-    git clone ${MIXIN_REPO} ${TMPDIR}/mixins
+    git clone --single-branch ${MIXIN_REPO} ${TMPDIR}/mixins
 else
     # clone the mixins repo branch
     echo -e "\nCloning branch '${BRANCH}':\n"
