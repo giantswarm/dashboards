@@ -4,13 +4,12 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-TMPDIR="./tmp"
+# make a temporary dir to work in
+TMPDIR=$(mktemp --directory)
+trap "rm -f $TMPDIR" EXIT
 MIXIN_REPO="git@github.com:giantswarm/giantswarm-kubernetes-mixin.git"
 # clone a branch if provided
 BRANCH=${1:-""}
-
-# make a temporary dir to work in
-mkdir ${TMPDIR}
 
 if [ -z "${BRANCH}" ]; then
     # clone the mixins repo
