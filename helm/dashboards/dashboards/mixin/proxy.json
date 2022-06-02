@@ -77,7 +77,7 @@
                "tableColumn": "",
                "targets": [
                   {
-                     "expr": "sum(up{cluster_id=\"$cluster\", app=\"kube-controller-manager\"})",
+                     "expr": "sum(up{cluster_id=\"$cluster\", app=\"kube-proxy\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "",
@@ -114,14 +114,14 @@
                "legend": {
                   "alignAsTable": true,
                   "avg": false,
-                  "current": true,
+                  "current": false,
                   "max": false,
                   "min": false,
                   "rightSide": true,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
-                  "values": true
+                  "values": false
                },
                "lines": true,
                "linewidth": 1,
@@ -134,22 +134,22 @@
                "repeat": null,
                "seriesOverrides": [ ],
                "spaceLength": 10,
-               "span": 10,
+               "span": 5,
                "stack": false,
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum(rate(workqueue_adds_total{cluster_id=\"$cluster\", app=\"kube-controller-manager\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, name)",
+                     "expr": "sum(rate(kubeproxy_sync_proxy_rules_duration_seconds_count{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
-                     "legendFormat": "{{cluster}} {{instance}} {{name}}",
+                     "legendFormat": "rate",
                      "refId": "A"
                   }
                ],
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Work Queue Add Rate",
+               "title": "Rules Sync Rate",
                "tooltip": {
                   "shared": false,
                   "sort": 0,
@@ -169,7 +169,7 @@
                      "label": null,
                      "logBase": 1,
                      "max": null,
-                     "min": null,
+                     "min": 0,
                      "show": true
                   },
                   {
@@ -177,24 +177,11 @@
                      "label": null,
                      "logBase": 1,
                      "max": null,
-                     "min": null,
+                     "min": 0,
                      "show": true
                   }
                ]
-            }
-         ],
-         "repeat": null,
-         "repeatIteration": null,
-         "repeatRowId": null,
-         "showTitle": false,
-         "title": "Dashboard Row",
-         "titleSize": "h6",
-         "type": "row"
-      },
-      {
-         "collapse": false,
-         "collapsed": false,
-         "panels": [
+            },
             {
                "aliasColors": { },
                "bars": false,
@@ -229,22 +216,22 @@
                "repeat": null,
                "seriesOverrides": [ ],
                "spaceLength": 10,
-               "span": 12,
+               "span": 5,
                "stack": false,
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum(rate(workqueue_depth{cluster_id=\"$cluster\", app=\"kube-controller-manager\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, name)",
+                     "expr": "histogram_quantile(0.99,rate(kubeproxy_sync_proxy_rules_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
-                     "legendFormat": "{{cluster}} {{instance}} {{name}}",
+                     "legendFormat": "{{instance}}",
                      "refId": "A"
                   }
                ],
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Work Queue Depth",
+               "title": "Rule Sync Latency 99th Quantile",
                "tooltip": {
                   "shared": false,
                   "sort": 0,
@@ -260,7 +247,7 @@
                },
                "yaxes": [
                   {
-                     "format": "short",
+                     "format": "s",
                      "label": null,
                      "logBase": 1,
                      "max": null,
@@ -268,7 +255,7 @@
                      "show": true
                   },
                   {
-                     "format": "short",
+                     "format": "s",
                      "label": null,
                      "logBase": 1,
                      "max": null,
@@ -304,6 +291,88 @@
                "legend": {
                   "alignAsTable": true,
                   "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "span": 6,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum(rate(kubeproxy_network_programming_duration_seconds_count{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\"}[$__rate_interval]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "rate",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Network Programming Rate",
+               "tooltip": {
+                  "shared": false,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": 0,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": 0,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "$datasource",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": { },
+               "id": 6,
+               "interval": "1m",
+               "legend": {
+                  "alignAsTable": true,
+                  "avg": false,
                   "current": true,
                   "max": false,
                   "min": false,
@@ -324,22 +393,22 @@
                "repeat": null,
                "seriesOverrides": [ ],
                "spaceLength": 10,
-               "span": 12,
+               "span": 6,
                "stack": false,
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-controller-manager\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, name, le))",
+                     "expr": "histogram_quantile(0.99, sum(rate(kubeproxy_network_programming_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\"}[$__rate_interval])) by (instance, le))",
                      "format": "time_series",
                      "intervalFactor": 2,
-                     "legendFormat": "{{cluster}} {{instance}} {{name}}",
+                     "legendFormat": "{{instance}}",
                      "refId": "A"
                   }
                ],
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Work Queue Latency",
+               "title": "Network Programming Latency 99th Quantile",
                "tooltip": {
                   "shared": false,
                   "sort": 0,
@@ -359,7 +428,7 @@
                      "label": null,
                      "logBase": 1,
                      "max": null,
-                     "min": null,
+                     "min": 0,
                      "show": true
                   },
                   {
@@ -367,7 +436,7 @@
                      "label": null,
                      "logBase": 1,
                      "max": null,
-                     "min": null,
+                     "min": 0,
                      "show": true
                   }
                ]
@@ -394,7 +463,7 @@
                "fill": 1,
                "fillGradient": 0,
                "gridPos": { },
-               "id": 6,
+               "id": 7,
                "interval": "1m",
                "legend": {
                   "alignAsTable": true,
@@ -424,28 +493,28 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum(rate(rest_client_requests_total{app=\"kube-controller-manager\", instance=~\"$instance\",code=~\"2..\"}[$__rate_interval]))",
+                     "expr": "sum(rate(rest_client_requests_total{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\",code=~\"2..\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "2xx",
                      "refId": "A"
                   },
                   {
-                     "expr": "sum(rate(rest_client_requests_total{app=\"kube-controller-manager\", instance=~\"$instance\",code=~\"3..\"}[$__rate_interval]))",
+                     "expr": "sum(rate(rest_client_requests_total{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\",code=~\"3..\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "3xx",
                      "refId": "B"
                   },
                   {
-                     "expr": "sum(rate(rest_client_requests_total{app=\"kube-controller-manager\", instance=~\"$instance\",code=~\"4..\"}[$__rate_interval]))",
+                     "expr": "sum(rate(rest_client_requests_total{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\",code=~\"4..\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "4xx",
                      "refId": "C"
                   },
                   {
-                     "expr": "sum(rate(rest_client_requests_total{app=\"kube-controller-manager\", instance=~\"$instance\",code=~\"5..\"}[$__rate_interval]))",
+                     "expr": "sum(rate(rest_client_requests_total{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\",code=~\"5..\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "5xx",
@@ -497,7 +566,7 @@
                "fill": 1,
                "fillGradient": 0,
                "gridPos": { },
-               "id": 7,
+               "id": 8,
                "interval": "1m",
                "legend": {
                   "alignAsTable": true,
@@ -527,7 +596,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-controller-manager\", instance=~\"$instance\", verb=\"POST\"}[$__rate_interval])) by (verb, url, le))",
+                     "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-proxy\",instance=~\"$instance\",verb=\"POST\"}[$__rate_interval])) by (verb, url, le))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{verb}} {{url}}",
@@ -592,7 +661,7 @@
                "fill": 1,
                "fillGradient": 0,
                "gridPos": { },
-               "id": 8,
+               "id": 9,
                "interval": "1m",
                "legend": {
                   "alignAsTable": true,
@@ -622,7 +691,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-controller-manager\", instance=~\"$instance\", verb=\"GET\"}[$__rate_interval])) by (verb, url, le))",
+                     "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster_id=\"$cluster\", app=\"kube-proxy\", instance=~\"$instance\", verb=\"GET\"}[$__rate_interval])) by (verb, url, le))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{verb}} {{url}}",
@@ -687,7 +756,7 @@
                "fill": 1,
                "fillGradient": 0,
                "gridPos": { },
-               "id": 9,
+               "id": 10,
                "interval": "1m",
                "legend": {
                   "alignAsTable": true,
@@ -717,7 +786,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "process_resident_memory_bytes{cluster_id=\"$cluster\", app=\"kube-controller-manager\",instance=~\"$instance\"}",
+                     "expr": "process_resident_memory_bytes{cluster_id=\"$cluster\", app=\"kube-proxy\",instance=~\"$instance\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -769,7 +838,7 @@
                "fill": 1,
                "fillGradient": 0,
                "gridPos": { },
-               "id": 10,
+               "id": 11,
                "interval": "1m",
                "legend": {
                   "alignAsTable": true,
@@ -799,7 +868,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "rate(process_cpu_seconds_total{cluster_id=\"$cluster\", app=\"kube-controller-manager\",instance=~\"$instance\"}[$__rate_interval])",
+                     "expr": "rate(process_cpu_seconds_total{cluster_id=\"$cluster\", app=\"kube-proxy\",instance=~\"$instance\"}[$__rate_interval])",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -851,7 +920,7 @@
                "fill": 1,
                "fillGradient": 0,
                "gridPos": { },
-               "id": 11,
+               "id": 12,
                "interval": "1m",
                "legend": {
                   "alignAsTable": true,
@@ -881,7 +950,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "go_goroutines{cluster_id=\"$cluster\", app=\"kube-controller-manager\",instance=~\"$instance\"}",
+                     "expr": "go_goroutines{cluster_id=\"$cluster\", app=\"kube-proxy\",instance=~\"$instance\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -965,7 +1034,7 @@
             "multi": false,
             "name": "cluster",
             "options": [ ],
-            "query": "label_values(up{app=\"kube-controller-manager\"}, cluster_id)",
+            "query": "label_values(up{app=\"kube-proxy\"}, cluster_id)",
             "refresh": 2,
             "regex": "",
             "sort": 1,
@@ -985,7 +1054,7 @@
             "multi": false,
             "name": "instance",
             "options": [ ],
-            "query": "label_values(up{cluster_id=\"$cluster\", app=\"kube-controller-manager\"}, instance)",
+            "query": "label_values(up{app=\"kube-proxy\", cluster_id=\"$cluster\", app=\"kube-proxy\"}, instance)",
             "refresh": 2,
             "regex": "",
             "sort": 1,
@@ -1027,7 +1096,7 @@
       ]
    },
    "timezone": "UTC",
-   "title": "Kubernetes / Controller Manager",
-   "uid": "72e0e05bef5099e5f049b05fdc429ed4",
+   "title": "Kubernetes / Proxy",
+   "uid": "632e265de029684c40b21cb76bca4f94",
    "version": 0
 }

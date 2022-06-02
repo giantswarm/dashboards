@@ -11,6 +11,129 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add sync mixin scripts.
 
+## [2.11.2] - 2022-05-31
+
+### Fixed
+
+- Yet another fix for the Fairness and Priority charts in the `K8s API Performance` dashboard.  
+
+## [2.11.1] - 2022-05-30
+
+### Fixed
+
+- Fixed query for the Fairness and Priority charts in the `K8s API Performance` dashboard.
+
+## [2.11.0] - 2022-05-30
+
+### Changed
+
+- Add Fairness and Priority charts in the `K8s API Performance` dashboard.
+
+## [2.10.0] - 2022-05-26
+
+### Changed
+
+- Updated mixin dashboards
+
+## [2.9.2] - 2022-05-26
+
+### Added
+
+- Add etcd response times histogram.
+
+### Changed
+
+- Improve `Etcd k8s events and resources` dashboard
+- Fix KVM usage dashboard
+
+## [2.9.1] - 2022-05-23
+
+### Added
+
+- Update `etcd-k8s-resources-count` to `etcd-k8s-events-and-resources-count`
+
+
+## [2.9.0] - 2022-05-18
+
+### Added
+
+- Add dashboard for Fluentbit.
+
+## [2.8.0] - 2022-05-17
+
+
+### Added
+
+- Add new dashboard 'Webhook Health'.
+- Add dashboard for Fluentbit.
+
+## Changed
+
+- Fixes and updates to `grafana` dashboard.
+- Improve `K8s API performance` dashboard.
+
+## [2.7.0] - 2022-05-12
+
+### Changed
+
+- Improve `K8s API performance` dashboard.
+
+## [2.6.0] - 2022-05-10
+
+### Changed
+
+- Improve `K8s API performance` dashboard.
+
+## [2.5.0] - 2022-05-09
+
+### Changed
+
+- Improve `K8s API performance` dashboard.
+
+## [2.4.2] - 2022-05-05
+
+### Fixed
+
+- Fix query in `K8s API performance` dashboard to make it more reliable.
+
+## [2.4.1] - 2022-05-05
+
+### Fixed
+
+- Only display master nodes metrics in `K8s API performance` dashboard.
+
+## [2.4.0] - 2022-05-04
+
+### Added
+
+- Add new dashboard 'K8s API performance'.
+
+## [2.3.0] - 2022-04-28
+
+### Changed
+
+- Make DNS dasbhoard public.
+
+## [2.2.0] - 2022-04-21
+
+### Changed
+
+- Improved DNS dashboard to visualize data about node-local DNS cache.
+
+## [2.1.1] - 2022-04-19
+
+### Changed
+
+- Make `kube-proxy` dashboard UX compliant.
+- Fix `ceph-cluster` dashboard datasource.
+
+## [2.1.0] - 2022-04-05
+
+### Changed
+
+- Split each dashboards into specific configmaps
+- Make mixin dashboard private
+
 ## [2.0.0] - 2022-04-04
 
 ### Added
@@ -165,7 +288,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.0.0...HEAD
+
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.11.2...HEAD
+[2.11.2]: https://github.com/giantswarm/dashboards/compare/v2.11.1...v2.11.2
+[2.11.1]: https://github.com/giantswarm/dashboards/compare/v2.11.0...v2.11.1
+[2.11.0]: https://github.com/giantswarm/dashboards/compare/v2.10.0...v2.11.0
+[2.10.0]: https://github.com/giantswarm/dashboards/compare/v2.9.2...v2.10.0
+[2.9.2]: https://github.com/giantswarm/dashboards/compare/v2.9.1...v2.9.2
+[2.9.1]: https://github.com/giantswarm/dashboards/compare/v2.9.0...v2.9.1
+[2.9.0]: https://github.com/giantswarm/dashboards/compare/v2.8.0...v2.9.0
+[2.8.0]: https://github.com/giantswarm/dashboards/compare/v2.7.0...v2.8.0
+[2.7.0]: https://github.com/giantswarm/dashboards/compare/v2.6.0...v2.7.0
+[2.6.0]: https://github.com/giantswarm/dashboards/compare/v2.5.0...v2.6.0
+[2.5.0]: https://github.com/giantswarm/dashboards/compare/v2.4.2...v2.5.0
+[2.4.2]: https://github.com/giantswarm/dashboards/compare/v2.4.1...v2.4.2
+[2.4.1]: https://github.com/giantswarm/dashboards/compare/v2.4.0...v2.4.1
+[2.4.0]: https://github.com/giantswarm/dashboards/compare/v2.3.0...v2.4.0
+[2.3.0]: https://github.com/giantswarm/dashboards/compare/v2.2.0...v2.3.0
+[2.2.0]: https://github.com/giantswarm/dashboards/compare/v2.1.1...v2.2.0
+[2.1.1]: https://github.com/giantswarm/dashboards/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/giantswarm/dashboards/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/giantswarm/dashboards/compare/v1.11.0...v2.0.0
 [1.11.0]: https://github.com/giantswarm/dashboards/compare/v1.10.2...v1.11.0
 [1.10.2]: https://github.com/giantswarm/dashboards/compare/v1.10.1...v1.10.2

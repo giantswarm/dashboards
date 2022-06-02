@@ -58,3 +58,12 @@ To sync a different branch, pass the branch name to the script:
 ```bash
 ./sync-mixins.sh my-fancy-branch
 ```
+=======
+
+
+### Mixin
+
+To Update `kubernetes-mixin` dashboards:
+
+* Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
+* Run `./sync-mixins.sh (?my-fancy-branch-or-tag)` to updated the `helm/dashboards/dashboards/mixin` folder.

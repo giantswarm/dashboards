@@ -18,7 +18,6 @@
       }
     ]
   },
-  "description": "prometheus operator ",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 12129,
@@ -29,6 +28,7 @@
   "panels": [
     {
       "datasource": "$datasource",
+      "description": "How many instances are up",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -107,6 +107,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "The rate of proxy rules synced by second",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -170,7 +171,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -200,6 +201,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "The 99th percentile of proxy rules synced",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -263,7 +265,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -293,6 +295,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "The number of operations per second compute by the proxy",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -356,7 +359,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -389,6 +392,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The 99th percentile of proxy operation duration",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -452,7 +456,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -485,6 +489,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The Kubernetes API requests per second made by the proxy",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -579,7 +584,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -610,6 +615,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The 99th percentile of the duration of proxy POST requests to the kubernetes API",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -657,7 +663,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{app=\"kube-proxy\",cluster_id=\"$cluster_id\",pod=~\"$instance\",verb=\"POST\"}[5m])) by (verb, url, le))",
+          "expr": "sum(rate(rest_client_request_duration_seconds_count{app=\"kube-proxy\",cluster_id=\"$cluster_id\",pod=~\"$instance\",verb=\"POST\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -673,7 +679,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -706,6 +712,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The 99th percentile of the duration of proxy GET requests to the kubernetes API",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -753,7 +760,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{app=\"kube-proxy\", cluster_id=\"$cluster_id\",pod=~\"$instance\", verb=\"GET\"}[5m])) by (verb, url, le))",
+          "expr": "sum(rate(rest_client_request_duration_seconds_count{app=\"kube-proxy\", cluster_id=\"$cluster_id\",pod=~\"$instance\", verb=\"GET\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -769,7 +776,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -802,6 +809,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The proxy memory usage",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -865,7 +873,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -896,8 +904,10 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The proxy CPU usage",
       "fieldConfig": {
         "defaults": {
+          "unit": "s",
           "links": []
         },
         "overrides": []
@@ -959,7 +969,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -992,6 +1002,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "The number of go routines managed by the proxy",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -1055,7 +1066,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "type": "graph",
+      "type": "timeseries",
       "xaxis": {
         "mode": "time",
         "show": true,
@@ -1082,7 +1093,11 @@
   "schemaVersion": 33,
   "style": "dark",
   "tags": [
-    "kubernetes-mixin"
+    "owner:team-rocket",
+    "owner:team-phoenix",
+    "provider:aws",
+    "provider:azure",
+    "provider:kvm"
   ],
   "templating": {
     "list": [
@@ -1147,7 +1162,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -1176,7 +1191,7 @@
     ]
   },
   "timezone": "UTC",
-  "title": "Kubernetes / Proxy",
+  "title": "Kubernetes / Kube Proxy",
   "uid": "qMN01qkWs",
   "version": 2
 }
