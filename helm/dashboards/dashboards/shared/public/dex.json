@@ -35,7 +35,7 @@
       },
       "id": 22,
       "options": {
-        "content": "# Dex\n\nThis Dashboard gives an overview on success and error responses returned by our SSO authentication service `dex`. All graph metrics are calculated based on error/success rate within a sliding 5 minute window. The single stats show the average of these metrics within the selected time frame.\n\nTo show metrics for `dex` running on the management cluster, select the installation name from the `cluster_id` drop down.\nTo show metrics for `dex` running on a workload cluster, select the workload cluster id. If you don't see metrics for a cluster, it either means `dex` is not installed or you need to update  it to a version > 1.20.0.\n\n**HTTP Response Codes** [More Info](https://restfulapi.net/http-status-codes/)\n\n`1xx` Info `2xx` Success `3xx` Redirect `4xx` Client error `5xx` Server error\n",
+        "content": "# Dex\n\nThis Dashboard gives an overview on success and error responses returned by our SSO authentication service `dex`. All graph metrics are calculated based on error/success rate within a sliding 5 minute window. The single stats show the average of these metrics within the selected time frame.\n\nTo show metrics for `dex` running on the management cluster, select the installation name from the `cluster id` drop down.\nTo show metrics for `dex` running on a workload cluster, select the workload cluster id. If you don't see metrics for a cluster, it either means `dex` is not installed or you need to update  it to a version > 1.20.0.\n\n**HTTP Response Codes** [More Info](https://restfulapi.net/http-status-codes/)\n\n`1xx` Info `2xx` Success `3xx` Redirect `4xx` Client error `5xx` Server error\n",
         "mode": "markdown"
       },
       "pluginVersion": "8.3.2",
@@ -93,7 +93,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\"}[5m]))/sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\"}[5m]))",
+          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\"}[5m]))/sum (increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",service=\"dex\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -215,7 +215,7 @@
             "uid": "P685D3FF52274927C"
           },
           "exemplar": true,
-          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\",handler!=\"/healthz\"}[5m]))by (code)",
+          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",service=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\",handler!=\"/healthz\"}[5m]))by (code)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -282,7 +282,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[4]..$|[5]..$\"}[5m]))",
+          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",service=\"dex\", code=~\"^[4]..$|[5]..$\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -401,7 +401,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\", code=~\"^[4]..$|^[5]..$\"}[5m]))by (code)",
+          "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",service=\"dex\", code=~\"^[4]..$|^[5]..$\"}[5m]))by (code)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -501,7 +501,7 @@
             "uid": "P685D3FF52274927C"
           },
           "exemplar": true,
-          "expr": "sum(increase(http_requests_total{cluster_id=\"$cluster_id\",service=\"dex\",handler!=\"/healthz\"}[1m])) by (handler, method, code)",
+          "expr": "sum(increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",service=\"dex\",handler!=\"/healthz\"}[1m])) by (handler, method, code)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -552,9 +552,9 @@
         "definition": "label_values(http_requests_total{service=\"dex\"}, cluster_id)",
         "hide": 0,
         "includeAll": false,
-        "label": "Cluster ID",
+        "label": "Cluster",
         "multi": false,
-        "name": "cluster_id",
+        "name": "cluster",
         "options": [],
         "query": {
           "query": "label_values(http_requests_total{service=\"dex\"}, cluster_id)",
@@ -565,6 +565,35 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(http_requests_total{service=\"dex\", cluster_id=\"$cluster\"}, organization)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(http_requests_total{service=\"dex\", cluster_id=\"$cluster\"}, organization)",
+          "refId": "Organization-query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
