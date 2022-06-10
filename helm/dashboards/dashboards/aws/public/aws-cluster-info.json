@@ -102,7 +102,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(kube_pod_status_phase{cluster_id=\"$cluster_id\"}) by (phase)",
+          "expr": "sum(kube_pod_status_phase{organization=\"$organization\", cluster_id=\"$cluster\"}) by (phase)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -181,7 +181,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(cluster_autoscaler_nodes_count{state=\"ready\",cluster_id=\"$cluster_id\"})/sum(cluster_autoscaler_nodes_count{cluster_id=\"$cluster_id\"})*100",
+          "expr": "sum(cluster_autoscaler_nodes_count{state=\"ready\",organization=\"$organization\", cluster_id=\"$cluster\"})/sum(cluster_autoscaler_nodes_count{organization=\"$organization\", cluster_id=\"$cluster\"})*100",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -243,7 +243,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(cluster_autoscaler_scaled_up_nodes_total{cluster_id=\"$cluster_id\"})",
+          "expr": "sum(cluster_autoscaler_scaled_up_nodes_total{organization=\"$organization\", cluster_id=\"$cluster\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 10,
@@ -253,7 +253,7 @@
           "step": 200
         },
         {
-          "expr": "sum(cluster_autoscaler_unneeded_nodes_count{cluster_id=\"$cluster_id\"})",
+          "expr": "sum(cluster_autoscaler_unneeded_nodes_count{organization=\"$organization\", cluster_id=\"$cluster\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "unneeded nodes",
@@ -261,7 +261,7 @@
           "step": 40
         },
         {
-          "expr": "sum(cluster_autoscaler_nodes_count{cluster_id=\"$cluster_id\"})\n",
+          "expr": "sum(cluster_autoscaler_nodes_count{organization=\"$organization\", cluster_id=\"$cluster\"})\n",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "total nodes",
@@ -363,7 +363,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(awscni_ipamd_error_count{cluster_id=\"$cluster_id\"}) by (fn)",
+          "expr": "sum(awscni_ipamd_error_count{organization=\"$organization\", cluster_id=\"$cluster\"}) by (fn)",
           "interval": "",
           "legendFormat": "{{ fn }}",
           "refId": "A"
@@ -479,7 +479,7 @@
       "repeat": null,
       "targets": [
         {
-          "expr": "kube_deployment_status_replicas_available{cluster_id=\"$cluster_id\",namespace=\"kube-system\", deployment!=\"calico-typha\"} / kube_deployment_spec_replicas{cluster_id=\"$cluster_id\",namespace=\"kube-system\", deployment!=\"calico-typha\"} ",
+          "expr": "kube_deployment_status_replicas_available{organization=\"$organization\", cluster_id=\"$cluster\",namespace=\"kube-system\", deployment!=\"calico-typha\"} / kube_deployment_spec_replicas{organization=\"$organization\", cluster_id=\"$cluster\",namespace=\"kube-system\", deployment!=\"calico-typha\"} ",
           "instant": true,
           "interval": "",
           "legendFormat": "{{deployment}}",
@@ -558,7 +558,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "kube_daemonset_status_number_available{cluster_id=\"$cluster_id\",namespace=\"kube-system\"}  / kube_daemonset_status_desired_number_scheduled{cluster_id=\"$cluster_id\",namespace=\"kube-system\"}",
+          "expr": "kube_daemonset_status_number_available{organization=\"$organization\", cluster_id=\"$cluster\",namespace=\"kube-system\"}  / kube_daemonset_status_desired_number_scheduled{organization=\"$organization\", cluster_id=\"$cluster\",namespace=\"kube-system\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "{{daemonset}}",
@@ -765,7 +765,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "aws_operator_subnet_available_ips{subnet_type=\"aws-cni\", cluster_id=\"$cluster_id\"}",
+          "expr": "aws_operator_subnet_available_ips{subnet_type=\"aws-cni\", organization=\"$organization\", cluster_id=\"$cluster\"}",
           "interval": "",
           "legendFormat": "{{availability_zone}}",
           "refId": "A"
@@ -830,7 +830,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "aws_operator_subnet_available_ips_percentage{subnet_type=\"aws-cni\", cluster_id=\"$cluster_id\"}",
+          "expr": "aws_operator_subnet_available_ips_percentage{subnet_type=\"aws-cni\", organization=\"$organization\", cluster_id=\"$cluster\"}",
           "interval": "",
           "legendFormat": "{{availability_zone}}",
           "refId": "A"
@@ -917,7 +917,7 @@
               "type": "date_histogram"
             }
           ],
-          "expr": "sum(container_memory_working_set_bytes{cluster_id=\"$cluster_id\"}) / sum(kube_node_status_capacity{cluster_id=\"$cluster_id\", resource=\"memory\"}) * 100",
+          "expr": "sum(container_memory_working_set_bytes{organization=\"$organization\", cluster_id=\"$cluster\"}) / sum(kube_node_status_capacity{organization=\"$organization\", cluster_id=\"$cluster\", resource=\"memory\"}) * 100",
           "format": "time_series",
           "instant": true,
           "interval": "10s",
@@ -1089,7 +1089,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster_id\"}[15m])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster_id\"}[15m])) * 1000",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{organization=\"$organization\", cluster_id=\"$cluster\"}[15m])) / sum(irate(coredns_dns_request_duration_seconds_count{organization=\"$organization\", cluster_id=\"$cluster\"}[15m])) * 1000",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1158,7 +1158,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(aws_operator_update_pause_time_seconds{cluster_id=\"$cluster_id\"})",
+          "expr": "max(aws_operator_update_pause_time_seconds{organization=\"$organization\", cluster_id=\"$cluster\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1223,7 +1223,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(aws_operator_update_max_batch_percentage{cluster_id=\"$cluster_id\"})",
+          "expr": "max(aws_operator_update_max_batch_percentage{organization=\"$organization\", cluster_id=\"$cluster\"})",
           "interval": "",
           "legendFormat": "{{node_pool_id}}",
           "refId": "A"
@@ -1250,17 +1250,46 @@
           "value": "$__all"
         },
         "datasource": "default",
-        "definition": "label_values(kubernetes_build_info, cluster_id)",
+        "definition": "label_values(kubernetes_build_info, organization)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Cluster ID",
+        "label": "Organization",
         "multi": false,
-        "name": "cluster_id",
+        "name": "organization",
         "options": [],
         "query": {
-          "query": "label_values(kubernetes_build_info, cluster_id)",
+          "query": "label_values(kubernetes_build_info, organization)",
+          "refId": "Promxy-organization-Variable-Query"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "default",
+        "definition": "label_values(kubernetes_build_info{organization=\"$organization\"}, cluster_id)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(kubernetes_build_info{organization=\"$organization\"}, cluster_id)",
           "refId": "Promxy-cluster_id-Variable-Query"
         },
         "refresh": 1,
