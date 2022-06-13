@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add sync mixin scripts.
+- Add Organization filter to shared and AWS public dashboards.
 
 ## [2.11.2] - 2022-05-31
 

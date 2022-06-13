@@ -170,27 +170,27 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})",
+          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",organization=~\"$organization\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "Total",
           "refId": "A"
         },
         {
-          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})-count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\"})by(alertname))",
+          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",organization=~\"$organization\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})-count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname))",
           "interval": "",
           "legendFormat": "Inactive",
           "refId": "C"
         },
         {
-          "expr": "count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\"})by(alertname))",
+          "expr": "count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname))",
           "instant": false,
           "interval": "",
           "legendFormat": "Active",
           "refId": "B"
         },
         {
-          "expr": "count(count(ALERTS{alertname=~\"^Inhibition.*\",cluster_id=~\"$cluster\"})by(alertname))",
+          "expr": "count(count(ALERTS{alertname=~\"^Inhibition.*\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname))",
           "interval": "",
           "legendFormat": "Inhibitions",
           "refId": "D"
@@ -363,7 +363,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\"})by(alertname)",
+          "expr": "sum(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname)",
           "instant": false,
           "interval": "",
           "legendFormat": "{{cluster_id}}",
@@ -455,7 +455,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "count(ALERTS{alertname=~\"^Inhibition.*\",cluster_id=~\"$cluster\"}) by (alertname)",
+          "expr": "count(ALERTS{alertname=~\"^Inhibition.*\",cluster_id=~\"$cluster\",organization=~\"$organization\"}) by (alertname)",
           "interval": "",
           "legendFormat": "{{ alertname }}",
           "refId": "A"
@@ -498,7 +498,36 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(ALERTS, cluster_id)",
+        "definition": "label_values(ALERTS, organization)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(ALERTS, organization)",
+          "refId": "Organization-query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(ALERTS{organization=\"$organization\"}, cluster_id)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -508,13 +537,13 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(ALERTS, cluster_id)",
+          "query": "label_values(ALERTS{organization=\"$organization\"}, cluster_id)",
           "refId": "Promxy-cluster-Variable-Query"
         },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tagsQuery": "",
         "type": "query",

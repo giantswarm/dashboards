@@ -141,7 +141,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\"}[5m])*60)",
+          "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])*60)",
           "interval": "",
           "legendFormat": "{{ user_agent }}",
           "refId": "A"
@@ -230,7 +230,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\", verb=\"$verb\"}[5m]))",
+          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\",organization=~\"$organization\", verb=\"$verb\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ resource }}",
           "refId": "A"
@@ -319,7 +319,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\"}[5m])/(10000000000))",
+          "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])/(10000000000))",
           "interval": "",
           "legendFormat": "{{ user }}",
           "refId": "A"
@@ -410,7 +410,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum by (app) (rate(apiserver_audit_event_total{cluster_id=\"$cluster\"}[5m]))",
+          "expr": "sum by (app) (rate(apiserver_audit_event_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ user_agent }}",
           "refId": "A"
@@ -448,12 +448,40 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "n24z0",
-          "value": "n24z0"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(up{app=\"node-exporter\"}, cluster_id)",
+        "definition": "label_values(up{app=\"node-exporter\"}, organization)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(up{app=\"node-exporter\"}, organization)",
+          "refId": "Organization-query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(up{app=\"node-exporter\", organization=\"$organization\"}, cluster_id)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -463,13 +491,13 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(up{app=\"node-exporter\"}, cluster_id)",
+          "query": "label_values(up{app=\"node-exporter\", organization=\"$organization\"}, cluster_id)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "type": "query"
       },
       {
