@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Move ownership of dashboards from Celestial and Firecracker to Phoenix.
+- Set Team Shield as owner of Falco and Starboard dashboards.
 
 ## [2.12.1] - 2022-06-29
 
