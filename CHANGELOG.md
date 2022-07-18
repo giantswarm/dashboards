@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.13.0] - 2022-07-18
+
 ### Changed
 
 - Move ownership of dashboards from Celestial and Firecracker to Phoenix.
@@ -304,7 +306,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.12.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.13.0...HEAD
+[2.13.0]: https://github.com/giantswarm/dashboards/compare/v2.12.1...v2.13.0
 [2.12.1]: https://github.com/giantswarm/dashboards/compare/v2.12.0...v2.12.1
 [2.12.0]: https://github.com/giantswarm/dashboards/compare/v2.11.2...v2.12.0
 [2.11.2]: https://github.com/giantswarm/dashboards/compare/v2.11.1...v2.11.2
