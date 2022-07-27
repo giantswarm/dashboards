@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.13.3] - 2022-07-27
+
 ### Changed
 
 - Certificates expiration details file name
@@ -322,7 +324,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.13.2...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.13.3...HEAD
+[2.13.3]: https://github.com/giantswarm/dashboards/compare/v2.13.2...v2.13.3
 [2.13.2]: https://github.com/giantswarm/dashboards/compare/v2.13.1...v2.13.2
 [2.13.1]: https://github.com/giantswarm/dashboards/compare/v2.13.0...v2.13.1
 [2.13.0]: https://github.com/giantswarm/dashboards/compare/v2.12.1...v2.13.0
