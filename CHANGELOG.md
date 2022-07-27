@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Certificates expiration details file name
+
 ## [2.13.2] - 2022-07-27
 
 ### Added
