@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - operatorkit dashboard
 
+### Changed
+
+- Deprecated cert-operator dashboard, superceded by operatorkit dashboard
+
 ## [2.13.3] - 2022-07-27
 
 ### Changed
