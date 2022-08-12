@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- operatorkit dashboard
+
 ## [2.13.3] - 2022-07-27
 
 ### Changed
