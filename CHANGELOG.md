@@ -11,6 +11,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add variable `app` and upgrade panel types for the "NGINX Ingress controller" dashboard.
 
+## [2.14.0] - 2022-08-12
+
+### Added
+
+- operatorkit dashboard
+
+### Changed
+
+- Deprecated cert-operator dashboard, superceded by operatorkit dashboard
+
+## [2.13.3] - 2022-07-27
+
+### Changed
+
+- Certificates expiration details file name
+
+## [2.13.2] - 2022-07-27
+
+### Added
+
+- Certificates expiration details
+
+## [2.13.1] - 2022-07-26
+
+### Added
+
+- Webhooks performance dashboard
+
 ## [2.13.0] - 2022-07-18
 
 ### Changed
@@ -310,7 +338,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.13.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.14.0...HEAD
+[2.14.0]: https://github.com/giantswarm/dashboards/compare/v2.13.3...v2.14.0
+[2.13.3]: https://github.com/giantswarm/dashboards/compare/v2.13.2...v2.13.3
+[2.13.2]: https://github.com/giantswarm/dashboards/compare/v2.13.1...v2.13.2
+[2.13.1]: https://github.com/giantswarm/dashboards/compare/v2.13.0...v2.13.1
 [2.13.0]: https://github.com/giantswarm/dashboards/compare/v2.12.1...v2.13.0
 [2.12.1]: https://github.com/giantswarm/dashboards/compare/v2.12.0...v2.12.1
 [2.12.0]: https://github.com/giantswarm/dashboards/compare/v2.11.2...v2.12.0
