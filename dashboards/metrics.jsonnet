@@ -16,10 +16,22 @@ stdlib.dashboard(
 )
 
 .addPanel(
-  stdlib.singleSeriesChart(
-    'Number of Time Series In Prometheus (Total)',
-    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',
-    'Time Series',
+  grafana.statPanel.new(
+    title='Number of Time Series In Prometheus (Total)',
+    transparent=true,
+    reducerFunction='lastNotNull',
+  )
+  .addThreshold(
+    {
+      color: 'super-light-orange',
+      value: 0,
+    }
+  )
+  .addTarget(
+    grafana.prometheus.target(
+      query='sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',,
+      legendFormat='Time Series',
+    )
   ),
   gridPos={x: 0, y: 0, w: 8, h: 9},
 )
