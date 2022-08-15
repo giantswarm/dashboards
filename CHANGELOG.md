@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add variable `app` and upgrade panel types for the "NGINX Ingress controller" dashboard.
+
 ## [2.14.0] - 2022-08-12
 
 ### Added
