@@ -29,7 +29,7 @@ stdlib.dashboard(
   )
   .addTarget(
     grafana.prometheus.target(
-      query='sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',,
+      expr='sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',
       legendFormat='Time Series',
     )
   ),
