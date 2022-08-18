@@ -16,10 +16,22 @@ stdlib.dashboard(
 )
 
 .addPanel(
-  stdlib.singleSeriesChart(
-    'Number of Time Series In Prometheus (Total)',
-    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',
-    'Time Series',
+  grafana.statPanel.new(
+    title='Number of Time Series In Prometheus (Total)',
+    transparent=true,
+    reducerFunction='lastNotNull',
+  )
+  .addThreshold(
+    {
+      color: 'super-light-orange',
+      value: 0,
+    }
+  )
+  .addTarget(
+    grafana.prometheus.target(
+      expr='sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster"})',
+      legendFormat='Time Series',
+    )
   ),
   gridPos={x: 0, y: 0, w: 8, h: 9},
 )
@@ -41,13 +53,12 @@ stdlib.dashboard(
 )
 
 .addPanel(
-  stdlib.singleSeriesChart(
-    'Memory Usage Of Prometheus (Total)',
-    'sum(aggregation:prometheus:memory_usage{customer=~"$customer", installation=~"$management_cluster"})',
-    'Memory',
-    format='decbytes',
+  stdlib.multiSeriesChart(
+    'Number of Time Series In Prometheus (Per Cluster)',
+    'sum(prometheus_tsdb_head_series{customer=~"$customer", installation=~"$management_cluster", cluster_id=~".*"}) by (cluster_id)',
+    '{{cluster_id}}',
   ),
-  gridPos={x: 0, y: 9, w: 8, h: 9},
+  gridPos={x: 0, y: 9, w: 8, h: 9}
 )
 .addPanel(
   stdlib.multiSeriesChart(

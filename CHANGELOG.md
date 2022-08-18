@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Add variable `app` and upgrade panel types for the "NGINX Ingress controller" dashboard.
+- Metrics dashboard: replace Prometheus total memory with time series per cluster
+- Metrics dashboard: change Prometheus total time series to stat panel type
 
 ## [2.14.0] - 2022-08-12
 
