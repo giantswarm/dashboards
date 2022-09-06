@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.15.0] - 2022-09-06
+
 ### Changed
 
 - Use `app` label instead of `service` label to identify metrics in `dex` dashboard.
@@ -348,7 +350,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.14.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.15.0...HEAD
+[2.15.0]: https://github.com/giantswarm/dashboards/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/giantswarm/dashboards/compare/v2.13.3...v2.14.0
 [2.13.3]: https://github.com/giantswarm/dashboards/compare/v2.13.2...v2.13.3
 [2.13.2]: https://github.com/giantswarm/dashboards/compare/v2.13.1...v2.13.2
