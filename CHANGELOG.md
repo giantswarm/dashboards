@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use `app` label instead of `service` label to identify metrics in `dex` dashboard.
+
 ### Added
 
 - Add new dashboard for CertificateRequests
