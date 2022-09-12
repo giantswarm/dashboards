@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add NGINX Ingress Controller Connection Distribution dashboard.
+
 ## [2.15.0] - 2022-09-06
 
 ### Changed
