@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "iteration": 1662994187781,
+  "iteration": 1663052425539,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -93,7 +93,6 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Rate of requests by user agent",
@@ -165,9 +164,7 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "right",
-          "sortBy": "Mean",
-          "sortDesc": true
+          "placement": "right"
         },
         "tooltip": {
           "mode": "single",
@@ -180,7 +177,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\"}[5m])*60)",
+          "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])*60)",
           "interval": "",
           "legendFormat": "{{ user_agent }}",
           "refId": "A"
@@ -274,7 +271,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\", verb=~\"$verb\"}[5m]))",
+          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\",organization=~\"$organization\", verb=~\"$verb\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ resource }}",
           "refId": "A"
@@ -285,7 +282,6 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Latency of requests in seconds by client",
@@ -368,7 +364,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\"}[5m])/(10000000000))",
+          "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])/(10000000000))",
           "interval": "",
           "legendFormat": "{{ user }}",
           "refId": "A"
@@ -379,7 +375,6 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Rate of events by app",
@@ -464,7 +459,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (app) (rate(apiserver_audit_event_total{cluster_id=\"$cluster\"}[5m]))",
+          "expr": "sum by (app) (rate(apiserver_audit_event_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ user_agent }}",
           "refId": "A"
@@ -499,7 +494,37 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
+          "text": "giantswarm",
+          "value": "giantswarm"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(up{app=\"node-exporter\"}, organization)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(up{app=\"node-exporter\"}, organization)",
+          "refId": "Organization-query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
           "text": "eagle",
           "value": "eagle"
         },
@@ -507,7 +532,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(up{app=\"k8s-audit-metrics\"}, cluster_id)",
+        "definition": "label_values(up{app=\"node-exporter\", organization=\"$organization\"}, cluster_id)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -515,7 +540,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(up{app=\"k8s-audit-metrics\"}, cluster_id)",
+          "query": "label_values(up{app=\"node-exporter\", organization=\"$organization\"}, cluster_id)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
