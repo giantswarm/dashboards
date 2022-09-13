@@ -3,23 +3,35 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "iteration": 1624864618200,
+  "iteration": 1663052425539,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "gridPos": {
         "h": 2,
@@ -32,16 +44,26 @@
         "content": "To view metrics in the panels you need to install [k8s-audit-exporter](https://github.com/giantswarm/k8s-audit-metrics) in your cluster",
         "mode": "markdown"
       },
-      "pluginVersion": "8.0.3",
+      "pluginVersion": "9.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 2
       },
       "id": 35,
       "options": {
@@ -57,12 +79,22 @@
           "showDetails": false
         }
       },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "  ",
       "transparent": true,
       "type": "macropower-analytics-panel"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Rate of requests by user agent",
       "fieldConfig": {
         "defaults": {
@@ -121,7 +153,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 1
+        "y": 3
       },
       "id": 2,
       "options": {
@@ -135,25 +167,30 @@
           "placement": "right"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])*60)",
           "interval": "",
           "legendFormat": "{{ user_agent }}",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Total requests by agent",
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Number of requests by resource",
       "fieldConfig": {
         "defaults": {
@@ -212,7 +249,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 1
+        "y": 13
       },
       "id": 3,
       "options": {
@@ -224,25 +261,29 @@
           "placement": "right"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\",organization=~\"$organization\", verb=\"$verb\"}[5m]))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\",organization=~\"$organization\", verb=~\"$verb\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ resource }}",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Number of requests by resource",
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Latency of requests in seconds by client",
       "fieldConfig": {
         "defaults": {
@@ -301,7 +342,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 1
+        "y": 23
       },
       "id": 4,
       "options": {
@@ -313,25 +354,29 @@
           "placement": "right"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])/(10000000000))",
           "interval": "",
           "legendFormat": "{{ user }}",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Latency of requests (seconds)",
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Rate of events by app",
       "fieldConfig": {
         "defaults": {
@@ -390,7 +435,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 1
+        "y": 33
       },
       "id": 5,
       "options": {
@@ -404,38 +449,40 @@
           "placement": "right"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum by (app) (rate(apiserver_audit_event_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ user_agent }}",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Total events by app",
       "type": "timeseries"
     }
   ],
   "refresh": "",
-  "schemaVersion": 30,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
+          "selected": false,
           "text": "default",
           "value": "default"
         },
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -446,15 +493,16 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": "giantswarm",
+          "value": "giantswarm"
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(up{app=\"node-exporter\"}, organization)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Organization",
@@ -475,15 +523,16 @@
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": "eagle",
+          "value": "eagle"
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(up{app=\"node-exporter\", organization=\"$organization\"}, cluster_id)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -501,16 +550,16 @@
         "type": "query"
       },
       {
-        "allValue": null,
         "current": {
           "selected": true,
-          "text": "GET",
-          "value": "GET"
+          "text": "All",
+          "value": "$__all"
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(apiserver_request_duration_seconds_count, verb)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Verb",
@@ -562,5 +611,6 @@
   "timezone": "UTC",
   "title": "API audit",
   "uid": "zFUtlNp7z",
-  "version": 12
+  "version": 1,
+  "weekStart": ""
 }
