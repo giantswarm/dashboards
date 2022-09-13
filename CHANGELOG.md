@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Make `API Audit` dashboard work with management clusters.
+- Add data about customer workloads in `Pod request vs usage`.
 
 ## [2.16.0] - 2022-09-12
 
