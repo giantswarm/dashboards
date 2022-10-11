@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Make `API Audit` dashboard work with management clusters.
+- Move nginx Ingress Controller to public dashboards
 
 ## [2.16.0] - 2022-09-12
 
