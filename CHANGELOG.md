@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add dashboard to display Cilium agents' metrics.
+
 ### Changed
 
 - Make `API Audit` dashboard work with management clusters.
