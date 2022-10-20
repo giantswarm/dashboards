@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.17.0] - 2022-10-20
+
 ### Added
 
 - Add dashboard to display Cilium agents' metrics.
@@ -366,7 +368,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.16.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.17.0...HEAD
+[2.17.0]: https://github.com/giantswarm/dashboards/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/giantswarm/dashboards/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/giantswarm/dashboards/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/giantswarm/dashboards/compare/v2.13.3...v2.14.0
