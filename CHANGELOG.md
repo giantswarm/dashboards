@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add user metrics for API audit logs.
+
 ## [2.17.0] - 2022-10-20
 
 ### Added

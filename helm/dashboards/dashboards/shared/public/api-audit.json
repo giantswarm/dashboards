@@ -24,7 +24,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "iteration": 1663052425539,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -44,7 +43,7 @@
         "content": "To view metrics in the panels you need to install [k8s-audit-exporter](https://github.com/giantswarm/k8s-audit-metrics) in your cluster",
         "mode": "markdown"
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -57,51 +56,18 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 2
-      },
-      "id": 35,
-      "options": {
-        "analyticsOptions": {
-          "dashboard": "$__dashboard",
-          "flatten": false,
-          "heartbeatAlways": false,
-          "heartbeatInterval": 60,
-          "postEnd": false,
-          "postHeartbeat": false,
-          "postStart": true,
-          "server": "/analytics-plugin/write",
-          "showDetails": false
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "  ",
-      "transparent": true,
-      "type": "macropower-analytics-panel"
-    },
-    {
-      "datasource": {
-        "uid": "$datasource"
-      },
-      "description": "Rate of requests by user agent",
+      "description": "Rate of requests by user",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -153,9 +119,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 3
+        "y": 2
       },
-      "id": 2,
+      "id": 38,
       "options": {
         "legend": {
           "calcs": [
@@ -164,7 +130,10 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -177,27 +146,66 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])*60)",
+          "editorMode": "code",
+          "expr": "sum by (user) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])*60)",
           "interval": "",
-          "legendFormat": "{{ user_agent }}",
+          "legendFormat": "{{ user }}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Total requests by agent",
+      "title": "Total requests by User",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Number of requests by resource",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 35,
+      "options": {
+        "analyticsOptions": {
+          "dashboard": "$__dashboard",
+          "flatten": false,
+          "heartbeatAlways": false,
+          "heartbeatInterval": 60,
+          "postEnd": false,
+          "postHeartbeat": false,
+          "postStart": true,
+          "server": "/analytics-plugin/write",
+          "showDetails": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "  ",
+      "transparent": true,
+      "type": "macropower-analytics-panel"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "description": "Rate of requests by user agent",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -251,14 +259,19 @@
         "x": 0,
         "y": 13
       },
-      "id": 3,
+      "id": 2,
       "options": {
         "legend": {
           "calcs": [
-            "mean"
+            "mean",
+            "max",
+            "min"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -271,26 +284,29 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\",organization=~\"$organization\", verb=~\"$verb\"}[5m]))",
+          "expr": "sum by (user_agent) (rate(k8s_api_audit_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])*60)",
           "interval": "",
-          "legendFormat": "{{ resource }}",
+          "legendFormat": "{{ user_agent }}",
           "refId": "A"
         }
       ],
-      "title": "Number of requests by resource",
+      "title": "Total requests by agent",
       "type": "timeseries"
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Latency of requests in seconds by client",
+      "description": "Number of requests by resource",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -344,14 +360,15 @@
         "x": 0,
         "y": 23
       },
-      "id": 4,
+      "id": 3,
       "options": {
         "legend": {
           "calcs": [
             "mean"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -364,26 +381,28 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])/(10000000000))",
+          "expr": "sum by (resource) (rate(apiserver_request_duration_seconds_count{cluster_id=\"$cluster\",organization=~\"$organization\", verb=~\"$verb\"}[5m]))",
           "interval": "",
-          "legendFormat": "{{ user }}",
+          "legendFormat": "{{ resource }}",
           "refId": "A"
         }
       ],
-      "title": "Latency of requests (seconds)",
+      "title": "Number of requests by resource",
       "type": "timeseries"
     },
     {
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "Rate of events by app",
+      "description": "Latency of requests in seconds by client",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -437,6 +456,102 @@
         "x": 0,
         "y": 33
       },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by (user) (rate(k8s_api_audit_request_duration_nanoseconds{cluster_id=\"$cluster\",organization=~\"$organization\"}[5m])/(10000000000))",
+          "interval": "",
+          "legendFormat": "{{ user }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Latency of requests (seconds)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "description": "Rate of events by app",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
       "id": 5,
       "options": {
         "legend": {
@@ -446,7 +561,8 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -470,7 +586,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 36,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -494,7 +610,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "giantswarm",
           "value": "giantswarm"
         },
@@ -524,9 +640,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "eagle",
-          "value": "eagle"
+          "selected": false,
+          "text": "gaia",
+          "value": "gaia"
         },
         "datasource": {
           "type": "prometheus",
@@ -551,7 +667,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -579,7 +695,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
