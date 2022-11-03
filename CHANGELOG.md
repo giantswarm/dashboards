@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add namespace to the Flux reconciliation duration graph.
+
 ### Added
 
 - Add user metrics for API audit logs.
@@ -98,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Yet another fix for the Fairness and Priority charts in the `K8s API Performance` dashboard.  
+- Yet another fix for the Fairness and Priority charts in the `K8s API Performance` dashboard.
 
 ## [2.11.1] - 2022-05-30
 
@@ -227,7 +231,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.11.0] - 2022-03-29
 
-### Added 
+### Added
 
 - Add a dashboard for `kube-proxy`.
 
