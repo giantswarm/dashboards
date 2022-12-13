@@ -1,6 +1,8 @@
 This PR
 
 - adds/changes/removes etc
+- screenshots before:
+- screenshots after:
 
 <!--
 Changelog must always be updated.
