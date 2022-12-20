@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.19.0] - 2022-12-20
+
 ### Added
 
 - Add official kong ingress controller dashboard rev 2 from https://grafana.com/grafana/dashboards/15662-kong-ingress-controller/
@@ -383,7 +385,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.18.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.19.0...HEAD
+[2.19.0]: https://github.com/giantswarm/dashboards/compare/v2.18.0...v2.19.0
 [2.18.0]: https://github.com/giantswarm/dashboards/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/giantswarm/dashboards/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/giantswarm/dashboards/compare/v2.15.0...v2.16.0
