@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add official kong ingress controller dashboard rev 2 from https://grafana.com/grafana/dashboards/15662-kong-ingress-controller/
 
+### Changed
+
+- Added uid for some dashboards when missing (etcd, managed-apps-efk-stack-app, management-cluster-kubernetes, microstorage, prometheus-remote-write, workload-cluster-kubernetes)
+
 ## [2.18.0] - 2022-11-22
 
 ### Changed
