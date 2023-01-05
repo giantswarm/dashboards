@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add official kong ingress controller dashboard rev 2 from https://grafana.com/grafana/dashboards/15662-kong-ingress-controller/
+- TESTING guidelines
 
 ### Changed
 
