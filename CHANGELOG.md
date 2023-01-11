@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.19.2] - 2023-01-11
+
 ### Changed
 
 - Fix efk-stack-app dashboard
@@ -400,7 +402,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.19.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.19.2...HEAD
+[2.19.2]: https://github.com/giantswarm/dashboards/compare/v2.19.1...v2.19.2
 [2.19.1]: https://github.com/giantswarm/dashboards/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/giantswarm/dashboards/compare/v2.18.0...v2.19.0
 [2.18.0]: https://github.com/giantswarm/dashboards/compare/v2.17.0...v2.18.0
