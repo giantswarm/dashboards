@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -21,13 +24,16 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 5,
-  "iteration": 1650528574747,
+  "id": 73,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -36,6 +42,15 @@
       },
       "id": 17,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Requests",
       "type": "row"
     },
@@ -44,6 +59,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "decimals": 0,
       "description": "Rate of requests made to CoreDNS.",
       "fill": 0,
@@ -76,7 +95,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -137,6 +156,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "decimals": 0,
       "description": "Rate of responses returned by CoreDNS, broken down by response code.\n\nWe expect some degree of `NXDOMAIN` responses.",
       "fill": 0,
@@ -170,7 +193,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -228,6 +251,10 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -236,6 +263,15 @@
       },
       "id": 21,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Latency",
       "type": "row"
     },
@@ -244,6 +280,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "description": "- Mean is defined here as the sum of all samples (latency durations), divided by the number of samples.\n- 50th percentile is the value under which 50% of samples fall (equivalent to the median).\n- 95th percentile is the value under which 95% of samples fall.\n\n\n- Lower latencies are, on the whole, better.\n- If the mean is equal or close to the 50th percentile, we have a symmetrical distribution (a bell curve).\n- If the mean is lower than the 50th percentile, the distribution is skewed to the left, or negatively skewed.\n- If the mean is greater than the 50th percentile, the distribution is skewed to the right, or positively skewed.\n\n\n- We expect the 50th percentile to be lower than the mean (positively skewed), as most requests execute quickly.",
       "fill": 1,
       "fillGradient": 0,
@@ -276,7 +316,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -290,12 +330,14 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\"}[15m])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Mean",
+          "range": true,
           "refId": "A"
         },
         {
@@ -306,6 +348,7 @@
           "exemplar": true,
           "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])) by (le))",
           "format": "time_series",
+          "hide": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "50th percentile",
@@ -319,6 +362,7 @@
           "exemplar": true,
           "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])) by (le))",
           "format": "time_series",
+          "hide": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "95th percentile",
@@ -332,6 +376,7 @@
           "exemplar": true,
           "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])) by (le))",
           "format": "time_series",
+          "hide": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "99th percentile",
@@ -389,7 +434,26 @@
         "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "description": "For each cumulative bucket exposed by CoreDNS, the percentage of requests that take less than that amount of time to complete.\n\nE.g:\n- 0.001s = 95% means that 95% of requests took less than 0.001s to complete.\n- 0.128s = 99.9% means that 99.9% of requests took less than 0.128s to complete.\n\nAs buckets are cumulative, buckets for higher latencies (e.g: 0.128 is higher than 0.001s) include the values of the smaller lower latencies.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
@@ -404,7 +468,44 @@
         "show": false
       },
       "links": [],
-      "pluginVersion": "8.4.2",
+      "options": {
+        "calculate": false,
+        "calculation": {},
+        "cellGap": 2,
+        "cellValues": {},
+        "color": {
+          "exponent": 0.5,
+          "fill": "#b4ff00",
+          "mode": "opacity",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Oranges",
+          "steps": 128
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": false
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "showValue": "never",
+        "tooltip": {
+          "show": true,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false,
+          "unit": "short"
+        }
+      },
+      "pluginVersion": "9.2.5",
       "reverseYBuckets": false,
       "targets": [
         {
@@ -439,6 +540,10 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -447,6 +552,15 @@
       },
       "id": 19,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Resources",
       "type": "row"
     },
@@ -455,6 +569,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -486,7 +604,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -547,6 +665,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -578,7 +700,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -639,6 +761,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -670,7 +796,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -731,6 +857,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -762,7 +892,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.2.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -819,6 +949,10 @@
       }
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "description": "Ideally the lines on this chart should always be around 0. If they are not, it means DNS requests load is not spread evenly across the CoreDNS replicas running in the cluster. Please be aware that this chart is more accurate when the number of DNS queries is higher.",
       "fieldConfig": {
         "defaults": {
@@ -860,8 +994,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -882,8 +1015,9 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "hidden",
-          "placement": "right"
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "multi",
@@ -908,7 +1042,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 35,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [
     "owner:team-phoenix"
@@ -917,12 +1051,12 @@
     "list": [
       {
         "current": {
+          "selected": false,
           "text": "default",
           "value": "default"
         },
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -933,15 +1067,16 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": false,
+          "text": "central-dev",
+          "value": "central-dev"
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(kubernetes_build_info{cluster_type=~\"workload_cluster\"}, organization)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Organization",
@@ -964,10 +1099,13 @@
       {
         "current": {
           "selected": false,
-          "text": "k2z8n",
-          "value": "k2z8n"
+          "text": "cdeve",
+          "value": "cdeve"
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(kubernetes_build_info{cluster_type=~\"workload_cluster\", organization=\"$organization\"}, cluster_id)",
         "hide": 0,
         "includeAll": false,
