@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.20.0] - 2023-01-18
+
 ### Added
 
 - Add private dashboard for External Secrets.
@@ -412,7 +414,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.19.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.20.0...HEAD
+[2.20.0]: https://github.com/giantswarm/dashboards/compare/v2.19.3...v2.20.0
 [2.19.3]: https://github.com/giantswarm/dashboards/compare/v2.19.2...v2.19.3
 [2.19.2]: https://github.com/giantswarm/dashboards/compare/v2.19.1...v2.19.2
 [2.19.1]: https://github.com/giantswarm/dashboards/compare/v2.19.0...v2.19.1
