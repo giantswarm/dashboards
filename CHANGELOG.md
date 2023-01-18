@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add private dashboard for External Secrets.
+
 ## [2.19.3] - 2023-01-12
 
 ### Fixed
