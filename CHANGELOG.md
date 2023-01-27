@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Datasource for kong-config-reload dashboard
+
+### Removed
+
+- What is presumed to be a debug matcher from upstream
+
 ## [2.20.0] - 2023-01-18
 
 ### Added
