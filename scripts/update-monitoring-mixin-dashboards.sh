@@ -19,7 +19,7 @@ echo "-- end"
 
 main() {
 ## clone the repo
-git clone git@github.com:monitoring-mixins/website.git --depth 1 monitoring-mixins
+git clone https://github.com/monitoring-mixins/website.git --depth 1 monitoring-mixins
 
 apps=("alertmanager" "prometheus")
 
@@ -34,3 +34,5 @@ done
 
 }
 
+
+main
