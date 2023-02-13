@@ -9,14 +9,6 @@
 
 set -e
 
-echo "-- env"
-env
-echo "-- pwd"
-pwd
-echo "-- ls"
-ls -la
-echo "-- end"
-
 TMPDIR="$(mktemp -d)"
 
 
@@ -36,8 +28,23 @@ for app in "${apps[@]}"; do
 done
 
 echo "------- Status"
-git status
+if [[ "$(git status --short)" != "" ]]; then
+    echo "applying changes"
+    echo_changes > "$TMPDIR"/tmp_changes
+    sed -i '/^## \[Unreleased\]/r '"$TMPDIR"'/tmp_changes' CHANGELOG.md
+fi
 
+}
+
+
+echo_changes() {
+  echo ""
+  echo "### Changed"
+  echo ""
+  echo "- Monitoring Dashboard Updated"
+  echo "\`\`\`"
+  git status --short
+  echo "\`\`\`"
 }
 
 
