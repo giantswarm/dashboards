@@ -17,9 +17,12 @@ echo "-- ls"
 ls -la
 echo "-- end"
 
+TMPDIR="$(mktemp -d)"
+
+
 main() {
 ## clone the repo
-git clone https://github.com/monitoring-mixins/website.git --depth 1 monitoring-mixins
+git clone https://github.com/monitoring-mixins/website.git --depth 1 "$TMPDIR"/monitoring-mixins
 
 apps=("alertmanager" "prometheus")
 
@@ -28,11 +31,17 @@ for app in "${apps[@]}"; do
 
     echo "copying $app dashboard"
 
-    cp ./monitoring-mixins/assets/"$app"/dashboards/* ./helm/dashboards/dashboards/shared/private/
+    cp "$TMPDIR"/monitoring-mixins/assets/"$app"/dashboards/* ./helm/dashboards/dashboards/shared/private/
 
 done
+
+echo "------- Status"
+git status
 
 }
 
 
-main
+main "$@"
+
+# Clean
+rm -r "$TMPDIR"
