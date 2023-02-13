@@ -16,7 +16,7 @@ main() {
 ## clone the repo
 git clone https://github.com/monitoring-mixins/website.git --depth 1 "$TMPDIR"/monitoring-mixins
 
-apps=("alertmanager" "prometheus")
+apps=("alertmanager")
 
 ## Copy and overwrite
 for app in "${apps[@]}"; do
