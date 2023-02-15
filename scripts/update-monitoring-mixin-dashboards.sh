@@ -1,38 +1,40 @@
 #!/bin/bash
 
-# Update monitoring mixin dashboard
-#
-# Retreive the dashboard from Upstream 
-# # https://monitoring.mixins.dev/
-# and update it.
-# 
+### This script is used to copy dashboards
+## from Monitoring Mixins website repo.
+## https://monitoring.mixins.dev/
+## the repo behind this website is located:
+## https://github.com/monitoring-mixins/website
+## We copy certain dashboards from this repo:
+## e.g alertmanager
+
 
 set -e
 
 TMPDIR="$(mktemp -d)"
+trap "rm -rf $TMPDIR" EXIT
 
 
 main() {
-## clone the repo
-git clone https://github.com/monitoring-mixins/website.git --depth 1 "$TMPDIR"/monitoring-mixins
 
-apps=("alertmanager")
+  apps=("alertmanager")
 
-## Copy and overwrite
-for app in "${apps[@]}"; do
+  ## clone the repo
+  git clone https://github.com/monitoring-mixins/website.git --depth 1 "$TMPDIR"/monitoring-mixins
 
-    echo "copying $app dashboard"
+  ## Copy and overwrite
+  for app in "${apps[@]}"; do
+      echo "copying $app dashboard"
+      cp "$TMPDIR"/monitoring-mixins/assets/"$app"/dashboards/* ./helm/dashboards/dashboards/shared/private/
+  done
 
-    cp "$TMPDIR"/monitoring-mixins/assets/"$app"/dashboards/* ./helm/dashboards/dashboards/shared/private/
-
-done
-
-echo "------- Status"
-if [[ "$(git status --short)" != "" ]]; then
-    echo "applying changes"
-    echo_changes > "$TMPDIR"/tmp_changes
-    sed -i '/^## \[Unreleased\]/r '"$TMPDIR"'/tmp_changes' CHANGELOG.md
-fi
+  echo "------- Update Changelog"
+  gst="$(git status --short)"
+  if [[ "$gst" != "" ]]; then
+      echo "$gst"
+      echo_changes > "$TMPDIR"/tmp_changes
+      sed -i '/^## \[Unreleased\]/r '"$TMPDIR"'/tmp_changes' CHANGELOG.md
+  fi
 
 }
 
@@ -49,6 +51,3 @@ echo_changes() {
 
 
 main "$@"
-
-# Clean
-rm -r "$TMPDIR"

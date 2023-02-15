@@ -1,5 +1,13 @@
 #!/bin/bash
 
+### This script is used to copy dashboards
+## from htttp://github.com/giantswarm/giantswarm-kubernetes-mixin.git
+## However, This repo is not the upstream.
+## it's used to Customizing upstream Grafana Dashboards and generating
+## proper Giant Swarm dashboards.
+## Generated via https://github.com/kubernetes-monitoring/kubernetes-mixin
+###
+
 set -o errexit
 set -o nounset
 set -o pipefail
