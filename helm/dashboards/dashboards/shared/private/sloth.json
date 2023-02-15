@@ -164,8 +164,9 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "slo:current_burn_rate:ratio > ${min_burning_rate}",
+          "expr": "slo:current_burn_rate:ratio{cluster_id=\"${cluster_id}\"} > ${min_burning_rate}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -183,7 +184,7 @@
               "names": [
                 "sloth_service",
                 "sloth_slo",
-                "Value #A"
+                "cluster_id"
               ]
             }
           }
@@ -207,6 +208,13 @@
           "options": {
             "regex": "sloth_slo",
             "renamePattern": "SLO"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "cluster_id",
+            "renamePattern": "Cluster"
           }
         }
       ],
@@ -764,7 +772,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "1-(\n  sum_over_time(\n    (\n       slo:sli_error:ratio_rate1h{sloth_service=\"${service}\",sloth_slo=\"${slo}\", cluster_id=\"${cluster_id}\"}\n       * on() group_left() (\n         month() == bool vector(${__to:date:M})\n       )\n    )[32d:1h]\n  )\n  / on(sloth_id)\n  (\n    slo:error_budget:ratio{sloth_service=\"${service}\",sloth_slo=\"${slo}\"} *on() group_left() (24 * days_in_month())\n  )\n)",
+          "expr": "1-(\n  sum_over_time(\n    (\n       sum(slo:sli_error:ratio_rate1h{sloth_service=\"${service}\",sloth_slo=\"${slo}\",cluster_id=\"${cluster_id}\"}\n       * on() group_left() (\n         month() == bool vector(${__to:date:M})\n       )) by (cluster_id,owner,sloth_id,sloth_service,sloth_slo,sloth_window)\n    )[32d:1h]\n  )\n  / on(sloth_id) group_left()\n  (\n    slo:error_budget:ratio{sloth_service=\"${service}\",sloth_slo=\"${slo}\"} *on() group_left() (24 * days_in_month())\n  )\n)",
           "instant": true,
           "interval": "1h",
           "legendFormat": "Remaining error budget (month)",
@@ -980,7 +988,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "1-(\n  sum_over_time(\n    (\n       slo:sli_error:ratio_rate1h{sloth_service=\"${service}\",sloth_slo=\"${slo}\", cluster_id=\"${cluster_id}\"}\n       * on() group_left() (\n         month() == bool vector(${__to:date:M})\n       )\n    )[32d:1h]\n  )\n  / on(sloth_id)\n  (\n    slo:error_budget:ratio{sloth_service=\"${service}\",sloth_slo=\"${slo}\"} *on() group_left() (24 * days_in_month())\n  )\n)",
+          "expr": "1-(\n  sum_over_time(\n    (\n       sum(slo:sli_error:ratio_rate1h{sloth_service=\"${service}\",sloth_slo=\"${slo}\", cluster_id=\"${cluster_id}\"}\n       * on() group_left() (\n         month() == bool vector(${__to:date:M})\n       )) by (cluster_id,owner,sloth_id,sloth_service,sloth_slo,sloth_window)\n    )[32d:1h]\n  )\n  / on(sloth_id) group_left()\n  (\n    slo:error_budget:ratio{sloth_service=\"${service}\",sloth_slo=\"${slo}\"} *on() group_left() (24 * days_in_month())\n  )\n)",
           "hide": false,
           "interval": "1h",
           "legendFormat": "Remaining error budget",
@@ -1317,20 +1325,29 @@
       {
         "current": {
           "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "gaia",
+          "value": "gaia"
         },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "label_values(apiserver_request_total, cluster_id)",
         "hide": 0,
         "includeAll": false,
+        "label": "Cluster",
         "multi": false,
-        "name": "Datasource",
+        "name": "cluster_id",
         "options": [],
-        "query": "prometheus",
-        "queryValue": "",
+        "query": {
+          "query": "label_values(apiserver_request_total, cluster_id)",
+          "refId": "StandardVariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "type": "datasource"
+        "sort": 0,
+        "type": "query"
       },
       {
         "current": {
@@ -1367,12 +1384,14 @@
           "text": [
             "availability",
             "latency-mutating",
-            "latency-readonly"
+            "latency-readonly-cluster",
+            "latency-readonly-resource"
           ],
           "value": [
             "availability",
             "latency-mutating",
-            "latency-readonly"
+            "latency-readonly-cluster",
+            "latency-readonly-resource"
           ]
         },
         "datasource": {
@@ -1404,8 +1423,8 @@
         "auto_min": "5m",
         "current": {
           "selected": false,
-          "text": "5m",
-          "value": "5m"
+          "text": "1h",
+          "value": "1h"
         },
         "description": "The time window used for the SLIs visualization",
         "hide": 0,
@@ -1413,7 +1432,7 @@
         "name": "sli_window",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "5m",
             "value": "5m"
           },
@@ -1423,7 +1442,7 @@
             "value": "30m"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "1h",
             "value": "1h"
           },
@@ -1461,9 +1480,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "1",
-          "value": "1"
+          "selected": false,
+          "text": "0",
+          "value": "0"
         },
         "description": "The minimum burning budget rate (0-1) to show on the general SLOs block",
         "hide": 0,
@@ -1472,40 +1491,13 @@
         "options": [
           {
             "selected": true,
-            "text": "1",
-            "value": "1"
+            "text": "0",
+            "value": "0"
           }
         ],
-        "query": "1",
+        "query": "0",
         "skipUrlSync": false,
         "type": "textbox"
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": "gaia",
-          "value": "gaia"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
-        "definition": "label_values(apiserver_request_total, cluster_id)",
-        "hide": 0,
-        "includeAll": false,
-        "label": "Cluster",
-        "multi": false,
-        "name": "cluster_id",
-        "options": [],
-        "query": {
-          "query": "label_values(apiserver_request_total, cluster_id)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
       }
     ]
   },
@@ -1517,6 +1509,6 @@
   "timezone": "",
   "title": "Sloth SLO",
   "uid": "slo-detail",
-  "version": 4,
+  "version": 10,
   "weekStart": ""
 }
