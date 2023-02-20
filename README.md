@@ -1,18 +1,18 @@
 # Dashboards
 
-This project currently contains Giantswarm public dashboards.
+This project currently contains Giant Swarm public dashboards.
 
 The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place and in the same format.
 
 ## Management cluster's dashboards
 
 The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana.
-The "public" ones are accessible by the customer, and the "private" ones are only accessible by Giantswarm employees.
+The "public" ones are accessible by the customer, and the "private" ones are only accessible by Giant Swarm employees.
 Those dashboards are currently in JSON and will eventually be replaced to jsonnet format.
 
 ## Grafana Cloud dashboards
 
-The dashboards located under `dashboards` are the dashboards hosted on Giantswarm's Grafana Cloud.
+The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Grafana Cloud.
 
 To build and upload the Grafana Cloud dashboards, here is what you need to do:
 
@@ -50,7 +50,7 @@ To Update the `kubernetes-mixin` dashboards:
 
 ## Origins of the dashboards
 
-Some dashboards are crafted by us (Giantswarm) or forked from public dashboards.
+Some dashboards are crafted by us (Giant Swarm) or forked from public dashboards.
 
 Some dashboards come from mixins, with a few manual updates. They have a `.*-mixin` tag, like `kubernetes-mixin` or `prometheus-mixin`.
 
