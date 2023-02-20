@@ -25,7 +25,7 @@ main() {
   ## Copy and overwrite
   for app in "${apps[@]}"; do
       echo "copying $app dashboard"
-      cp "$TMPDIR"/monitoring-mixins/assets/"$app"/dashboards/* ./helm/dashboards/dashboards/shared/private/
+      cp "$TMPDIR"/monitoring-mixins/assets/"$app"/dashboards/* ./helm/dashboards/dashboards/shared/public/
   done
 
   echo "------- Update Changelog"
