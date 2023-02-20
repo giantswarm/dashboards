@@ -1,19 +1,20 @@
 # Dashboards
 
-This project currently contains Giant Swarm public dashboards.
+This project currently contains Giantswarm public dashboards.
 
-The goal of this repository is to have both public and cortex dashboards defined in one place and in the same format.
+The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place and in the same format.
 
 ## Management cluster's dashboards
 
-The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana and are accessible by the customer.
+The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana.
+The "public" ones are accessible by the customer, and the "private" ones are only accessible by Giantswarm employees.
 Those dashboards are currently in JSON and will eventually be replaced to jsonnet format.
 
-## Cortex dashboards
+## Grafana Cloud dashboards
 
-The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Cortex.
+The dashboards located under `dashboards` are the dashboards hosted on Giantswarm's Grafana Cloud.
 
-To build and upload the Cortex Dashboards hosted in Grafana Cloud, here is what you need to do:
+To build and upload the Grafana Cloud dashboards, here is what you need to do:
 
 To make the dashboards, run:
 ```
@@ -46,3 +47,15 @@ To Update the `kubernetes-mixin` dashboards:
 
 * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
 * Run `./scripts/sync-mixins.sh (?my-fancy-branch-or-tag)` to updated the `helm/dashboards/dashboards/mixin` folder.
+
+## Origins of the dashboards
+
+Some dashboards are crafted by us (Giantswarm) or forked from public dashboards.
+
+Some dashboards come from mixins, with a few manual updates. They have a `.*-mixin` tag, like `kubernetes-mixin` or `prometheus-mixin`.
+
+Beware when updating them: even though they come from mixins, they may require tweaks to work with our architecture.
+
+The dashboards that don't require tweaks can be automatically updated with the `update-mixins-monitoring` github workflow.
+
+In the future we should provide documentation and automation to perform clean updates of mixins-based dashboards.
