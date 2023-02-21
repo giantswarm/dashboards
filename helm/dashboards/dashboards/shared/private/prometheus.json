@@ -130,10 +130,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(prometheus_tsdb_head_samples_appended_total{type!=\"histogram\", job=~\".*($cluster).*\"}[5m])",
+          "expr": "rate(prometheus_tsdb_head_samples_appended_total{type!=\"histogram\", cluster_id=~\"($cluster)\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}}",
+          "legendFormat": "{{cluster_id}}",
           "range": true,
           "refId": "A",
           "step": 60
@@ -216,9 +216,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(prometheus_tsdb_head_series{cluster_type=~\"management_cluster\", job=~\".*($cluster).*\"})",
+          "expr": "sum(prometheus_tsdb_head_series{cluster_id=~\"($cluster)\"}) by (cluster_id)",
           "format": "time_series",
           "intervalFactor": 2,
+          "legendFormat": "{{cluster}}",
           "range": true,
           "refId": "B",
           "step": 40
@@ -319,10 +320,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.99\", job=~\".*($cluster).*\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.99 quantile",
+          "legendFormat": "{{cluster_id}} - 0.99 quantile",
           "range": true,
           "refId": "A",
           "step": 120
@@ -333,10 +334,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.9\", job=~\".*($cluster).*\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.9 quantile",
+          "legendFormat": "{{cluster_id}} - 0.9 quantile",
           "range": true,
           "refId": "B",
           "step": 120
@@ -347,10 +348,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.5\", job=~\".*($cluster).*\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.5 quantile",
+          "legendFormat": "{{cluster_id}} - 0.5 quantile",
           "range": true,
           "refId": "C",
           "step": 120
@@ -451,10 +452,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.99\", job=~\".*($cluster).*\"}",
+          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.99 quantile",
+          "legendFormat": "{{cluster_id}} - 0.99 quantile",
           "range": true,
           "refId": "A",
           "step": 120
@@ -465,10 +466,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.9\", job=~\".*($cluster).*\"}",
+          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.9 quantile",
+          "legendFormat": "{{cluster_id}} - 0.9 quantile",
           "range": true,
           "refId": "B",
           "step": 120
@@ -479,10 +480,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.5\", job=~\".*($cluster).*\"}",
+          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.5 quantile",
+          "legendFormat": "{{cluster_id}} - 0.5 quantile",
           "range": true,
           "refId": "C",
           "step": 120
@@ -903,11 +904,15 @@
         "current": {
           "selected": true,
           "text": [
-            "gauss"
+            "All"
           ],
           "value": [
-            "gauss"
+            "$__all"
           ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
         },
         "definition": "label_values(container_cpu_usage_seconds_total{container=\"prometheus\",cluster_type=~\"management_cluster\", pod=~\".*prometheus.*\"}, pod)",
         "hide": 0,
@@ -929,8 +934,8 @@
     ]
   },
   "time": {
-    "from": "2023-02-13T18:27:51.188Z",
-    "to": "2023-02-14T04:14:08.587Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
