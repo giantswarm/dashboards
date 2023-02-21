@@ -35,6 +35,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
+  "id": 30,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -130,10 +131,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(prometheus_tsdb_head_samples_appended_total{type!=\"histogram\"}[5m])",
+          "expr": "rate(prometheus_tsdb_head_samples_appended_total{type!=\"histogram\", cluster_id=~\"($cluster)\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}}",
+          "legendFormat": "{{cluster_id}}",
           "range": true,
           "refId": "A",
           "step": 60
@@ -215,9 +216,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(prometheus_tsdb_head_series{cluster_type=~\"management_cluster\"})",
+          "editorMode": "code",
+          "expr": "sum(prometheus_tsdb_head_series{cluster_id=~\"($cluster)\"}) by (cluster_id)",
           "format": "time_series",
           "intervalFactor": 2,
+          "legendFormat": "{{cluster}}",
+          "range": true,
           "refId": "B",
           "step": 40
         }
@@ -317,10 +321,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.99\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.99 quantile",
+          "legendFormat": "{{cluster_id}} - 0.99 quantile",
           "range": true,
           "refId": "A",
           "step": 120
@@ -331,10 +335,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.9\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.9 quantile",
+          "legendFormat": "{{cluster_id}} - 0.9 quantile",
           "range": true,
           "refId": "B",
           "step": 120
@@ -345,10 +349,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.5\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.5 quantile",
+          "legendFormat": "{{cluster_id}} - 0.5 quantile",
           "range": true,
           "refId": "C",
           "step": 120
@@ -449,10 +453,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.99\"}",
+          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.99 quantile",
+          "legendFormat": "{{cluster_id}} - 0.99 quantile",
           "range": true,
           "refId": "A",
           "step": 120
@@ -463,10 +467,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.9\"}",
+          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.9 quantile",
+          "legendFormat": "{{cluster_id}} - 0.9 quantile",
           "range": true,
           "refId": "B",
           "step": 120
@@ -477,10 +481,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.5\"}",
+          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}/{{app}} - 0.5 quantile",
+          "legendFormat": "{{cluster_id}} - 0.5 quantile",
           "range": true,
           "refId": "C",
           "step": 120
@@ -546,7 +550,34 @@
           },
           "unit": "bytes"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "limit.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -580,13 +611,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "max(\n    container_memory_working_set_bytes{container=\"prometheus\", pod=~\".*prometheus.*\", cluster_type=~\"management_cluster\"}\n    ) by (container, pod, cluster_type)",
+          "expr": "max(\n    container_memory_working_set_bytes{container=\"prometheus\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n    ) by (container, pod, cluster_type)",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "intervalFactor": 2,
           "legendFormat": "memory working for {{ pod }}",
-          "refId": "B"
+          "refId": "working set"
         },
         {
           "datasource": {
@@ -594,15 +625,27 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "max(\n    container_memory_usage_bytes{container=\"prometheus\", pod=~\".*prometheus.*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)\n",
+          "expr": "max(\n    container_memory_usage_bytes{container=\"prometheus\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)\n",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "intervalFactor": 2,
           "legendFormat": "memory used for {{pod}}",
           "metric": "container_memory_usage_bytes",
-          "refId": "A",
+          "refId": "usage",
           "step": 60
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "max(\n    kube_pod_container_resource_limits{container=\"prometheus\",resource=\"memory\", unit=\"byte\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
+          "hide": false,
+          "legendFormat": "limit for {{ pod }}",
+          "range": true,
+          "refId": "limit"
         }
       ],
       "title": "Memory working/usage",
@@ -665,7 +708,34 @@
           },
           "unit": "none"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "limit.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -699,17 +769,125 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\",cluster_type=~\"management_cluster\"}[3m])) by (pod)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}[3m])) by (pod)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
           "legendFormat": "cpu used by {{pod}}",
           "metric": "container_cpu_usage_seconds_total",
-          "refId": "A",
+          "refId": "usage",
           "step": 60
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "max(\n    kube_pod_container_resource_limits{container=\"prometheus\",resource=\"cpu\", unit=\"core\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
+          "hide": false,
+          "legendFormat": "limit for {{pod}}",
+          "range": true,
+          "refId": "limit"
         }
       ],
       "title": "CPU usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "max (\n    (\n        kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n        - \n        kubelet_volume_stats_available_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    )\n    / kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    * 100\n) by (persistentvolumeclaim)",
+          "legendFormat": "{{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Persistent Volume Usage",
       "type": "timeseries"
     }
   ],
@@ -722,10 +900,42 @@
     "topic:workload-cluster"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "label_values(container_cpu_usage_seconds_total{container=\"prometheus\",cluster_type=~\"management_cluster\", pod=~\".*prometheus.*\"}, pod)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "",
+        "multi": true,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(container_cpu_usage_seconds_total{container=\"prometheus\",cluster_type=~\"management_cluster\", pod=~\".*prometheus.*\"}, pod)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/prometheus-(?<text>.*)-[0-9]+/",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      }
+    ]
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -756,6 +966,6 @@
   "timezone": "UTC",
   "title": "Prometheus",
   "uid": "iWowmlSmk",
-  "version": 1,
+  "version": 4,
   "weekStart": ""
 }

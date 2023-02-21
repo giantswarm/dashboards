@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Prometheus dashboard improvements: add volume usage, add memory and cpu limits.
 - README updates
 - Update cimg/go Docker tag from v1.20.0 to v1.20.1
 
