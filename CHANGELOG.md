@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- README updates
+- Update cimg/go Docker tag from v1.20.0 to v1.20.1
+
 ## [2.21.0] - 2023-02-20
 
 ### Changed
@@ -21,10 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - What is presumed to be a debug matcher from upstream
-
-### Changed
-
-- Update cimg/go Docker tag from v1.20.0 to v1.20.1
 
 ## [2.20.0] - 2023-01-18
 
