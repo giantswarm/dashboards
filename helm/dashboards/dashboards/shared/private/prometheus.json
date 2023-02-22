@@ -25,7 +25,7 @@
           "uid": "PBFA97CFB590B2093"
         },
         "enable": true,
-        "expr": "increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus.*\", cluster_type=~\"management_cluster\"}[$__interval])",
+        "expr": "increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-[0-9]+\", cluster_type=~\"management_cluster\"}[$__interval]) > 0",
         "iconColor": "red",
         "name": "prometheus restarts",
         "titleFormat": "{{pod}} restarted"
@@ -300,7 +300,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max(increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-[0-9]+\", cluster_type=~\"management_cluster\"}[$__range])) by (pod)",
+          "expr": "sort_desc(max(increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-[0-9]+\", cluster_type=~\"management_cluster\"}[$__range]) > 0) by (pod))",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -1200,7 +1200,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -1231,6 +1231,6 @@
   "timezone": "UTC",
   "title": "Prometheus",
   "uid": "iWowmlSmk",
-  "version": 6,
+  "version": 5,
   "weekStart": ""
 }
