@@ -54,6 +54,8 @@ Some dashboards are crafted by us (Giant Swarm) or forked from public dashboards
 
 Some dashboards come from mixins, with a few manual updates. They have a `.*-mixin` tag, like `kubernetes-mixin` or `prometheus-mixin`.
 
+Some dashboards are coming from https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/templates/grafana/dashboards-1.14/ like the `prometheus-remote-write` dashboard
+
 Beware when updating them: even though they come from mixins, they may require tweaks to work with our architecture.
 
 The dashboards that don't require tweaks can be automatically updated from pre-generated mixins at https://monitoring.mixins.dev/ with the `update-mixins-monitoring` github workflow.
