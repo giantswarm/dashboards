@@ -6,7 +6,7 @@
 ## the repo behind this website is located:
 ## https://github.com/monitoring-mixins/website
 ## We copy certain dashboards from this repo:
-## e.g alertmanager
+## alertmanager
 
 
 set -e
