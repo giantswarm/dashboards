@@ -25,7 +25,7 @@
           "uid": "PBFA97CFB590B2093"
         },
         "enable": true,
-        "expr": "increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus.*\", cluster_type=~\"management_cluster\"}[$__interval])",
+        "expr": "increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-[0-9]+\", cluster_type=~\"management_cluster\"}[$__interval]) > 0",
         "iconColor": "red",
         "name": "prometheus restarts",
         "titleFormat": "{{pod}} restarted"
@@ -35,10 +35,22 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 30,
   "links": [],
   "liveNow": false,
   "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 19,
+      "panels": [],
+      "title": "Prometheus",
+      "type": "row"
+    },
     {
       "datasource": {
         "type": "prometheus",
@@ -101,9 +113,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 18,
+        "w": 16,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 4,
       "links": [],
@@ -115,7 +127,7 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -152,7 +164,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
           },
           "mappings": [
             {
@@ -188,9 +200,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 6,
-        "x": 18,
-        "y": 0
+        "w": 4,
+        "x": 16,
+        "y": 1
       },
       "id": 13,
       "links": [],
@@ -217,16 +229,87 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(prometheus_tsdb_head_series{cluster_id=~\"($cluster)\"}) by (cluster_id)",
+          "exemplar": false,
+          "expr": "sort_desc(sum(prometheus_tsdb_head_series{cluster_id=~\"($cluster)\"}) by (cluster_id))",
           "format": "time_series",
+          "instant": true,
           "intervalFactor": 2,
           "legendFormat": "{{cluster}}",
-          "range": true,
+          "range": false,
           "refId": "B",
           "step": 40
         }
       ],
       "title": "Total Series",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Number of restarts during the current time range",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sort_desc(max(increase(kube_pod_container_status_restarts_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-[0-9]+\", cluster_type=~\"management_cluster\"}[$__range]) > 0) by (pod))",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Restarts",
       "type": "stat"
     },
     {
@@ -291,9 +374,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 12,
+        "w": 13,
         "x": 0,
-        "y": 7
+        "y": 8
       },
       "id": 5,
       "links": [],
@@ -305,7 +388,7 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -423,9 +506,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 7
+        "w": 11,
+        "x": 13,
+        "y": 8
       },
       "id": 6,
       "links": [],
@@ -437,7 +520,7 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -494,10 +577,24 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 17,
+      "panels": [],
+      "title": "System",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Memory usage by Prometheus instances.\n\nDashed lines show pod limit and node capacity.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -576,6 +673,32 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "node.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    20,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
           }
         ]
       },
@@ -583,7 +706,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 16
       },
       "id": 8,
       "links": [],
@@ -595,8 +718,9 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "right",
+          "showLegend": true,
+          "width": 400
         },
         "tooltip": {
           "mode": "multi",
@@ -616,7 +740,7 @@
           "hide": false,
           "instant": false,
           "intervalFactor": 2,
-          "legendFormat": "memory working for {{ pod }}",
+          "legendFormat": "working {{ pod }}",
           "refId": "working set"
         },
         {
@@ -630,7 +754,7 @@
           "hide": false,
           "instant": false,
           "intervalFactor": 2,
-          "legendFormat": "memory used for {{pod}}",
+          "legendFormat": "used {{pod}}",
           "metric": "container_memory_usage_bytes",
           "refId": "usage",
           "step": 60
@@ -643,9 +767,21 @@
           "editorMode": "code",
           "expr": "max(\n    kube_pod_container_resource_limits{container=\"prometheus\",resource=\"memory\", unit=\"byte\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
           "hide": false,
-          "legendFormat": "limit for {{ pod }}",
+          "legendFormat": "limit {{ pod }}",
           "range": true,
           "refId": "limit"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "max(node_memory_MemTotal_bytes{node=~\".+\"} * on (node) group_right(pod) (topk(1, kube_pod_info{pod=~\"prometheus-.*-0\"}))) by (node)",
+          "hide": false,
+          "legendFormat": "node memory",
+          "range": true,
+          "refId": "node memory"
         }
       ],
       "title": "Memory working/usage",
@@ -657,6 +793,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "CPU usage by Prometheus instances.\n\nDashed lines show pod limit and node capacity.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -693,6 +830,7 @@
             }
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -734,6 +872,32 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "node.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    20,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
           }
         ]
       },
@@ -741,7 +905,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 23
       },
       "id": 9,
       "links": [],
@@ -753,8 +917,9 @@
             "min"
           ],
           "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "right",
+          "showLegend": true,
+          "width": 400
         },
         "tooltip": {
           "mode": "multi",
@@ -773,7 +938,7 @@
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
-          "legendFormat": "cpu used by {{pod}}",
+          "legendFormat": "used {{pod}}",
           "metric": "container_cpu_usage_seconds_total",
           "refId": "usage",
           "step": 60
@@ -786,9 +951,23 @@
           "editorMode": "code",
           "expr": "max(\n    kube_pod_container_resource_limits{container=\"prometheus\",resource=\"cpu\", unit=\"core\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
           "hide": false,
-          "legendFormat": "limit for {{pod}}",
+          "legendFormat": "limit {{pod}}",
           "range": true,
           "refId": "limit"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max(node:node_num_cpu:sum{node=~\".+\"} * on (node) group_right(pod) (topk(1, kube_pod_info{pod=~\"prometheus-.*-0\"}))) by (node)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "node cpu",
+          "range": true,
+          "refId": "node cpu"
         }
       ],
       "title": "CPU usage",
@@ -859,15 +1038,16 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 30
       },
       "id": 15,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "right",
+          "showLegend": true,
+          "width": 400
         },
         "tooltip": {
           "mode": "single",
@@ -889,6 +1069,322 @@
       ],
       "title": "Persistent Volume Usage",
       "type": "timeseries"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 25,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "Number of samples scraped by app / job.\n\nShows which jobs scrape the most data.\n\nMetric: `scrape_samples_scraped`",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 8,
+            "x": 0,
+            "y": 37
+          },
+          "id": 23,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {
+              "titleSize": 15,
+              "valueSize": 15
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "9.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "topk(10, sum(scrape_samples_scraped) by (app, job, cluster_id))",
+              "instant": true,
+              "legendFormat": "{{app}} | {{job}} | {{cluster_id}}",
+              "range": false,
+              "refId": "A"
+            }
+          ],
+          "title": "Samples scraped",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "Top number metrics and associated job.\n\nShows which metrics have the highest instant cardinality.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 8,
+            "x": 8,
+            "y": 37
+          },
+          "id": 26,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {
+              "titleSize": 15,
+              "valueSize": 15
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "9.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "topk(10, count by (__name__, job, cluster_id)({__name__=~\".+\"}))",
+              "instant": true,
+              "legendFormat": "{{__name__}} | {{job}} | {{cluster_id}}",
+              "range": false,
+              "refId": "A"
+            }
+          ],
+          "title": "Top metrics",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "Top number of metrics per job.\n\nShows which metrics add new labels, increasing cardinality over time.\n\nMetric: `scrape_series_added`",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 8,
+            "x": 16,
+            "y": 37
+          },
+          "id": 27,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {
+              "titleSize": 15,
+              "valueSize": 15
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "9.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "topk(10, max_over_time(scrape_series_added[5m]))",
+              "instant": true,
+              "legendFormat": "{{job}} | {{app}} | {{cluster_id}}",
+              "range": false,
+              "refId": "A"
+            }
+          ],
+          "title": "Top churning jobs",
+          "type": "stat"
+        }
+      ],
+      "title": "Scraping info (⚠️ heavy metrics)",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 29,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "Duration of rules evaluation per group / cluster.\n\nShows which ones use most CPU.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 13,
+            "w": 24,
+            "x": 0,
+            "y": 50
+          },
+          "id": 30,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {
+              "titleSize": 15,
+              "valueSize": 15
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "9.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "topk(10, prometheus_rule_group_last_duration_seconds)",
+              "instant": true,
+              "legendFormat": "{{rule_group}} | {{cluster_id}}",
+              "range": false,
+              "refId": "A"
+            }
+          ],
+          "title": "Rules evaluation duration",
+          "type": "stat"
+        }
+      ],
+      "title": "Rules info",
+      "type": "row"
     }
   ],
   "refresh": "1m",
@@ -966,6 +1462,6 @@
   "timezone": "UTC",
   "title": "Prometheus",
   "uid": "iWowmlSmk",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }
