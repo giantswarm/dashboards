@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Monitoring Dashboard Updated
+```
+?? helm/dashboards/dashboards/shared/public/alertmanager-overview.json
+```
+
 ### Added
 
 - Alertmanager / Overview Dashboard
