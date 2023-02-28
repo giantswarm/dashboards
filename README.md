@@ -31,7 +31,10 @@ To upload a dashboard while editing, run:
 ./scripts/upload-dashboard.sh metrics.json
 ```
 
-## Requirements
+
+## Mixins Dashboards
+
+### Requirements
 
 * jsonnet: https://github.com/google/jsonnet
 
@@ -41,12 +44,18 @@ To upload a dashboard while editing, run:
 
 `git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
 
-### Mixins
 
-To Update the `kubernetes-mixin` dashboards:
+### Update 
 
-* Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
-* Run `./scripts/sync-mixins.sh (?my-fancy-branch-or-tag)` to updated the `helm/dashboards/dashboards/mixin` folder.
+* To Update the `kubernetes-mixin` dashboards:
+
+  * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
+  * Run `./scripts/sync-mixins.sh (?my-fancy-branch-or-tag)` to updated the `helm/dashboards/dashboards/mixin` folder.
+
+* To Update the `alertmanager-monitoring-mixins` dashboards:
+
+  * The Github Action `update-monitoring-mixins` runs automatically every month and it created a PR to update the dashboard.
+  * Or you can run the action manually `update-monitoring-mixins`.
 
 ## Origins of the dashboards
 
