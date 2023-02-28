@@ -54,8 +54,8 @@ To upload a dashboard while editing, run:
 
 * To Update the `alertmanager-monitoring-mixins` dashboards:
 
-  * The Github Action `update-monitoring-mixins` runs automatically every month and it created a PR to update the dashboard.
-  * Or you can run the action manually `update-monitoring-mixins`.
+  * The Github Action `update-monitoring-mixins` runs automatically every month and it creates a PR to update the dashboard.
+  * Or you can run the action named `update-monitoring-mixins` manually.
 
 ## Origins of the dashboards
 
