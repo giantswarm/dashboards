@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Make main prometheus dashboard public
+
 ## [2.23.0] - 2023-02-28
 
 ### Changed
