@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.24.0] - 2023-03-03
+
 ### Added
 
 - Prometheus - opsrecipe dashboard
@@ -465,7 +467,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.23.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.24.0...HEAD
+[2.24.0]: https://github.com/giantswarm/dashboards/compare/v2.23.0...v2.24.0
 [2.23.0]: https://github.com/giantswarm/dashboards/compare/v2.22.0...v2.23.0
 [2.22.0]: https://github.com/giantswarm/dashboards/compare/v2.21.0...v2.22.0
 [2.21.0]: https://github.com/giantswarm/dashboards/compare/v2.20.0...v2.21.0
