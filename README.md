@@ -70,3 +70,9 @@ Beware when updating them: even though they come from mixins, they may require t
 The dashboards that don't require tweaks can be automatically updated from pre-generated mixins at https://monitoring.mixins.dev/ with the `update-mixins-monitoring` github workflow.
 
 In the future we should provide documentation and automation to perform clean updates of mixins-based dashboards.
+
+### Specific dashboards
+
+#### Prometheus-overview
+
+Comes from `prometheus-mixins`, with the addition of support for multiple clusters.
