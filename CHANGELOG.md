@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add `ETCD Backend Quota Low Space` to K8s API Performance Dashboard.
+
 ## [2.23.0] - 2023-02-28
 
 ### Changed
