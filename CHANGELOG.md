@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Prometheus - opsrecipe dashboard
+- Prometheus Overview dashboards - from prometheus-mixins
+- Add `ETCD Backend Quota Low Space` to K8s API Performance Dashboard.
+- 
 ### Changed
 
-- Add `ETCD Backend Quota Low Space` to K8s API Performance Dashboard.
+- Make main prometheus dashboard public
 
 ## [2.23.0] - 2023-02-28
 
