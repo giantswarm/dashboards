@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Prometheus - opsrecipe dashboard
+- Prometheus Overview dashboards - from prometheus-mixins
+
+### Changed
+
+- Make main prometheus dashboard public
 
 ## [2.23.0] - 2023-02-28
 
