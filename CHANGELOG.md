@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Change the name of metric `ETCD Backend Quota Low Space` to `ETCD Keyspace usage`.
+
 ## [2.24.0] - 2023-03-03
 
 ### Added
