@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.24.1] - 2023-03-09
+
 ### Changed
 
 - Change the name of metric `ETCD Backend Quota Low Space` to `ETCD Keyspace usage`.
@@ -471,7 +473,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.24.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.24.1...HEAD
+[2.24.1]: https://github.com/giantswarm/dashboards/compare/v2.24.0...v2.24.1
 [2.24.0]: https://github.com/giantswarm/dashboards/compare/v2.23.0...v2.24.0
 [2.23.0]: https://github.com/giantswarm/dashboards/compare/v2.22.0...v2.23.0
 [2.22.0]: https://github.com/giantswarm/dashboards/compare/v2.21.0...v2.22.0
