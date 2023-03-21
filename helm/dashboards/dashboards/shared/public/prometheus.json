@@ -113,7 +113,7 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 16,
+        "w": 13,
         "x": 0,
         "y": 1
       },
@@ -201,7 +201,7 @@
       "gridPos": {
         "h": 7,
         "w": 4,
-        "x": 16,
+        "x": 13,
         "y": 1
       },
       "id": 13,
@@ -221,7 +221,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.3.8",
       "targets": [
         {
           "datasource": {
@@ -273,8 +273,8 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 4,
-        "x": 20,
+        "w": 3,
+        "x": 17,
         "y": 1
       },
       "id": 21,
@@ -293,7 +293,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.3.8",
       "targets": [
         {
           "datasource": {
@@ -310,6 +310,74 @@
         }
       ],
       "title": "Restarts",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Number of restarts during the current time range",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dtdhms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.3.8",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "time() - max(kube_pod_start_time{pod=~\"prometheus-($cluster)-0\"}) by (pod)",
+          "hide": false,
+          "legendFormat": "{{pod}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Pod age",
       "type": "stat"
     },
     {
@@ -777,9 +845,9 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "max(node_memory_MemTotal_bytes{node=~\".+\"} * on (node) group_right(pod) (topk(1, kube_pod_info{pod=~\"prometheus-.*-0\"}))) by (node)",
+          "expr": "max (node_memory_MemTotal_bytes{node=~\".+\"} * on (node) group_right(pod) (kube_pod_info{pod=~\"prometheus-.*-0\",cluster_type=\"management_cluster\", namespace=~\"($cluster)-prometheus\"})) by (namespace)",
           "hide": false,
-          "legendFormat": "node memory",
+          "legendFormat": "node memory - {{ namespace }}",
           "range": true,
           "refId": "node memory"
         }
@@ -962,15 +1030,174 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max(node:node_num_cpu:sum{node=~\".+\"} * on (node) group_right(pod) (topk(1, kube_pod_info{pod=~\"prometheus-.*-0\"}))) by (node)",
+          "expr": "max(node:node_num_cpu:sum{node=~\".+\"} * on (node) group_right(pod) (topk(1, kube_pod_info{pod=~\"prometheus-.*-0\"}))) by (namespace)",
           "hide": false,
           "instant": false,
-          "legendFormat": "node cpu",
+          "legendFormat": "node cpu - {{ namespace }}",
           "range": true,
           "refId": "node cpu"
         }
       ],
       "title": "CPU usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "CPU throttling percentage\n\nHow much CPU had to be throttled down by CFS scheduler. No worries as long as youre <100%.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "cores",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "limit.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "node.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    20,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "id": 32,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "width": 400
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_cfs_throttled_seconds_total{pod=~\"prometheus-($cluster)-0\", container=\"prometheus\"}[$__rate_interval])) by (pod, container)\n/\nsum(irate(container_cpu_usage_seconds_total{pod=~\"prometheus-($cluster)-0\", container=\"prometheus\"}[$__rate_interval])) by (pod,container)",
+          "format": "time_series",
+          "instant": false,
+          "intervalFactor": 2,
+          "legendFormat": "{{pod}}",
+          "metric": "container_cpu_usage_seconds_total",
+          "refId": "usage",
+          "step": 60
+        }
+      ],
+      "title": "CPU throttling %",
       "type": "timeseries"
     },
     {
@@ -1038,7 +1265,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 34
       },
       "id": 15,
       "options": {
@@ -1076,7 +1303,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 40
       },
       "id": 25,
       "panels": [
@@ -1096,8 +1323,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1168,8 +1394,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1240,8 +1465,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1306,7 +1530,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 41
       },
       "id": 29,
       "panels": [
@@ -1326,8 +1550,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1401,10 +1624,10 @@
         "current": {
           "selected": true,
           "text": [
-            "All"
+            "prod"
           ],
           "value": [
-            "$__all"
+            "prod"
           ]
         },
         "datasource": {
@@ -1431,7 +1654,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {
@@ -1462,6 +1685,6 @@
   "timezone": "UTC",
   "title": "Prometheus",
   "uid": "iWowmlSmk",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
