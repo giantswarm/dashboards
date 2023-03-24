@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.25.0] - 2023-03-24
+
 ### Added
 
 - Prometheus availability dashboard
@@ -481,7 +483,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.24.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.25.0...HEAD
+[2.25.0]: https://github.com/giantswarm/dashboards/compare/v2.24.1...v2.25.0
 [2.24.1]: https://github.com/giantswarm/dashboards/compare/v2.24.0...v2.24.1
 [2.24.0]: https://github.com/giantswarm/dashboards/compare/v2.23.0...v2.24.0
 [2.23.0]: https://github.com/giantswarm/dashboards/compare/v2.22.0...v2.23.0
