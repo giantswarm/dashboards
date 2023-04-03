@@ -50,7 +50,7 @@ To upload a dashboard while editing, run:
 * To Update the `kubernetes-mixin` dashboards:
 
   * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
-  * Run `./scripts/sync-mixins.sh (?my-fancy-branch-or-tag)` to update the `helm/dashboards/dashboards/mixin` folder.
+  * Run `./scripts/sync-kube-mixin.sh (?my-fancy-branch-or-tag)` to update the `helm/dashboards/dashboards/mixin` folder.
 
 * To Update the `alertmanager-monitoring-mixins` dashboards:
 

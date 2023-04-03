@@ -7,7 +7,7 @@
    "graphTooltip": 0,
    "hideControls": false,
    "links": [ ],
-   "refresh": "10s",
+   "refresh": "1m",
    "rows": [
       {
          "collapse": false,
@@ -49,7 +49,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "1 - sum(avg by (mode) (rate(node_cpu_seconds_total{app=\"node-exporter\", mode=~\"idle|iowait|steal\", cluster_id=\"$cluster\"}[$__rate_interval])))",
+                     "expr": "cluster:node_cpu:ratio_rate5m{cluster_id=\"$cluster\"}",
                      "format": "time_series",
                      "instant": true,
                      "intervalFactor": 2,
@@ -639,7 +639,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to pods",
-                     "linkUrl": "/d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell_1",
+                     "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell_1",
                      "pattern": "Value #A",
                      "thresholds": [ ],
                      "type": "number",
@@ -654,7 +654,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to workloads",
-                     "linkUrl": "/d/a87fb0d919ec0ea5f6543124e16c42a5/k8s-resources-workloads-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell_1",
+                     "linkUrl": "./d/a87fb0d919ec0ea5f6543124e16c42a5/k8s-resources-workloads-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell_1",
                      "pattern": "Value #B",
                      "thresholds": [ ],
                      "type": "number",
@@ -744,7 +744,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to pods",
-                     "linkUrl": "/d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell",
+                     "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell",
                      "pattern": "namespace",
                      "thresholds": [ ],
                      "type": "number",
@@ -1016,7 +1016,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to pods",
-                     "linkUrl": "/d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell_1",
+                     "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell_1",
                      "pattern": "Value #A",
                      "thresholds": [ ],
                      "type": "number",
@@ -1031,7 +1031,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to workloads",
-                     "linkUrl": "/d/a87fb0d919ec0ea5f6543124e16c42a5/k8s-resources-workloads-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell_1",
+                     "linkUrl": "./d/a87fb0d919ec0ea5f6543124e16c42a5/k8s-resources-workloads-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell_1",
                      "pattern": "Value #B",
                      "thresholds": [ ],
                      "type": "number",
@@ -1121,7 +1121,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to pods",
-                     "linkUrl": "/d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell",
+                     "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell",
                      "pattern": "namespace",
                      "thresholds": [ ],
                      "type": "number",
@@ -1392,7 +1392,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to pods",
-                     "linkUrl": "/d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell",
+                     "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell",
                      "pattern": "namespace",
                      "thresholds": [ ],
                      "type": "number",
@@ -2231,7 +2231,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "ceil(sum by(namespace) (rate(container_fs_reads_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]) + rate(container_fs_writes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval])))",
+                     "expr": "ceil(sum by(namespace) (rate(container_fs_reads_total{app=\"cadvisor\", container!=\"\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]) + rate(container_fs_writes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval])))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{namespace}}",
@@ -2310,7 +2310,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{app=\"cadvisor\", container!=\"\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{namespace}}",
@@ -2509,7 +2509,7 @@
                      "link": true,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down to pods",
-                     "linkUrl": "/d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster_id=$cluster&var-namespace=$__cell",
+                     "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell",
                      "pattern": "namespace",
                      "thresholds": [ ],
                      "type": "number",
@@ -2529,7 +2529,7 @@
                ],
                "targets": [
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_reads_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_reads_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
                      "intervalFactor": 2,
@@ -2538,7 +2538,7 @@
                      "step": 10
                   },
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_writes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_writes_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
                      "intervalFactor": 2,
@@ -2547,7 +2547,7 @@
                      "step": 10
                   },
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_reads_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]) + rate(container_fs_writes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_reads_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]) + rate(container_fs_writes_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
                      "intervalFactor": 2,
@@ -2556,7 +2556,7 @@
                      "step": 10
                   },
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
                      "intervalFactor": 2,
@@ -2565,7 +2565,7 @@
                      "step": 10
                   },
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_writes_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_writes_bytes_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
                      "intervalFactor": 2,
@@ -2574,7 +2574,7 @@
                      "step": 10
                   },
                   {
-                     "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{app=\"cadvisor\", container!=\"\", cluster_id=\"$cluster\"}[$__rate_interval]))",
+                     "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{app=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster_id=\"$cluster\", namespace!=\"\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
                      "intervalFactor": 2,
@@ -2632,7 +2632,8 @@
    "schemaVersion": 14,
    "style": "dark",
    "tags": [
-      "kubernetes-mixin"
+      "origin:kubernetes-mixin",
+      "owner:team-ludacris"
    ],
    "templating": {
       "list": [
@@ -2657,7 +2658,7 @@
                "value": ""
             },
             "datasource": "$datasource",
-            "hide": 2,
+            "hide": 0,
             "includeAll": false,
             "label": null,
             "multi": false,

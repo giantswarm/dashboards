@@ -12,6 +12,16 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+function tune_dashboard {
+    dashboardFile="$1"
+    # Extra tuning
+
+    # Latest mixins use SLO instead of classic metrics in several places
+    # but we dropped these SLO metrics
+    sed -i 's/apiserver_request_slo_duration_seconds/apiserver_request_duration_seconds/g' "$dashboardFile"
+}
+
+
 # make a temporary dir to work in
 TMPDIR=$(mktemp -d -t 'tmp.XXXXXXXXXX')
 trap 'rm -f $TMPDIR' EXIT
@@ -33,6 +43,10 @@ fi
 cd "${TMPDIR}"/mixins
 MIXIN_VER=$(git rev-parse HEAD)
 cd - > /dev/null
+
+while read -r file; do
+    tune_dashboard "$file"
+done < <(find "$TMPDIR" -type f -name \*.json)
 
 # copy over the dashboards to the helm chart
 cp -a "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/dashboards/mixin/
