@@ -7,9 +7,114 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Updated team labels for team-rocket
+- Add graph in Node Overview to identify emptydir growth
+- Added Etcd health for monitoring the Etcd key space status
+- Adjusted the K8s Api Perfomance master nodes memory dashoboard and using `node_memory_MemAvailable_bytes` instead of `node_memory_MemFree_bytes`
+
+## [2.25.0] - 2023-03-24
+
+### Added
+
+- Prometheus availability dashboard
+
+### Changed
+
+- Small improvements for Prometheus dashboard
+
+## [2.24.1] - 2023-03-09
+
+### Changed
+
+- Change the name of metric `ETCD Backend Quota Low Space` to `ETCD Keyspace usage`.
+
+## [2.24.0] - 2023-03-03
+
+### Added
+
+- Prometheus - opsrecipe dashboard
+- Prometheus Overview dashboards - from prometheus-mixins
+- Add `ETCD Backend Quota Low Space` to K8s API Performance Dashboard.
+
+### Changed
+
+- Make main prometheus dashboard public
+
+## [2.23.0] - 2023-02-28
+
+### Changed
+
+- Monitoring Dashboard Updated
+```
+?? helm/dashboards/dashboards/shared/public/alertmanager-overview.json
+```
+
+### Added
+
+- Alertmanager / Overview Dashboard
+
+### Changed
+
+- Prometheus dashboard improvements: available node resources, scraped metrics info and rules info.
+
+## [2.22.0] - 2023-02-23
+
+### Changed
+
+- Prometheus dashboard improvements: add volume usage, add memory and cpu limits.
+- README updates
+- Update cimg/go Docker tag from v1.20.0 to v1.20.1
+- Move prometheus-remote-write dashboard to public
+
+## [2.21.0] - 2023-02-20
+
+### Changed
+
+- updates of Prometheus dashboard
+- updates of Pod request vs usage dashboard
+
+### Fixed
+
+- Datasource for kong-config-reload dashboard
+
+### Removed
+
+- What is presumed to be a debug matcher from upstream
+
+## [2.20.0] - 2023-01-18
+
+### Added
+
+- Add private dashboard for External Secrets.
+
+## [2.19.3] - 2023-01-12
+
+### Fixed
+
+- Fix hardcoded interval in the DNS dashboard.
+
+## [2.19.2] - 2023-01-11
+
+### Changed
+
+- Fix efk-stack-app dashboard
+
+## [2.19.1] - 2023-01-10
+
+### Changed
+
+- Add dashboards to gcp.
+
+## [2.19.0] - 2023-01-05
+
 ### Added
 
 - Add official kong ingress controller dashboard rev 2 from https://grafana.com/grafana/dashboards/15662-kong-ingress-controller/
+- TESTING guidelines
+
+### Changed
+
+- Added uid for some dashboards when missing (etcd, managed-apps-efk-stack-app, management-cluster-kubernetes, microstorage, prometheus-remote-write, workload-cluster-kubernetes)
 
 ## [2.18.0] - 2022-11-22
 
@@ -383,7 +488,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.18.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.25.0...HEAD
+[2.25.0]: https://github.com/giantswarm/dashboards/compare/v2.24.1...v2.25.0
+[2.24.1]: https://github.com/giantswarm/dashboards/compare/v2.24.0...v2.24.1
+[2.24.0]: https://github.com/giantswarm/dashboards/compare/v2.23.0...v2.24.0
+[2.23.0]: https://github.com/giantswarm/dashboards/compare/v2.22.0...v2.23.0
+[2.22.0]: https://github.com/giantswarm/dashboards/compare/v2.21.0...v2.22.0
+[2.21.0]: https://github.com/giantswarm/dashboards/compare/v2.20.0...v2.21.0
+[2.20.0]: https://github.com/giantswarm/dashboards/compare/v2.19.3...v2.20.0
+[2.19.3]: https://github.com/giantswarm/dashboards/compare/v2.19.2...v2.19.3
+[2.19.2]: https://github.com/giantswarm/dashboards/compare/v2.19.1...v2.19.2
+[2.19.1]: https://github.com/giantswarm/dashboards/compare/v2.19.0...v2.19.1
+[2.19.0]: https://github.com/giantswarm/dashboards/compare/v2.18.0...v2.19.0
 [2.18.0]: https://github.com/giantswarm/dashboards/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/giantswarm/dashboards/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/giantswarm/dashboards/compare/v2.15.0...v2.16.0
