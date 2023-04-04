@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated team labels for team-rocket
 - Add graph in Node Overview to identify emptydir growth
+- Update kube-mixins to 0.12
 - Added Etcd health for monitoring the Etcd key space status
 - Adjusted the K8s Api Perfomance master nodes memory dashoboard and using `node_memory_MemAvailable_bytes` instead of `node_memory_MemFree_bytes`
 
