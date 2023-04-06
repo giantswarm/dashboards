@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 109,
+  "id": 93,
   "links": [
     {
       "asDropdown": true,
@@ -64,7 +64,7 @@
           "refId": "A"
         }
       ],
-      "title": "Resource Usage",
+      "title": "Resource",
       "type": "row"
     },
     {
@@ -72,20 +72,56 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "",
+      "description": "request => indicates how many CPU is reserved by Loki\n\nusage => indicates how many CPU is used by Loki",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
-          "mappings": []
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
@@ -98,22 +134,14 @@
       "id": 1,
       "links": [],
       "options": {
-        "displayLabels": [
-          "name",
-          "value"
-        ],
         "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "min",
+            "max"
           ],
-          "fields": "",
-          "values": false
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -127,7 +155,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", container=~\"loki|promtail\", pod=~\"loki.*|promtail.*\"}[5m]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{cluster_id=\"$cluster\", container=\"loki\", pod=~\"loki.*\"}[5m]))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -141,7 +169,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", container=~\"loki|promtail\", pod=~\"loki.*|promtail.*\", resource=\"cpu\"})",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\", container=\"loki\", pod=~\"loki.*\", resource=\"cpu\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -151,28 +179,65 @@
           "step": 10
         }
       ],
-      "title": "CPU used by loki and promtail pods",
-      "type": "piechart"
+      "title": "CPU",
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "",
+      "description": "request => indicates how many memory is reserved by Loki\n\nusage => indicates how many memory is used by Loki",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
-          "mappings": []
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decgbytes"
         },
         "overrides": []
       },
@@ -185,22 +250,14 @@
       "id": 2,
       "links": [],
       "options": {
-        "displayLabels": [
-          "name",
-          "value"
-        ],
         "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "min",
+            "max"
           ],
-          "fields": "",
-          "values": false
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -214,10 +271,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_memory_usage_bytes{cluster_id=~\"$cluster\", container=~\"loki|promtail\", pod=~\"loki.*|promtail.*\"}[5m])) / 1000000",
+          "expr": "sum(rate(container_memory_usage_bytes{cluster_id=\"$cluster\", container=\"loki\", pod=~\"loki.*\"}[5m])) / 1000000000",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "usage MB",
+          "legendFormat": "usage",
           "range": true,
           "refId": "usage",
           "step": 10
@@ -227,18 +284,18 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", container=~\"loki|promtail\", pod=~\"loki.*|promtail.*\", resource=\"memory\"}) / 1000000000",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\", container=\"loki\", pod=~\"loki.*\", resource=\"memory\"}) / 1000000000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "request GB",
+          "legendFormat": "request",
           "range": true,
           "refId": "request",
           "step": 10
         }
       ],
-      "title": "Memory used by loki and promtail pods",
-      "type": "piechart"
+      "title": "Memory",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -249,10 +306,39 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
-          "max": 10000000000,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -274,7 +360,7 @@
               }
             ]
           },
-          "unit": "Bps"
+          "unit": "decbytes"
         },
         "overrides": [
           {
@@ -302,20 +388,20 @@
       "maxDataPoints": 100,
       "minSpan": 12,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
+        "legend": {
           "calcs": [
-            "last"
+            "sum"
           ],
-          "fields": "",
-          "values": false
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
         },
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -323,27 +409,17 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_network_receive_bytes_total{cluster_id=\"$cluster\", pod=~\"loki.*|promtail.*\"}[5m]))",
+          "expr": "sum(increase(container_network_receive_bytes_total{cluster_id=\"$cluster\", pod=~\"loki-gateway.*\"}[5m]))",
           "format": "time_series",
+          "interval": "5m",
           "intervalFactor": 1,
           "legendFormat": "Bandwidth",
           "range": true,
           "refId": "network"
-        },
-        {
-          "datasource": {
-            "name": "Expression",
-            "type": "__expr__",
-            "uid": "__expr__"
-          },
-          "expression": "$network*60*60*24*30/1000000000*0.09",
-          "hide": false,
-          "refId": "cost",
-          "type": "math"
         }
       ],
-      "title": "Network Cost",
-      "type": "stat"
+      "title": "Network",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -355,7 +431,7 @@
       },
       "id": 26,
       "panels": [],
-      "title": "Data",
+      "title": "Storage",
       "type": "row"
     },
     {
@@ -473,72 +549,9 @@
       ],
       "title": "Data stored on S3",
       "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 16
-      },
-      "id": 24,
-      "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Logs",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Dv3FyXf4k"
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 17
-      },
-      "id": 17,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "Dv3FyXf4k"
-          },
-          "editorMode": "code",
-          "expr": "{cluster_id=~\"$cluster\", job=~\"($namespace)/loki\"}",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Compactor Logs",
-      "type": "logs"
     }
   ],
-  "refresh": "10s",
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -626,7 +639,7 @@
   },
   "timezone": "utc",
   "title": "Loki / Cost estimation",
-  "uid": "Atl1UqB4z",
-  "version": 8,
+  "uid": "jF8DghLVz",
+  "version": 5,
   "weekStart": ""
 }
