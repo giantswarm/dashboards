@@ -565,7 +565,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "",
+      "description": "bytes stored on S3 for the selected tenant(s)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -646,7 +646,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(loki_ingester_chunk_stored_bytes_total{container=\"loki\"}[1m])) by (container)",
+          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=\"$tenant\"}[1m]))",
           "hide": false,
           "instant": false,
           "interval": "1m",
@@ -663,7 +663,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Total of bytes stored on S3 during the selected period",
+      "description": "Total of bytes stored on S3 for the selected tenant(s) over the selected period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -717,7 +717,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(increase(loki_ingester_chunk_stored_bytes_total{container=\"loki\"}[1m])) by (container)",
+          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=\"$tenant\"}[1m]))",
           "interval": "1m",
           "legendFormat": "__auto",
           "range": true,
@@ -814,7 +814,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Number of log lines received by Loki over the selected period",
+      "description": "Number of log lines received by Loki for the selected tenant(s) over the selected period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -871,7 +871,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(loki_distributor_lines_received_total{cluster_id=\"$cluster\"}[$__range]))",
+          "expr": "sum by (tenant) (increase(loki_distributor_lines_received_total{tenant=\"$tenant\"}[$__range]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -885,7 +885,7 @@
       "type": "stat"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -913,23 +913,27 @@
       {
         "current": {
           "selected": false,
-          "text": "gauss",
-          "value": "gauss"
+          "text": [
+            "gauss"
+          ],
+          "value": [
+            "gauss"
+          ]
         },
         "datasource": {
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "",
+        "definition": "label_values(loki_build_info, cluster_id)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "cluster",
-        "multi": false,
+        "multi": true,
         "name": "cluster",
         "options": [],
         "query": {
           "query": "label_values(loki_build_info, cluster_id)",
-          "refId": "Prometheus-cluster-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
@@ -939,11 +943,37 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "tenant-1"
+          ],
+          "value": [
+            "tenant-1"
+          ]
+        },
+        "definition": "label_values(loki_ingester_chunk_stored_bytes_total, tenant)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "tenant",
+        "options": [],
+        "query": {
+          "query": "label_values(loki_ingester_chunk_stored_bytes_total, tenant)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -974,6 +1004,6 @@
   "timezone": "utc",
   "title": "Loki Cost estimation",
   "uid": "jF8DghLVz",
-  "version": 27,
+  "version": 29,
   "weekStart": ""
 }
