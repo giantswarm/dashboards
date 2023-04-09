@@ -439,7 +439,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "All the traffic received by Loki Gateway (mostly promtail from the MC and the WCs), in bytes\n\nTotal represents the total of bytes received over the selected period",
+      "description": "All the traffic sent by Promtail to Loki in bytes.\n\nIt's interesting to select all WC and ignore the MC in order to find the correct number of paided bytes\n\nTotal represents the total of bytes sent by the selected WC over the selected period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -534,14 +534,15 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(container_network_receive_bytes_total{pod=~\"loki-gateway.*\"}[$__interval]))",
+          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=\"$cluster\"}[$__interval]))",
           "format": "time_series",
+          "hide": false,
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Bandwidth",
           "range": true,
-          "refId": "network"
+          "refId": "A"
         }
       ],
       "title": "Network",
@@ -888,7 +889,7 @@
       "type": "stat"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -916,12 +917,8 @@
       {
         "current": {
           "selected": false,
-          "text": [
-            "gauss"
-          ],
-          "value": [
-            "gauss"
-          ]
+          "text": "gauss",
+          "value": "gauss"
         },
         "datasource": {
           "type": "prometheus",
@@ -957,6 +954,10 @@
             "tenant-1"
           ]
         },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
         "definition": "label_values(loki_ingester_chunk_stored_bytes_total, tenant)",
         "hide": 0,
         "includeAll": true,
@@ -976,7 +977,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -1007,6 +1008,6 @@
   "timezone": "utc",
   "title": "Loki Cost estimation",
   "uid": "jF8DghLVz",
-  "version": 31,
+  "version": 32,
   "weekStart": ""
 }
