@@ -30,8 +30,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
+      "description": "10% means avg usage is 1/10th of reserved resources.\n1000% means avg usage is 10x more than reserved resources.\nShows the 10 lowest ones, to spot wasted resources.",
       "fieldConfig": {
         "defaults": {
           "decimals": 4,
@@ -73,30 +74,32 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\n    bottomk(10,sum(\n        label_replace(\n            rate(process_cpu_seconds_total{cluster_id=\"$cluster\"}[2h]),\n            \"matchlabel\",\n            \"$1\",\n            \"app\",\n            \"(.*)\"\n            )\n        ) by (matchlabel)\n        /\n        on (matchlabel) avg (\n        label_replace(\n            avg_over_time(kube_pod_container_resource_requests{cluster_id=\"$cluster\", resource=\"cpu\",unit=\"core\"}[1d]),\n            \"matchlabel\",\n            \"$1\",\n            \"container\",\n            \"(.*)\"\n            )\n        ) by (matchlabel)\n    *100)\n)",
+          "expr": "sort(\n    bottomk(10,\n    sum(\n        label_replace(\n            avg_over_time(\n                node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster_id=\"$cluster\", namespace=\"$namespace\", pod=~\"($container).*\"}[$__range]\n                ),\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\"\n            )\n        ) by (shortpod)\n     /\n     max(\n        label_replace(\n            cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests{cluster_id=\"$cluster\", namespace=\"$namespace\", pod=~\"($container).*\"}\n            ,\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\"\n        )\n    ) by (shortpod)\n*100)\n)",
+          "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "{{ container }}",
-          "refId": "A"
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "B"
         }
       ],
-      "title": "Top10 lowest % requested CPU over real usage",
+      "title": "Top10 lowest % of used CPU over requests",
       "type": "bargauge"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
+      "description": "10% means avg usage is 1/10th of reserved resources.\n1000% means avg usage is 10x more than reserved resources.\nShows the 10 lowest ones, to spot wasted resources.",
       "fieldConfig": {
         "defaults": {
           "decimals": 4,
@@ -138,31 +141,32 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\n    bottomk(10,\n        avg(\n            label_replace(\n                avg_over_time(process_resident_memory_bytes{cluster_id=\"$cluster\"}[1w]),\n                \"matchlabel\",\n                \"$1\",\n                \"app\",\n                \"(.*)\"\n            )\n        ) by (matchlabel)\n        / on (matchlabel)\n        avg(\n            label_replace(\n                avg_over_time(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\", unit=\"byte\"}[1w]),\n                \"matchlabel\",\n                \"$1\",\n                \"container\",\n                \"(.*)\"\n            )\n        ) by (matchlabel)\n    *100)\n)",
+          "expr": "sort(\n    bottomk(10,\n        max(\n            label_replace(\n                avg_over_time(\n                    container_memory_working_set_bytes{app=\"cadvisor\", cluster_id=\"$cluster\", namespace=\"$namespace\",container!=\"\", image!=\"\", pod=~\"($container).*\"}[$__range]\n                ),\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\"\n            )\n        ) by (shortpod)\n        /\n        max(\n            label_replace(\n                cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{cluster_id=\"$cluster\", namespace=\"$namespace\", pod=~\"($container).*\"}\n                ,\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\"\n            )\n        ) by (shortpod)\n    *100)\n)",
           "hide": false,
           "instant": true,
           "interval": "",
           "legendFormat": "{{ container }}",
-          "refId": "A"
+          "refId": "B"
         }
       ],
-      "title": "Top10 lowest % requested memory over real usage",
+      "title": "Top10 lowest % of used memory over requests",
       "type": "bargauge"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -186,8 +190,7 @@
             "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
-              "log": 2,
-              "type": "log"
+              "type": "linear"
             },
             "showPoints": "never",
             "spanNulls": false,
@@ -202,6 +205,7 @@
           "decimals": 4,
           "links": [],
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -229,7 +233,7 @@
       "options": {
         "legend": {
           "calcs": [
-            "lastNotNull"
+            "mean"
           ],
           "displayMode": "table",
           "placement": "right",
@@ -245,38 +249,38 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max(\n    kube_pod_container_resource_requests{container=\"$container\",cluster_id=\"$cluster\",resource=\"cpu\",unit=\"core\"}\n) by (container, pod)",
+          "expr": "max(label_replace(cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests{cluster_id=\"$cluster\", namespace=\"$namespace\", pod=~\"($container).*\"},\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\")) by (shortpod)",
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "request for {{pod}}",
+          "legendFormat": "request for {{shortpod}}",
           "refId": "requests"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "max(\n    rate(process_cpu_seconds_total{cluster_id=\"$cluster\",app=\"$container\"}[2h])\n) by (app, pod)",
+          "expr": "max(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster_id=\"$cluster\", namespace=\"$namespace\", pod=~\"($container).*\"},\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\")) by (shortpod)",
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "usage for {{app}}/{{pod}}",
+          "legendFormat": "usage for {{shortpod}}",
           "refId": "cpu"
         }
       ],
-      "title": "CPU request vs usage (Y-axis: log2 scale)",
+      "title": "CPU request vs usage",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -315,6 +319,7 @@
           },
           "links": [],
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -342,11 +347,13 @@
       "options": {
         "legend": {
           "calcs": [
-            "lastNotNull"
+            "mean"
           ],
           "displayMode": "table",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "multi",
@@ -358,27 +365,27 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max(\n    kube_pod_container_resource_requests{container=\"$container\",cluster_id=\"$cluster\",resource=\"memory\", unit=\"byte\"} > 0\n) by (container, pod)",
+          "expr": "max(label_replace(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{cluster_id=\"$cluster\", namespace=\"$namespace\", pod=~\"($container).*\"},\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\")) by (shortpod)",
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "request for {{pod}}",
+          "legendFormat": "request for {{shortpod}}",
           "refId": "pod requests"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max(\n    process_resident_memory_bytes{cluster_id=\"$cluster\",app=\"$container\"}\n) by (app, pod)",
+          "expr": "max(label_replace(container_memory_working_set_bytes{app=\"cadvisor\", cluster_id=\"$cluster\", namespace=\"$namespace\",container!=\"\", image!=\"\", pod=~\"($container).*\"},\"shortpod\",\"$1\",\"pod\",\"(.*)-.*\")) by (shortpod)",
           "interval": "",
-          "legendFormat": "usage for {{app}}/{{pod}}",
+          "legendFormat": "usage for {{shortpod}}",
           "range": true,
           "refId": "pod usage"
         }
@@ -388,7 +395,8 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 37,
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [
     "owner:team-atlas"
@@ -397,15 +405,33 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "gauss",
-          "value": "gauss"
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "gaia",
+          "value": "gaia"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
-        "definition": "label_values(process_cpu_seconds_total, cluster_id)",
+        "definition": "label_values(up{app=\"kube-state-metrics\"}, cluster_id)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -413,10 +439,10 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(process_cpu_seconds_total, cluster_id)",
-          "refId": "Promxy-cluster-Variable-Query"
+          "query": "label_values(up{app=\"kube-state-metrics\"}, cluster_id)",
+          "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -427,27 +453,54 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "prometheus",
-          "value": "prometheus"
+          "selected": false,
+          "text": "kube-system",
+          "value": "kube-system"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
-        "definition": "label_values(process_cpu_seconds_total{cluster_id=\"$cluster\"},app)",
+        "definition": "label_values(kube_namespace_status_phase{app=\"kube-state-metrics\", cluster_id=\"$cluster\"}, namespace)",
         "hide": 0,
         "includeAll": false,
+        "multi": false,
+        "name": "namespace",
+        "options": [],
+        "query": {
+          "query": "label_values(kube_namespace_status_phase{app=\"kube-state-metrics\", cluster_id=\"$cluster\"}, namespace)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": false,
+          "text": "k8s-controller-manager-ip-10-0-5-178.eu-central",
+          "value": "k8s-controller-manager-ip-10-0-5-178.eu-central"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{cluster_id=\"$cluster\", namespace=~\"$namespace\"},pod)",
+        "hide": 0,
+        "includeAll": true,
         "label": "Container",
         "multi": false,
         "name": "container",
         "options": [],
         "query": {
-          "query": "label_values(process_cpu_seconds_total{cluster_id=\"$cluster\"},app)",
-          "refId": "Promxy-container-Variable-Query"
+          "query": "label_values(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{cluster_id=\"$cluster\", namespace=~\"$namespace\"},pod)",
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "",
+        "regex": "/(.*)-(.*)/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
@@ -458,7 +511,7 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {

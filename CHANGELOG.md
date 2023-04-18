@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
 - Add Loki cost estimation dashboard
+
+### Changed
+
+- rework of requests vs usage to use the same metrics as kube-mixins and change filtering options
 
 ## [2.27.0] - 2023-04-17
 
