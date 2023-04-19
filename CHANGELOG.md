@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - rework of requests vs usage to use the same metrics as kube-mixins and change filtering options
+- requests vs usage dashboard made public
 
 ## [2.27.0] - 2023-04-17
 
