@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- prometheus availability over period
+
 ## [2.28.0] - 2023-04-20
 
 ### Added
