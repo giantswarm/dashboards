@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- added link from prometheus to prometheus/availability dashboard
+- added link from prometheus/availability to prometheus dashboard
+
 ## [2.28.1] - 2023-05-02
 
 ### Fixed
