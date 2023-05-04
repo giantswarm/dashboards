@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Make `Nodes Overview` dashboard work for Workload Clusters and assign to team phoenix.
+
 ## [2.28.2] - 2023-05-03
 
 ### Changed
