@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Make `Nodes Overview` dashboard work for Workload Clusters and assign to team phoenix.
+
 ### Changed
 
 - Adjusted the ENA dashboard to have an overview of the data across time
