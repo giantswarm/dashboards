@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add Helm charts to Flux cluster dashboard
+- Add Helm charts to Flux cluster dashboard.
+- Add `Prometheus Cost Estimate` dashboard.
 
 ### Removed
 
