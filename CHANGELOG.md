@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.28.4] - 2023-06-06
+
 ### Added
 
 - Add Helm charts to Flux cluster dashboard.
@@ -543,7 +545,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.28.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.28.4...HEAD
+[2.28.4]: https://github.com/giantswarm/dashboards/compare/v2.28.3...v2.28.4
 [2.28.3]: https://github.com/giantswarm/dashboards/compare/v2.28.2...v2.28.3
 [2.28.2]: https://github.com/giantswarm/dashboards/compare/v2.28.1...v2.28.2
 [2.28.1]: https://github.com/giantswarm/dashboards/compare/v2.28.0...v2.28.1
