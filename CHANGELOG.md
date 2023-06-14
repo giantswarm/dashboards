@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
 - Update team label of dashboards related to bigmac components.
 
 ## [2.29.0] - 2023-06-13
