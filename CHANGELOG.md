@@ -12,6 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `Mimir Cost Estimate` dashboard.
 - Add `Prometheus - Mimir Comparative` dashboard.
 
+
+## [2.30.0] - 2023-06-20
+
+### Changed
+
+- Update team label of dashboards related to bigmac components.
+
+## [2.29.0] - 2023-06-13
+
+### Changed
+
+- Update "Persistent Volume Usage" dashboard.
+
 ## [2.28.4] - 2023-06-06
 
 ### Added
@@ -550,7 +563,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.28.4...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.30.0...HEAD
+[2.30.0]: https://github.com/giantswarm/dashboards/compare/v2.29.0...v2.30.0
+[2.29.0]: https://github.com/giantswarm/dashboards/compare/v2.28.4...v2.29.0
 [2.28.4]: https://github.com/giantswarm/dashboards/compare/v2.28.3...v2.28.4
 [2.28.3]: https://github.com/giantswarm/dashboards/compare/v2.28.2...v2.28.3
 [2.28.2]: https://github.com/giantswarm/dashboards/compare/v2.28.1...v2.28.2
