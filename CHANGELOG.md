@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `CAPI Overview` dashboard.
 - Add `Mimir Cost Estimate` dashboard.
 - Add `Prometheus - Mimir Comparative` dashboard.
 
