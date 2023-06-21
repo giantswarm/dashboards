@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `CAPI Overview` dashboard.
 - Add `Mimir Cost Estimate` dashboard.
 - Add `Prometheus - Mimir Comparative` dashboard.
-
+- Add `Kyverno Health` dashboard.
 
 ## [2.30.0] - 2023-06-20
 
