@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.31.1] - 2023-06-28
 
+### Removed
+
+- Remove broken managed app sli dashboard.
+
 ## [2.31.0] - 2023-06-23
 
 ### Added
