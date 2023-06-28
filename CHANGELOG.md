@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.31.1] - 2023-06-28
+
 ## [2.31.0] - 2023-06-23
 
 ### Added
@@ -566,7 +568,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.31.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.31.1...HEAD
+[2.31.1]: https://github.com/giantswarm/dashboards/compare/v2.31.0...v2.31.1
 [2.31.0]: https://github.com/giantswarm/dashboards/compare/v2.30.0...v2.31.0
 [2.30.0]: https://github.com/giantswarm/dashboards/compare/v2.29.0...v2.30.0
 [2.29.0]: https://github.com/giantswarm/dashboards/compare/v2.28.4...v2.29.0
