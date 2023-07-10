@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved the DNS dashboard in order to be quicker and richer, especially considering node-local DNS cache and coredns as separate components.
+
 ## [2.31.2] - 2023-07-10
 
 ### Fixed
