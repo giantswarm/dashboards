@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.32.1] - 2023-07-11
+
 ### Fixed
 
 - Set correct filter in DNS Latency graph for node-local DNS cache.
@@ -588,7 +590,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.32.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.32.1...HEAD
+[2.32.1]: https://github.com/giantswarm/dashboards/compare/v2.32.0...v2.32.1
 [2.32.0]: https://github.com/giantswarm/dashboards/compare/v2.31.2...v2.32.0
 [2.31.2]: https://github.com/giantswarm/dashboards/compare/v2.31.1...v2.31.2
 [2.31.1]: https://github.com/giantswarm/dashboards/compare/v2.31.0...v2.31.1
