@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Set correct filter in DNS Latency graph for node-local DNS cache.
+
 ## [2.32.0] - 2023-07-10
 
 ### Changed
