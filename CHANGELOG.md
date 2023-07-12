@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add MC data into DNS dashboard.
+
 ## [2.33.0] - 2023-07-11
 
 ### Changed
