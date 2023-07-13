@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dashboards: Rename `nginx-ingress-controller` to `ingress-nginx`. ([#331](https://github.com/giantswarm/dashboards/pull/331))
+- Allow filtering by DNS zone in the `DNS` dashboard.
 
 ## [2.34.0] - 2023-07-12
 
