@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `External DNS` dashboard.
+- Add Cache panes to DNS dashboard.
 
 ## [2.35.0] - 2023-07-13
 
