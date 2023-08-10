@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update Kyverno health dashboard to be compatible with Kyverno 1.10.
+
 ## [2.36.0] - 2023-07-27
 
 ### Added
