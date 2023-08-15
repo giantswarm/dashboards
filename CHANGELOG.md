@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update Kyverno health dashboard to be compatible with Kyverno 1.10.
+- Update Kong-Connection-Distribution dashboard to work with new kong-app versions
 
 ## [2.36.0] - 2023-07-27
 
