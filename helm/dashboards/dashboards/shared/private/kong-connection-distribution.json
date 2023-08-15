@@ -203,6 +203,25 @@
       ],
       "title": "Active Connections by Node",
       "type": "timeseries"
+    },
+    {
+      "id": 3,
+      "title": "Active Connections by Zone",
+      "type": "timeseries",
+      "datasource": "default",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "targets": [
+        {
+          "refId": "Active Connections by Zone",
+          "datasource": "default",
+          "expr": "sum by (zone) (kong_nginx_http_current_connections{cluster_id="$cluster",namespace=~"$namespace",pod=~"$pod",state="active"} * on (node) group_left(zone) (group by (node, zone) (kube_node_labels{cluster_id="$cluster"})))"
+        }
+      ]
     }
   ],
   "refresh": "",
