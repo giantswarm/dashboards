@@ -11,6 +11,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -Fixed issues from `Loki Cost Estimate` dashboard
 
+### Changed
+
+- Update Kyverno health dashboard to be compatible with Kyverno 1.10.
+
+## [2.36.0] - 2023-07-27
+
+### Added
+
+- Add `External DNS` dashboard.
+- Add Cache panes to DNS dashboard.
+
+## [2.35.0] - 2023-07-13
+
+### Changed
+
+- Dashboards: Rename `nginx-ingress-controller` to `ingress-nginx`. ([#331](https://github.com/giantswarm/dashboards/pull/331))
+- Allow filtering by DNS zone in the `DNS` dashboard.
+
+## [2.34.0] - 2023-07-12
+
+### Changed
+
+- Add MC data into DNS dashboard.
+
+## [2.33.0] - 2023-07-11
+
+### Changed
+
+- Add per-node brakedown of latency in DNS dashboard.
+
+## [2.32.1] - 2023-07-11
+
+### Fixed
+
+- Set correct filter in DNS Latency graph for node-local DNS cache.
+
+## [2.32.0] - 2023-07-10
+
+### Changed
+
+- Improved the DNS dashboard in order to be quicker and richer, especially considering node-local DNS cache and coredns as separate components.
+
+## [2.31.2] - 2023-07-10
+
+### Fixed
+
+- Fix broken panels in `DNS` dashboard.
+
+## [2.31.1] - 2023-06-28
+
+### Removed
+
+- Remove broken managed app sli dashboard.
+
+## [2.31.0] - 2023-06-23
+
+### Added
+
+- Add `CAPI Overview` dashboard.
+- Add `Mimir Cost Estimate` dashboard.
+- Add `Prometheus - Mimir Comparative` dashboard.
+- Add `Kyverno Health` dashboard.
+
+## [2.30.0] - 2023-06-20
+
+### Changed
+
+- Update team label of dashboards related to bigmac components.
+
+## [2.29.0] - 2023-06-13
+
+### Changed
+
+- Update "Persistent Volume Usage" dashboard.
+
 ## [2.28.4] - 2023-06-06
 
 ### Added
@@ -549,7 +624,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.28.4...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.36.0...HEAD
+[2.36.0]: https://github.com/giantswarm/dashboards/compare/v2.35.0...v2.36.0
+[2.35.0]: https://github.com/giantswarm/dashboards/compare/v2.34.0...v2.35.0
+[2.34.0]: https://github.com/giantswarm/dashboards/compare/v2.33.0...v2.34.0
+[2.33.0]: https://github.com/giantswarm/dashboards/compare/v2.32.1...v2.33.0
+[2.32.1]: https://github.com/giantswarm/dashboards/compare/v2.32.0...v2.32.1
+[2.32.0]: https://github.com/giantswarm/dashboards/compare/v2.31.2...v2.32.0
+[2.31.2]: https://github.com/giantswarm/dashboards/compare/v2.31.1...v2.31.2
+[2.31.1]: https://github.com/giantswarm/dashboards/compare/v2.31.0...v2.31.1
+[2.31.0]: https://github.com/giantswarm/dashboards/compare/v2.30.0...v2.31.0
+[2.30.0]: https://github.com/giantswarm/dashboards/compare/v2.29.0...v2.30.0
+[2.29.0]: https://github.com/giantswarm/dashboards/compare/v2.28.4...v2.29.0
 [2.28.4]: https://github.com/giantswarm/dashboards/compare/v2.28.3...v2.28.4
 [2.28.3]: https://github.com/giantswarm/dashboards/compare/v2.28.2...v2.28.3
 [2.28.2]: https://github.com/giantswarm/dashboards/compare/v2.28.1...v2.28.2
