@@ -73,7 +73,7 @@
             "content": "This dashboard is a tool to estimate the cost of Loki.\n\n`loki` is deployed on the MC and `promtail` is deployed on each WC + MC.\n\n`promtail` sends the logs to `loki` and `loki` sends the data on `S3`.\n\nTo evaluate the real cost of `loki`, we need to take in account:\n- CPU and memory used by all loki pods\n- data sent by all WC promtail to loki\n- data sent on S3\n\n\nOnly the traffic between EC2 instances and Internet has a cost. <br/>\nTo estimate the global cost of the traffic for `loki`, we have to mesure the traffic between `promtail` pods on WC and `loki` on MC.<br/>\nThe traffic between `promtail` pods on MC and `loki` is free.\n\nTotal of bytes stored on S3 is estimated from data sent to S3. Hence, we are not aware of data cleaning.\n\nA tenant is related to a cluster. `tenant` selection allows you to know:\n- how much data is sent on S3 for the selected tenants\n- how many logs are sent by the selected tenants\n\n\n`cluster` selection allows you to know:\n- how much traffic is transmitted between WC and Loki (you have to select all the clusters in the list except the MC)\n- how many pods are running on the selected clusters",
             "mode": "markdown"
           },
-          "pluginVersion": "9.4.7",
+          "pluginVersion": "10.0.3",
           "title": "Explanation",
           "type": "text"
         }
@@ -555,7 +555,7 @@
         "y": 10
       },
       "id": 28,
-      "interval": "1m",
+      "interval": "5m",
       "options": {
         "legend": {
           "calcs": [],
@@ -576,7 +576,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=\"$tenant\"}[$__interval]))",
+          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=~\"$tenant\"}[$__interval]))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -641,7 +641,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
@@ -649,7 +649,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=\"$tenant\"}[$__interval]))",
+          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=~\"$tenant\"}[$__interval]))",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
@@ -733,7 +733,7 @@
         "y": 18
       },
       "id": 30,
-      "interval": "1m",
+      "interval": "5m",
       "links": [],
       "maxDataPoints": 100,
       "minSpan": 12,
@@ -758,7 +758,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=\"$cluster\"}[$__interval]))",
+          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -810,7 +810,7 @@
         "y": 18
       },
       "id": 39,
-      "interval": "1m",
+      "interval": "5m",
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -825,7 +825,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
@@ -833,7 +833,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=\"$cluster\"}[$__interval]))",
+          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval]))",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
@@ -907,7 +907,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
@@ -916,7 +916,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kubelet_running_pods{cluster_id=\"$cluster\"})",
+          "expr": "sum(kubelet_running_pods{cluster_id=~\"$cluster\"})",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -981,7 +981,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
@@ -990,7 +990,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (tenant) (increase(loki_distributor_lines_received_total{tenant=\"$tenant\"}[$__interval]))",
+          "expr": "sum by (tenant) (increase(loki_distributor_lines_received_total{tenant=~\"$tenant\"}[$__interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1030,10 +1030,15 @@
         "type": "datasource"
       },
       {
+        "allValue": ".*",
         "current": {
-          "selected": false,
-          "text": "gauss",
-          "value": "gauss"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "prometheus",
@@ -1063,10 +1068,10 @@
         "current": {
           "selected": true,
           "text": [
-            "tenant-1"
+            "All"
           ],
           "value": [
-            "tenant-1"
+            "$__all"
           ]
         },
         "datasource": {
@@ -1092,8 +1097,8 @@
     ]
   },
   "time": {
-    "from": "2023-04-06T14:08:33.483Z",
-    "to": "2023-04-07T03:42:00.707Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -1121,8 +1126,8 @@
     ]
   },
   "timezone": "utc",
-  "title": "Loki Cost Estimation",
-  "uid": "jF8DghLVz",
-  "version": 41,
+  "title": "Loki Cost Estimate",
+  "uid": "bc5a973d-0978-420f-b831-bbc2a9a4f3bc",
+  "version": 1,
   "weekStart": ""
 }
