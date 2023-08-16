@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+-Fixed issues from `Loki Cost Estimate` dashboard
+
 ### Changed
 
 - Update Kyverno health dashboard to be compatible with Kyverno 1.10.
