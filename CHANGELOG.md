@@ -7,12 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Align owner tags in Grafana cloud dashboards to format `owner:TEAM-NAME`.
+
 ## [2.37.0] - 2023-08-18
 
 ### Fixed
 
--Fixed issues from `Loki Cost Estimate` dashboard
--Fixed cluster id in `Cilium Metrics` dashboard
+- Fixed issues from `Loki Cost Estimate` dashboard
+- Fixed cluster id in `Cilium Metrics` dashboard
 
 ### Changed
 
