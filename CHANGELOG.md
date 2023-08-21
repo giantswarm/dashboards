@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Added promtail to cpu & memory graphs
+
 ## [2.37.0] - 2023-08-18
 
 ### Fixed
