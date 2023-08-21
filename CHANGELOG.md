@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--Fixed issues from `Loki Cost Estimate` dashboard and added promtail to cpu & memory graphs
+- Added promtail to cpu & memory graphs
+
+## [2.37.0] - 2023-08-18
+
+### Fixed
+
+-Fixed issues from `Loki Cost Estimate` dashboard
+-Fixed cluster id in `Cilium Metrics` dashboard
 
 ### Changed
 
@@ -626,7 +633,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.36.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.37.0...HEAD
+[2.37.0]: https://github.com/giantswarm/dashboards/compare/v2.36.0...v2.37.0
 [2.36.0]: https://github.com/giantswarm/dashboards/compare/v2.35.0...v2.36.0
 [2.35.0]: https://github.com/giantswarm/dashboards/compare/v2.34.0...v2.35.0
 [2.34.0]: https://github.com/giantswarm/dashboards/compare/v2.33.0...v2.34.0
