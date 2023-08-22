@@ -24,7 +24,7 @@ local burnRateChart(title, queries) =
 stdlib.dashboard(
   'Service Level',
   'service-level',
-  ['atlas'],
+  ['owner:team-atlas'],
 )
 
 .addTemplates([

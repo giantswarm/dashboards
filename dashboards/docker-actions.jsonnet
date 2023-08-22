@@ -4,7 +4,7 @@ local stdlib = import 'stdlib.jsonnet';
 stdlib.dashboard(
   'Docker Actions',
   'docker-actions',
-  ['honeybadger'],
+  ['owner:team-honeybadger'],
   time_from='now-7d',
 )
 
