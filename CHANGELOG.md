@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added dashboard showing AWS Load Balancer Controller errors
+- Added Karpenter dashboard
 
 ## [2.39.0] - 2023-08-22
 
