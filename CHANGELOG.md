@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Prometheus dashboard: logs panel and restart logs annotation
+
 ## [2.40.0] - 2023-08-24
 
 ### Added
