@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - DNS Dashboard: add logs panel for CoreDNS
+- Kong Connection Distribution: Make public
 
 ## [2.41.0] - 2023-08-30
 
