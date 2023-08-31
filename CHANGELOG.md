@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.42.0] - 2023-08-31
+
 ### Changed
 
 - DNS Dashboard: add logs panel for CoreDNS
@@ -659,7 +661,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.41.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.42.0...HEAD
+[2.42.0]: https://github.com/giantswarm/dashboards/compare/v2.41.0...v2.42.0
 [2.41.0]: https://github.com/giantswarm/dashboards/compare/v2.40.0...v2.41.0
 [2.40.0]: https://github.com/giantswarm/dashboards/compare/v2.39.0...v2.40.0
 [2.39.0]: https://github.com/giantswarm/dashboards/compare/v2.38.0...v2.39.0
