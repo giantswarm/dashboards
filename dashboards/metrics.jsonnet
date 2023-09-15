@@ -4,7 +4,7 @@ local stdlib = import 'stdlib.jsonnet';
 stdlib.dashboard(
   'Metrics',
   'metrics',
-  ['atlas'],
+  ['owner:team-atlas'],
   time_from='now-7d',
 )
 

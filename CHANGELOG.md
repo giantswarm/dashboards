@@ -11,6 +11,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add internal links between all Prometheus Dashboards.
 
+## [2.42.0] - 2023-08-31
+
+### Changed
+
+- DNS Dashboard: add logs panel for CoreDNS
+- Kong Connection Distribution: Make public
+
+## [2.41.0] - 2023-08-30
+
+### Changed
+
+- Prometheus dashboard: logs panel and restart logs annotation
+
+## [2.40.0] - 2023-08-24
+
+### Added
+
+- Added dashboard showing AWS Load Balancer Controller errors
+- Added Karpenter dashboard
+
+## [2.39.0] - 2023-08-22
+
+### Changed
+
+- Align owner tags in Grafana cloud dashboards to format `owner:TEAM-NAME`.
+
+## [2.38.0] - 2023-08-21
+
+### Fixed
+
+- Added promtail to cpu & memory graphs
+
+## [2.37.0] - 2023-08-18
+
+### Fixed
+
+- Fixed issues from `Loki Cost Estimate` dashboard
+- Fixed cluster id in `Cilium Metrics` dashboard
+
+### Changed
+
+- Update Kyverno health dashboard to be compatible with Kyverno 1.10.
+- Add modified "Kong (official)" dashboard
+- Update Kong-Connection-Distribution dashboard to work with new kong-app versions
+
 ## [2.36.0] - 2023-07-27
 
 ### Added
@@ -620,7 +665,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.36.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.42.0...HEAD
+[2.42.0]: https://github.com/giantswarm/dashboards/compare/v2.41.0...v2.42.0
+[2.41.0]: https://github.com/giantswarm/dashboards/compare/v2.40.0...v2.41.0
+[2.40.0]: https://github.com/giantswarm/dashboards/compare/v2.39.0...v2.40.0
+[2.39.0]: https://github.com/giantswarm/dashboards/compare/v2.38.0...v2.39.0
+[2.38.0]: https://github.com/giantswarm/dashboards/compare/v2.37.0...v2.38.0
+[2.37.0]: https://github.com/giantswarm/dashboards/compare/v2.36.0...v2.37.0
 [2.36.0]: https://github.com/giantswarm/dashboards/compare/v2.35.0...v2.36.0
 [2.35.0]: https://github.com/giantswarm/dashboards/compare/v2.34.0...v2.35.0
 [2.34.0]: https://github.com/giantswarm/dashboards/compare/v2.33.0...v2.34.0
