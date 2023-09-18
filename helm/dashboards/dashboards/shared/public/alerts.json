@@ -4,7 +4,10 @@
       {
         "$$hashKey": "object:54",
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -15,197 +18,78 @@
   },
   "description": "Installation-wide information on alerts, inhibitions, and silences",
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1627564498200,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "datasource": "$datasource",
+      "collapsed": false,
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 21,
-      "options": {
-        "analyticsOptions": {
-          "dashboard": "$__dashboard",
-          "flatten": false,
-          "heartbeatAlways": false,
-          "heartbeatInterval": 60,
-          "postEnd": false,
-          "postHeartbeat": false,
-          "postStart": true,
-          "server": "/analytics-plugin/write",
-          "showDetails": false
-        }
-      },
-      "title": "  ",
-      "transparent": true,
-      "type": "macropower-analytics-panel"
-    },
-    {
-      "datasource": "$datasource",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 1
-      },
       "id": 17,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Overview",
       "type": "row"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "gridPos": {
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 2
+        "y": 1
       },
       "id": 19,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "This dashboard provides metrics about alerts, inhibitions, and silences on a cluster level (workload cluster or management cluster).\n\n**Alert:** An alert is created by Prometheus Alertmanager based on a set of rules. For example, when some metric exceeds a configured threshold.\n\nAlerts are defined in the [prometheus-rules](https://github.com/giantswarm/prometheus-rules) repository. To learn about a particular alert, you can search that repository for the alert name.\n\n**Inhibition:** An inhibition is a rule to prevent an alert from being created. At Giant Swarm we use this for example to avoid certain alerts from being created when a cluster is freshly created, as this would otherwise trigger pages to staff on call.\n\n**Silence:** A silence is another specific override rule to opress one or several alerts from firing. Silences are not cluster specific, but instead are effective for the entire installation.",
         "mode": "markdown"
       },
-      "pluginVersion": "8.0.3",
-      "timeFrom": null,
-      "timeShift": null,
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "About this dashboard",
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "rgb(255, 255, 255)",
-                  "mode": "fixed"
-                }
-              }
-            ]
+          "color": {
+            "mode": "palette-classic-by-name"
           },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Inactive"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Inhibitions"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 16,
-        "x": 8,
-        "y": 2
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.0.3",
-      "targets": [
-        {
-          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",organization=~\"$organization\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Total",
-          "refId": "A"
-        },
-        {
-          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",organization=~\"$organization\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})-count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname))",
-          "interval": "",
-          "legendFormat": "Inactive",
-          "refId": "C"
-        },
-        {
-          "expr": "count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname))",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Active",
-          "refId": "B"
-        },
-        {
-          "expr": "count(count(ALERTS{alertname=~\"^Inhibition.*\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname))",
-          "interval": "",
-          "legendFormat": "Inhibitions",
-          "refId": "D"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Alerts by name",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -223,7 +107,112 @@
         "h": 5,
         "w": 16,
         "x": 8,
-        "y": 7
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total (global)",
+          "range": false,
+          "refId": "Total"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})-count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\"})by(alertname))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Inactive (global)",
+          "range": false,
+          "refId": "Inactive"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(count(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"})by(alertname))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Currently active (filtered)",
+          "range": false,
+          "refId": "Active"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(sum(max_over_time(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname))",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "Active over period (filtered)",
+          "range": false,
+          "refId": "active over period"
+        }
+      ],
+      "title": "Global alerts stats",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 16,
+        "x": 8,
+        "y": 6
       },
       "id": 13,
       "options": {
@@ -241,87 +230,78 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.3",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(aggregation:alertmanager:silences_active_total)",
           "interval": "",
           "legendFormat": "Active",
-          "refId": "A"
+          "refId": "total"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(aggregation:alertmanager:silences_expired_total)",
           "interval": "",
           "legendFormat": "Expired",
-          "refId": "B"
+          "refId": "expired"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(aggregation:alertmanager:silences_pending_total)",
           "interval": "",
           "legendFormat": "Pending",
-          "refId": "C"
+          "refId": "pending"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Global silences",
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
+      "datasource": {
+        "uid": "$datasource"
       },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 11
       },
       "id": 15,
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Metrics",
       "type": "row"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "fillOpacity": 70,
+            "lineWidth": 0,
+            "spanNulls": false
           },
-          "decimals": 0,
-          "links": [],
           "mappings": [],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -334,140 +314,163 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 12,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 12
       },
-      "id": 5,
+      "id": 22,
       "options": {
+        "alignValue": "left",
         "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right"
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
         },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "never",
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
-      "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "sum(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\",organization=~\"$organization\"})by(alertname)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", severity=~\"$severity\", team=~\"$team\"})by(alertname, cluster_id)",
           "instant": false,
-          "interval": "",
-          "legendFormat": "{{cluster_id}}",
+          "legendFormat": "{{alertname}} on {{cluster_id}}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Active alerts instances",
-      "type": "timeseries"
+      "title": "Alerts timeline",
+      "type": "state-timeline"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "align": "auto",
+            "cellOptions": {
+              "type": "json-view"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "filterable": true,
+            "inspect": false
           },
-          "decimals": 0,
-          "links": [],
           "mappings": [],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 24
       },
-      "id": 6,
+      "id": 23,
       "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max"
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
           ],
-          "displayMode": "table",
-          "placement": "right"
+          "show": false
         },
-        "tooltip": {
-          "mode": "single"
-        }
+        "showHeader": true,
+        "sortBy": []
       },
-      "pluginVersion": "8.0.3",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
-          "expr": "count(ALERTS{alertname=~\"^Inhibition.*\",cluster_id=~\"$cluster\",organization=~\"$organization\"}) by (alertname)",
-          "interval": "",
-          "legendFormat": "{{ alertname }}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(max_over_time(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname, team, severity)",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Inhibitions",
-      "type": "timeseries"
+      "title": "Firing alerts for selected period",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        },
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "kvp",
+            "jsonPaths": [
+              {
+                "alias": "alertname",
+                "path": "alertname"
+              }
+            ],
+            "keepTime": false,
+            "replace": false,
+            "source": "Metric"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Metric": true,
+              "Time": true
+            },
+            "indexByName": {
+              "Metric": 1,
+              "Time": 0,
+              "Value": 5,
+              "alertname": 2,
+              "severity": 3,
+              "team": 4
+            },
+            "renameByName": {
+              "Value": "Quantity"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
-  "schemaVersion": 30,
+  "refresh": "",
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [
     "owner:team-atlas"
@@ -476,12 +479,12 @@
     "list": [
       {
         "current": {
+          "selected": false,
           "text": "default",
           "value": "default"
         },
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -492,44 +495,16 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": false,
+          "text": "gauss",
+          "value": "gauss"
         },
-        "datasource": "$datasource",
-        "definition": "label_values(ALERTS, organization)",
-        "description": null,
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": "Organization",
-        "multi": false,
-        "name": "organization",
-        "options": [],
-        "query": {
-          "query": "label_values(ALERTS, organization)",
-          "refId": "Organization-query"
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
         },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": null,
-        "current": {
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(ALERTS{organization=\"$organization\"}, cluster_id)",
-        "description": null,
-        "error": null,
+        "definition": "label_values(ALERTS{},cluster_id)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -537,8 +512,8 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(ALERTS{organization=\"$organization\"}, cluster_id)",
-          "refId": "Promxy-cluster-Variable-Query"
+          "query": "label_values(ALERTS{},cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
         "regex": "",
@@ -548,11 +523,105 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(ALERTS{},severity)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Severity",
+        "multi": true,
+        "name": "severity",
+        "options": [],
+        "query": {
+          "query": "label_values(ALERTS{},severity)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(ALERTS{},team)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Team",
+        "multi": true,
+        "name": "team",
+        "options": [],
+        "query": {
+          "query": "label_values(ALERTS{},team)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname))",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "alertname",
+        "options": [],
+        "query": {
+          "query": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname))",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/.*{alertname=\"(.*)\"}.*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -572,5 +641,6 @@
   "timezone": "UTC",
   "title": "Alerts",
   "uid": "L65Jdq3Zk",
-  "version": 2
+  "version": 1,
+  "weekStart": ""
 }

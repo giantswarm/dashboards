@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+
+- Alerts dashboard:
+  - new filters: team, severity, alertname
+  - removed "inhibitions" graph as it was not reliable
+  - changed visualization for alerts from graph to timeline
+  - added a table listing alerts that have previously fired
+  - minor changes to global stat numbers
+
 ## [2.42.0] - 2023-08-31
 
 ### Changed
