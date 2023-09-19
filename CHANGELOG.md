@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - added a table listing alerts that have previously fired
   - minor changes to global stat numbers
 
+## [2.43.0] - 2023-09-19
+
+### Added
+
+- Add internal links between all Prometheus Dashboards.
+
 ## [2.42.0] - 2023-08-31
 
 ### Changed
@@ -670,7 +676,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.42.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.43.0...HEAD
+[2.43.0]: https://github.com/giantswarm/dashboards/compare/v2.42.0...v2.43.0
 [2.42.0]: https://github.com/giantswarm/dashboards/compare/v2.41.0...v2.42.0
 [2.41.0]: https://github.com/giantswarm/dashboards/compare/v2.40.0...v2.41.0
 [2.40.0]: https://github.com/giantswarm/dashboards/compare/v2.39.0...v2.40.0
