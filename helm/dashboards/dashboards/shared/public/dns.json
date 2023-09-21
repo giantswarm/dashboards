@@ -24,6 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
+  "id": 57,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -2305,8 +2306,8 @@
         "uid": "P8E80F9AEF21F6940"
       },
       "gridPos": {
-        "h": 6,
-        "w": 24,
+        "h": 7,
+        "w": 20,
         "x": 0,
         "y": 88
       },
@@ -2328,13 +2329,99 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "{app=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" | duration > 0.128\n",
+          "expr": "{app=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Records with duration > 0.128s",
+      "title": "CoreDNS Logs",
       "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 20,
+        "y": 88
+      },
+      "id": 46,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "editorMode": "code",
+          "expr": "sum by (type) (count_over_time({app=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`[5m]))",
+          "hide": false,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Filter by Response type",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value #A": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Time": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "",
@@ -2444,6 +2531,27 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {},
+        "hide": 0,
+        "label": "Logs Filter",
+        "name": "filter",
+        "options": [],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "P8E80F9AEF21F6940"
+        },
+        "filters": [],
+        "hide": 0,
+        "name": "Filters",
+        "skipUrlSync": false,
+        "type": "adhoc"
       }
     ]
   },

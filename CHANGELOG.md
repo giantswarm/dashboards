@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improve DNS logs with filtering options.
+
 ## [2.44.0] - 2023-09-19
 
-## Changed
+### Changed
 
 - Alerts dashboard:
   - new filters: team, severity, alertname
