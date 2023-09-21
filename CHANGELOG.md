@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve DNS logs with filtering options.
 
+### Fixed
+
+- Alerts dashboard: show alerts with missing fields
+
 ## [2.44.0] - 2023-09-19
 
 ### Changed

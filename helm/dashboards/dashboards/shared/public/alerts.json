@@ -91,6 +91,8 @@
             "mode": "palette-classic-by-name"
           },
           "mappings": [],
+          "min": 0,
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -99,7 +101,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -123,7 +126,7 @@
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "10.0.3",
       "targets": [
@@ -146,7 +149,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(prometheus_rule_group_rules{cluster_id=~\"$cluster\",rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})-count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\"})by(alertname))",
+          "expr": "sum(prometheus_rule_group_rules{cluster_id=~'($cluster)|$^',rule_group!~\".*;(cortex|helm-operations|labelling-schema|inhibit|service-level.*|.+\\\\.rules)$\"})-count(count(ALERTS{alertname!~\"^(Inhibition.*|Heartbeat|InvalidLabellingSchema)\",cluster_id=~'($cluster)|$^'})by(alertname))",
           "instant": true,
           "interval": "",
           "legendFormat": "Inactive (global)",
@@ -159,7 +162,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "count(count(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"})by(alertname))",
+          "expr": "count(count(ALERTS{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'})by(alertname))",
           "instant": true,
           "interval": "",
           "legendFormat": "Currently active (filtered)",
@@ -173,7 +176,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "count(sum(max_over_time(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname))",
+          "expr": "count(sum(max_over_time(ALERTS{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
           "hide": false,
           "instant": true,
           "legendFormat": "Active over period (filtered)",
@@ -347,7 +350,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", severity=~\"$severity\", team=~\"$team\"})by(alertname, cluster_id)",
+          "expr": "sum(ALERTS{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', severity=~'($severity)|$^', team=~'($team)|$^'})by(alertname, cluster_id)",
           "instant": false,
           "legendFormat": "{{alertname}} on {{cluster_id}}",
           "range": true,
@@ -418,7 +421,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "count(max_over_time(ALERTS{alertname=~\"$alertname\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname, team, severity)",
+          "expr": "count(max_over_time(ALERTS{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname, cluster_id, team, severity)",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -602,14 +605,18 @@
             "$__all"
           ]
         },
-        "definition": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname))",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "alertname",
         "options": [],
         "query": {
-          "query": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~\"$cluster\", team=~\"$team\", severity=~\"$severity\"}[$__range:])) by (alertname))",
+          "query": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -641,6 +648,6 @@
   "timezone": "UTC",
   "title": "Alerts",
   "uid": "L65Jdq3Zk",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
