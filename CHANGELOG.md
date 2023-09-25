@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add custom dashboards documentation link into home panel.
+
 ## [2.45.0] - 2023-09-21
 
 ### Changed
