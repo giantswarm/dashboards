@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
 ### Changed
 
 - Update Loki Cost Estimation dashboard.
+
+### Fixed
+
+- Prometheus dashboard: fix node RAM
 
 ### Added
 
