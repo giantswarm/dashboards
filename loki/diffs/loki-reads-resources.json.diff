@@ -1,0 +1,96 @@
+73c73
+<                         "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
+---
+>                         "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
+81c81
+<                         "expr": "min(kube_pod_container_resource_requests{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"cpu\"} > 0)",
+---
+>                         "expr": "min(kube_pod_container_resource_requests{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"cpu\"} > 0)",
+89c89
+<                         "expr": "min(container_spec_cpu_quota{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+---
+>                         "expr": "min(container_spec_cpu_quota{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{cluster_id=\"$cluster_id\",namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+175c175
+<                         "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+---
+>                         "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+183c183
+<                         "expr": "min(kube_pod_container_resource_requests{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"memory\"} > 0)",
+---
+>                         "expr": "min(kube_pod_container_resource_requests{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"memory\"} > 0)",
+191c191
+<                         "expr": "min(container_spec_memory_limit_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} > 0)",
+---
+>                         "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} > 0)",
+266c266
+<                         "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
+---
+>                         "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
+341c341
+<                         "expr": "sum by(instance, pod, device) (rate(node_disk_written_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+---
+>                         "expr": "sum by(instance, pod, device) (rate(node_disk_written_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+418c418
+<                         "expr": "sum by(instance, pod, device) (rate(node_disk_read_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+---
+>                         "expr": "sum by(instance, pod, device) (rate(node_disk_read_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+495c495
+<                         "expr": "max by(persistentvolumeclaim) (kubelet_volume_stats_used_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"} / kubelet_volume_stats_capacity_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"}) and count by(persistentvolumeclaim) (kube_persistentvolumeclaim_labels{cluster=~\"$cluster\", namespace=~\"$namespace\",label_name=~\"(loki|enterprise-logs)-read.*\"})",
+---
+>                         "expr": "max by(persistentvolumeclaim) (kubelet_volume_stats_used_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\"} / kubelet_volume_stats_capacity_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\"}) and count by(persistentvolumeclaim) (kube_persistentvolumeclaim_labels{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\",label_name=~\"(loki|enterprise-logs)-read.*\"})",
+595c595
+<                         "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"}[$__rate_interval]))",
+---
+>                         "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"}[$__rate_interval]))",
+603c603
+<                         "expr": "min(kube_pod_container_resource_requests{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"cpu\"} > 0)",
+---
+>                         "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"cpu\"} > 0)",
+611c611
+<                         "expr": "min(container_spec_cpu_quota{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} / container_spec_cpu_period{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
+---
+>                         "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} / container_spec_cpu_period{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
+696c696
+<                         "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
+---
+>                         "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
+704c704
+<                         "expr": "min(kube_pod_container_resource_requests{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"memory\"} > 0)",
+---
+>                         "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"memory\"} > 0)",
+712c712
+<                         "expr": "min(container_spec_memory_limit_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} > 0)",
+---
+>                         "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} > 0)",
+786c786
+<                         "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-write\"})",
+---
+>                         "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster_id\", job=~\"($namespace)/(loki|enterprise-logs)-write\"})",
+858a859,876
+>                "datasource": "$datasource",
+>                "hide": 0,
+>                "includeAll": false,
+>                "label": "Kube cluster",
+>                "multi": false,
+>                "name": "cluster_id",
+>                "options": [ ],
+>                "query": "label_values(loki_build_info, cluster_id)",
+>                "refresh": 1,
+>                "regex": "",
+>                "sort": 2,
+>                "tagValuesQuery": "",
+>                "tags": [ ],
+>                "tagsQuery": "",
+>                "type": "query",
+>                "useTags": false
+>             },
+>             {
+937c955
+<       "uid": "reads-resources",
+---
+>       "uid": "loki-reads-resources",
+939c957
+<    }
+\ No newline at end of file
+---
+>    }

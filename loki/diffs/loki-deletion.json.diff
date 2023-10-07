@@ -1,0 +1,87 @@
+62c62
+<                         "expr": "sum(loki_compactor_pending_delete_requests_count{cluster=~\"$cluster\", namespace=~\"$namespace\"})",
+---
+>                         "expr": "sum(loki_compactor_pending_delete_requests_count{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"})",
+138c138
+<                         "expr": "max(loki_compactor_oldest_pending_delete_request_age_seconds{cluster=~\"$cluster\", namespace=~\"$namespace\"})",
+---
+>                         "expr": "max(loki_compactor_oldest_pending_delete_request_age_seconds{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"})",
+225c225
+<                         "expr": "(loki_compactor_delete_requests_received_total{cluster=~\"$cluster\", namespace=~\"$namespace\"} or on() vector(0)) - on () (loki_compactor_delete_requests_processed_total{cluster=~\"$cluster\", namespace=~\"$namespace\"} or on () vector(0))",
+---
+>                         "expr": "(loki_compactor_delete_requests_received_total{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"} or on() vector(0)) - on () (loki_compactor_delete_requests_processed_total{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"} or on () vector(0))",
+301c301
+<                         "expr": "sum(increase(loki_compactor_delete_requests_received_total{cluster=~\"$cluster\", namespace=~\"$namespace\"}[1d]))",
+---
+>                         "expr": "sum(increase(loki_compactor_delete_requests_received_total{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[1d]))",
+377c377
+<                         "expr": "sum(increase(loki_compactor_delete_requests_processed_total{cluster=~\"$cluster\", namespace=~\"$namespace\"}[1d]))",
+---
+>                         "expr": "sum(increase(loki_compactor_delete_requests_processed_total{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[1d]))",
+541c541
+<                         "expr": "go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"compactor\"} / 1024 / 1024 ",
+---
+>                         "expr": "go_memstats_heap_inuse_bytes{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", job=\"loki/loki-backend\"} / 1024 / 1024 ",
+617c617
+<                         "expr": "loki_boltdb_shipper_compact_tables_operation_duration_seconds{cluster=~\"$cluster\", namespace=~\"$namespace\"}",
+---
+>                         "expr": "loki_boltdb_shipper_compact_tables_operation_duration_seconds{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"}",
+705c705
+<                         "expr": "sum(increase(loki_compactor_load_pending_requests_attempts_total{status=\"fail\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[1h]))",
+---
+>                         "expr": "sum(increase(loki_compactor_load_pending_requests_attempts_total{status=\"fail\", cluster_id=\"$cluster_id\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[1h]))",
+781c781
+<                         "expr": "sum(rate(loki_compactor_deleted_lines{cluster=~\"$cluster\",job=~\"$namespace/(loki|enterprise-logs)-read\"}[$__rate_interval])) by (user)",
+---
+>                         "expr": "sum(rate(loki_compactor_deleted_lines{cluster_id=\"$cluster_id\", cluster=~\"$cluster\",job=~\"$namespace/(loki|enterprise-logs)-read\"}[$__rate_interval])) by (user)",
+843c843
+<                         "expr": "{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"compactor\"} |~ \"Started processing delete request|delete request for user marked as processed\" | logfmt | line_format \"{{.ts}} user={{.user}} delete_request_id={{.delete_request_id}} msg={{.msg}}\" ",
+---
+>                         "expr": "{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", component=\"backend\"} |~ \"Started processing delete request|delete request for user marked as processed\" | logfmt | line_format \"{{.ts}} user={{.user}} delete_request_id={{.delete_request_id}} msg={{.msg}}\" ",
+856c856
+<                         "expr": "{cluster=~\"$cluster\", namespace=~\"$namespace\", container=\"compactor\"} |~ \"delete request for user added\" | logfmt | line_format \"{{.ts}} user={{.user}} query='{{.query}}'\"",
+---
+>                         "expr": "{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", component=\"backend\"} |~ \"delete request for user added\" | logfmt | line_format \"{{.ts}} user={{.user}} query='{{.query}}'\"",
+893a894,903
+>                "hide": 0,
+>                "label": null,
+>                "name": "loki_datasource",
+>                "options": [ ],
+>                "query": "loki",
+>                "refresh": 1,
+>                "regex": "",
+>                "type": "datasource"
+>             },
+>             {
+916a927,944
+>                "datasource": "$datasource",
+>                "hide": 0,
+>                "includeAll": false,
+>                "label": "Kube cluster",
+>                "multi": false,
+>                "name": "cluster_id",
+>                "options": [ ],
+>                "query": "label_values(loki_build_info, cluster_id)",
+>                "refresh": 1,
+>                "regex": "",
+>                "sort": 2,
+>                "tagValuesQuery": "",
+>                "tags": [ ],
+>                "tagsQuery": "",
+>                "type": "query",
+>                "useTags": false
+>             },
+>             {
+929c957
+<                "query": "label_values(loki_build_info{cluster=~\"$cluster\"}, namespace)",
+---
+>                "query": "label_values(loki_build_info{cluster_id=\"$cluster_id\", cluster=~\"$cluster\"}, namespace)",
+972c1000
+<       "uid": "deletion",
+---
+>       "uid": "loki-deletion",
+974c1002
+<    }
+\ No newline at end of file
+---
+>    }

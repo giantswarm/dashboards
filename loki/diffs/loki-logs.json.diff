@@ -1,0 +1,84 @@
+66c66
+<                   "expr": "sum(go_goroutines{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"})",
+---
+>                   "expr": "sum(go_goroutines{cluster_id=\"$cluster_id\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"})",
+152c152
+<                   "expr": "sum(go_gc_duration_seconds{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"}) by (quantile)",
+---
+>                   "expr": "sum(go_gc_duration_seconds{cluster_id=\"$cluster_id\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"}) by (quantile)",
+239c239
+<                   "expr": "sum(rate(container_cpu_usage_seconds_total{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"}[5m]))",
+---
+>                   "expr": "sum(rate(container_cpu_usage_seconds_total{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"}[5m]))",
+325c325
+<                   "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"})",
+---
+>                   "expr": "sum(container_memory_working_set_bytes{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"})",
+411c411
+<                   "expr": "sum(rate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"}[5m]))",
+---
+>                   "expr": "sum(rate(container_network_transmit_bytes_total{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"}[5m]))",
+497c497
+<                   "expr": "sum(rate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"}[5m]))",
+---
+>                   "expr": "sum(rate(container_network_receive_bytes_total{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\"}[5m]))",
+583c583
+<                   "expr": "increase(kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"}[30m]) > 0",
+---
+>                   "expr": "increase(kube_pod_container_status_last_terminated_reason{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"}[30m]) > 0",
+670c670
+<                   "expr": "sum(rate(promtail_custom_bad_words_total{cluster=\"$cluster\", exported_namespace=\"$namespace\", exported_pod=~\"$deployment.*\", exported_pod=~\"$pod\", container=~\"$container\"}[5m])) by (level)",
+---
+>                   "expr": "sum(rate(promtail_custom_bad_words_total{cluster_id=\"$cluster_id\", cluster=\"$cluster\", exported_namespace=\"$namespace\", exported_pod=~\"$deployment.*\", exported_pod=~\"$pod\", container=~\"$container\"}[5m])) by (level)",
+774c774
+<                   "expr": "sum(rate({cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\" } |logfmt| level=\"$level\" |= \"$filter\" [5m])) by (level)",
+---
+>                   "expr": "sum(rate({cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\" } |logfmt| level=~\"$level\" |= \"$filter\" [5m])) by (level)",
+839c839
+<                   "expr": "{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"} | logfmt | level=\"$level\" |= \"$filter\"",
+---
+>                   "expr": "{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\", pod=~\"$pod\", container=~\"$container\"} | logfmt | level=~\"$level\" |= \"$filter\"",
+895a896,913
+>                "datasource": "$datasource",
+>                "hide": 0,
+>                "includeAll": false,
+>                "label": "Kube cluster",
+>                "multi": false,
+>                "name": "cluster_id",
+>                "options": [ ],
+>                "query": "label_values(loki_build_info, cluster_id)",
+>                "refresh": 1,
+>                "regex": "",
+>                "sort": 2,
+>                "tagValuesQuery": "",
+>                "tags": [ ],
+>                "tagsQuery": "",
+>                "type": "query",
+>                "useTags": false
+>             },
+>             {
+908c926
+<                "query": "label_values(loki_build_info{cluster=~\"$cluster\"}, namespace)",
+---
+>                "query": "label_values(loki_build_info{cluster_id=\"$cluster_id\", cluster=~\"$cluster\"}, namespace)",
+938c956
+<                "query": "label_values(kube_deployment_created{cluster=\"$cluster\", namespace=\"$namespace\"}, deployment)",
+---
+>                "query": "label_values(kube_deployment_created{cluster_id=\"$cluster_id\", namespace=\"$namespace\"}, deployment)",
+958c976
+<                "query": "label_values(kube_pod_container_info{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$deployment.*\"}, pod)",
+---
+>                "query": "label_values(kube_pod_container_info{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$deployment.*\"}, pod)",
+978c996
+<                "query": "label_values(kube_pod_container_info{cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\", pod=~\"$deployment.*\"}, container)",
+---
+>                "query": "label_values(kube_pod_container_info{cluster_id=\"$cluster_id\", namespace=\"$namespace\", pod=~\"$pod\", pod=~\"$deployment.*\"}, container)",
+1070c1088
+<       "uid": "logs",
+---
+>       "uid": "loki-logs",
+1072c1090
+<    }
+\ No newline at end of file
+---
+>    }
