@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.47.0] - 2023-10-11
+### Changed
 
+- Update Loki Cost Estimation dashboard.
+- [BREAKING] Split the chart in sub-chart to get around chart size limitation - all values are moved to a `global` section.
+
+## [2.47.0] - 2023-10-11
 
 ### Changed
 

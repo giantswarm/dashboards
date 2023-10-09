@@ -10,7 +10,7 @@ items:
     labels:
       {{- include "labels.common" $ | nindent 6 }}
     name: grafana-home-dashboard
-    namespace: {{ $.Values.namespace  }}
+    namespace: {{ $.Values.global.namespace  }}
   data:
     home.json: {{ (tpl ($.Files.Get "dashboards/home.json") .) | quote }}
 ## Mixins dashboards
@@ -24,7 +24,7 @@ items:
     labels:
       {{- include "labels.common" $ | nindent 6 }}
     name: {{ printf "grafana-mixin-%s-dashboard" $dashboardName | trunc 63 | trimSuffix "-" }}
-    namespace: {{ $.Values.namespace  }}
+    namespace: {{ $.Values.global.namespace  }}
   data:
     {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
 {{- end }}
@@ -39,7 +39,7 @@ items:
     labels:
       {{- include "labels.common" $ | nindent 6 }}
     name: {{ printf "grafana-shared-%s-dashboard" $dashboardName | trunc 63 | trimSuffix "-" }}
-    namespace: {{ $.Values.namespace  }}
+    namespace: {{ $.Values.global.namespace  }}
   data:
     {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
 {{- end }}
@@ -54,37 +54,37 @@ items:
     labels:
       {{- include "labels.common" $ | nindent 6 }}
     name: {{ printf "grafana-shared-%s-dashboard" $dashboardName | trunc 63 | trimSuffix "-" }}
-    namespace: {{ $.Values.namespace  }}
+    namespace: {{ $.Values.global.namespace  }}
   data:
     {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
 {{- end }}
 ## Provider specific public dashboards
-{{- range $path, $fileContents := $.Files.Glob (printf "dashboards/%s/public/*.json" $.Values.provider.kind) }}
+{{- range $path, $fileContents := $.Files.Glob (printf "dashboards/%s/public/*.json" $.Values.global.provider.kind) }}
 {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
 - apiVersion: v1
   kind: ConfigMap
   metadata:
     annotations:
-      k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public/{{ $.Values.provider.kind }}"
+      k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public/{{ $.Values.global.provider.kind }}"
     labels:
       {{- include "labels.common" $ | nindent 6 }}
-    name: {{ printf "grafana-%s-%s-dashboard" $.Values.provider.kind $dashboardName | trunc 63 | trimSuffix "-" }}
-    namespace: {{ $.Values.namespace  }}
+    name: {{ printf "grafana-%s-%s-dashboard" $.Values.global.provider.kind $dashboardName | trunc 63 | trimSuffix "-" }}
+    namespace: {{ $.Values.global.namespace  }}
   data:
     {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
 {{- end }}
 ## Provider specific private dashboards
-{{- range $path, $fileContents := $.Files.Glob (printf "dashboards/%s/private/*.json" $.Values.provider.kind) }}
+{{- range $path, $fileContents := $.Files.Glob (printf "dashboards/%s/private/*.json" $.Values.global.provider.kind) }}
 {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
 - apiVersion: v1
   kind: ConfigMap
   metadata:
     annotations:
-      k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/private/{{ $.Values.provider.kind }}"
+      k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/private/{{ $.Values.global.provider.kind }}"
     labels:
       {{- include "labels.common" $ | nindent 6 }}
-    name: {{ printf "grafana-%s-%s-dashboard" $.Values.provider.kind $dashboardName | trunc 63 | trimSuffix "-" }}
-    namespace: {{ $.Values.namespace  }}
+    name: {{ printf "grafana-%s-%s-dashboard" $.Values.global.provider.kind $dashboardName | trunc 63 | trimSuffix "-" }}
+    namespace: {{ $.Values.global.namespace  }}
   data:
     {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
 {{- end }}
