@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add custom dashboards documentation link into home panel.
 
+### Changed
+
+- Cilium: migrate to Timeseries and change rate timeframe.
+
 ## [2.45.0] - 2023-09-21
 
 ### Changed
