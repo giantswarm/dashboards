@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+### Changed
+
+- Update Loki Cost Estimation dashboard.
+
 ## [2.46.0] - 2023-10-09
 
 ### Fixed

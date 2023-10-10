@@ -24,7 +24,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 93,
   "links": [
     {
       "asDropdown": true,
@@ -50,35 +49,36 @@
         "y": 0
       },
       "id": 41,
-      "panels": [],
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "",
+          "gridPos": {
+            "h": 13,
+            "w": 24,
+            "x": 0,
+            "y": 1
+          },
+          "id": 43,
+          "options": {
+            "code": {
+              "language": "plaintext",
+              "showLineNumbers": false,
+              "showMiniMap": false
+            },
+            "content": "This dashboard is a tool to estimate the cost of Loki.\n\n`loki` is deployed on the management cluster and `promtail` is deployed on each workload cluster and on the management cluster as well.\n\n`promtail` sends the logs to `loki` and `loki` sends the data on `S3`.\n\nTo evaluate the real cost of `loki`, we need to take in account:\n- CPU and memory used by all loki pods\n- data sent by all promtail on workload clusters to loki\n- data sent on S3\n\n\nOnly the traffic between EC2 instances and Internet has a cost. <br/>\nTo estimate the global cost of the traffic for `loki`, we have to mesure the traffic between `promtail` pods on workload clusters and `loki` on the management cluster.<br/>\nThe traffic between `promtail` pods on the management cluster and `loki` is free.\n\nTotal of bytes stored on S3 is estimated from data sent to S3. Hence, we are not aware of data cleaning.\n\n`cluster` selection allows you to know:\n- how much traffic is transmitted between selected clusters and Loki\n- how many targets are scraped on the selected clusters",
+            "mode": "markdown"
+          },
+          "pluginVersion": "10.0.3",
+          "title": "Explanation",
+          "type": "text"
+        }
+      ],
       "title": "Explanation",
       "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "",
-      "gridPos": {
-        "h": 16,
-        "w": 24,
-        "x": 0,
-        "y": 1
-      },
-      "id": 43,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "This dashboard is a tool to estimate the cost of Loki.\n\n`loki` is deployed on the MC and `promtail` is deployed on each WC + MC.\n\n`promtail` sends the logs to `loki` and `loki` sends the data on `S3`.\n\nTo evaluate the real cost of `loki`, we need to take in account:\n- CPU and memory used by all loki pods\n- data sent by all WC promtail to loki\n- data sent on S3\n\n\nOnly the traffic between EC2 instances and Internet has a cost. <br/>\nTo estimate the global cost of the traffic for `loki`, we have to mesure the traffic between `promtail` pods on WC and `loki` on MC.<br/>\nThe traffic between `promtail` pods on MC and `loki` is free.\n\nTotal of bytes stored on S3 is estimated from data sent to S3. Hence, we are not aware of data cleaning.\n\nA tenant is related to a cluster. `tenant` selection allows you to know:\n- how much data is sent on S3 for the selected tenants\n- how many logs are sent by the selected tenants\n\n\n`cluster` selection allows you to know:\n- how much traffic is transmitted between WC and Loki (you have to select all the clusters in the list except the MC)\n- how many pods are running on the selected clusters",
-        "mode": "markdown"
-      },
-      "pluginVersion": "10.0.3",
-      "title": "Explanation",
-      "type": "text"
     },
     {
       "collapsed": false,
@@ -90,7 +90,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 1
       },
       "id": 18,
       "panels": [],
@@ -222,7 +222,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 2
       },
       "id": 1,
       "links": [],
@@ -248,7 +248,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_requests{container=~\"loki|promtail\", resource=\"cpu\"})",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", resource=\"cpu\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -262,7 +262,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container=~\"loki|promtail\"}[5m]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"loki\"}[5m]))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -276,7 +276,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{container=~\"loki|promtail\"}[5m]))",
+          "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{container=\"loki\"}[5m]))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -407,7 +407,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 2
       },
       "id": 2,
       "links": [],
@@ -433,7 +433,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_requests{container=~\"loki|promtail\", resource=\"memory\"})",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", resource=\"memory\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -447,7 +447,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_memory_usage_bytes{container=~\"loki|promtail\"}[5m]))",
+          "expr": "sum(rate(container_memory_usage_bytes{container=\"loki\"}[5m]))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "usage for all pods",
@@ -460,7 +460,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod) (rate(container_memory_usage_bytes{container=~\"loki|promtail\"}[5m]))",
+          "expr": "sum by (pod) (rate(container_memory_usage_bytes{container=\"loki\"}[5m]))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -479,7 +479,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 9
       },
       "id": 26,
       "panels": [],
@@ -491,7 +491,78 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "bytes sent to S3 for the selected tenant(s)",
+      "description": "Total of bytes sent on S3 over the selected period",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 0,
+        "y": 10
+      },
+      "id": 38,
+      "interval": "2m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total[$__interval]))",
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total of bytes sent on S3",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -550,11 +621,11 @@
       "gridPos": {
         "h": 8,
         "w": 19,
-        "x": 0,
-        "y": 26
+        "x": 5,
+        "y": 10
       },
       "id": 28,
-      "interval": "5m",
+      "interval": "2m",
       "options": {
         "legend": {
           "calcs": [],
@@ -575,7 +646,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=~\"$tenant\"}[$__interval]))",
+          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total[$__interval]))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -592,12 +663,12 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Total of bytes sent to S3 for the selected tenant(s) over the selected period",
+      "description": "Total of bytes transmitted over the network over the selected period.\n\nThe first series displays the total bytes sent by the selected cluster(s) to Loki over the selected period.\n\nThe second series displays the total bytes sent by workload clusters to Loki over the selected period that need to be paid.\n",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
+            "fixedColor": "green",
+            "mode": "palette-classic"
           },
           "mappings": [],
           "min": 0,
@@ -619,18 +690,18 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 5,
-        "x": 19,
-        "y": 26
+        "x": 0,
+        "y": 18
       },
-      "id": 38,
-      "interval": "1m",
+      "id": 39,
+      "interval": "2m",
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "sum"
@@ -648,14 +719,29 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum by (tenant) (increase(loki_ingester_chunk_stored_bytes_total{tenant=~\"$tenant\"}[$__interval]))",
+          "exemplar": false,
+          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval])))",
+          "instant": false,
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "Selected cluster(s) traffic",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\"}[$__interval])))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost traffic",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Total of bytes sent on S3",
+      "title": "Total of bytes transmitted over the network",
       "type": "stat"
     },
     {
@@ -663,7 +749,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "All the traffic sent by Promtail to Loki in bytes.\n\nIt's interesting to select all WC and ignore the MC in order to find the correct number of paided bytes",
+      "description": "All the traffic sent by Promtail to Loki in bytes.\n\nThe first series displays the total bytes sent by the selected cluster(s) to Loki.\n\nThe second series displays the total bytes sent by workload clusters to Loki that need to be paid.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -728,20 +814,19 @@
       "gridPos": {
         "h": 7,
         "w": 19,
-        "x": 0,
-        "y": 34
+        "x": 5,
+        "y": 18
       },
       "id": 30,
-      "interval": "5m",
+      "interval": "2m",
       "links": [],
-      "maxDataPoints": 100,
       "minSpan": 12,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -757,90 +842,32 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval]))",
+          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval])))",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "__auto",
+          "legendFormat": "Selected cluster(s) traffic",
           "range": true,
           "refId": "A"
-        }
-      ],
-      "title": "bytes transmitted over the network",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Total of bytes sent by the selected WC over the selected period",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "green",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "decbytes"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 5,
-        "x": 19,
-        "y": 34
-      },
-      "id": 39,
-      "interval": "5m",
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "sum"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "10.0.3",
-      "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval]))",
-          "interval": "",
-          "legendFormat": "__auto",
+          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\"}[$__interval])))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost traffic",
           "range": true,
-          "refId": "A"
+          "refId": "B"
         }
       ],
-      "title": "Total of bytes transmitted over the network",
-      "type": "stat"
+      "title": "bytes transmitted over the network",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -848,7 +875,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 25
       },
       "id": 32,
       "panels": [],
@@ -860,7 +887,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Number of pods currently running on the selected cluster(s)",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -889,7 +916,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 42
+        "y": 26
       },
       "id": 34,
       "options": {
@@ -915,14 +942,14 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kubelet_running_pods{cluster_id=~\"$cluster\"})",
+          "expr": "sum(sum by (cluster_id) (promtail_targets_active_total{cluster_id=~\"$cluster\"}))",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Number of Pods running on the cluster",
+      "title": "Number of targets scraped on the selected cluster(s)",
       "type": "stat"
     },
     {
@@ -930,7 +957,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Number of log lines received by Loki for the selected tenant(s) over the selected period",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -962,10 +989,10 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 42
+        "y": 26
       },
       "id": 36,
-      "interval": "1m",
+      "interval": "2m",
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -989,7 +1016,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (tenant) (increase(loki_distributor_lines_received_total{tenant=~\"$tenant\"}[$__interval]))",
+          "expr": "sum by (tenant) (increase(loki_distributor_lines_received_total[$__interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -999,11 +1026,11 @@
           "refId": "loki"
         }
       ],
-      "title": "Number of Logs received by Loki",
+      "title": "Number of Logs received by Loki over the selected period",
       "type": "stat"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -1023,6 +1050,7 @@
         "name": "datasource",
         "options": [],
         "query": "prometheus",
+        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1043,7 +1071,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(loki_build_info, cluster_id)",
+        "definition": "label_values(promtail_build_info,cluster_id)",
         "hide": 0,
         "includeAll": true,
         "label": "cluster",
@@ -1051,8 +1079,8 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(loki_build_info, cluster_id)",
-          "refId": "StandardVariableQuery"
+          "query": "label_values(promtail_build_info,cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "",
@@ -1062,36 +1090,6 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
-        "definition": "label_values(loki_ingester_chunk_stored_bytes_total, tenant)",
-        "hide": 0,
-        "includeAll": true,
-        "multi": true,
-        "name": "tenant",
-        "options": [],
-        "query": {
-          "query": "label_values(loki_ingester_chunk_stored_bytes_total, tenant)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
       }
     ]
   },
@@ -1125,8 +1123,8 @@
     ]
   },
   "timezone": "utc",
-  "title": "Loki Cost Estimate",
-  "uid": "bc5a973d-0978-420f-b831-bbc2a9a4f3bc",
+  "title": "Loki Cost Estimation",
+  "uid": "lokicost",
   "version": 1,
   "weekStart": ""
 }
