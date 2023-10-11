@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2023-10-11
+
 ### Changed
 
 - Update Loki Cost Estimation dashboard.
@@ -714,7 +716,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v2.47.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/giantswarm/dashboards/compare/v2.47.0...v3.0.0
 [2.47.0]: https://github.com/giantswarm/dashboards/compare/v2.46.0...v2.47.0
 [2.46.0]: https://github.com/giantswarm/dashboards/compare/v2.45.0...v2.46.0
 [2.45.0]: https://github.com/giantswarm/dashboards/compare/v2.44.0...v2.45.0
