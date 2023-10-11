@@ -4,6 +4,14 @@ This project currently contains Giant Swarm public dashboards.
 
 The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place and in the same format.
 
+## Sub-charts
+
+This chart is divided in 4 different charts, to get around helm charts size limitations:
+- `helm/dashboards/charts/public_dashboards/` for public dashboards.
+- `helm/dashboards/charts/private_dashboards_al/` for private dashboards starting with letters A to L.
+- `helm/dashboards/charts/private_dashboards_mz/` for private dashboards starting with letters M to Z.
+- `helm/dashboards/` for other dashboards.
+
 ## Management cluster's dashboards
 
 The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana.
