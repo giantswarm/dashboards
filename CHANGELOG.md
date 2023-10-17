@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Prometheus remote-writes: add nginx stats
+
 ## [3.1.0] - 2023-10-13
 
 ### Changed
