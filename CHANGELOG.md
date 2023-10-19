@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-10-19
+
 ### Changed
 
 - Prometheus remote-writes: add nginx stats
@@ -726,7 +728,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/giantswarm/dashboards/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/giantswarm/dashboards/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/giantswarm/dashboards/compare/v2.47.0...v3.0.0
 [2.47.0]: https://github.com/giantswarm/dashboards/compare/v2.46.0...v2.47.0
