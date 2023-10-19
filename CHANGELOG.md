@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### fixed
+
+- Fixed nginx panel in remote-writes dashboard
+
 ## [3.2.0] - 2023-10-19
 
 ### Changed
