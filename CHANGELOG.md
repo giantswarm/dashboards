@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add Nginx admission controller dashboard.
+
 ## [3.2.4] - 2023-11-06
 
 ### Added
