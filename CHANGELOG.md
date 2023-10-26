@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix `Kubernetes Events & Resources Count` dashboard.
+
 ## [3.2.2] - 2023-10-20
 
 ### Changed
