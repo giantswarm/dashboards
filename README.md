@@ -84,3 +84,9 @@ In the future we should provide documentation and automation to perform clean up
 #### Prometheus-overview
 
 Comes from `prometheus-mixins`, with the addition of support for multiple clusters.
+
+#### KEDA
+
+Comes from https://github.com/kedacore/keda/blob/main/config/grafana/keda-dashboard.json
+
+We added multi-cluster support and tags (team owner)

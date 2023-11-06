@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add KEDA dashboard.
+
 ## [3.2.3] - 2023-10-26
 
 ### Fixed
