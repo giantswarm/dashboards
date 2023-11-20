@@ -135,7 +135,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_info{image=~\"docker.io.*\",image!~\".*giantswarm.*\",cluster_type=\"workload_cluster\"})",
+          "expr": "sum(kube_pod_container_info{image=~\"docker.io.*\",image!~\".*/giantswarm/.*\",cluster_type=\"workload_cluster\"} or kube_pod_init_container_info{image=~\"docker.io.*\",image!~\".*/giantswarm/.*\",cluster_type=\"workload_cluster\"})",
           "instant": false,
           "legendFormat": "Total",
           "range": true,
@@ -228,7 +228,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_pod_container_info{image=~\"docker.io.*\",image!~\".*giantswarm.*\",cluster_type=\"workload_cluster\"}) by (organization, cluster_id, namespace, container, image)",
+          "expr": "sum(kube_pod_container_info{image=~\"docker.io.*\",image!~\".*giantswarm.*\",cluster_type=\"workload_cluster\"} or kube_pod_init_container_info{image=~\"docker.io.*\",image!~\".*giantswarm.*\",cluster_type=\"workload_cluster\"}) by (organization, cluster_id, namespace, pod, container, image)",
           "format": "table",
           "instant": true,
           "legendFormat": "Total",
@@ -245,13 +245,14 @@
               "Time": true
             },
             "indexByName": {
-              "Time": 6,
-              "Value": 5,
+              "Time": 7,
+              "Value": 6,
               "cluster_id": 2,
-              "container": 4,
+              "container": 5,
               "image": 0,
               "namespace": 3,
-              "organization": 1
+              "organization": 1,
+              "pod": 4
             },
             "renameByName": {
               "Time": "",
@@ -260,7 +261,8 @@
               "container": "Container name",
               "image": "Image",
               "namespace": "Namespace",
-              "organization": "Organization"
+              "organization": "Organization",
+              "pod": "Pod"
             }
           }
         }
@@ -350,7 +352,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_pod_container_info{image=~\"docker.io.*\",image!~\".*giantswarm.*\",cluster_type=\"workload_cluster\"}) by (image)",
+          "expr": "sum(kube_pod_container_info{image=~\"docker.io.*\",image!~\".*/giantswarm/.*\",cluster_type=\"workload_cluster\"} or kube_pod_init_container_info{image=~\"docker.io.*\",image!~\".*/giantswarm/.*\",cluster_type=\"workload_cluster\"}) by (image)",
           "format": "table",
           "instant": true,
           "legendFormat": "Total",
@@ -407,6 +409,6 @@
   "timezone": "utc",
   "title": "Container images from docker.io",
   "uid": "be4cd321-9c4c-4447-b060-fc875c089f5e",
-  "version": 6,
+  "version": 7,
   "weekStart": ""
 }
