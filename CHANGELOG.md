@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Loki cost estimation: update legends to name tenants
+
 ## [3.4.2] - 2023-11-21
 
 ### Changed
