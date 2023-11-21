@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Loki Operational dashboard improvements:
+  * Added a `Backend Path` panel
+  * Added `disk usage` to Write and Backend path panel
+  * Added `total pods` to Write, Read and Backend panels
+
 ## [3.4.2] - 2023-11-21
 
 ### Changed
