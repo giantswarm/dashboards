@@ -67,3 +67,13 @@ DASHBOARDS="/home/herve/github/giantswarm/dashboards/helm/dashboards/dashboards/
 mkdir -p diffs
 for dashboard in "$LOKI_GIT"/production/loki-mixin-compiled-ssd/dashboards/*.json; do diff "$dashboard" "$DASHBOARDS"/"$(basename "$dashboard")" > diffs/"$(basename "$dashboard")".diff; done
 ```
+
+# Extra changes
+
+There's been some extra changes done interactively with Grafana UI.
+
+## Loki Overview
+
+* Added a `Backend Path` panel
+* Added `disk usage` to Write and Backend path panel
+* Added `total pods` to Write, Read and Backend panels
