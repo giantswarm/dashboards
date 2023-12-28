@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kube-Builder operators dashboard
 - Add Linkerd Control Plane dashboard
 
+## Changed
+
+- Better description and small spacing fixes in etcd-backup dashboard
+
 ## [3.5.0] - 2023-11-24
 
 ### Changed
