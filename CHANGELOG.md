@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.0] - 2024-01-15
+
 ### Added
 
 - Kube-Builder operators dashboard
@@ -799,7 +801,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.5.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.6.0...HEAD
+[3.6.0]: https://github.com/giantswarm/dashboards/compare/v3.5.0...v3.6.0
 [3.5.0]: https://github.com/giantswarm/dashboards/compare/v3.4.2...v3.5.0
 [3.4.2]: https://github.com/giantswarm/dashboards/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/giantswarm/dashboards/compare/v3.4.0...v3.4.1
