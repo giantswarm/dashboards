@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix name and query for API server dashboard
+
 ## [3.6.1] - 2024-01-18
 
 ### Changed
