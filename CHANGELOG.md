@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix query in API server dashboard for CAPI clusters
+
 ## [3.6.2] - 2024-01-18
 
 ### Fixed
