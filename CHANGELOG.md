@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Create `Policy Enforcement (PSS) Status` workload cluster compliance overview dashboard.
+
 ### Fixed
 
 - Fix query in API server dashboard for CAPI clusters
