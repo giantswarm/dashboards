@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Create `Policy Enforcement (PSS) Status` workcload cluster compliance overview dashboard.
+- Create `Policy Enforcement (PSS) Status` workload cluster compliance overview dashboard.
 
 ### Fixed
 
