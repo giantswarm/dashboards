@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add mimir mixins dashboards.
+- Add mimir mixins dashboard for write.
 
 ## [3.7.0] - 2024-01-31
 
