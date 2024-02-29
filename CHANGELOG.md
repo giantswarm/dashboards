@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.8.0] - 2024-02-29
+### Added
+
+- Add mimir mixins dashboards for read.
 
 ## [3.8.0] - 2024-02-29
 
@@ -844,9 +846,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.8.0...HEAD
-[3.8.0]: https://github.com/giantswarm/dashboards/compare/v3.8.0...v3.8.0
-[3.8.0]: https://github.com/giantswarm/dashboards/compare/v3.7.1...v3.8.0
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.7.1...HEAD
 [3.7.1]: https://github.com/giantswarm/dashboards/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/giantswarm/dashboards/compare/v3.6.2...v3.7.0
 [3.6.2]: https://github.com/giantswarm/dashboards/compare/v3.6.1...v3.6.2
