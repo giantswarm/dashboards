@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add mimir mixins dashboard for write.
 
+### Changed
+
+- Change `managed-apps-efk-stack-app` dashboard owner to Atlas.
+
+## [3.7.1] - 2024-02-27
+
+### Fixed
+
+- Fix Prometheus - Mimir Cost Comparison dashboard.
+- Moved Dashboards from deprecated ludacris team to turtles team tags.
+- Removed Dashboards with deprecated data sources.
+
 ## [3.7.0] - 2024-01-31
 
 ### Added
@@ -828,7 +840,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.7.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.7.1...HEAD
+[3.7.1]: https://github.com/giantswarm/dashboards/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/giantswarm/dashboards/compare/v3.6.2...v3.7.0
 [3.6.2]: https://github.com/giantswarm/dashboards/compare/v3.6.1...v3.6.2
 [3.6.1]: https://github.com/giantswarm/dashboards/compare/v3.6.0...v3.6.1
