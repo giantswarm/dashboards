@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add mimir mixins dashboard for ruler.
+
 ## [3.8.0] - 2024-02-29
 
 ### Added
