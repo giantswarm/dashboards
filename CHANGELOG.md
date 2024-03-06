@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Change `managed-apps-efk-stack-app` dashboard owner to Atlas.
+- Updated `k8s-resources-node` dashboard.
 
 ## [3.7.1] - 2024-02-27
 
