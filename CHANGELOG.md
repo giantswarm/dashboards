@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add mimir mixins dashboard for compactor.
+
 ## [3.8.2] - 2024-03-07
 
 ### Added
