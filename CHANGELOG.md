@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add public Cilium performance dashboard.
+
 ## [3.8.4] - 2024-03-11
 
 ### Added
