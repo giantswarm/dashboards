@@ -43,13 +43,13 @@ stdlib.dashboard(
   .addTarget(
     grafana.prometheus.target(
       'sum(
-        slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, cluster_id) group_left (cluster_type, class) slo_threshold_high
+        slo_errors_per_request:ratio_rate1h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, customer, installation, cluster_id) group_left (cluster_type, class) slo_threshold_high
         and
-        slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, cluster_id) group_left (cluster_type, class) slo_threshold_high
+        slo_errors_per_request:ratio_rate5m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, customer, installation, cluster_id) group_left (cluster_type, class) slo_threshold_high
         or
-        slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, cluster_id) group_left (cluster_type, class) slo_threshold_low
+        slo_errors_per_request:ratio_rate6h{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, customer, installation, cluster_id) group_left (cluster_type, class) slo_threshold_low
         and
-        slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, cluster_id) group_left (cluster_type, class) slo_threshold_low
+        slo_errors_per_request:ratio_rate30m{pipeline=~"$pipeline", service=~"$service", customer=~"$customer", installation=~"$installation", cluster_id=~"$cluster_id"} > on (service, customer, installation, cluster_id) group_left (cluster_type, class) slo_threshold_low
       ) by (service, customer, installation, cluster_id)',
       format='table',
       instant=true,
