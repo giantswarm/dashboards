@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add public Cilium performance dashboard.
+
 ### Fixed
 
 - Fix all dashboards that were only supporting only role=master to now support role=~control-plane|master.
