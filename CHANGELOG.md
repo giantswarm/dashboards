@@ -7,6 +7,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add public Cilium performance dashboard.
+
+### Fixed
+
+- Fix all dashboards that were only supporting only role=master to now support role=~control-plane|master.
+
+## [3.8.4] - 2024-03-11
+
+### Added
+
+- Add mimir overview mixins dashboard.
+
+## [3.8.3] - 2024-03-11
+
+### Added
+
+- Add mimir mixins dashboard for compactor.
+
+## [3.8.2] - 2024-03-07
+
+### Added
+
+- Add mimir mixins dashboard for ruler.
+
+## [3.8.1] - 2024-03-05
+
+### Added
+
+- Add mimir mixins dashboards for read.
+
+## [3.8.0] - 2024-02-29
+
+### Added
+
+- Add mimir mixins dashboards for write.
+
+### Changed
+
+- Change `managed-apps-efk-stack-app` dashboard owner to Atlas.
+- Updated `k8s-resources-node` dashboard.
+
+## [3.7.1] - 2024-02-27
+
+### Fixed
+
+- Fix Prometheus - Mimir Cost Comparison dashboard.
+- Moved Dashboards from deprecated ludacris team to turtles team tags.
+- Removed Dashboards with deprecated data sources.
+
 ## [3.7.0] - 2024-01-31
 
 ### Added
@@ -824,7 +875,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.7.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.8.4...HEAD
+[3.8.4]: https://github.com/giantswarm/dashboards/compare/v3.8.3...v3.8.4
+[3.8.3]: https://github.com/giantswarm/dashboards/compare/v3.8.2...v3.8.3
+[3.8.2]: https://github.com/giantswarm/dashboards/compare/v3.8.1...v3.8.2
+[3.8.1]: https://github.com/giantswarm/dashboards/compare/v3.8.0...v3.8.1
+[3.8.0]: https://github.com/giantswarm/dashboards/compare/v3.7.1...v3.8.0
+[3.7.1]: https://github.com/giantswarm/dashboards/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/giantswarm/dashboards/compare/v3.6.2...v3.7.0
 [3.6.2]: https://github.com/giantswarm/dashboards/compare/v3.6.1...v3.6.2
 [3.6.1]: https://github.com/giantswarm/dashboards/compare/v3.6.0...v3.6.1
