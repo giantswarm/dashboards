@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix all dashboards that were only supporting only role=master to now support role=~control-plane|master.
+- Fix Mimir - Prometheus cost dashboard to compare over real data (not missing on data from old prometheus instances)
 
 ## [3.8.4] - 2024-03-11
 

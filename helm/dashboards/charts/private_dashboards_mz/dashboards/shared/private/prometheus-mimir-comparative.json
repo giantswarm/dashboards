@@ -94,7 +94,7 @@
               "uid": "PBFA97CFB590B2093"
             },
             "editorMode": "code",
-            "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}[5m]))",
+            "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", namespace=~\".*-prometheus\", cluster_type=~\"management_cluster\"}[$__range]))",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
@@ -162,7 +162,7 @@
               "uid": "PBFA97CFB590B2093"
             },
             "editorMode": "code",
-            "expr": "sum(max_over_time(\n    container_memory_usage_bytes{container=\"prometheus\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}[$__range]\n))",
+            "expr": "sum(max_over_time(container_memory_usage_bytes{container=\"prometheus\", namespace=~\".*-prometheus\", cluster_type=~\"management_cluster\"}[$__range]))",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
@@ -256,7 +256,7 @@
               "uid": "PBFA97CFB590B2093"
             },
             "editorMode": "code",
-            "expr": "sum(irate(container_network_receive_bytes_total{pod=~\"prometheus-($cluster)-.*\"}[5m])) by (pod)",
+            "expr": "sum(irate(container_network_receive_bytes_total{namespace=~\".*-prometheus\"}[$__range])) by (pod)",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "A"
@@ -350,7 +350,7 @@
               "uid": "PBFA97CFB590B2093"
             },
             "editorMode": "code",
-            "expr": "sum(irate(container_network_transmit_bytes_total{pod=~\"prometheus-($cluster)-.*\"}[5m])) by (pod)",
+            "expr": "sum(irate(container_network_transmit_bytes_total{namespace=~\".*-prometheus\"}[$__range])) by (pod)",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "A"
@@ -432,7 +432,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(sum(rate(container_cpu_usage_seconds_total{pod=~\"mimir-.*\", cluster_type=~\"management_cluster\"}[5m])) by (pod))",
+            "expr": "sum(sum(rate(container_cpu_usage_seconds_total{pod=~\"mimir-.*\", cluster_type=~\"management_cluster\"}[$__range])) by (pod))",
             "instant": false,
             "legendFormat": "__auto",
             "range": true,
@@ -595,7 +595,7 @@
               "uid": "PBFA97CFB590B2093"
             },
             "editorMode": "code",
-            "expr": "sum(irate(container_network_receive_bytes_total{pod=~\"mimir-.*\"}[5m])) by (pod)",
+            "expr": "sum(irate(container_network_receive_bytes_total{pod=~\"mimir-.*\"}[$__range])) by (pod)",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "A"
@@ -689,7 +689,7 @@
               "uid": "PBFA97CFB590B2093"
             },
             "editorMode": "code",
-            "expr": "sum(irate(container_network_transmit_bytes_total{pod=~\"mimir-.*\"}[5m])) by (pod)",
+            "expr": "sum(irate(container_network_transmit_bytes_total{pod=~\"mimir-.*\"}[$__range])) by (pod)",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "A"
@@ -703,41 +703,6 @@
     "schemaVersion": 38,
     "style": "dark",
     "tags": [],
-    "templating": {
-      "list": [
-        {
-          "allValue": "",
-          "current": {
-            "selected": true,
-            "text": [
-              "All"
-            ],
-            "value": [
-              "$__all"
-            ]
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "definition": "label_values(kube_pod_container_info{image=~\".*prometheus.*\"},cluster_id)",
-          "hide": 0,
-          "includeAll": true,
-          "multi": true,
-          "name": "cluster",
-          "options": [],
-          "query": {
-            "query": "label_values(kube_pod_container_info{image=~\".*prometheus.*\"},cluster_id)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
-          },
-          "refresh": 1,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 0,
-          "type": "query"
-        }
-      ]
-    },
     "time": {
       "from": "now-7d",
       "to": "now"
