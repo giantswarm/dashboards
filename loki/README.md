@@ -77,3 +77,22 @@ There's been some extra changes done interactively with Grafana UI.
 * Added a `Backend Path` panel
 * Added `disk usage` to Write and Backend path panel
 * Added `total pods` to Write, Read and Backend panels
+
+
+# Loki canary
+
+This one was generated from the [mixins](https://github.com/grafana/loki/tree/main/production/loki-mixin) following these steps:
+
+* Update config (mixin-ssd.libsonnet) with:
+   ```
+        {
+      _config+:: {
+        canary+: {
+          enabled: true,
+        },
+      },
+    }
+   ```
+* Generate with `mixtool generate all mixin-ssd.libsonnet`
+* Dashboard is `loki-canary.json`
+* Then we just changed the `uid` of the dashboard to `loki-canary`
