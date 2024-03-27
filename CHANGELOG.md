@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Migrate panels from graph to timeseries in DNS dashboard.
+- Add promxy cpu and memory graphs to prometheus cost dashboard.
 
 ## [3.8.5] - 2024-03-26
 
