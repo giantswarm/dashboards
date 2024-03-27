@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- dashboard for loki-canary (private for now)
+- Add dashboard for loki-canary (private for now)
+- Add private dashboard about in-cluster container image registry (Zot)
 
 ### Changed
 
