@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- dashboard for loki-canary (private for now)
+
 ### Changed
 
 - Migrate panels from graph to timeseries in DNS dashboard.
