@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.0] - 2024-03-27
+
 ### Added
 
 - dashboard for loki-canary (private for now)
@@ -888,7 +890,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.8.5...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.9.0...HEAD
+[3.9.0]: https://github.com/giantswarm/dashboards/compare/v3.8.5...v3.9.0
 [3.8.5]: https://github.com/giantswarm/dashboards/compare/v3.8.4...v3.8.5
 [3.8.4]: https://github.com/giantswarm/dashboards/compare/v3.8.3...v3.8.4
 [3.8.3]: https://github.com/giantswarm/dashboards/compare/v3.8.2...v3.8.3
