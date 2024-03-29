@@ -1,922 +1,1631 @@
 {
-    "__requires": [
-       {
-          "id": "grafana",
-          "name": "Grafana",
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
           "type": "grafana",
-          "version": "8.0.0"
-       }
-    ],
-    "annotations": {
-       "list": [ ]
-    },
-    "editable": true,
-    "gnetId": null,
-    "graphTooltip": 1,
-    "hideControls": false,
-    "links": [
-       {
-          "asDropdown": true,
-          "icon": "external link",
-          "includeVars": true,
-          "keepTime": true,
-          "tags": [
-             "mimir"
-          ],
-          "targetBlank": false,
-          "title": "Mimir dashboards",
-          "type": "dashboards"
-       }
-    ],
-    "refresh": "10s",
-    "rows": [
-       {
-          "collapse": false,
-          "height": "250px",
-          "panels": [
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "short"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 1,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"}[$__rate_interval]))",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "CPU",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "bytes"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 2,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"})",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Memory (workingset)",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 0,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "bytes"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 3,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "multi",
-                      "sort": "desc"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"})",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Memory (go heap inuse)",
-                "type": "timeseries"
-             }
-          ],
-          "repeat": null,
-          "repeatIteration": null,
-          "repeatRowId": null,
-          "showTitle": true,
-          "title": "Writes",
-          "titleSize": "h6"
-       },
-       {
-          "collapse": false,
-          "height": "250px",
-          "panels": [
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 100,
-                         "lineWidth": 0,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "Bps"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 4,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_written_bytes_total[$__rate_interval]\n  )\n)\n+\nignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"distributor|ingester|mimir-write\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}} - {{device}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Disk writes",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 100,
-                         "lineWidth": 0,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "Bps"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 5,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_read_bytes_total[$__rate_interval]\n  )\n) + ignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"distributor|ingester|mimir-write\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}} - {{device}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Disk reads",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "custom": {
-                      "fillOpacity": 0
-                   },
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "percentunit"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 6,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"} /\n  kubelet_volume_stats_capacity_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"}\n)\nand\ncount by(persistentvolumeclaim) (\n  kube_persistentvolumeclaim_labels{\n    cluster=~\"$cluster\", namespace=~\"$namespace\",\n    label_name=~\"(distributor|ingester|mimir-write).*\"\n  }\n)\n",
-                      "format": "time_series",
-                      "legendFormat": "{{persistentvolumeclaim}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Disk space utilization",
-                "type": "timeseries"
-             }
-          ],
-          "repeat": null,
-          "repeatIteration": null,
-          "repeatRowId": null,
-          "showTitle": true,
-          "title": "",
-          "titleSize": "h6"
-       },
-       {
-          "collapse": false,
-          "height": "250px",
-          "panels": [
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "short"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 7,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read\"}[$__rate_interval]))",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "CPU",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "bytes"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 8,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read\"})",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Memory (workingset)",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 0,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "bytes"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 9,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "multi",
-                      "sort": "desc"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read\"})",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Memory (go heap inuse)",
-                "type": "timeseries"
-             }
-          ],
-          "repeat": null,
-          "repeatIteration": null,
-          "repeatRowId": null,
-          "showTitle": true,
-          "title": "Reads",
-          "titleSize": "h6"
-       },
-       {
-          "collapse": false,
-          "height": "250px",
-          "panels": [
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "short"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 10,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\"}[$__rate_interval]))",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "CPU",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "bytes"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 11,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\"})",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Memory (workingset)",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 0,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "bytes"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 12,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "multi",
-                      "sort": "desc"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\"})",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Memory (go heap inuse)",
-                "type": "timeseries"
-             }
-          ],
-          "repeat": null,
-          "repeatIteration": null,
-          "repeatRowId": null,
-          "showTitle": true,
-          "title": "Backend",
-          "titleSize": "h6"
-       },
-       {
-          "collapse": false,
-          "height": "250px",
-          "panels": [
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 100,
-                         "lineWidth": 0,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "Bps"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 13,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_written_bytes_total[$__rate_interval]\n  )\n)\n+\nignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}} - {{device}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Disk writes",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 100,
-                         "lineWidth": 0,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "Bps"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 14,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_read_bytes_total[$__rate_interval]\n  )\n) + ignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
-                      "format": "time_series",
-                      "legendFormat": "{{pod}} - {{device}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Disk reads",
-                "type": "timeseries"
-             },
-             {
-                "datasource": "$datasource",
-                "fieldConfig": {
-                   "custom": {
-                      "fillOpacity": 0
-                   },
-                   "defaults": {
-                      "custom": {
-                         "drawStyle": "line",
-                         "fillOpacity": 1,
-                         "lineWidth": 1,
-                         "pointSize": 5,
-                         "showPoints": "never",
-                         "spanNulls": false,
-                         "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                         }
-                      },
-                      "min": 0,
-                      "thresholds": {
-                         "mode": "absolute",
-                         "steps": [ ]
-                      },
-                      "unit": "percentunit"
-                   },
-                   "overrides": [ ]
-                },
-                "id": 15,
-                "links": [ ],
-                "options": {
-                   "legend": {
-                      "showLegend": true
-                   },
-                   "tooltip": {
-                      "mode": "single",
-                      "sort": "none"
-                   }
-                },
-                "span": 4,
-                "targets": [
-                   {
-                      "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"} /\n  kubelet_volume_stats_capacity_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"}\n)\nand\ncount by(persistentvolumeclaim) (\n  kube_persistentvolumeclaim_labels{\n    cluster=~\"$cluster\", namespace=~\"$namespace\",\n    label_name=~\"(query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend).*\"\n  }\n)\n",
-                      "format": "time_series",
-                      "legendFormat": "{{persistentvolumeclaim}}",
-                      "legendLink": null
-                   }
-                ],
-                "title": "Disk space utilization",
-                "type": "timeseries"
-             }
-          ],
-          "repeat": null,
-          "repeatIteration": null,
-          "repeatRowId": null,
-          "showTitle": true,
-          "title": "",
-          "titleSize": "h6"
-       }
-    ],
-    "schemaVersion": 14,
-    "style": "dark",
-    "tags": [
-       "mimir"
-    ],
-    "templating": {
-       "list": [
-          {
-             "current": {
-                "text": "default",
-                "value": "default"
-             },
-             "hide": 0,
-             "label": "Data source",
-             "name": "datasource",
-             "options": [ ],
-             "query": "prometheus",
-             "refresh": 1,
-             "regex": "",
-             "type": "datasource"
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "mimir"
+      ],
+      "targetBlank": false,
+      "title": "Mimir dashboards",
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 16,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
           },
-          {
-             "allValue": ".*",
-             "current": {
-                "text": "prod",
-                "value": "prod"
-             },
-             "datasource": "$datasource",
-             "hide": 0,
-             "includeAll": true,
-             "label": "cluster",
-             "multi": false,
-             "name": "cluster",
-             "options": [ ],
-             "query": "label_values(cortex_build_info, cluster)",
-             "refresh": 1,
-             "regex": "",
-             "sort": 1,
-             "tagValuesQuery": "",
-             "tags": [ ],
-             "tagsQuery": "",
-             "type": "query",
-             "useTags": false
+          "refId": "A"
+        }
+      ],
+      "title": "Writes",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
           },
-          {
-             "allValue": null,
-             "current": {
-                "text": "prod",
-                "value": "prod"
-             },
-             "datasource": "$datasource",
-             "hide": 0,
-             "includeAll": false,
-             "label": "namespace",
-             "multi": false,
-             "name": "namespace",
-             "options": [ ],
-             "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
-             "refresh": 1,
-             "regex": "",
-             "sort": 1,
-             "tagValuesQuery": "",
-             "tags": [ ],
-             "tagsQuery": "",
-             "type": "query",
-             "useTags": false
-          }
-       ]
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"}[$__rate_interval]))",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU",
+      "type": "timeseries"
     },
-    "time": {
-       "from": "now-1h",
-       "to": "now"
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"})",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory (workingset)",
+      "type": "timeseries"
     },
-    "timepicker": {
-       "refresh_intervals": [
-          "5s",
-          "10s",
-          "30s",
-          "1m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "1d"
-       ],
-       "time_options": [
-          "5m",
-          "15m",
-          "1h",
-          "6h",
-          "12h",
-          "24h",
-          "2d",
-          "7d",
-          "30d"
-       ]
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"})",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory (go heap inuse)",
+      "type": "timeseries"
     },
-    "timezone": "utc",
-    "title": "Mimir / Overview resources",
-    "uid": "a9b92d3c4d1af325d872a9e9a7083d71",
-    "version": 0
- }
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 17,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 9
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_written_bytes_total[$__rate_interval]\n  )\n)\n+\nignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"distributor|ingester|mimir-write\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
+          "format": "time_series",
+          "hide": true,
+          "legendFormat": "{{pod}} - {{device}}",
+          "refId": "Original query"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"distributor|ingester|mimir-write\",\n        device!~\".*sda.*\"\n      }\n",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{pod}} - {{device}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Disk writes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 9
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_read_bytes_total[$__rate_interval]\n  )\n) + ignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"distributor|ingester|mimir-write\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
+          "format": "time_series",
+          "hide": true,
+          "legendFormat": "{{pod}} - {{device}}",
+          "range": true,
+          "refId": "Original query"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"distributor|ingester|mimir-write\",\n        device!~\".*sda.*\"\n      }\n",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{pod}} - {{device}}",
+          "range": true,
+          "refId": "GS query"
+        }
+      ],
+      "title": "Disk reads",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 9
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{namespace=~\"$namespace\"} /\n  kubelet_volume_stats_capacity_bytes{namespace=~\"$namespace\"}\n)\nand\ncount by(persistentvolumeclaim) (\n  kube_persistentvolumeclaim_labels{\n    namespace=~\"$namespace\",\n    label_name=~\"(distributor|ingester|mimir-write).*\"\n  }\n)\n",
+          "format": "time_series",
+          "hide": true,
+          "legendFormat": "{{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "original query"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{namespace=~\"$namespace\", persistentvolumeclaim=~\".*(distributor|ingester|mimir-write).*\"} /\n  kubelet_volume_stats_capacity_bytes{namespace=~\"$namespace\", persistentvolumeclaim=~\".*(distributor|ingester|mimir-write).*\"}\n)\n",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "GS query"
+        }
+      ],
+      "title": "Disk space utilization",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 18,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Reads",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 17
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read\"}[$__rate_interval]))",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 17
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read\"})",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory (workingset)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 17
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read\"})",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory (go heap inuse)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 19,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Backend",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 25
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\"}[$__rate_interval]))",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 25
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "max by(pod) (container_memory_working_set_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\"})",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory (workingset)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 25
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\",container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\"})",
+          "format": "time_series",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory (go heap inuse)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "id": 20,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 33
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_written_bytes_total[$__rate_interval]\n  )\n)\n+\nignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
+          "format": "time_series",
+          "hide": true,
+          "legendFormat": "{{pod}} - {{device}}",
+          "refId": "Original query"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\",\n        device!~\".*sda.*\"\n      }\n",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{pod}} - {{device}}",
+          "range": true,
+          "refId": "GS query"
+        }
+      ],
+      "title": "Disk writes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 33
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum by(instance, pod, device) (\n  rate(\n    node_disk_read_bytes_total[$__rate_interval]\n  )\n) + ignoring(pod) group_right() (\n  label_replace(\n    count by(\n      instance,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
+          "format": "time_series",
+          "hide": true,
+          "legendFormat": "{{pod}} - {{device}}",
+          "range": true,
+          "refId": "Original query"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "      container_fs_writes_bytes_total{\n        cluster=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend\",\n        device!~\".*sda.*\"\n      }",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{pod}} - {{device}}",
+          "range": true,
+          "refId": "GS query"
+        }
+      ],
+      "title": "Disk reads",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 33
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{namespace=~\"$namespace\", persistentvolumeclaim=~\".*(query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend).*\"} /\n  kubelet_volume_stats_capacity_bytes{namespace=~\"$namespace\", persistentvolumeclaim=~\".*(query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend).*\"}\n)",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "Original query"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"} /\n  kubelet_volume_stats_capacity_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\"}\n)\nand\ncount by(persistentvolumeclaim) (\n  kube_persistentvolumeclaim_labels{\n    cluster=~\"$cluster\", namespace=~\"$namespace\",\n    label_name=~\"(query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend).*\"\n  }\n)\n",
+          "format": "time_series",
+          "hide": false,
+          "legendFormat": "{{persistentvolumeclaim}}",
+          "refId": "GS query"
+        }
+      ],
+      "title": "Disk space utilization",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 39,
+  "tags": [
+    "mimir"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": "label_values(cortex_build_info, cluster)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "mimir",
+          "value": "mimir"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "namespace",
+        "multi": false,
+        "name": "namespace",
+        "options": [],
+        "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "utc",
+  "title": "Mimir / Overview resources",
+  "uid": "mimir-overview-resources",
+  "version": 1,
+  "weekStart": ""
+}
