@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.10.0] - 2024-04-03
 
+### Added
+
+- Add private dashboard about in-cluster container image registry (Zot)
+
 ### Fixed
 
 - Fix `Mimir / Overview resources` dashboard
@@ -18,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add dashboard for loki-canary (private for now)
-- Add private dashboard about in-cluster container image registry (Zot)
 
 ### Changed
 
