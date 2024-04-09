@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+-  Add a CAPA aggregated error logs dashboard.
+
 ## [3.10.1] - 2024-04-08
 
 ### Fixed
