@@ -1,0 +1,109 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "aggregate logs for specific cluster ID from capa-manager-controller, capa-iam-operator, irsa-operator, aws-resolver-rules-operator",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 118,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "editorMode": "builder",
+          "expr": "{app=~\"capa-iam-operator|irsa-operator|aws-resolver-rules-operator|cluster-api-provider-aws\"} |~ `(?i)error` |= `$cluster` | logfmt",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Agregated error logs for: capa-controller-manager,irsa-operator, capa-iam-operator, aws-resolver-rules-operator",
+      "transparent": true,
+      "type": "logs"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [
+    "provider:aws",
+    "owner:team-phoenix",
+    "team:phoenix",
+    "provider:capa"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "t-8f3x78jexl0yae6xys",
+          "value": "t-8f3x78jexl0yae6xys"
+        },
+        "definition": "label_values(up{app=\"node-exporter\"},cluster_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(up{app=\"node-exporter\"},cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "CAPA - agregated error logs from capa controllers",
+  "uid": "bdi7iswg81czkc",
+  "version": 7,
+  "weekStart": ""
+}
