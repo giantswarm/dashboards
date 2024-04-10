@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix and update Flux Control Plane dashboard in various ways.
+
 ## [3.10.1] - 2024-04-08
 
 ### Fixed
