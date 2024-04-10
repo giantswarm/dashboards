@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.10.4] - 2024-04-10
+
 ### Fixed
 
 - Fixes "All Dex requests" panel showing "No data" by increasing query interval to 2m.
@@ -930,7 +932,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.4...HEAD
+[3.10.4]: https://github.com/giantswarm/dashboards/compare/v3.10.3...v3.10.4
 [3.10.3]: https://github.com/giantswarm/dashboards/compare/v3.10.2...v3.10.3
 [3.10.2]: https://github.com/giantswarm/dashboards/compare/v3.10.1...v3.10.2
 [3.10.1]: https://github.com/giantswarm/dashboards/compare/v3.10.0...v3.10.1
