@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix and update Flux Control Plane dashboard in various ways.
 
+### Changed
+
+- The private Zot dashboard is updated because of a namespace change, and some minor fixes are applied.
+
 ## [3.10.1] - 2024-04-08
 
 ### Fixed
