@@ -13,7 +13,9 @@
       "includeVars": true,
       "keepTime": true,
       "tags": [
-        "loki"
+        "owner:team-atlas",
+        "topic:observability",
+        "component:loki"
       ],
       "targetBlank": false,
       "title": "Loki Dashboards",
@@ -70,7 +72,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
+              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}}",
@@ -78,7 +80,7 @@
               "step": 10
             },
             {
-              "expr": "min(kube_pod_container_resource_requests{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"cpu\"} > 0)",
+              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"cpu\"} > 0)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "request",
@@ -86,7 +88,7 @@
               "step": 10
             },
             {
-              "expr": "min(container_spec_cpu_quota{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{cluster_id=\"$cluster_id\",namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+              "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "limit",
@@ -172,7 +174,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+              "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}}",
@@ -180,7 +182,7 @@
               "step": 10
             },
             {
-              "expr": "min(kube_pod_container_resource_requests{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"memory\"} > 0)",
+              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"memory\"} > 0)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "request",
@@ -263,7 +265,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
+              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster_id\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}}",
@@ -338,7 +340,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(instance, pod, device) (rate(node_disk_written_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+              "expr": "sum by(instance, pod, device) (rate(node_disk_written_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}} - {{device}}",
@@ -837,7 +839,9 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-    "loki"
+    "owner:team-atlas",
+    "topic:observability",
+    "component:loki"
   ],
   "templating": {
     "list": [
@@ -856,24 +860,6 @@
         "type": "datasource"
       },
       {
-        "datasource": "$datasource",
-        "hide": 0,
-        "includeAll": false,
-        "label": "Kube cluster",
-        "multi": false,
-        "name": "cluster_id",
-        "options": [],
-        "query": "label_values(loki_build_info, cluster_id)",
-        "refresh": 1,
-        "regex": "",
-        "sort": 2,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
         "allValue": null,
         "current": {
           "text": "prod",
@@ -886,7 +872,7 @@
         "multi": false,
         "name": "cluster",
         "options": [],
-        "query": "label_values(loki_build_info, cluster)",
+        "query": "label_values(loki_build_info, cluster_id)",
         "refresh": 1,
         "regex": "",
         "sort": 2,
@@ -909,7 +895,7 @@
         "multi": false,
         "name": "namespace",
         "options": [],
-        "query": "label_values(loki_build_info{cluster=~\"$cluster\"}, namespace)",
+        "query": "label_values(loki_build_info{cluster_id=~\"$cluster_id\"}, namespace)",
         "refresh": 1,
         "regex": "",
         "sort": 2,
