@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix cpu throttling panel in prometheus dashboard
 
+## [3.10.2] - 2024-04-10
+
+### Fixed
+
+- Fix and update Flux Control Plane dashboard in various ways.
+
+### Changed
+
+- The private Zot dashboard is updated because of a namespace change, and some minor fixes are applied.
+
 ## [3.10.1] - 2024-04-08
 
 ### Fixed
@@ -910,7 +920,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.2...HEAD
+[3.10.2]: https://github.com/giantswarm/dashboards/compare/v3.10.1...v3.10.2
 [3.10.1]: https://github.com/giantswarm/dashboards/compare/v3.10.0...v3.10.1
 [3.10.0]: https://github.com/giantswarm/dashboards/compare/v3.9.0...v3.10.0
 [3.9.0]: https://github.com/giantswarm/dashboards/compare/v3.8.5...v3.9.0
