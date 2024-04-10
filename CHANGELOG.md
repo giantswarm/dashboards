@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix cpu throttling panel in prometheus dashboard
+
 ## [3.10.1] - 2024-04-08
 
 ### Fixed
