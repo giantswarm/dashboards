@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes "All Dex requests" panel showing "No data" by increasing query interval to 2m.
+
 ## [3.10.3] - 2024-04-10
 
 ### Changed
