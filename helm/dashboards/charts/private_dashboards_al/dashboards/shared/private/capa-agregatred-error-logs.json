@@ -15,18 +15,19 @@
       }
     ]
   },
-  "description": "aggregate logs for specific cluster ID from capa-manager-controller, capa-iam-operator, irsa-operator, aws-resolver-rules-operator",
+  "description": "aggregate error logs for specific cluster ID for CAPA controllers",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 118,
+  "id": 121,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "${loki_datasource}"
       },
+      "description": "",
       "gridPos": {
         "h": 21,
         "w": 24,
@@ -48,33 +49,29 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "${loki_datasource}"
           },
           "editorMode": "builder",
-          "expr": "{app=~\"capa-iam-operator|irsa-operator|aws-resolver-rules-operator|cluster-api-provider-aws\"} |~ `(?i)error` |= `$cluster` | logfmt",
+          "expr": "{app=~\"cluster-api-provider-aws|capa-iam-operator|aws-resolver-rules-operator|irsa-operator\"} |~ `(?i)error` |= `$cluster` | logfmt",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Agregated error logs for: capa-controller-manager,irsa-operator, capa-iam-operator, aws-resolver-rules-operator",
+      "title": "Agregated error logs for all CAPA controllers - capa-controller-manager, capa-iam-operator,aws-resolver-rules-operator,irsa-operator",
       "transparent": true,
       "type": "logs"
     }
   ],
   "schemaVersion": 39,
-  "tags": [
-    "provider:aws",
-    "owner:team-phoenix",
-    "team:phoenix",
-    "provider:capa"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "t-8f3x78jexl0yae6xys",
-          "value": "t-8f3x78jexl0yae6xys"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
         },
         "definition": "label_values(up{app=\"node-exporter\"},cluster_id)",
         "hide": 0,
@@ -93,17 +90,49 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "loki_datasource",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Mimir",
+          "value": "mimir"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
       }
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "CAPA - agregated error logs from capa controllers",
-  "uid": "bdi7iswg81czkc",
-  "version": 7,
+  "title": "CAPA - agregated error logs for capa controllers",
+  "uid": "bdiako8tt1b7kc",
+  "version": 2,
   "weekStart": ""
 }
