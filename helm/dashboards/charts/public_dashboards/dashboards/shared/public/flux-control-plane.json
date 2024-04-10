@@ -315,61 +315,62 @@
     },
     {
       "datasource": {
-        "uid": "$datasource"
+        "uid": "$datasource",
+        "type": "prometheus"
       },
-      "description": "",
+      "description": "Broken down by controller",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
             "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "barAlignment": 0,
+            "lineWidth": 1,
             "fillOpacity": 10,
             "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
+            "spanNulls": false,
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "showPoints": "never",
             "pointSize": 5,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "axisColorMode": "text",
+            "axisBorderShow": false,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
+            "axisCenteredZero": false,
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
             },
             "thresholdsStyle": {
               "mode": "off"
             }
+          },
+          "color": {
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "value": null,
+                "color": "green"
               },
               {
-                "color": "red",
-                "value": 80
+                "value": 80,
+                "color": "red"
               }
             ]
           },
-          "unit": "s"
+          "unit": "ops"
         },
         "overrides": []
       },
@@ -380,55 +381,40 @@
         "y": 6
       },
       "id": 8,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
       "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "histogram_quantile(0.50, sum(rate(rest_client_request_latency_seconds_bucket{namespace=\"$namespace\"}[5m])) by (le))",
+          "expr": "sum(rate(rest_client_requests_total{namespace=\"$namespace\", job=~\".*flux.*\"}[$__rate_interval])) by (job)",
           "interval": "",
-          "legendFormat": "P50",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "expr": "histogram_quantile(0.90, sum(rate(rest_client_request_latency_seconds_bucket{namespace=\"$namespace\"}[5m])) by (le))",
-          "hide": true,
-          "interval": "",
-          "legendFormat": "P90",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{namespace=\"$namespace\"}[5m])) by (le))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "P99",
-          "refId": "C"
+          "legendFormat": "__auto",
+          "refId": "A",
+          "editorMode": "code",
+          "range": true
         }
       ],
-      "title": "Kubernetes API Requests Duration",
-      "type": "timeseries"
+      "title": "Kubernetes API requests rate",
+      "type": "timeseries",
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ]
+        }
+      },
+      "interval": "2m",
+      "timeFrom": null,
+      "timeShift": null
     },
     {
       "datasource": {
