@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove `app` and `namespace` labels from the prometheus - remotewrite's nginx graphs.
 
+### Fixed
+
+- Fix cpu throttling panel in prometheus dashboard
+
 ## [3.10.2] - 2024-04-10
 
 ### Fixed
