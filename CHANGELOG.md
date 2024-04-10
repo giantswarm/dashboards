@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.10.3] - 2024-04-10
+
 ### Changed
 
 - Remove `app` and `namespace` labels from the prometheus - remotewrite's nginx graphs.
@@ -924,7 +926,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.2...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.3...HEAD
+[3.10.3]: https://github.com/giantswarm/dashboards/compare/v3.10.2...v3.10.3
 [3.10.2]: https://github.com/giantswarm/dashboards/compare/v3.10.1...v3.10.2
 [3.10.1]: https://github.com/giantswarm/dashboards/compare/v3.10.0...v3.10.1
 [3.10.0]: https://github.com/giantswarm/dashboards/compare/v3.9.0...v3.10.0
