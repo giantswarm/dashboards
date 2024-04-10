@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Align tags on Atlas public dashboards.
+- Add datasource selection to Atlas public dashboards.
+
 ## [3.10.4] - 2024-04-10
 
 ### Fixed
