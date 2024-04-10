@@ -20,7 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The private Zot dashboard is updated because of a namespace change, and some minor fixes are applied.
-- Remove `app` and `namespace` labels from the prometheus - remotewrite's nginx graphs.
 
 ## [3.10.1] - 2024-04-08
 
