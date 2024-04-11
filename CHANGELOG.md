@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
 - Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
 - Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old table with new table panel.
+- Update "Kubernetes / Scheduler" dashboard file to replace old graph panels with new time series panels.
 
 ## [3.11.0] - 2024-04-11
 
