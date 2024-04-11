@@ -2,29 +2,40 @@
 
 # Update Loki mixins from upstream
 #
+# This script is used to update the Loki mixins from the upstream repository.
+#
+# Usage:
+#  ./loki/update.sh from the root of the repository
 
 set -e
 
-TAG="helm-loki-5.47.2"
+BRANCH="main"
+BRANCH="fix-cluster-id-label-in-mixins"
+MIXIN_URL=https://github.com/grafana/loki/production/loki-mixin@$BRANCH
+MIXIN_URL=https://github.com/QuentinBisson/loki-upstream/production/loki-mixin@$BRANCH
+helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_al/dashboards/shared/private"
 
-tmpDir="$(mktemp -d)"
+cd loki
+rm -rf vendor jsonnetfile.*
 
-git clone --depth 1 --single-branch -b "$TAG" --no-tags -q git@github.com:grafana/loki.git "$tmpDir"
+jb init
+jb install $MIXIN_URL
+mixtool generate all mixin.libsonnet
 
-ls -l "$tmpDir"/production/loki-mixin-compiled-ssd/dashboards
-
-rm -rf ./output
-mkdir -p ./output
-
-for file in "$tmpDir"/production/loki-mixin-compiled-ssd/dashboards/*; do
+for file in dashboards_out/*; do
   # Process each file here
   echo "$file"
   
-  # replaces cluster with cluster_id in queries and  expr, then adds loki- prefix to uid
-  jq '.uid = "loki-" + .uid | .templating.list[].query |= gsub(", cluster\\)"; ", cluster_id)") | .templating.list[].query |= gsub("cluster=~\\\"\\$cluster\\\""; "cluster_id=~\"$cluster_id\"") | .templating.list[].query |= gsub("cluster=\\\"\\$cluster\\\""; "cluster_id=\"$cluster_id\"") | .rows[].panels[].targets[].expr |= gsub("cluster=~\\\"\\$cluster\\\""; "cluster_id=~\"$cluster_id\"") | .rows[].panels[].targets[].expr |= gsub("cluster=\\\"\\$cluster\\\""; "cluster_id=\"$cluster_id\"") | .tags |= ["owner:team-atlas", "topic:observability", "component:loki"] | .links[].tags |= ["owner:team-atlas", "topic:observability", "component:loki"]' "$file" > "./output/$(basename "$file")"
 
+
+  if [[ $(basename "$file") == "loki-canary.json" ]]; then
+    # adds missing uid
+    jq '.uid = "loki-canary"' "$file" > "$file.out" && mv "$file.out" "$file"
+  else
+    # adds loki- prefix to uid
+    jq '.uid = "loki-" + .uid' "$file" > "$file.out" && mv "$file.out" "$file"
+  fi
+
+  echo "Copying dashboard to $helmDir"
+  cp "$file" "$helmDir"
 done
-
-cp ./output/* helm/dashboards/charts/private_dashboards_al/dashboards/shared/private
-
-
