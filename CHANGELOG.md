@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
+
 ## [3.11.0] - 2024-04-11
 
 ### Added
