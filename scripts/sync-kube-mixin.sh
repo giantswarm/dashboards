@@ -25,7 +25,7 @@ function tune_dashboard {
         cluster-total.json|namespace-by-pod.json|namespace-by-workload.json|pod-total.json|workload-total.json)
             sed -i 's/"owner:team-.*"/"owner:team-cabbage"/g' "${dashboardFile}"
             ;;
-        controller-manager.json|k8s-resources-cluster.json|k8s-resources-namespace.json|k8s-resources-multicluster.json|scheduler.json|statefulset.json|k8s-resources-pod.json|k8s-resources-workloads-namespace.json|persistentvolumesusage.json|k8s-resources-node.json)
+        controller-manager.json|k8s-resources-cluster.json|k8s-resources-multicluster.json|k8s-resources-namespace.json|k8s-resources-node.json|k8s-resources-pod.json|k8s-resources-workloads-namespace.json|persistentvolumesusage.json|scheduler.json|statefulset.json)
             sed -i 's/"owner:team-.*"/"owner:team-turtles"/g' "${dashboardFile}"
             ;;
     esac
