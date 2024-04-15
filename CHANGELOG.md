@@ -10,6 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix `Mimir / writes resources` disk usage related graphs.
+- Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
+- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
+- Remove "Microstorage" dashboard.
+- Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old table with new table panel.
+
+## [3.11.0] - 2024-04-11
+
+### Added
+
+-  Add a CAPA aggregated error logs dashboard.
+  
+## [3.10.4] - 2024-04-10
+
+### Fixed
+
+- Fixes "All Dex requests" panel showing "No data" by increasing query interval to 2m.
 
 ## [3.10.3] - 2024-04-10
 
@@ -930,7 +946,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.10.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.11.0...HEAD
+[3.11.0]: https://github.com/giantswarm/dashboards/compare/v3.10.4...v3.11.0
+[3.10.4]: https://github.com/giantswarm/dashboards/compare/v3.10.3...v3.10.4
 [3.10.3]: https://github.com/giantswarm/dashboards/compare/v3.10.2...v3.10.3
 [3.10.2]: https://github.com/giantswarm/dashboards/compare/v3.10.1...v3.10.2
 [3.10.1]: https://github.com/giantswarm/dashboards/compare/v3.10.0...v3.10.1
