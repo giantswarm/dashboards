@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved some details on the dashboard "In-cluster container registry (Zot)".
+
 ### Fixed
 
 - Fix `Mimir / Reads resources` Disk usage graphs.
