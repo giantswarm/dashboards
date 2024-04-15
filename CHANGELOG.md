@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Change `net-exporter` dashboard ownership from turtles to cabbage.
+- Change `cluster-total.json` dashboard ownership from turtles to cabbage.
+- Change `namespace-by-pod.json` dashboard ownership from turtles to cabbage.
+- Change `namespace-by-workload.json` dashboard ownership from turtles to cabbage.
+- Change `pod-total.json` dashboard ownership from turtles to cabbage.
+- Change `workload-total.json` dashboard ownership from turtles to cabbage.
+
 ### Fixed
 
 - Fix `Mimir / Reads resources` Disk usage graphs.
