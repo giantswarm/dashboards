@@ -57,7 +57,7 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "short"
+                        "unit": "Bps"
                      },
                      "overrides": [ ]
                   },
@@ -72,16 +72,16 @@
                         "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"}[$__rate_interval]))",
+                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{pod}}",
                         "legendLink": null
                      }
                   ],
-                  "title": "CPU",
+                  "title": "Receive bandwidth",
                   "type": "timeseries"
                },
                {
@@ -105,7 +105,7 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "bytes"
+                        "unit": "Bps"
                      },
                      "overrides": [ ]
                   },
@@ -120,32 +120,35 @@
                         "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"})",
+                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{pod}}",
                         "legendLink": null
                      }
                   ],
-                  "title": "Memory (workingset)",
+                  "title": "Transmit bandwidth",
                   "type": "timeseries"
                },
                {
                   "datasource": "$datasource",
                   "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
-                           "fillOpacity": 100,
-                           "lineWidth": 0,
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
                            "pointSize": 5,
                            "showPoints": "never",
                            "spanNulls": false,
                            "stacking": {
                               "group": "A",
-                              "mode": "normal"
+                              "mode": "none"
                            }
                         },
                         "min": 0,
@@ -153,7 +156,7 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "bytes"
+                        "unit": "short"
                      },
                      "overrides": [ ]
                   },
@@ -164,41 +167,39 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
+                        "mode": "single",
+                        "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor|ingester|mimir-write\"})",
+                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"})",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"})",
+                        "format": "time_series",
+                        "legendFormat": "highest",
                         "legendLink": null
                      }
                   ],
-                  "title": "Memory (go heap inuse)",
+                  "title": "Inflight requests (per pod)",
                   "type": "timeseries"
-               }
-            ],
-            "repeat": null,
-            "repeatIteration": null,
-            "repeatRowId": null,
-            "showTitle": true,
-            "title": "Summary",
-            "titleSize": "h6"
-         },
-         {
-            "collapse": false,
-            "height": "250px",
-            "panels": [
+               },
                {
                   "datasource": "$datasource",
+                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
                   "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
-                           "fillOpacity": 0,
+                           "fillOpacity": 1,
                            "lineWidth": 1,
                            "pointSize": 5,
                            "showPoints": "never",
@@ -215,58 +216,7 @@
                         },
                         "unit": "short"
                      },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "request"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#FFC000",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        },
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "limit"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#E02F44",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        }
-                     ]
+                     "overrides": [ ]
                   },
                   "id": 4,
                   "links": [ ],
@@ -275,191 +225,32 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
+                        "mode": "single",
+                        "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\"}[$__rate_interval]))",
+                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"}))",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
+                        "legendFormat": "avg",
                         "legendLink": null
                      },
                      {
-                        "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\"} / container_spec_cpu_period{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\"})",
+                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"}))",
+                        "format": "time_series",
+                        "legendFormat": "highest",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(ruler-query-frontend|ruler-query-scheduler|ruler-querier).*\"})",
                         "format": "time_series",
                         "legendFormat": "limit",
                         "legendLink": null
-                     },
-                     {
-                        "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\",resource=\"cpu\"})",
-                        "format": "time_series",
-                        "legendFormat": "request",
-                        "legendLink": null
                      }
                   ],
-                  "title": "CPU",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "bytes"
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "request"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#FFC000",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        },
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "limit"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#E02F44",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "id": 5,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 4,
-                  "targets": [
-                     {
-                        "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\"})",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\"} > 0)",
-                        "format": "time_series",
-                        "legendFormat": "limit",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\",resource=\"memory\"})",
-                        "format": "time_series",
-                        "legendFormat": "request",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Memory (workingset)",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "bytes"
-                     },
-                     "overrides": [ ]
-                  },
-                  "id": 6,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 4,
-                  "targets": [
-                     {
-                        "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"distributor\"})",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Memory (go heap inuse)",
+                  "title": "Ingress TCP connections (per pod)",
                   "type": "timeseries"
                }
             ],
@@ -467,460 +258,7 @@
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Distributor",
-            "titleSize": "h6"
-         },
-         {
-            "collapse": false,
-            "height": "250px",
-            "panels": [
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
-                     },
-                     "overrides": [ ]
-                  },
-                  "id": 7,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 6,
-                  "targets": [
-                     {
-                        "expr": "sum by(pod) (cortex_ingester_memory_series{cluster_id=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"})",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "In-memory series",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "request"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#FFC000",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        },
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "limit"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#E02F44",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "id": 8,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 6,
-                  "targets": [
-                     {
-                        "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"} / container_spec_cpu_period{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"})",
-                        "format": "time_series",
-                        "legendFormat": "limit",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\",resource=\"cpu\"})",
-                        "format": "time_series",
-                        "legendFormat": "request",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "CPU",
-                  "type": "timeseries"
-               }
-            ],
-            "repeat": null,
-            "repeatIteration": null,
-            "repeatRowId": null,
-            "showTitle": true,
-            "title": "Ingester",
-            "titleSize": "h6"
-         },
-         {
-            "collapse": false,
-            "height": "250px",
-            "panels": [
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "bytes"
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "request"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#FFC000",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        },
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "limit"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#E02F44",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "id": 9,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 4,
-                  "targets": [
-                     {
-                        "expr": "max by(pod) (container_memory_rss{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"})",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"} > 0)",
-                        "format": "time_series",
-                        "legendFormat": "limit",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\",resource=\"memory\"})",
-                        "format": "time_series",
-                        "legendFormat": "request",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Memory (RSS)",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "bytes"
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "request"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#FFC000",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        },
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "limit"
-                           },
-                           "properties": [
-                              {
-                                 "id": "color",
-                                 "value": {
-                                    "fixedColor": "#E02F44",
-                                    "mode": "fixed"
-                                 }
-                              },
-                              {
-                                 "id": "custom.fillOpacity",
-                                 "value": 0
-                              },
-                              {
-                                 "id": "custom.lineStyle",
-                                 "value": {
-                                    "fill": "dash"
-                                 }
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "id": 10,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 4,
-                  "targets": [
-                     {
-                        "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"})",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"} > 0)",
-                        "format": "time_series",
-                        "legendFormat": "limit",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\",resource=\"memory\"})",
-                        "format": "time_series",
-                        "legendFormat": "request",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Memory (workingset)",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 0,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "bytes"
-                     },
-                     "overrides": [ ]
-                  },
-                  "id": 11,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "span": 4,
-                  "targets": [
-                     {
-                        "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\",container=~\"ingester\"})",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Memory (go heap inuse)",
-                  "type": "timeseries"
-               }
-            ],
-            "repeat": null,
-            "repeatIteration": null,
-            "repeatRowId": null,
-            "showTitle": true,
-            "title": "",
+            "title": "Summary",
             "titleSize": "h6"
          },
          {
@@ -952,6 +290,392 @@
                      },
                      "overrides": [ ]
                   },
+                  "id": 5,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "{{pod}}",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Receive bandwidth",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 100,
+                           "lineWidth": 0,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "normal"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "Bps"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 6,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "{{pod}}",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Transmit bandwidth",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 7,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "highest",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Inflight requests (per pod)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
+                  "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 8,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"}))",
+                        "format": "time_series",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"}))",
+                        "format": "time_series",
+                        "legendFormat": "highest",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-frontend.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "limit",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Ingress TCP connections (per pod)",
+                  "type": "timeseries"
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Ruler-query-frontend",
+            "titleSize": "h6"
+         },
+         {
+            "collapse": false,
+            "height": "250px",
+            "panels": [
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 100,
+                           "lineWidth": 0,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "normal"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "Bps"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 9,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "{{pod}}",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Receive bandwidth",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 100,
+                           "lineWidth": 0,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "normal"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "Bps"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 10,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "{{pod}}",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Transmit bandwidth",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 11,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "highest",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Inflight requests (per pod)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
+                  "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
                   "id": 12,
                   "links": [ ],
                   "options": {
@@ -963,18 +687,42 @@
                         "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(node, pod, device) (\n  rate(\n    node_disk_written_bytes_total[$__rate_interval]\n  )\n)\n+\nignoring(pod) group_right() (\n  label_replace(\n    count by(\n      node,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster_id=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"ingester\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
+                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"}))",
                         "format": "time_series",
-                        "legendFormat": "{{pod}} - {{device}}",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"}))",
+                        "format": "time_series",
+                        "legendFormat": "highest",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-query-scheduler.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "limit",
                         "legendLink": null
                      }
                   ],
-                  "title": "Disk writes",
+                  "title": "Ingress TCP connections (per pod)",
                   "type": "timeseries"
-               },
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Ruler-query-scheduler",
+            "titleSize": "h6"
+         },
+         {
+            "collapse": false,
+            "height": "250px",
+            "panels": [
                {
                   "datasource": "$datasource",
                   "fieldConfig": {
@@ -1011,16 +759,64 @@
                         "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(node, pod, device) (\n  rate(\n    node_disk_read_bytes_total[$__rate_interval]\n  )\n) + ignoring(pod) group_right() (\n  label_replace(\n    count by(\n      node,\n      pod,\n      device\n    )\n    (\n      container_fs_writes_bytes_total{\n        cluster_id=~\"$cluster\", namespace=~\"$namespace\",\n        container=~\"ingester\",\n        device!~\".*sda.*\"\n      }\n    ),\n    \"device\",\n    \"$1\",\n    \"device\",\n    \"/dev/(.*)\"\n  ) * 0\n)\n\n",
+                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"}[$__rate_interval]))",
                         "format": "time_series",
-                        "legendFormat": "{{pod}} - {{device}}",
+                        "legendFormat": "{{pod}}",
                         "legendLink": null
                      }
                   ],
-                  "title": "Disk reads",
+                  "title": "Receive bandwidth",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 100,
+                           "lineWidth": 0,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "normal"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "Bps"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 14,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "{{pod}}",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Transmit bandwidth",
                   "type": "timeseries"
                },
                {
@@ -1047,11 +843,11 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "percentunit"
+                        "unit": "short"
                      },
                      "overrides": [ ]
                   },
-                  "id": 14,
+                  "id": 15,
                   "links": [ ],
                   "options": {
                      "legend": {
@@ -1062,16 +858,86 @@
                         "sort": "none"
                      }
                   },
-                  "span": 4,
+                  "span": 3,
                   "targets": [
                      {
-                        "expr": "max by(persistentvolumeclaim) (\n  kubelet_volume_stats_used_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", persistentvolumeclaim=~\".*(ingester).*\"} /\n  kubelet_volume_stats_capacity_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", persistentvolumeclaim=~\".*(ingester).*\"}\n)\n",
+                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"})",
                         "format": "time_series",
-                        "legendFormat": "{{persistentvolumeclaim}}",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "highest",
                         "legendLink": null
                      }
                   ],
-                  "title": "Disk space utilization",
+                  "title": "Inflight requests (per pod)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": "$datasource",
+                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
+                  "fieldConfig": {
+                     "custom": {
+                        "fillOpacity": 0
+                     },
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 16,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 3,
+                  "targets": [
+                     {
+                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"}))",
+                        "format": "time_series",
+                        "legendFormat": "avg",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"}))",
+                        "format": "time_series",
+                        "legendFormat": "highest",
+                        "legendLink": null
+                     },
+                     {
+                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ruler-querier.*\"})",
+                        "format": "time_series",
+                        "legendFormat": "limit",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Ingress TCP connections (per pod)",
                   "type": "timeseries"
                }
             ],
@@ -1079,7 +945,7 @@
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "",
+            "title": "Ruler-querier",
             "titleSize": "h6"
          }
       ],
@@ -1184,7 +1050,7 @@
          ]
       },
       "timezone": "utc",
-      "title": "Mimir / Writes resources",
-      "uid": "bc9160e50b52e89e0e49c840fea3d379",
+      "title": "Mimir / Remote ruler reads networking",
+      "uid": "9e8cfff65f91632f8a25981c6fe44bc9",
       "version": 0
    }

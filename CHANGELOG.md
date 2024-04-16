@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add script to update all mimir dashboards from mixins.
+
 ## [3.11.3] - 2024-04-17
 
 ### Changed
 
 - Move `node-problem-detector` to be aws only.
+
 
 ### Fixed
 

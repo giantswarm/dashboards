@@ -57,7 +57,7 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "Bps"
+                        "unit": "reqps"
                      },
                      "overrides": [ ]
                   },
@@ -72,18 +72,63 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"}[$__rate_interval]))",
+                        "expr": "sum by(component) (rate(thanos_objstore_bucket_operations_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
+                        "legendFormat": "{{component}}",
                         "legendLink": null
                      }
                   ],
-                  "title": "Receive bandwidth",
+                  "title": "RPS / component",
                   "type": "timeseries"
                },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "defaults": {
+                        "max": 1,
+                        "min": 0,
+                        "noValue": "0",
+                        "unit": "percentunit"
+                     }
+                  },
+                  "id": 2,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 6,
+                  "targets": [
+                     {
+                        "expr": "sum by(component) (rate(thanos_objstore_bucket_operation_failures_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) / sum by(component) (rate(thanos_objstore_bucket_operations_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) >= 0",
+                        "format": "time_series",
+                        "legendFormat": "{{component}}",
+                        "legendLink": null
+                     }
+                  ],
+                  "title": "Error rate / component",
+                  "type": "timeseries"
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Components",
+            "titleSize": "h6"
+         },
+         {
+            "collapse": false,
+            "height": "250px",
+            "panels": [
                {
                   "datasource": "$datasource",
                   "fieldConfig": {
@@ -105,58 +150,7 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "Bps"
-                     },
-                     "overrides": [ ]
-                  },
-                  "id": 2,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "single",
-                        "sort": "none"
-                     }
-                  },
-                  "span": 3,
-                  "targets": [
-                     {
-                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Transmit bandwidth",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "custom": {
-                        "fillOpacity": 0
-                     },
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 1,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
+                        "unit": "reqps"
                      },
                      "overrides": [ ]
                   },
@@ -171,52 +165,27 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 6,
                   "targets": [
                      {
-                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"})",
+                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operations_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
                         "format": "time_series",
-                        "legendFormat": "avg",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"})",
-                        "format": "time_series",
-                        "legendFormat": "highest",
+                        "legendFormat": "{{operation}}",
                         "legendLink": null
                      }
                   ],
-                  "title": "Inflight requests (per pod)",
+                  "title": "RPS / operation",
                   "type": "timeseries"
                },
                {
                   "datasource": "$datasource",
-                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
                   "fieldConfig": {
-                     "custom": {
-                        "fillOpacity": 0
-                     },
                      "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 1,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
+                        "max": 1,
                         "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
-                     },
-                     "overrides": [ ]
+                        "noValue": "0",
+                        "unit": "percentunit"
+                     }
                   },
                   "id": 4,
                   "links": [ ],
@@ -229,28 +198,16 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 6,
                   "targets": [
                      {
-                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"}))",
+                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operation_failures_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) / sum by(operation) (rate(thanos_objstore_bucket_operations_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) >= 0",
                         "format": "time_series",
-                        "legendFormat": "avg",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"}))",
-                        "format": "time_series",
-                        "legendFormat": "highest",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?(distributor|ingester|mimir-write).*\"})",
-                        "format": "time_series",
-                        "legendFormat": "limit",
+                        "legendFormat": "{{operation}}",
                         "legendLink": null
                      }
                   ],
-                  "title": "Ingress TCP connections (per pod)",
+                  "title": "Error rate / operation",
                   "type": "timeseries"
                }
             ],
@@ -258,7 +215,7 @@
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Summary",
+            "title": "Operations",
             "titleSize": "h6"
          },
          {
@@ -271,14 +228,14 @@
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
-                           "fillOpacity": 100,
-                           "lineWidth": 0,
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
                            "pointSize": 5,
                            "showPoints": "never",
                            "spanNulls": false,
                            "stacking": {
                               "group": "A",
-                              "mode": "normal"
+                              "mode": "none"
                            }
                         },
                         "min": 0,
@@ -286,12 +243,13 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "Bps"
+                        "unit": "ms"
                      },
                      "overrides": [ ]
                   },
                   "id": 5,
                   "links": [ ],
+                  "nullPointMode": "null as zero",
                   "options": {
                      "legend": {
                         "showLegend": true
@@ -301,17 +259,47 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"}[$__rate_interval]))",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
+                        "legendFormat": "99th Percentile",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+                        "format": "time_series",
+                        "legendFormat": "50th Percentile",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C"
                      }
                   ],
-                  "title": "Receive bandwidth",
-                  "type": "timeseries"
+                  "title": "Op: Get",
+                  "type": "timeseries",
+                  "yaxes": [
+                     {
+                        "format": "ms",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
                },
                {
                   "datasource": "$datasource",
@@ -319,14 +307,14 @@
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
-                           "fillOpacity": 100,
-                           "lineWidth": 0,
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
                            "pointSize": 5,
                            "showPoints": "never",
                            "spanNulls": false,
                            "stacking": {
                               "group": "A",
-                              "mode": "normal"
+                              "mode": "none"
                            }
                         },
                         "min": 0,
@@ -334,12 +322,13 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "Bps"
+                        "unit": "ms"
                      },
                      "overrides": [ ]
                   },
                   "id": 6,
                   "links": [ ],
+                  "nullPointMode": "null as zero",
                   "options": {
                      "legend": {
                         "showLegend": true
@@ -349,24 +338,51 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"}[$__rate_interval]))",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
+                        "legendFormat": "99th Percentile",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+                        "format": "time_series",
+                        "legendFormat": "50th Percentile",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C"
                      }
                   ],
-                  "title": "Transmit bandwidth",
-                  "type": "timeseries"
+                  "title": "Op: GetRange",
+                  "type": "timeseries",
+                  "yaxes": [
+                     {
+                        "format": "ms",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
                },
                {
                   "datasource": "$datasource",
                   "fieldConfig": {
-                     "custom": {
-                        "fillOpacity": 0
-                     },
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
@@ -385,12 +401,13 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "short"
+                        "unit": "ms"
                      },
                      "overrides": [ ]
                   },
                   "id": 7,
                   "links": [ ],
+                  "nullPointMode": "null as zero",
                   "options": {
                      "legend": {
                         "showLegend": true
@@ -400,94 +417,54 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 4,
                   "targets": [
                      {
-                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"})",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
-                        "legendFormat": "avg",
-                        "legendLink": null
+                        "legendFormat": "99th Percentile",
+                        "refId": "A"
                      },
                      {
-                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"})",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
-                        "legendFormat": "highest",
-                        "legendLink": null
+                        "legendFormat": "50th Percentile",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C"
                      }
                   ],
-                  "title": "Inflight requests (per pod)",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
-                  "fieldConfig": {
-                     "custom": {
-                        "fillOpacity": 0
-                     },
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 1,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
+                  "title": "Op: Exists",
+                  "type": "timeseries",
+                  "yaxes": [
+                     {
+                        "format": "ms",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
                         "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
+                        "show": true
                      },
-                     "overrides": [ ]
-                  },
-                  "id": 8,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "single",
-                        "sort": "none"
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
                      }
-                  },
-                  "span": 3,
-                  "targets": [
-                     {
-                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"}))",
-                        "format": "time_series",
-                        "legendFormat": "avg",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"}))",
-                        "format": "time_series",
-                        "legendFormat": "highest",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?distributor.*\"})",
-                        "format": "time_series",
-                        "legendFormat": "limit",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Ingress TCP connections (per pod)",
-                  "type": "timeseries"
+                  ]
                }
             ],
             "repeat": null,
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Distributor",
+            "title": "",
             "titleSize": "h6"
          },
          {
@@ -500,14 +477,14 @@
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
-                           "fillOpacity": 100,
-                           "lineWidth": 0,
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
                            "pointSize": 5,
                            "showPoints": "never",
                            "spanNulls": false,
                            "stacking": {
                               "group": "A",
-                              "mode": "normal"
+                              "mode": "none"
                            }
                         },
                         "min": 0,
@@ -515,12 +492,92 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "Bps"
+                        "unit": "ms"
+                     },
+                     "overrides": [ ]
+                  },
+                  "id": 8,
+                  "links": [ ],
+                  "nullPointMode": "null as zero",
+                  "options": {
+                     "legend": {
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                     }
+                  },
+                  "span": 4,
+                  "targets": [
+                     {
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+                        "format": "time_series",
+                        "legendFormat": "99th Percentile",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+                        "format": "time_series",
+                        "legendFormat": "50th Percentile",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C"
+                     }
+                  ],
+                  "title": "Op: Attributes",
+                  "type": "timeseries",
+                  "yaxes": [
+                     {
+                        "format": "ms",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
+               },
+               {
+                  "datasource": "$datasource",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "drawStyle": "line",
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           }
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "ms"
                      },
                      "overrides": [ ]
                   },
                   "id": 9,
                   "links": [ ],
+                  "nullPointMode": "null as zero",
                   "options": {
                      "legend": {
                         "showLegend": true
@@ -530,17 +587,47 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_network_receive_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"}[$__rate_interval]))",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
+                        "legendFormat": "99th Percentile",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "format": "time_series",
+                        "legendFormat": "50th Percentile",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C"
                      }
                   ],
-                  "title": "Receive bandwidth",
-                  "type": "timeseries"
+                  "title": "Op: Upload",
+                  "type": "timeseries",
+                  "yaxes": [
+                     {
+                        "format": "ms",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
                },
                {
                   "datasource": "$datasource",
@@ -548,14 +635,14 @@
                      "defaults": {
                         "custom": {
                            "drawStyle": "line",
-                           "fillOpacity": 100,
-                           "lineWidth": 0,
+                           "fillOpacity": 1,
+                           "lineWidth": 1,
                            "pointSize": 5,
                            "showPoints": "never",
                            "spanNulls": false,
                            "stacking": {
                               "group": "A",
-                              "mode": "normal"
+                              "mode": "none"
                            }
                         },
                         "min": 0,
@@ -563,12 +650,13 @@
                            "mode": "absolute",
                            "steps": [ ]
                         },
-                        "unit": "Bps"
+                        "unit": "ms"
                      },
                      "overrides": [ ]
                   },
                   "id": 10,
                   "links": [ ],
+                  "nullPointMode": "null as zero",
                   "options": {
                      "legend": {
                         "showLegend": true
@@ -578,145 +666,54 @@
                         "sort": "none"
                      }
                   },
-                  "span": 3,
+                  "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(pod) (rate(container_network_transmit_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"}[$__rate_interval]))",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
-                        "legendFormat": "{{pod}}",
-                        "legendLink": null
+                        "legendFormat": "99th Percentile",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+                        "format": "time_series",
+                        "legendFormat": "50th Percentile",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C"
                      }
                   ],
-                  "title": "Transmit bandwidth",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "fieldConfig": {
-                     "custom": {
-                        "fillOpacity": 0
-                     },
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 1,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
+                  "title": "Op: Delete",
+                  "type": "timeseries",
+                  "yaxes": [
+                     {
+                        "format": "ms",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
                         "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
+                        "show": true
                      },
-                     "overrides": [ ]
-                  },
-                  "id": 11,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "single",
-                        "sort": "none"
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
                      }
-                  },
-                  "span": 3,
-                  "targets": [
-                     {
-                        "expr": "avg(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"})",
-                        "format": "time_series",
-                        "legendFormat": "avg",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "max(cortex_inflight_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"})",
-                        "format": "time_series",
-                        "legendFormat": "highest",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Inflight requests (per pod)",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": "$datasource",
-                  "description": "### Ingress TCP connections (per pod)\nThe number of ingress TCP connections (HTTP and gRPC protocol).\n",
-                  "fieldConfig": {
-                     "custom": {
-                        "fillOpacity": 0
-                     },
-                     "defaults": {
-                        "custom": {
-                           "drawStyle": "line",
-                           "fillOpacity": 1,
-                           "lineWidth": 1,
-                           "pointSize": 5,
-                           "showPoints": "never",
-                           "spanNulls": false,
-                           "stacking": {
-                              "group": "A",
-                              "mode": "none"
-                           }
-                        },
-                        "min": 0,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "short"
-                     },
-                     "overrides": [ ]
-                  },
-                  "id": 12,
-                  "links": [ ],
-                  "options": {
-                     "legend": {
-                        "showLegend": true
-                     },
-                     "tooltip": {
-                        "mode": "single",
-                        "sort": "none"
-                     }
-                  },
-                  "span": 3,
-                  "targets": [
-                     {
-                        "expr": "avg(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"}))",
-                        "format": "time_series",
-                        "legendFormat": "avg",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "max(sum by(pod) (cortex_tcp_connections{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"}))",
-                        "format": "time_series",
-                        "legendFormat": "highest",
-                        "legendLink": null
-                     },
-                     {
-                        "expr": "min(cortex_tcp_connections_limit{cluster_id=~\"$cluster\", namespace=~\"$namespace\",pod=~\"(.*mimir-)?ingester.*\"})",
-                        "format": "time_series",
-                        "legendFormat": "limit",
-                        "legendLink": null
-                     }
-                  ],
-                  "title": "Ingress TCP connections (per pod)",
-                  "type": "timeseries"
+                  ]
                }
             ],
             "repeat": null,
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Ingester",
+            "title": "",
             "titleSize": "h6"
          }
       ],
@@ -744,16 +741,17 @@
                "type": "datasource"
             },
             {
-               "allValue": ".*",
+               "allValue": ".+",
                "current": {
-                  "text": "prod",
-                  "value": "prod"
+                  "selected": true,
+                  "text": "All",
+                  "value": "$__all"
                },
                "datasource": "$datasource",
                "hide": 0,
                "includeAll": true,
                "label": "cluster",
-               "multi": false,
+               "multi": true,
                "name": "cluster",
                "options": [ ],
                "query": "label_values(cortex_build_info, cluster_id)",
@@ -767,16 +765,17 @@
                "useTags": false
             },
             {
-               "allValue": null,
+               "allValue": ".+",
                "current": {
-                  "text": "prod",
-                  "value": "prod"
+                  "selected": true,
+                  "text": "All",
+                  "value": "$__all"
                },
                "datasource": "$datasource",
                "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "namespace",
-               "multi": false,
+               "multi": true,
                "name": "namespace",
                "options": [ ],
                "query": "label_values(cortex_build_info{cluster_id=~\"$cluster\"}, namespace)",
@@ -821,7 +820,7 @@
          ]
       },
       "timezone": "utc",
-      "title": "Mimir / Writes networking",
-      "uid": "978c1cb452585c96697a238eaac7fe2d",
+      "title": "Mimir / Object Store",
+      "uid": "e1324ee2a434f4158c00a9ee279d3292",
       "version": 0
    }
