@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improved many details on the dashboard "In-cluster container registry (Zot)".
 - Change `net-exporter` dashboard ownership from turtles to cabbage.
 - Change `cluster-total.json` dashboard ownership from turtles to cabbage.
 - Change `namespace-by-pod.json` dashboard ownership from turtles to cabbage.
