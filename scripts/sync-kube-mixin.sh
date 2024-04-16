@@ -34,7 +34,7 @@ function tune_dashboard {
 
 # make a temporary dir to work in
 TMPDIR=$(mktemp -d -t 'tmp.XXXXXXXXXX')
-trap rm -f "$TMPDIR" EXIT
+trap 'rm -f $TMPDIR' EXIT
 MIXIN_REPO="git@github.com:giantswarm/giantswarm-kubernetes-mixin.git"
 # clone a branch of tag if provided
 BRANCH=${1:-""}

@@ -8,8 +8,8 @@ OUTPUT_DIRECTORY="./output"
 echo "Cleaning output directory"
 rm -rf ./$OUTPUT_DIRECTORY && mkdir ./$OUTPUT_DIRECTORY
 
-for dashboard in "$DASHBOARD_DIRECTORY"/*; do
-    dashboard=$(basename "$dashboard")
+for dashboard in $DASHBOARD_DIRECTORY/*; do
+    dashboard=$(basename $dashboard)
     dashboard=${dashboard%.*}
 
     if [ "$dashboard" = "stdlib" ]; then
@@ -19,8 +19,8 @@ for dashboard in "$DASHBOARD_DIRECTORY"/*; do
     echo "Making dashboard $dashboard.jsonnet"
 
     jsonnet \
-        --jpath "$GOPATH"/src/github.com/grafana/grafonnet-lib/ \
-        $DASHBOARD_DIRECTORY/"$dashboard".jsonnet > $OUTPUT_DIRECTORY/"$dashboard".json
+        --jpath $GOPATH/src/github.com/grafana/grafonnet-lib/ \
+        $DASHBOARD_DIRECTORY/$dashboard.jsonnet > $OUTPUT_DIRECTORY/$dashboard.json
 done
 
 echo "Made all dashboards"

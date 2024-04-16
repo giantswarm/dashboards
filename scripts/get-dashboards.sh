@@ -21,8 +21,8 @@
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 
-"$script_path"/list-dashboards.sh "$1" | while read -r d; do
+$script_path/list-dashboards.sh $1 | while read d; do
 	uid=$(echo -n "$d" | cut -d: -f1)
 	echo "$d"
-	"$script_path"/get-dashboard.sh "$uid" "$2"
+	$script_path/get-dashboard.sh $uid $2
 done
