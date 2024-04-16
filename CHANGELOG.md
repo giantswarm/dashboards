@@ -18,15 +18,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change `namespace-by-workload.json` dashboard ownership from turtles to cabbage.
 - Change `pod-total.json` dashboard ownership from turtles to cabbage.
 - Change `workload-total.json` dashboard ownership from turtles to cabbage.
+- Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
+- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
+- Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old table with new table panel.
 
 ### Fixed
 
 - Fix `Mimir / Reads resources` Disk usage graphs.
 
-- Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
-- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
+### Removed
+
 - Remove "Microstorage" dashboard.
-- Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old table with new table panel.
 
 ## [3.11.0] - 2024-04-11
 
