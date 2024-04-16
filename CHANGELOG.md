@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Improved some details on the dashboard "In-cluster container registry (Zot)".
+- Improved many details on the dashboard "In-cluster container registry (Zot)".
 
 ### Fixed
 
