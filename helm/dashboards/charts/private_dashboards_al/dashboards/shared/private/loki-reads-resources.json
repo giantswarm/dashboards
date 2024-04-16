@@ -13,9 +13,7 @@
       "includeVars": true,
       "keepTime": true,
       "tags": [
-        "owner:team-atlas",
-        "topic:observability",
-        "component:loki"
+        "loki"
       ],
       "targetBlank": false,
       "title": "Loki Dashboards",
@@ -29,397 +27,514 @@
       "collapsed": false,
       "panels": [
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "short"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#FFC000",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "limit"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E02F44",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              }
-            ]
-          },
+          "fill": 1,
           "gridPos": {},
           "id": 1,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
-          "targets": [
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
             {
-              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
-              "format": "time_series",
-              "legendFormat": "{{pod}}",
-              "legendLink": null
+              "alias": "request",
+              "color": "#FFC000",
+              "fill": 0
             },
             {
-              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"cpu\"} > 0)",
-              "format": "time_series",
-              "legendFormat": "request",
-              "legendLink": null
-            },
-            {
-              "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
-              "format": "time_series",
-              "legendFormat": "limit",
-              "legendLink": null
+              "alias": "limit",
+              "color": "#E02F44",
+              "fill": 0
             }
           ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(kube_pod_container_resource_requests{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"cpu\"} > 0)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "request",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(container_spec_cpu_quota{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{cluster_id=\"$cluster_id\",namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "limit",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "CPU",
           "tooltip": {
             "sort": 2
           },
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "bytes"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#FFC000",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "limit"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E02F44",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              }
-            ]
-          },
+          "fill": 1,
           "gridPos": {},
           "id": 2,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
-          "targets": [
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
             {
-              "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
-              "format": "time_series",
-              "legendFormat": "{{pod}}",
-              "legendLink": null
+              "alias": "request",
+              "color": "#FFC000",
+              "fill": 0
             },
             {
-              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"memory\"} > 0)",
-              "format": "time_series",
-              "legendFormat": "request",
-              "legendLink": null
-            },
-            {
-              "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} > 0)",
-              "format": "time_series",
-              "legendFormat": "limit",
-              "legendLink": null
+              "alias": "limit",
+              "color": "#E02F44",
+              "fill": 0
             }
           ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(kube_pod_container_resource_requests{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", resource=\"memory\"} > 0)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "request",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\"} > 0)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "limit",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Memory (workingset)",
           "tooltip": {
             "sort": 2
           },
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "bytes"
-            },
-            "overrides": []
-          },
+          "fill": 1,
           "gridPos": {},
           "id": 3,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
+              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=\"$cluster_id\", cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
               "format": "time_series",
+              "intervalFactor": 2,
               "legendFormat": "{{pod}}",
-              "legendLink": null
+              "legendLink": null,
+              "step": 10
             }
           ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Memory (go heap inuse)",
           "tooltip": {
             "sort": 2
           },
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 100,
-                "lineWidth": 0,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "normal"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "Bps"
-            },
-            "overrides": []
-          },
+          "fill": 10,
           "gridPos": {},
           "id": 4,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
+          "lines": true,
+          "linewidth": 0,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(instance, pod, device) (rate(node_disk_written_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+              "expr": "sum by(instance, pod, device) (rate(node_disk_written_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
               "format": "time_series",
+              "intervalFactor": 2,
               "legendFormat": "{{pod}} - {{device}}",
-              "legendLink": null
+              "legendLink": null,
+              "step": 10
             }
           ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Disk Writes",
-          "type": "timeseries"
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 100,
-                "lineWidth": 0,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "normal"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "Bps"
-            },
-            "overrides": []
-          },
+          "fill": 10,
           "gridPos": {},
           "id": 5,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
+          "lines": true,
+          "linewidth": 0,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(instance, pod, device) (rate(node_disk_read_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
+              "expr": "sum by(instance, pod, device) (rate(node_disk_read_bytes_total[$__rate_interval])) + ignoring(pod) group_right() (label_replace(count by(instance, pod, device) (container_fs_writes_bytes_total{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-read.*\", device!~\".*sda.*\"}), \"device\", \"$1\", \"device\", \"/dev/(.*)\") * 0)\n",
               "format": "time_series",
+              "intervalFactor": 2,
               "legendFormat": "{{pod}} - {{device}}",
-              "legendLink": null
+              "legendLink": null,
+              "step": 10
             }
           ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Disk Reads",
-          "type": "timeseries"
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "percentunit"
-            },
-            "overrides": []
-          },
+          "fill": 1,
           "gridPos": {},
           "id": 6,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
-              "expr": "max by(persistentvolumeclaim) (kubelet_volume_stats_used_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\"} / kubelet_volume_stats_capacity_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}) and count by(persistentvolumeclaim) (kube_persistentvolumeclaim_labels{cluster_id=~\"$cluster\", namespace=~\"$namespace\",label_name=~\"(loki|enterprise-logs)-read.*\"})",
+              "expr": "max by(persistentvolumeclaim) (kubelet_volume_stats_used_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\"} / kubelet_volume_stats_capacity_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\"}) and count by(persistentvolumeclaim) (kube_persistentvolumeclaim_labels{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\",label_name=~\"(loki|enterprise-logs)-read.*\"})",
               "format": "time_series",
+              "intervalFactor": 2,
               "legendFormat": "{{persistentvolumeclaim}}",
-              "legendLink": null
+              "legendLink": null,
+              "step": 10
             }
           ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Disk Space Utilization",
-          "type": "timeseries"
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         }
       ],
       "repeat": null,
@@ -435,256 +550,280 @@
       "height": "250px",
       "panels": [
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "short"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#FFC000",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "limit"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E02F44",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              }
-            ]
-          },
+          "fill": 1,
           "id": 7,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
-          "span": 4,
-          "targets": [
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
             {
-              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"}[$__rate_interval]))",
-              "format": "time_series",
-              "legendFormat": "{{pod}}",
-              "legendLink": null
+              "alias": "request",
+              "color": "#FFC000",
+              "fill": 0
             },
             {
-              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"cpu\"} > 0)",
-              "format": "time_series",
-              "legendFormat": "request",
-              "legendLink": null
-            },
-            {
-              "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} / container_spec_cpu_period{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
-              "format": "time_series",
-              "legendFormat": "limit",
-              "legendLink": null
+              "alias": "limit",
+              "color": "#E02F44",
+              "fill": 0
             }
           ],
+          "spaceLength": 10,
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"}[$__rate_interval]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"cpu\"} > 0)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "request",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(container_spec_cpu_quota{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} / container_spec_cpu_period{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "limit",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "CPU",
           "tooltip": {
             "sort": 2
           },
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "bytes"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#FFC000",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "limit"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E02F44",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.fillOpacity",
-                    "value": 0
-                  }
-                ]
-              }
-            ]
-          },
+          "fill": 1,
           "id": 8,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
-          "span": 4,
-          "targets": [
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
             {
-              "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
-              "format": "time_series",
-              "legendFormat": "{{pod}}",
-              "legendLink": null
+              "alias": "request",
+              "color": "#FFC000",
+              "fill": 0
             },
             {
-              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"memory\"} > 0)",
-              "format": "time_series",
-              "legendFormat": "request",
-              "legendLink": null
-            },
-            {
-              "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} > 0)",
-              "format": "time_series",
-              "legendFormat": "limit",
-              "legendLink": null
+              "alias": "limit",
+              "color": "#E02F44",
+              "fill": 0
             }
           ],
+          "spaceLength": 10,
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max by(pod) (container_memory_working_set_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(kube_pod_container_resource_requests{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\", resource=\"memory\"} > 0)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "request",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "min(container_spec_memory_limit_bytes{cluster_id=~\"$cluster_id\", namespace=~\"$namespace\", container=\"loki\", pod=~\"(loki|enterprise-logs)-write.*\"} > 0)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "limit",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Memory (workingset)",
           "tooltip": {
             "sort": 2
           },
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "lineWidth": 1,
-                "pointSize": 5,
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              },
-              "unit": "bytes"
-            },
-            "overrides": []
-          },
+          "fill": 1,
           "id": 9,
-          "links": [],
-          "options": {
-            "legend": {
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
           "span": 4,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-write\"})",
+              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster_id\", job=~\"($namespace)/(loki|enterprise-logs)-write\"})",
               "format": "time_series",
+              "intervalFactor": 2,
               "legendFormat": "{{pod}}",
-              "legendLink": null
+              "legendLink": null,
+              "step": 10
             }
           ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
           "title": "Memory (go heap inuse)",
           "tooltip": {
             "sort": 2
           },
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
         }
       ],
       "repeat": null,
@@ -698,9 +837,7 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-    "owner:team-atlas",
-    "topic:observability",
-    "component:loki"
+    "loki"
   ],
   "templating": {
     "list": [
@@ -710,13 +847,31 @@
           "value": "default"
         },
         "hide": 0,
-        "label": "Data source",
+        "label": "Data Source",
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
         "regex": "",
         "type": "datasource"
+      },
+      {
+        "datasource": "$datasource",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Kube cluster",
+        "multi": false,
+        "name": "cluster_id",
+        "options": [],
+        "query": "label_values(loki_build_info, cluster_id)",
+        "refresh": 1,
+        "regex": "",
+        "sort": 2,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": null,
@@ -731,7 +886,7 @@
         "multi": false,
         "name": "cluster",
         "options": [],
-        "query": "label_values(loki_build_info, cluster_id)",
+        "query": "label_values(loki_build_info, cluster)",
         "refresh": 1,
         "regex": "",
         "sort": 2,
@@ -754,7 +909,7 @@
         "multi": false,
         "name": "namespace",
         "options": [],
-        "query": "label_values(loki_build_info{cluster_id=~\"$cluster\"}, namespace)",
+        "query": "label_values(loki_build_info{cluster=~\"$cluster\"}, namespace)",
         "refresh": 1,
         "regex": "",
         "sort": 2,

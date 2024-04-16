@@ -15,9 +15,7 @@
       "includeVars": true,
       "keepTime": true,
       "tags": [
-        "owner:team-atlas",
-        "topic:observability",
-        "component:loki"
+        "loki"
       ],
       "targetBlank": false,
       "title": "Loki Dashboards",
@@ -27,7 +25,7 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -75,9 +73,9 @@
       "pluginVersion": "8.3.0-38205pre",
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(loki_ruler_wal_appender_ready) by (pod, tenant) == 0",
+          "expr": "sum(loki_ruler_wal_appender_ready{cluster_id=\"$cluster_id\"}) by (pod, tenant) == 0",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -88,7 +86,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -159,9 +157,9 @@
       },
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(rate(loki_ruler_wal_samples_appended_total{tenant=~\"${tenant}\"}[$__rate_interval])) by (tenant) > 0",
+          "expr": "sum(rate(loki_ruler_wal_samples_appended_total{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"}[$__rate_interval])) by (tenant) > 0",
           "interval": "",
           "legendFormat": "{{tenant}}",
           "refId": "A"
@@ -171,7 +169,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "description": "Series are unique combinations of labels",
       "fieldConfig": {
         "defaults": {
@@ -242,9 +240,9 @@
       },
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(rate(loki_ruler_wal_storage_created_series_total{tenant=~\"${tenant}\"}[$__rate_interval])) by (tenant) > 0",
+          "expr": "sum(rate(loki_ruler_wal_storage_created_series_total{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"}[$__rate_interval])) by (tenant) > 0",
           "interval": "",
           "legendFormat": "{{tenant}}",
           "refId": "A"
@@ -254,7 +252,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "description": "Difference between highest timestamp appended to WAL and highest timestamp successfully written to remote storage",
       "fieldConfig": {
         "defaults": {
@@ -325,9 +323,9 @@
       },
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "loki_ruler_wal_prometheus_remote_storage_highest_timestamp_in_seconds{tenant=~\"${tenant}\"}\n- on (tenant)\n  (\n    loki_ruler_wal_prometheus_remote_storage_queue_highest_sent_timestamp_seconds{tenant=~\"${tenant}\"}\n    or vector(0)\n  )",
+          "expr": "loki_ruler_wal_prometheus_remote_storage_highest_timestamp_in_seconds{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"}\n- on (tenant)\n  (\n    loki_ruler_wal_prometheus_remote_storage_queue_highest_sent_timestamp_seconds{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"}\n    or vector(0)\n  )",
           "interval": "",
           "legendFormat": "{{tenant}}",
           "refId": "A"
@@ -337,7 +335,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -408,9 +406,9 @@
       },
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(rate(loki_ruler_wal_prometheus_remote_storage_samples_total{tenant=~\"${tenant}\"}[$__rate_interval])) by (tenant) > 0",
+          "expr": "sum(rate(loki_ruler_wal_prometheus_remote_storage_samples_total{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"}[$__rate_interval])) by (tenant) > 0",
           "interval": "",
           "legendFormat": "{{tenant}}",
           "refId": "A"
@@ -420,7 +418,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "description": "\n",
       "fieldConfig": {
         "defaults": {
@@ -492,9 +490,9 @@
       },
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum by (tenant) (loki_ruler_wal_disk_size{tenant=~\"${tenant}\"})",
+          "expr": "sum by (tenant) (loki_ruler_wal_disk_size{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"})",
           "interval": "",
           "legendFormat": "{{tenant}}",
           "refId": "A"
@@ -504,7 +502,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": "$datasource",
       "description": "Some number of pending samples is expected, but if remote-write is failing this value will remain high",
       "fieldConfig": {
         "defaults": {
@@ -575,9 +573,9 @@
       },
       "targets": [
         {
-          "datasource": "${datasource}",
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "max(loki_ruler_wal_prometheus_remote_storage_samples_pending{tenant=~\"${tenant}\"}) by (tenant,pod) > 0",
+          "expr": "max(loki_ruler_wal_prometheus_remote_storage_samples_pending{cluster_id=\"$cluster_id\", tenant=~\"${tenant}\"}) by (tenant,pod) > 0",
           "interval": "",
           "legendFormat": "{{tenant}}",
           "refId": "A"
@@ -592,9 +590,7 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-    "owner:team-atlas",
-    "topic:observability",
-    "component:loki"
+    "loki"
   ],
   "templating": {
     "list": [
@@ -604,7 +600,7 @@
           "value": "default"
         },
         "hide": 0,
-        "label": "Data source",
+        "label": "Data Source",
         "name": "datasource",
         "options": [],
         "query": "prometheus",
@@ -624,6 +620,24 @@
         "label": "cluster",
         "multi": false,
         "name": "cluster",
+        "options": [],
+        "query": "label_values(loki_build_info, cluster)",
+        "refresh": 1,
+        "regex": "",
+        "sort": 2,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "datasource": "$datasource",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Kube cluster",
+        "multi": false,
+        "name": "cluster_id",
         "options": [],
         "query": "label_values(loki_build_info, cluster_id)",
         "refresh": 1,
@@ -648,7 +662,7 @@
         "multi": false,
         "name": "namespace",
         "options": [],
-        "query": "label_values(loki_build_info{cluster_id=~\"$cluster\"}, namespace)",
+        "query": "label_values(loki_build_info{cluster_id=\"$cluster_id\", cluster=~\"$cluster\"}, namespace)",
         "refresh": 1,
         "regex": "",
         "sort": 2,
@@ -678,7 +692,7 @@
         "multi": false,
         "name": "tenant",
         "options": [],
-        "query": "query_result(sum by (id) (grafanacloud_logs_instance_info) and sum(label_replace(loki_tenant:active_streams{cluster_id=~\"$cluster\",namespace=\"$namespace\"},\"id\",\"$1\",\"tenant\",\"(.*)\")) by(id))",
+        "query": "query_result(sum by (id) (grafanacloud_logs_instance_info) and sum(label_replace(loki_tenant:active_streams{cluster_id=\"$cluster_id\", cluster=\"$cluster\",namespace=\"$namespace\"},\"id\",\"$1\",\"tenant\",\"(.*)\")) by(id))",
         "refresh": 0,
         "regex": "/\"([^\"]+)\"/",
         "sort": 1,
