@@ -30,11 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix `Mimir / Reads resources` Disk usage graphs.
 
-### Changed
-
-- Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
-- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
-
 ### Removed
 
 - Remove "Microstorage" dashboard.
