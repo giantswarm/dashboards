@@ -21,12 +21,12 @@
       }
     ]
   },
-  "description": "",
+  "description": "Usage metrics for the internal registry powered by Zot",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 20501,
   "graphTooltip": 1,
-  "id": 117,
+  "id": 125,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -46,14 +46,16 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "mimir"
+        "uid": "${datasource}"
       },
+      "description": "Current storage used in relation to the storage capacity of the provisioned volume(s).",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "mappings": [],
+          "max": 1,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -77,17 +79,19 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 5,
+        "h": 5,
+        "w": 8,
         "x": 0,
         "y": 1
       },
       "id": 155,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -95,22 +99,22 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "text"
       },
       "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(zot_repo_storage_bytes) / sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{persistentvolumeclaim=\"$zot_pvc_name\"})",
-          "format": "time_series",
+          "expr": "sum(zot_repo_storage_bytes) / sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{persistentvolumeclaim=\"$zot_pvc_name\",namespace=\"zot\"})",
+          "format": "table",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -122,86 +126,14 @@
         }
       ],
       "title": "Storage usage",
-      "type": "stat"
+      "type": "bargauge"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "mimir"
+        "uid": "${datasource}"
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 5,
-        "x": 5,
-        "y": 1
-      },
-      "id": 156,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "mimir"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(zot_repo_storage_bytes)",
-          "format": "time_series",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "legendFormat": "Capacity",
-          "range": false,
-          "refId": "capacity",
-          "useBackend": false
-        }
-      ],
-      "title": "Storage usage (absolute)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "mimir"
-      },
+      "description": "Storage usage over time, plus the volume capacity as a dashed line.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -229,7 +161,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -305,8 +237,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 14,
-        "x": 10,
+        "w": 16,
+        "x": 8,
         "y": 1
       },
       "id": 154,
@@ -316,11 +248,11 @@
             "lastNotNull"
           ],
           "displayMode": "table",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -328,12 +260,12 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "kube_persistentvolumeclaim_resource_requests_storage_bytes{persistentvolumeclaim=\"$zot_pvc_name\"}",
+          "expr": "sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{persistentvolumeclaim=\"$zot_pvc_name\",namespace=\"zot\"})",
           "format": "time_series",
           "fullMetaSearch": false,
           "hide": false,
@@ -347,7 +279,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(zot_repo_storage_bytes)",
@@ -364,45 +296,13 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "mimir"
+        "uid": "${datasource}"
       },
-      "description": "Total number of image pulls served by Zot",
+      "description": "Current storage consumption in SI units (1 KB = 1000 Bytes)",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "thresholds"
           },
           "mappings": [],
           "min": 0,
@@ -410,60 +310,143 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "none"
+          "unit": "decbytes"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 6,
+        "h": 5,
+        "w": 4,
         "x": 0,
-        "y": 11
+        "y": 6
       },
-      "id": 2,
+      "id": 156,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(zot_repo_downloads_total)",
-          "legendFormat": "total",
-          "range": true,
-          "refId": "A"
+          "exemplar": false,
+          "expr": "sum(zot_repo_storage_bytes)",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "Capacity",
+          "range": false,
+          "refId": "capacity",
+          "useBackend": false
         }
       ],
-      "title": "Downloads",
-      "type": "timeseries"
+      "title": "Storage usage (absolute)",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "mimir"
+        "uid": "${datasource}"
       },
-      "description": "downloads/minute",
+      "description": "Size of the volume(s) provisioned for Zot",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 6
+      },
+      "id": 168,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{persistentvolumeclaim=\"$zot_pvc_name\",namespace=\"zot\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "Capacity",
+          "range": false,
+          "refId": "capacity",
+          "useBackend": false
+        }
+      ],
+      "title": "Storage capacity",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Total images pulled in the time interval",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -477,7 +460,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
-            "fillOpacity": 0,
+            "fillOpacity": 100,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -486,7 +469,7 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineWidth": 0,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -521,9 +504,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 6,
+        "h": 10,
+        "w": 8,
+        "x": 0,
         "y": 11
       },
       "id": 75,
@@ -548,10 +531,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(zot_repo_downloads_total[$__rate_interval]))*60",
+          "expr": "sum(rate(zot_repo_downloads_total[$__rate_interval]))",
           "legendFormat": "Total",
           "range": true,
           "refId": "A"
@@ -563,106 +546,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "mimir"
+        "uid": "${datasource}"
       },
-      "description": "Total number of repository uploads to Zot",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 12,
-        "y": 11
-      },
-      "id": 4,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "mimir"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(zot_repo_uploads_total)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "Total",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Uploads",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "mimir"
-      },
-      "description": "uploads per minute",
+      "description": "Uploads per time interval",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -721,9 +607,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
+        "h": 10,
+        "w": 8,
+        "x": 8,
         "y": 11
       },
       "id": 76,
@@ -748,7 +634,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(zot_repo_uploads_total[$__rate_interval]))*60.0",
@@ -762,20 +648,160 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Data transmitted (pulled from the registry) and received (pushed to the registry)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text"
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 11
+      },
+      "id": 157,
+      "interval": "2m",
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(irate(container_network_transmit_bytes_total{namespace=~\"zot\", pod=~\".*-zot.*\"}[$__rate_interval]))",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Transmitted",
+          "range": true,
+          "refId": "transmit",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(irate(container_network_receive_bytes_total{namespace=~\"zot\", pod=~\".*-zot.*\"}[$__rate_interval])) * -1",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Received",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Data transfer",
+      "type": "timeseries"
+    },
+    {
       "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 21
       },
       "id": 6,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Total number of pulls, broken down by repository name",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -818,14 +844,16 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "short"
             },
             "overrides": []
           },
@@ -854,7 +882,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_repo_downloads_total{repo=~\"$repo_prefix.*\"}) by (repo)",
@@ -870,9 +898,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Download rate broken down by image repository",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -886,7 +914,7 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "bars",
-                "fillOpacity": 0,
+                "fillOpacity": 80,
                 "gradientMode": "none",
                 "hideFrom": {
                   "legend": false,
@@ -895,7 +923,7 @@
                 },
                 "insertNulls": false,
                 "lineInterpolation": "linear",
-                "lineWidth": 1,
+                "lineWidth": 0,
                 "pointSize": 5,
                 "scaleDistribution": {
                   "type": "linear"
@@ -904,7 +932,7 @@
                 "spanNulls": false,
                 "stacking": {
                   "group": "A",
-                  "mode": "none"
+                  "mode": "normal"
                 },
                 "thresholdsStyle": {
                   "mode": "off"
@@ -915,7 +943,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -944,7 +973,9 @@
               ],
               "displayMode": "table",
               "placement": "right",
-              "showLegend": true
+              "showLegend": true,
+              "sortBy": "Max",
+              "sortDesc": true
             },
             "tooltip": {
               "mode": "single",
@@ -955,7 +986,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(rate(zot_repo_downloads_total{repo=~\"$repo_prefix.*\"}[$__rate_interval])) by (repo) *60",
@@ -971,9 +1002,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Uploaded images broken down by repository",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1011,19 +1042,22 @@
                   "mode": "off"
                 }
               },
+              "decimals": 0,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "short"
             },
             "overrides": []
           },
@@ -1052,7 +1086,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_repo_uploads_total{repo=~\"$repo_prefix.*\"}) by (repo)",
@@ -1068,9 +1102,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Uploads per time interval, broken down by image repository",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1113,7 +1147,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1153,7 +1188,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(rate(zot_repo_uploads_total{repo=~\"$repo_prefix.*\"}[$__rate_interval])) by (repo) *60",
@@ -1169,8 +1204,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Total storage space occupied by repositories",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1213,7 +1249,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1250,7 +1287,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_repo_storage_bytes{repo=~\"$repo_prefix.*\"}) by (repo)",
@@ -1266,9 +1303,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Storage usage rate broken down by image repository",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1300,7 +1337,7 @@
                 "spanNulls": false,
                 "stacking": {
                   "group": "A",
-                  "mode": "none"
+                  "mode": "normal"
                 },
                 "thresholdsStyle": {
                   "mode": "off"
@@ -1311,7 +1348,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1347,7 +1385,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(rate(zot_repo_storage_bytes{repo=~\"$repo_prefix.*\"}[$__rate_interval])) by (repo)",
@@ -1370,16 +1408,16 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 22
       },
       "id": 36,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Response time of HTTP requests",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1422,7 +1460,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1436,12 +1475,12 @@
           },
           "gridPos": {
             "h": 14,
-            "w": 12,
+            "w": 11,
             "x": 0,
             "y": 19
           },
           "id": 37,
-          "interval": "1m",
+          "interval": "5m",
           "options": {
             "legend": {
               "calcs": [
@@ -1450,7 +1489,7 @@
                 "mean"
               ],
               "displayMode": "table",
-              "placement": "right",
+              "placement": "bottom",
               "showLegend": true,
               "sortBy": "Max",
               "sortDesc": true
@@ -1465,7 +1504,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(rate(zot_http_repo_latency_seconds_sum[$__rate_interval]))",
@@ -1482,9 +1521,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "HTTP response duration, broken down by repository name",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1528,7 +1567,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1542,12 +1582,12 @@
           },
           "gridPos": {
             "h": 14,
-            "w": 12,
-            "x": 12,
+            "w": 13,
+            "x": 11,
             "y": 19
           },
           "id": 70,
-          "interval": "1m",
+          "interval": "5m",
           "options": {
             "legend": {
               "calcs": [
@@ -1571,7 +1611,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "rate(zot_http_repo_latency_seconds_sum[$__rate_interval])",
@@ -1582,7 +1622,7 @@
               "refId": "B"
             }
           ],
-          "title": "HTT latency by repository",
+          "title": "HTTP latency by repository",
           "type": "timeseries"
         }
       ],
@@ -1595,15 +1635,16 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 23
       },
       "id": 103,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Total number of pushes for images with repository names starting with \"$repo_prefix/\"",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1646,14 +1687,16 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "short"
             },
             "overrides": []
           },
@@ -1674,7 +1717,7 @@
                 "mean"
               ],
               "displayMode": "table",
-              "placement": "right",
+              "placement": "bottom",
               "showLegend": true
             },
             "tooltip": {
@@ -1688,7 +1731,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_repo_uploads_total{repo=~\"$repo_prefix.*\"})",
@@ -1704,9 +1747,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "rate per minute",
+          "description": "Push rate for images with repository names starting with \"$repo_prefix/\"",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1749,14 +1792,16 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "ops"
             },
             "overrides": []
           },
@@ -1767,7 +1812,7 @@
             "y": 26
           },
           "id": 124,
-          "interval": "1m",
+          "interval": "5m",
           "maxPerRow": 12,
           "options": {
             "legend": {
@@ -1778,7 +1823,7 @@
                 "mean"
               ],
               "displayMode": "table",
-              "placement": "right",
+              "placement": "bottom",
               "showLegend": true
             },
             "tooltip": {
@@ -1792,10 +1837,10 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(rate(zot_repo_uploads_total{repo=~\"$repo_prefix.*\"}[$__rate_interval]))*60",
+              "expr": "sum(rate(zot_repo_uploads_total{repo=~\"$repo_prefix.*\"}[$__rate_interval]))",
               "hide": false,
               "legendFormat": "$repo_prefix",
               "range": true,
@@ -1815,16 +1860,16 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 24
       },
       "id": 56,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Total number of pulls for images with repository names starting with \"$repo_prefix/\"",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1867,14 +1912,16 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "short"
             },
             "overrides": []
           },
@@ -1906,7 +1953,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_repo_downloads_total{repo=~\"$repo_prefix.*\"})",
@@ -1922,9 +1969,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "rate per minute",
+          "description": "Pull rate for images with repository names starting with \"$repo_prefix/\"",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1967,14 +2014,16 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "ops"
             },
             "overrides": []
           },
@@ -1985,7 +2034,7 @@
             "y": 29
           },
           "id": 81,
-          "interval": "1m",
+          "interval": "5m",
           "maxPerRow": 12,
           "options": {
             "legend": {
@@ -2009,10 +2058,10 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(rate(zot_repo_downloads_total{repo=~\"$repo_prefix.*\"}[$__rate_interval]))*60",
+              "expr": "sum(rate(zot_repo_downloads_total{repo=~\"$repo_prefix.*\"}[$__rate_interval]))",
               "hide": false,
               "legendFormat": "$repo_prefix",
               "range": true,
@@ -2032,16 +2081,16 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 25
       },
       "id": 132,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Storage space used by all images in the repository starting with \"$repo_prefix/\"",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2084,7 +2133,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2092,7 +2142,7 @@
                   }
                 ]
               },
-              "unit": "bytes"
+              "unit": "decbytes"
             },
             "overrides": []
           },
@@ -2124,7 +2174,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_repo_storage_bytes{repo=~\"$repo_prefix.*\"})",
@@ -2140,9 +2190,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Storage space used by all images in the repository starting with \"$repo_prefix/\"",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2185,7 +2235,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2193,7 +2244,7 @@
                   }
                 ]
               },
-              "unit": "bytes"
+              "unit": "Bps"
             },
             "overrides": []
           },
@@ -2204,7 +2255,7 @@
             "y": 31
           },
           "id": 147,
-          "interval": "1m",
+          "interval": "5m",
           "maxPerRow": 12,
           "options": {
             "legend": {
@@ -2228,10 +2279,10 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(rate(zot_repo_storage_bytes{repo=~\"$repo_prefix.*\"}[$__rate_interval]))*60",
+              "expr": "sum(rate(zot_repo_storage_bytes{repo=~\"$repo_prefix.*\"}[$__rate_interval]))",
               "hide": false,
               "legendFormat": "$repo_prefix",
               "range": true,
@@ -2251,15 +2302,16 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 26
       },
       "id": 13,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Number of Zot scheduler generators with priority \"high\", by state",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2302,7 +2354,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2337,7 +2390,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_scheduler_generators_status{priority=\"high\"}) by (state)",
@@ -2353,8 +2406,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Number of Zot scheduler generators with priority \"medium\", by state",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2397,7 +2451,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2432,7 +2487,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_scheduler_generators_status{priority=\"medium\"}) by (state)",
@@ -2448,8 +2503,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Number of Zot scheduler generators with priority \"low\", by state",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2492,7 +2548,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2527,7 +2584,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_scheduler_generators_status{priority=\"low\"}) by (state)",
@@ -2550,14 +2607,14 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 27
       },
       "id": 20,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
           "description": "Number of tasks in the queue waiting to be processed by scheduler workers",
           "fieldConfig": {
@@ -2604,7 +2661,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2620,7 +2678,7 @@
             "h": 9,
             "w": 8,
             "x": 0,
-            "y": 26
+            "y": 24
           },
           "id": 17,
           "interval": "1m",
@@ -2640,7 +2698,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_scheduler_tasksqueue_length) by (priority)",
@@ -2656,9 +2714,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Number of Zot workers",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2702,7 +2760,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2718,7 +2777,7 @@
             "h": 9,
             "w": 8,
             "x": 8,
-            "y": 26
+            "y": 24
           },
           "id": 18,
           "options": {
@@ -2737,7 +2796,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_scheduler_workers_total)",
@@ -2753,9 +2812,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
-          "description": "",
+          "description": "Number of Zot workers by state",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2799,7 +2858,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2815,7 +2875,7 @@
             "h": 9,
             "w": 8,
             "x": 16,
-            "y": 26
+            "y": 24
           },
           "id": 21,
           "options": {
@@ -2834,7 +2894,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(zot_scheduler_workers) by (state)",
@@ -2857,7 +2917,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 28
       },
       "id": 29,
       "panels": [
@@ -2873,8 +2933,9 @@
           "dataFormat": "timeseries",
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Heatmap showing the distribution of the HTTP request latency for $http_method requests",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -2892,9 +2953,9 @@
           },
           "gridPos": {
             "h": 8,
-            "w": 6,
+            "w": 12,
             "x": 0,
-            "y": 27
+            "y": 25
           },
           "heatmap": {},
           "hideZeroBuckets": false,
@@ -2963,7 +3024,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(increase(zot_http_method_latency_seconds_bucket{method=\"$http_method\"}[$__interval])) by (le)",
@@ -3006,7 +3067,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 29
       },
       "id": 24,
       "panels": [
@@ -3022,8 +3083,9 @@
           "dataFormat": "timeseries",
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Heatmap showing the distribution of the duration of the Zot worker task \"$scheduler_workers_tasks_duration\"",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -3043,7 +3105,7 @@
             "h": 9,
             "w": 6,
             "x": 0,
-            "y": 28
+            "y": 26
           },
           "heatmap": {},
           "hideZeroBuckets": false,
@@ -3112,7 +3174,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(increase(zot_scheduler_workers_tasks_duration_seconds_bucket{name=\"$scheduler_workers_tasks_duration\"}[$__interval])) by (le)",
@@ -3156,7 +3218,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 30
       },
       "id": 45,
       "panels": [
@@ -3172,8 +3234,9 @@
           "dataFormat": "timeseries",
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir"
+            "uid": "${datasource}"
           },
+          "description": "Heatmap that displays the distribution of storage lock duration for a particular storage path",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -3193,12 +3256,13 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 29
+            "y": 27
           },
           "heatmap": {},
           "hideZeroBuckets": false,
           "highlightCards": true,
           "id": 47,
+          "interval": "5m",
           "legend": {
             "show": true
           },
@@ -3261,7 +3325,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "sum(increase(zot_storage_lock_latency_seconds_bucket{storageName=\"$storageName\"}[$__interval])) by (le)",
@@ -3306,6 +3370,25 @@
     "list": [
       {
         "current": {
+          "selected": false,
+          "text": "Mimir",
+          "value": "mimir"
+        },
+        "description": "Please select a Prometheus-compatible data soure",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
           "selected": true,
           "text": [
             "All"
@@ -3316,7 +3399,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "mimir"
+          "uid": "${datasource}"
         },
         "definition": "label_values(zot_http_method_latency_seconds_bucket,method)",
         "description": "zot_http_method_latency_seconds_bucket method",
@@ -3329,7 +3412,7 @@
           "query": "label_values(zot_http_method_latency_seconds_bucket,method)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -3347,7 +3430,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "mimir"
+          "uid": "${datasource}"
         },
         "definition": "label_values(zot_scheduler_workers_tasks_duration_seconds_bucket,name)",
         "description": "zot_http_method_latency_seconds_bucket method",
@@ -3360,7 +3443,7 @@
           "query": "label_values(zot_scheduler_workers_tasks_duration_seconds_bucket,name)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -3378,7 +3461,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "mimir"
+          "uid": "${datasource}"
         },
         "definition": "label_values(zot_storage_lock_latency_seconds_bucket,storageName)",
         "description": "zot_storage_lock_latency_seconds_bucket",
@@ -3391,7 +3474,7 @@
           "query": "label_values(zot_storage_lock_latency_seconds_bucket,storageName)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -3409,7 +3492,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "mimir"
+          "uid": "${datasource}"
         },
         "definition": "label_values(zot_repo_downloads_total,repo)",
         "description": "For repository names separated by slash, this is the part before the first separator.",
@@ -3423,7 +3506,7 @@
           "query": "label_values(zot_repo_downloads_total,repo)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "([a-z-.]+)/(.*)",
         "skipUrlSync": false,
         "sort": 1,
@@ -3437,7 +3520,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "mimir"
+          "uid": "${datasource}"
         },
         "definition": "label_values(kube_persistentvolumeclaim_info{cluster_type=\"management_cluster\", namespace=\"zot\"},persistentvolumeclaim)",
         "description": "Name of the PersistentVolumeClaim for the container image storage",
@@ -3451,7 +3534,7 @@
           "query": "label_values(kube_persistentvolumeclaim_info{cluster_type=\"management_cluster\", namespace=\"zot\"},persistentvolumeclaim)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -3460,13 +3543,13 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "utc",
   "title": "In-cluster container registry (Zot)",
   "uid": "zot-container-registry",
-  "version": 11,
+  "version": 1,
   "weekStart": ""
 }
