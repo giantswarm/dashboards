@@ -19,6 +19,16 @@ function tune_dashboard {
     # Latest mixins use SLO instead of classic metrics in several places
     # but we dropped these SLO metrics
     sed -i 's/apiserver_request_slo_duration_seconds/apiserver_request_duration_seconds/g' "$dashboardFile"
+
+    # Dashboard ownership.
+    case $(basename "${dashboardFile}") in
+        cluster-total.json|namespace-by-pod.json|namespace-by-workload.json|pod-total.json|workload-total.json)
+            sed -i 's/"owner:team-.*"/"owner:team-cabbage"/g' "${dashboardFile}"
+            ;;
+        controller-manager.json|k8s-resources-cluster.json|k8s-resources-multicluster.json|k8s-resources-namespace.json|k8s-resources-node.json|k8s-resources-pod.json|k8s-resources-workloads-namespace.json|persistentvolumesusage.json|scheduler.json|statefulset.json)
+            sed -i 's/"owner:team-.*"/"owner:team-turtles"/g' "${dashboardFile}"
+            ;;
+    esac
 }
 
 
