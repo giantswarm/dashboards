@@ -6,13 +6,13 @@ GRAFANA_URL="https://giantswarm.grafana.net"
 FOLDER_ID="31"  # Playground folder
 OUTPUT_DIRECTORY="./output"
 
-if [ -z $GRAFANA_API_KEY ]; then
+if [ -z "$GRAFANA_API_KEY" ]; then
     echo "Grafana API key not set"
     exit 1
 fi
 
 filename=$1
-dashboard_data=`cat $OUTPUT_DIRECTORY/$filename`
+dashboard_data=$(cat $OUTPUT_DIRECTORY/"$filename")
 
 curl \
     --header "Authorization: Bearer $GRAFANA_API_KEY" \
