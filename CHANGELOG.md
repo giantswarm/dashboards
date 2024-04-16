@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.12.0] - 2024-04-16
+
 ### Changed
 
 - Improved many details on the dashboard "In-cluster container registry (Zot)".
@@ -957,7 +959,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.11.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.12.0...HEAD
+[3.12.0]: https://github.com/giantswarm/dashboards/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/giantswarm/dashboards/compare/v3.10.4...v3.11.0
 [3.10.4]: https://github.com/giantswarm/dashboards/compare/v3.10.3...v3.10.4
 [3.10.3]: https://github.com/giantswarm/dashboards/compare/v3.10.2...v3.10.3
