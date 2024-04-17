@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Move `node-problem-detector` to be aws only.
+
 ### Fixed
 
 - Fix Grafana Cloud service-level dashboard in case we have duplicate clusrer names in different installations.
