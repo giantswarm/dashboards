@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.11.4] - 2024-04-17
+
 ### Changed
 
 - Updated "In-cluster container registry (Zot)" dashboard to use metric `kubelet_volume_stats_used_bytes` for storage used.
@@ -982,7 +984,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.11.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.11.4...HEAD
+[3.11.4]: https://github.com/giantswarm/dashboards/compare/v3.11.3...v3.11.4
 [3.11.3]: https://github.com/giantswarm/dashboards/compare/v3.11.2...v3.11.3
 [3.11.2]: https://github.com/giantswarm/dashboards/compare/v3.11.1...v3.11.2
 [3.11.1]: https://github.com/giantswarm/dashboards/compare/v3.11.0...v3.11.1
