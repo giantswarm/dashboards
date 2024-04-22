@@ -28,3 +28,20 @@ items:
   data:
     {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
 {{- end }}
+## Teleport dashboards
+{{- if eq .Values.global.provider.kind "teleport" }}
+{{- range $path, $fileContents := $.Files.Glob "dashboards/teleport/*.json" }}
+{{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/private/teleport"
+    labels:
+      {{- include "labels.common" $ | nindent 6 }}
+    name: {{ printf "grafana-teleport-%s-dashboard" $dashboardName | trunc 63 | trimSuffix "-" }}
+    namespace: {{ $.Values.global.namespace  }}
+  data:
+    {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson }}
+{{- end }}
+{{- end }}
