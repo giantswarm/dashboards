@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add dashboard "Worker node utilization".
+
 ## [3.11.4] - 2024-04-17
 
 ### Changed
