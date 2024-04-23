@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.12.0] - 2024-04-23
+
 ### Added
 
 - Add dashboard "Worker node utilization".
@@ -988,7 +990,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.11.4...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.12.0...HEAD
+[3.12.0]: https://github.com/giantswarm/dashboards/compare/v3.11.4...v3.12.0
 [3.11.4]: https://github.com/giantswarm/dashboards/compare/v3.11.3...v3.11.4
 [3.11.3]: https://github.com/giantswarm/dashboards/compare/v3.11.2...v3.11.3
 [3.11.2]: https://github.com/giantswarm/dashboards/compare/v3.11.1...v3.11.2
