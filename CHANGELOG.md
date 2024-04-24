@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Change "Worker node utilization" dashboard to "Node utilization", also allowing to analyze data for control plane nodes.
+
 ## [3.12.0] - 2024-04-23
 
 ### Added
