@@ -15,6 +15,7 @@
       }
     ]
   },
+  "description": "Utilization of a cluster on a node level, focusing on requests",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -63,7 +64,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This dashboard aims to analyze worker node resource (CPU and RAM) utilization based on resource requests.\n**Utilization** is the ratio of resources requested by workloads, divided by the total amount of resources provided by the nodes.\nAs the cluster owner, your general aim should be to keep both memory and CPU utilization high, to avoid paying for unused resources. On the other hand, you want to keep head room, as maximized utilization can lead to increased latency and instability.\n\nFor CPU, the basis in this dashboard are _logical_ cores as provided by the `machine_cpu_cores` metric. This may differ from the _physical_ number of cores.",
+            "content": "This dashboard helps to analyze node resource (CPU and RAM) utilization based on resource requests.\n\n**Utilization** is the ratio of resources requested by workloads, divided by the total amount of resources provided by the node. As the cluster owner, your general aim should be to keep both memory and CPU utilization high, to avoid paying for unused resources. On the other hand, you want to keep head room, as maximized utilization can lead to increased latency and instability.\n\nFor CPU, the basis in this dashboard are _logical_ cores as provided by the `machine_cpu_cores` metric. This may differ from the _physical_ number of cores.",
             "mode": "markdown"
           },
           "pluginVersion": "10.4.0",
@@ -91,7 +92,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Number of nodes currently (at the end of the selected time window)",
+      "description": "Number of nodes of the selected role currently (at the end of the selected time window)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -150,7 +151,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "count(kube_node_role{cluster_id=\"$cluster\",role=\"worker\"})",
+          "expr": "count(kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"})",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -158,7 +159,7 @@
           "refId": "A"
         }
       ],
-      "title": "Worker nodes",
+      "title": "Nodes",
       "type": "stat"
     },
     {
@@ -166,7 +167,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Number of nodes in condition Ready, currently (at the end of the selected time window)",
+      "description": "Number of nodes of the selected role in condition Ready, currently (at the end of the selected time window)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -225,7 +226,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} \n+ on(node) group_left(role)\n(\n    sum(kube_node_status_condition{cluster_id=\"$cluster\",condition=\"Ready\",status=\"true\"}) by (node) * 0\n))",
+          "expr": "sum(kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} \n+ on(node) group_left(role)\n(\n    sum(kube_node_status_condition{cluster_id=\"$cluster\",condition=\"Ready\",status=\"true\"}) by (node) * 0\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -233,7 +234,7 @@
           "refId": "A"
         }
       ],
-      "title": "Worker nodes ready",
+      "title": "Nodes ready",
       "type": "stat"
     },
     {
@@ -314,7 +315,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(\n    kube_node_role{role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
           "instant": true,
           "legendFormat": "Memory",
           "range": false,
@@ -326,7 +327,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(\n    kube_node_role{role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
           "hide": false,
           "instant": false,
           "legendFormat": "CPU",
@@ -342,7 +343,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total of memory available in worker nodes currently (at the end of the selected time window)",
+      "description": "Total of memory available in nodes currently (at the end of the selected time window)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -394,7 +395,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -410,7 +411,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total memory requests in worker nodes currently (at the end of the selected time window)",
+      "description": "Total memory requests in nodes currently (at the end of the selected time window)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -462,7 +463,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -478,7 +479,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total CPU cores available in worker nodes currently (at the end of the selected time window)",
+      "description": "Total CPU cores available in nodes currently (at the end of the selected time window)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -530,7 +531,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -546,7 +547,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total CPU requests in worker nodes currently (at the end of the selected time window)",
+      "description": "Total CPU requests in nodes currently (at the end of the selected time window)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -598,7 +599,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -690,14 +691,14 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "count(kube_node_role{cluster_id=\"$cluster\",role=\"worker\"})",
+          "expr": "count(kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"})",
           "instant": false,
-          "legendFormat": "Worker nodes",
+          "legendFormat": "Nodes",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Worker nodes over time",
+      "title": "Node count over time",
       "type": "timeseries"
     },
     {
@@ -705,7 +706,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total of memory requests, divided by the total memory available in worker nodes",
+      "description": "Total of memory requests, divided by the total memory available in nodes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -791,7 +792,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(\n    kube_node_role{role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
           "instant": false,
           "legendFormat": "Average memory utilization",
           "range": true,
@@ -806,7 +807,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total of memory requests in worker nodes",
+      "description": "Total of memory requests in nodes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -891,7 +892,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(\n    kube_node_role{role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)",
           "instant": false,
           "legendFormat": "Average memory utilization",
           "range": true,
@@ -906,7 +907,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total CPU requests, divided by the number of cores available in worker nodes",
+      "description": "Total CPU requests, divided by the number of cores available in nodes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -992,7 +993,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(\n    kube_node_role{role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
           "instant": false,
           "legendFormat": "Average CPU utilization",
           "range": true,
@@ -1007,7 +1008,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total CPU requests in worker nodes",
+      "description": "Total CPU requests in nodes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1092,7 +1093,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(\n    kube_node_role{role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)",
           "instant": false,
           "legendFormat": "Total CPU requests",
           "range": true,
@@ -1303,7 +1304,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -1317,7 +1318,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1332,7 +1333,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1347,7 +1348,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1362,7 +1363,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=\"worker\"} * 0\n    + on(node) group_left(zone)\n    (\n        kube_node_labels{cluster_id=\"$cluster\"}\n    )\n) without (cluster_id)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left(zone)\n    (\n        kube_node_labels{cluster_id=\"$cluster\"}\n    )\n) without (cluster_id)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1371,7 +1372,7 @@
           "refId": "zone"
         }
       ],
-      "title": "Worker node resource requests",
+      "title": "Node resource requests",
       "transformations": [
         {
           "id": "sortBy",
@@ -1419,7 +1420,7 @@
               "region 3": true,
               "region 4": true,
               "region 5": true,
-              "role 1": true,
+              "role 1": false,
               "role 2": true,
               "role 3": true,
               "role 4": true,
@@ -1429,7 +1430,7 @@
             },
             "includeByName": {},
             "indexByName": {
-              "Time 1": 2,
+              "Time 1": 3,
               "Time 2": 6,
               "Time 3": 10,
               "Time 4": 14,
@@ -1453,19 +1454,19 @@
               "pipeline": 29,
               "pod": 30,
               "provider": 31,
-              "region 1": 3,
+              "region 1": 4,
               "region 2": 7,
               "region 3": 11,
               "region 4": 15,
               "region 5": 32,
-              "role 1": 4,
+              "role 1": 1,
               "role 2": 8,
               "role 3": 12,
               "role 4": 16,
               "role 5": 33,
               "service": 34,
               "service_priority": 35,
-              "zone": 1
+              "zone": 2
             },
             "renameByName": {
               "Value #cpu_absolute": "CPU req total",
@@ -1473,6 +1474,7 @@
               "Value #mem_absolute": "Mem req total",
               "Value #mem_relative": "Memory requests utilization",
               "node": "Node",
+              "role 1": "Role",
               "zone": "Zone"
             }
           }
@@ -1627,7 +1629,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node, namespace, pod, container, uid)\n+ on(node) group_left() kube_node_role{role=\"worker\"} * 0",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node, namespace, pod, container, uid)\n+ on(node) group_left() kube_node_role{role=~\"$role\"} * 0",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -1641,7 +1643,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node, namespace, pod, container, uid)\n+ on(node) group_left() kube_node_role{role=\"worker\"} * 0",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node, namespace, pod, container, uid)\n+ on(node) group_left() kube_node_role{role=~\"$role\"} * 0",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1765,6 +1767,35 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "worker",
+          "value": "worker"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(kube_node_role{role!=\"master\"},role)",
+        "description": "Select the node type to focus on, or choose all.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Node role",
+        "multi": false,
+        "name": "role",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(kube_node_role{role!=\"master\"},role)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
       }
     ]
   },
@@ -1784,8 +1815,8 @@
     ]
   },
   "timezone": "utc",
-  "title": "Worker node utilization",
-  "uid": "worker-node-utilization",
+  "title": "Node utilization",
+  "uid": "node-utilization",
   "version": 1,
   "weekStart": ""
 }
