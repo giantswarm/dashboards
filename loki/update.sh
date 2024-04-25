@@ -10,9 +10,7 @@
 set -e
 
 BRANCH="main"
-BRANCH="fix-cluster-id-label-in-mixins"
 MIXIN_URL=https://github.com/grafana/loki/production/loki-mixin@$BRANCH
-MIXIN_URL=https://github.com/QuentinBisson/loki-upstream/production/loki-mixin@$BRANCH
 helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_al/dashboards/shared/private"
 
 cd loki
@@ -26,14 +24,17 @@ for file in dashboards_out/*; do
   # Process each file here
   echo "$file"
   
-
-
   if [[ $(basename "$file") == "loki-canary.json" ]]; then
     # adds missing uid
     jq '.uid = "loki-canary"' "$file" > "$file.out" && mv "$file.out" "$file"
   else
     # adds loki- prefix to uid
     jq '.uid = "loki-" + .uid' "$file" > "$file.out" && mv "$file.out" "$file"
+  fi
+
+  ## Needed until this is fixed https://github.com/grafana/loki/pull/12846
+  if [[ $(basename "$file") == "loki-deletion.json" ]]; then
+    sed -i 's/container=\\"compactor\\"/container=\\"loki\\", pod=~\\"(loki.*|enterprise-logs)-backend.*\\"/g' "$file"
   fi
 
   echo "Copying dashboard to $helmDir"
