@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Fix storage related panes on zot's dashboards
+### Fixed
+
+- Fix atlas dashboard tags.
+- Fix storage related panes on zot's dashboards.
 
 ## [3.13.0] - 2024-04-24
 
