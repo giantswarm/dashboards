@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix atlas dashboard tags.
-- Fix storage related panes on zot's dashboards.
+- Fix storage related panes on zot's dashboards
+- prometheus: scraping info can now be filtered by cluster
 
 ## [3.13.0] - 2024-04-24
 
