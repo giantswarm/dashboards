@@ -19,7 +19,7 @@ This chart is divided in 4 different charts, to get around helm charts size limi
 
 ### Dashboard format
 
-All dashboards should strive to have proper tags to facilitate their discovery.
+All dashboards should have proper tags to facilitate their discovery.
 To that end, we advise the following tags:
 - `owner:team-name`: Team that owns the dashboard
 - `component:component_name`: Name of the component this dashboard is about
