@@ -25,6 +25,20 @@ To that end, we advise the following tags:
 - `component:component_name`: Name of the component this dashboard is about
 - `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
 
+### Linting
+
+Atlas introduced a dashboard linter to ensure some basic dashboard rules are followed (e.g. always have a datasource present) to help with the migration to Mimir. 
+This will most likely be moved to CI later but until it is you can run it like this:
+
+```sh
+# Install the tool
+go install github.com/grafana/dashboard-linter@latest
+### Run on a specific dashboard
+dashboard-linter lint -c linter/config.yaml <dashboard_location>
+```
+
+If you need help with the tool or its output, please contact @team-atlas.
+
 ## Grafana Cloud dashboards
 
 The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Grafana Cloud.
