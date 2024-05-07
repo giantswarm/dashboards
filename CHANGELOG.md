@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - prometheus: scraping info can now be filtered by cluster
 - add some basic linting configuration so we can track down issues in dashboards.
 
+### Added
+
+- ServiceMonitors overview dashboard
+
 ## [3.13.0] - 2024-04-24
 
 ### Changed
