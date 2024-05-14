@@ -19,7 +19,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 139,
   "links": [],
   "panels": [
     {
@@ -77,7 +76,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "The number of samples per target (servicemonitor or podmonitor) remaining after metric relabeling was applied.",
       "fieldConfig": {
@@ -165,7 +164,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(scrape_samples_post_metric_relabeling{cluster_id=~\"$cluster\", job=~\"$job\"}) by (app, job, cluster_id)",
@@ -181,7 +180,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "The number of samples discarded by relabeling.",
       "fieldConfig": {
@@ -269,7 +268,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(scrape_samples_scraped{cluster_id=~\"$cluster\", job=~\"$job\"} - scrape_samples_post_metric_relabeling{cluster_id=~\"$cluster\", job=~\"$job\"}) by (app, job, cluster_id)",
@@ -285,7 +284,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "The approximate number of new series added when scraping.",
       "fieldConfig": {
@@ -373,7 +372,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(max_over_time(scrape_series_added{cluster_id=~\"$cluster\", job=~\"$job\"}[$__interval])) by (cluster_id, job, app)",
@@ -504,7 +503,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "default",
           "value": "default"
         },
@@ -515,6 +514,7 @@
         "name": "datasource",
         "options": [],
         "query": "prometheus",
+        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -532,7 +532,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
         "definition": "label_values(container_cpu_usage_seconds_total{container=\"prometheus\"},cluster_id)",
         "hide": 0,
@@ -552,6 +552,7 @@
         "type": "query"
       },
       {
+        "allValue": ".*",
         "current": {
           "selected": true,
           "text": [
@@ -563,9 +564,41 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
-        "definition": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\"},job)",
+        "definition": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\"},team)",
+        "description": "Job (usually a ServiceMonitor or a PodMonitor)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "team",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\"},team)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\", team=~\"$team\"},job)",
         "description": "Job (usually a ServiceMonitor or a PodMonitor)",
         "hide": 0,
         "includeAll": true,
@@ -574,7 +607,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\"},job)",
+          "query": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\", team=~\"$team\"},job)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -593,6 +626,6 @@
   "timezone": "browser",
   "title": "ServiceMonitors overview",
   "uid": "edkvr7lj5n9c0c",
-  "version": 9,
+  "version": 1,
   "weekStart": ""
 }
