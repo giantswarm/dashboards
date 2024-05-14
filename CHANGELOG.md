@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ServiceMonitors overview dashboard
+- ServiceMonitors details dashboard
 
 ## [3.13.0] - 2024-04-24
 
