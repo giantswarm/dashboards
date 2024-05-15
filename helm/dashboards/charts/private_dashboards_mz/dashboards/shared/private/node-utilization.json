@@ -64,7 +64,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This dashboard helps to analyze node resource (CPU and RAM) utilization based on resource requests.\n\n**Utilization** is the ratio of resources requested by workloads, divided by the total amount of resources provided by the node. As the cluster owner, your general aim should be to keep both memory and CPU utilization high, to avoid paying for unused resources. On the other hand, you want to keep head room, as maximized utilization can lead to increased latency and instability.\n\nFor CPU, the basis in this dashboard are _logical_ cores as provided by the `machine_cpu_cores` metric. This may differ from the _physical_ number of cores.",
+            "content": "This dashboard helps to analyze node resource (CPU and RAM) utilization based on resource requests.\n\n**Utilization** is the ratio of resources requested by workloads, divided by the total amount of resources provided by the node. As the cluster owner, your general aim should be to keep both memory and CPU utilization high, to avoid paying for unused resources. On the other hand, you want to keep head room, as maximized utilization can lead to increased latency and instability.\n\nFor CPU, the basis in this dashboard is _allocatable_ CPU as provided by the `kube_node_status_allocatable` metric. This will differ from the _physical_ number of cores.",
             "mode": "markdown"
           },
           "pluginVersion": "10.4.0",
@@ -242,7 +242,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Most recent utilization based on resource requests divided by the resource capacity",
+      "description": "Most recent utilization based on resource requests divided by the allocatable resource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -315,7 +315,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n        (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)",
           "instant": true,
           "legendFormat": "Memory",
           "range": false,
@@ -327,7 +327,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)",
           "hide": false,
           "instant": false,
           "legendFormat": "CPU",
@@ -395,7 +395,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)\n",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -403,7 +403,7 @@
           "refId": "A"
         }
       ],
-      "title": "Memory capacity",
+      "title": "Allocatable memory",
       "type": "stat"
     },
     {
@@ -531,7 +531,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)\n",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -539,7 +539,7 @@
           "refId": "A"
         }
       ],
-      "title": "CPU capacity",
+      "title": "Allocatable CPU",
       "type": "stat"
     },
     {
@@ -792,7 +792,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n)",
           "instant": false,
           "legendFormat": "Average memory utilization",
           "range": true,
@@ -907,7 +907,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Total CPU requests, divided by the number of cores available in nodes",
+      "description": "Total CPU requests, divided by the amount of CPU available in nodes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -993,7 +993,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n)",
+          "expr": "avg(\n    kube_node_role{role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n)",
           "instant": false,
           "legendFormat": "Average CPU utilization",
           "range": true,
@@ -1304,7 +1304,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(machine_memory_bytes{cluster_id=\"$cluster\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n        /\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"memory\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -1333,7 +1333,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(machine_cpu_cores{cluster_id=\"$cluster\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
+          "expr": "sum(\n    kube_node_role{cluster_id=\"$cluster\",role=~\"$role\"} * 0\n    + on(node) group_left()\n    (\n        sum(kube_pod_container_resource_requests{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n        /\n        sum(kube_node_status_allocatable{cluster_id=\"$cluster\",resource=\"cpu\"}) by (node)\n    )\n) without (app, cluster_id, cluster_type, container, customer, endpoint, installation, instance, job, namespace, organization, pipeline, pod, provider, service, service_priority)",
           "format": "table",
           "hide": false,
           "instant": true,
