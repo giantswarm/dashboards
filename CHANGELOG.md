@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14.1] - 2024-05-15
+
 ### Changed
 
 - Change "Node utilization" dashboard to use allocatable over capacity, to better reflect the available resources of the nodes.
@@ -1015,7 +1017,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.14.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.14.1...HEAD
+[3.14.1]: https://github.com/giantswarm/dashboards/compare/v3.14.0...v3.14.1
 [3.14.0]: https://github.com/giantswarm/dashboards/compare/v3.13.0...v3.14.0
 [3.13.0]: https://github.com/giantswarm/dashboards/compare/v3.12.0...v3.13.0
 [3.12.0]: https://github.com/giantswarm/dashboards/compare/v3.11.4...v3.12.0
