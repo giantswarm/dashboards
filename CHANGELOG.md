@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14.0] - 2024-05-15
+
 ### Fixed
 
 - Fix loki and mimir mixins recording rules
@@ -1009,7 +1011,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.13.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.14.0...HEAD
+[3.14.0]: https://github.com/giantswarm/dashboards/compare/v3.13.0...v3.14.0
 [3.13.0]: https://github.com/giantswarm/dashboards/compare/v3.12.0...v3.13.0
 [3.12.0]: https://github.com/giantswarm/dashboards/compare/v3.11.4...v3.12.0
 [3.11.4]: https://github.com/giantswarm/dashboards/compare/v3.11.3...v3.11.4
