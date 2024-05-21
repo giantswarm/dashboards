@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add datasource variable to Prometheus dashboard
+
 ## [3.14.1] - 2024-05-15
 
 ### Changed
