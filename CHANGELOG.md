@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add datasource variable to Prometheus dashboard
+
 ### Fixed
 
 - Adjust panel positions to fill width and move Mimir related panel under related section
