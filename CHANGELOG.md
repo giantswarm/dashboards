@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.0] - 2024-05-23
+
 ### Added
 
 - Add datasource variable to Prometheus dashboard
@@ -1031,7 +1033,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.14.2...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.15.0...HEAD
+[3.15.0]: https://github.com/giantswarm/dashboards/compare/v3.14.2...v3.15.0
 [3.14.2]: https://github.com/giantswarm/dashboards/compare/v3.14.1...v3.14.2
 [3.14.1]: https://github.com/giantswarm/dashboards/compare/v3.14.0...v3.14.1
 [3.14.0]: https://github.com/giantswarm/dashboards/compare/v3.13.0...v3.14.0
