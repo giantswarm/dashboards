@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Move SLO reporting dashboard to be public.
+
 ## [3.15.1] - 2024-05-29
 
 ### Fix
