@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Remove EFK dashboards.
+
 ## [3.15.1] - 2024-05-29
 
 ### Fix
