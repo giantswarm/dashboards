@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Move SLO reporting dashboard to be public.
 
+### Fixed
+
+- Add missing data source to atlas dashboards.
+
 ### Removed
 
 - Remove EFK dashboards.
