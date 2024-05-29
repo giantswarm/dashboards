@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add missing data source to atlas dashboards.
 - Fix missing provider specific dashboards.
+- Fix prometheus-cost-estimation dashboard.
 
 ### Removed
 
