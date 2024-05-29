@@ -78,7 +78,6 @@ There's been some extra changes done interactively with Grafana UI.
 * Added `disk usage` to Write and Backend path panel
 * Added `total pods` to Write, Read and Backend panels
 
-
 # Loki canary
 
 This one was generated from the [mixins](https://github.com/grafana/loki/tree/main/production/loki-mixin) following these steps:
