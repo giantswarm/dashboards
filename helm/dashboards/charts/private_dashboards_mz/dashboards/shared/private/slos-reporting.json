@@ -25,7 +25,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 121,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -86,10 +85,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -308,10 +308,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -338,7 +339,7 @@
       },
       "id": 53,
       "panels": [],
-      "title": "Public NGINX Ingress",
+      "title": "Ingress per class",
       "type": "row"
     },
     {
@@ -385,10 +386,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -452,7 +454,7 @@
           "decimals": 2,
           "mappings": [],
           "max": 1.0001,
-          "min": 0.999,
+          "min": 0.5,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -531,8 +533,9 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "min(1,1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"cluster-nginx-availability\", cluster_id=\"$cluster\"})[30d:1h]))",
-          "legendFormat": "Public Ingress",
+          "expr": "1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"ingress-availability\", cluster_id=\"$cluster\"}) by (ingress_class)[30d:1h])",
+          "hide": false,
+          "legendFormat": "{{ ingress_class }}",
           "range": true,
           "refId": "A"
         },
@@ -549,7 +552,7 @@
           "refId": "B"
         }
       ],
-      "title": "Public NGINX Ingress Availability",
+      "title": "Ingress Class Availability",
       "type": "timeseries"
     },
     {
@@ -593,11 +596,11 @@
         "x": 0,
         "y": 12
       },
-      "id": 60,
+      "id": 55,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
-        "justifyMode": "center",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -606,10 +609,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -617,8 +621,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "min(1,1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"cluster-nginx-availability\", cluster_id=\"$cluster\"})[30d:1h]))",
-          "legendFormat": "Internal Ingress Tests",
+          "exemplar": false,
+          "expr": "1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"ingress-availability\", cluster_id=\"$cluster\"}) by (ingress_class) [30d:1h])",
+          "instant": false,
+          "legendFormat": "{{ ingress_class }}",
           "range": true,
           "refId": "A"
         }
@@ -632,303 +638,6 @@
         "w": 24,
         "x": 0,
         "y": 16
-      },
-      "id": 58,
-      "panels": [],
-      "title": "Private NGINX Ingress",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 7,
-        "x": 0,
-        "y": 17
-      },
-      "id": 68,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "$sla",
-          "legendFormat": "SLA",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Service Level Agreement (SLA)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "Average SLA over last 30d",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": true,
-            "axisLabel": "",
-            "axisPlacement": "right",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 3,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 2,
-          "mappings": [],
-          "max": 1.0001,
-          "min": 0.999,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "SLA"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.spanNulls",
-                "value": true
-              },
-              {
-                "id": "custom.fillOpacity",
-                "value": 25
-              },
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    15,
-                    10
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 1
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 17,
-        "x": 7,
-        "y": 17
-      },
-      "id": 56,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "width": 0
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "min(1,1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"cluster-nginx-availability\", cluster_id=\"$cluster\"})[30d:1h]))",
-          "legendFormat": "Public Ingress",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "$sla",
-          "hide": false,
-          "legendFormat": "SLA",
-          "range": true,
-          "refId": "C"
-        }
-      ],
-      "title": "Private NGINX Ingress Availability",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "max": 1,
-          "min": 0,
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 99.5
-              },
-              {
-                "color": "green",
-                "value": 99.95
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 7,
-        "x": 0,
-        "y": 20
-      },
-      "id": 55,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "min(1,1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"cluster-internal-nginx-availability\", cluster_id=\"$cluster\"})[30d:1h]))",
-          "legendFormat": "Internal Ingress Tests",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 24
       },
       "id": 2,
       "panels": [],
@@ -964,7 +673,7 @@
         "h": 3,
         "w": 7,
         "x": 0,
-        "y": 25
+        "y": 17
       },
       "id": 69,
       "options": {
@@ -979,10 +688,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -1102,8 +812,9 @@
         "h": 7,
         "w": 17,
         "x": 7,
-        "y": 25
+        "y": 17
       },
+      "id": 70,
       "options": {
         "legend": {
           "calcs": [],
@@ -1124,7 +835,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"dns-dns-service-availability\", cluster_id=\"$cluster\"})[30d:1h])",
+          "expr": "1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"dns-availability\", cluster_id=\"$cluster\"})[30d:1h])",
           "legendFormat": "DNS Resolution",
           "range": true,
           "refId": "A"
@@ -1184,7 +895,7 @@
         "h": 4,
         "w": 7,
         "x": 0,
-        "y": 28
+        "y": 20
       },
       "id": 48,
       "options": {
@@ -1199,10 +910,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -1210,7 +922,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"dns-dns-service-availability\", cluster_id=\"$cluster\"})[30d:1h])",
+          "expr": "1-avg_over_time(avg(slo:sli_error:ratio_rate1h{sloth_id=\"dns-availability\", cluster_id=\"$cluster\"})[30d:1h])",
           "legendFormat": "DNS Resolution",
           "range": true,
           "refId": "A"
@@ -1238,7 +950,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -1309,6 +1021,6 @@
   "timezone": "utc",
   "title": "SLOs / Reporting",
   "uid": "slo-reporting",
-  "version": 7,
+  "version": 8,
   "weekStart": ""
 }
