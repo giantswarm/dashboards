@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix missing provider specific dashboards.
 - Update alertmanager-overview dashboard (angular deprecation).
 - Update fluentbit dashboard (angular deprecation).
+- Update operatorkit dashboard (angular deprecation).
 - Update prometheus-overview dashboard (angular deprecation).
 - Update prometheus-remote-write dashboard (angular deprecation).
 
