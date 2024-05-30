@@ -68,7 +68,7 @@
         "content": "This dashboard provides metrics about alerts, inhibitions, and silences on a cluster level (workload cluster or management cluster).\n\n**Alert:** An alert is created by Prometheus Alertmanager based on a set of rules. For example, when some metric exceeds a configured threshold.\n\nAlerts are defined in the [prometheus-rules](https://github.com/giantswarm/prometheus-rules) repository. To learn about a particular alert, you can search that repository for the alert name.\n\n**Inhibition:** An inhibition is a rule to prevent an alert from being created. At Giant Swarm we use this for example to avoid certain alerts from being created when a cluster is freshly created, as this would otherwise trigger pages to staff on call.\n\n**Silence:** A silence is another specific override rule to opress one or several alerts from firing. Silences are not cluster specific, but instead are effective for the entire installation.",
         "mode": "markdown"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -125,10 +125,12 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value_and_name"
+        "textMode": "value_and_name",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -185,7 +187,6 @@
         }
       ],
       "title": "Global alerts stats",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -230,10 +231,12 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
@@ -291,7 +294,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -301,6 +304,12 @@
           },
           "custom": {
             "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineWidth": 0,
             "spanNulls": false
           },
@@ -347,7 +356,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(ALERTS{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', severity=~'($severity)|$^', team=~'($team)|$^'})by(alertname, cluster_id)",
@@ -363,7 +372,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -383,8 +392,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -417,7 +425,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -473,8 +481,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "owner:team-atlas",
     "topic:observability",
@@ -488,8 +495,9 @@
           "text": "default",
           "value": "default"
         },
-        "hide": 2,
+        "hide": 0,
         "includeAll": false,
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -609,7 +617,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
         "definition": "query_result(count(max_over_time(ALERTS{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
         "hide": 0,
@@ -650,6 +658,6 @@
   "timezone": "UTC",
   "title": "Alerts",
   "uid": "L65Jdq3Zk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

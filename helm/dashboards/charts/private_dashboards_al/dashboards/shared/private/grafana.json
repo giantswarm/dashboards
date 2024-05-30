@@ -40,6 +40,7 @@
       "type": "row"
     },
     {
+      "datasource": "$datasource",
       "description": "Pod restarts",
       "fieldConfig": {
         "defaults": {
@@ -114,6 +115,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -185,6 +187,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "description": "The number of dashboards existing",
       "fieldConfig": {
         "defaults": {
@@ -257,6 +260,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "description": "As a percentage of Grafana API requests on selected range.",
       "fieldConfig": {
         "defaults": {
@@ -331,6 +335,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "description": "As a percentage of proxy requests (Prom, Elasticsearch, ...) on selected range.",
       "fieldConfig": {
         "defaults": {
@@ -404,6 +409,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -464,7 +470,7 @@
       "pluginVersion": "8.4.2",
       "targets": [
         {
-          "expr": "sum(irate(grafana_api_response_status_total[5m]))",
+          "expr": "sum(irate(grafana_api_response_status_total[$__rate_interval]))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -475,6 +481,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "description": "Number of CPU cores reserved",
       "fieldConfig": {
         "defaults": {
@@ -550,6 +557,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "description": "Amount of memory reserved",
       "fieldConfig": {
         "defaults": {
@@ -636,6 +644,7 @@
       "type": "row"
     },
     {
+      "datasource": "$datasource",
       "description": "This is supposed to display the number of logins over time.",
       "fieldConfig": {
         "defaults": {
@@ -720,6 +729,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Current users logged in",
       "fieldConfig": {
         "defaults": {
@@ -805,6 +815,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Number of proxy requests processed over time",
       "fieldConfig": {
         "defaults": {
@@ -904,6 +915,7 @@
       "type": "row"
     },
     {
+      "datasource": "$datasource",
       "description": "Time it takes to fulfill a query via the proxy",
       "fieldConfig": {
         "defaults": {
@@ -989,6 +1001,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Time it takes to fetch a dashboard (the main resource)",
       "fieldConfig": {
         "defaults": {
@@ -1074,6 +1087,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Errors in requests to the Grafana API",
       "fieldConfig": {
         "defaults": {
@@ -1148,7 +1162,7 @@
       "pluginVersion": "8.4.2",
       "targets": [
         {
-          "expr": "sum(irate(grafana_api_response_status_total{code!=\"200\"}[3m]))",
+          "expr": "sum(irate(grafana_api_response_status_total{code!=\"200\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1160,6 +1174,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Errors in requests to the datasource proxy",
       "fieldConfig": {
         "defaults": {
@@ -1235,7 +1250,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(grafana_proxy_response_status_total{code!=\"200\"}[3m]))",
+          "expr": "sum(irate(grafana_proxy_response_status_total{code!=\"200\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "",
@@ -1255,7 +1270,22 @@
     "component:grafana"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "label": "Data source",
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",

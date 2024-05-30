@@ -37,7 +37,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Total cpu used by all promxy pods",
       "fieldConfig": {
@@ -90,10 +90,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(sum(rate(container_cpu_usage_seconds_total{container=\"promxy-app\", pod=~\"promxy-app-.*\", cluster_type=\"management_cluster\"}[3m])) by (pod))",
+          "expr": "sum(sum(rate(container_cpu_usage_seconds_total{container=\"promxy-app\", pod=~\"promxy-app-.*\", cluster_type=\"management_cluster\"}[$__rate_interval])) by (pod))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -106,7 +106,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Total memory used by all promxy pods",
       "fieldConfig": {
@@ -160,7 +160,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(sum(max_over_time(\n    container_memory_usage_bytes{container=\"promxy-app\", pod=~\"promxy-app-.*\", cluster_type=\"management_cluster\"}[$__range]\n)) by (container, pod, cluster_type))",
@@ -189,7 +189,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Shows how much CPU is reserved by prometheus and how much is actually used",
       "fieldConfig": {
@@ -294,10 +294,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}[3m])) by (pod)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}[$__rate_interval])) by (pod)",
           "legendFormat": "used {{pod}}",
           "range": true,
           "refId": "A"
@@ -305,7 +305,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max(\n    kube_pod_container_resource_limits{container=\"prometheus\",resource=\"cpu\", unit=\"core\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
@@ -317,7 +317,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max(node:node_num_cpu:sum{node=~\".+\"} * on (node) group_right(pod) (topk(1, kube_pod_info{pod=~\"prometheus-.*-0\"}))) by (namespace)",
@@ -333,7 +333,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Total memory used by all prometheus pods",
       "fieldConfig": {
@@ -388,10 +388,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}[3m])) by (pod))",
+          "expr": "sum(sum(rate(container_cpu_usage_seconds_total{container=\"prometheus\", pod=~\"prometheus-($cluster)-.*\", cluster_type=~\"management_cluster\"}[$__rate_interval])) by (pod))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -403,7 +403,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Shows how much memory is reserved by prometheus",
       "fieldConfig": {
@@ -531,7 +531,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max(\n    container_memory_working_set_bytes{container=\"prometheus\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n    ) by (container, pod, cluster_type)",
@@ -542,7 +542,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max(\n    container_memory_usage_bytes{container=\"prometheus\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
@@ -554,7 +554,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max(\n    kube_pod_container_resource_limits{container=\"prometheus\",resource=\"memory\", unit=\"byte\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}\n) by (container, pod, cluster_type)",
@@ -566,7 +566,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max (node_memory_MemTotal_bytes{node=~\".+\"} * on (node) group_right(pod) (kube_pod_info{pod=~\"prometheus-.*-0\",cluster_type=\"management_cluster\", namespace=~\"($cluster)-prometheus\"})) by (namespace)",
@@ -582,7 +582,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Total memory used by all prometheus pods",
       "fieldConfig": {
@@ -637,7 +637,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(sum(max_over_time(\n    container_memory_usage_bytes{container=\"prometheus\", pod=~\"prometheus-($cluster).*\", cluster_type=~\"management_cluster\"}[$__range]\n)) by (container, pod, cluster_type))",
@@ -665,7 +665,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Storage space used by prometheus",
       "fieldConfig": {
@@ -747,7 +747,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "max (\n        kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n        - \n        kubelet_volume_stats_available_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    ) by (persistentvolumeclaim)",
@@ -758,7 +758,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(max (\n        kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n        - \n        kubelet_volume_stats_available_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    ) by (persistentvolumeclaim))",
@@ -774,7 +774,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Total storage space used by all prometheus instances on the installation",
       "fieldConfig": {
@@ -827,7 +827,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(max (\n        kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n        - \n        kubelet_volume_stats_available_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    ) by (persistentvolumeclaim))",
@@ -853,7 +853,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -934,10 +934,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(irate(container_network_receive_bytes_total{pod=~\"prometheus-($cluster)-.*\"}[5m])) by (pod)",
+          "expr": "sum(irate(container_network_receive_bytes_total{pod=~\"prometheus-($cluster)-.*\"}[$__rate_interval])) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -949,7 +949,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1030,10 +1030,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(irate(container_network_transmit_bytes_total{pod=~\"prometheus-($cluster)-.*\"}[5m])) by (pod)",
+          "expr": "sum(irate(container_network_transmit_bytes_total{pod=~\"prometheus-($cluster)-.*\"}[$__rate_interval])) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1058,7 +1058,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "Total number of time series in prometheus",
       "fieldConfig": {
@@ -1127,7 +1127,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -1153,6 +1153,24 @@
     "list": [
       {
         "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
           "selected": true,
           "text": [
             "All"
@@ -1163,7 +1181,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
         "definition": "label_values(kube_pod_container_info{image=~\".*prometheus.*\"},cluster_id)",
         "description": "Allows to select a particular cluster in the installation",
@@ -1177,7 +1195,7 @@
           "query": "label_values(kube_pod_container_info{image=~\".*prometheus.*\"},cluster_id)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
