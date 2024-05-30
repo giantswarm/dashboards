@@ -569,7 +569,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "max (node_memory_MemTotal_bytes{node=~\".+\"} * on (node) group_right(pod) (kube_pod_info{pod=~\"prometheus-.*-0\",cluster_type=\"management_cluster\", namespace=~\"($cluster)-prometheus\"})) by (namespace)",
+          "expr": "max (sum(node_memory_MemTotal_bytes{node=~\".+\"}) by (cluster_id, node) * on (cluster_id, node) group_right(pod) (kube_pod_info{pod=~\"prometheus-.*-0\",cluster_type=\"management_cluster\", namespace=~\"($cluster)-prometheus\"})) by (namespace)",
           "hide": false,
           "legendFormat": "node memory - {{ namespace }}",
           "range": true,
