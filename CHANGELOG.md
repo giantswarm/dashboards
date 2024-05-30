@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Move SLO reporting dashboard to be public.
+- Get rid of the `app` label in Atlas dashboards.
 
 ### Fixed
 
@@ -133,7 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -  Add a CAPA aggregated error logs dashboard.
-  
+
 ## [3.10.4] - 2024-04-10
 
 ### Fixed
@@ -576,7 +577,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add AWS ENA Performance 
+- Add AWS ENA Performance
 - Updated team labels for team-rocket
 - Add graph in Node Overview to identify emptydir growth
 - Update kube-mixins to 0.12
