@@ -9,12 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.16.1] - 2024-06-04
 
+### Changed
+
+- Get rid of the `app` label in Atlas dashboards.
+
 ## [3.16.0] - 2024-05-30
 
 ### Changed
 
 - Move SLO reporting dashboard to be public.
-- Get rid of the `app` label in Atlas dashboards.
 
 ### Fixed
 
