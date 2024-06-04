@@ -36,7 +36,7 @@
           "uid": "P8E80F9AEF21F6940"
         },
         "enable": true,
-        "expr": "{app=\"prometheus\", instance=~\"$cluster\"} |= `Starting Prometheus Server`",
+        "expr": "{container=\"prometheus\", instance=~\"$cluster\"} |= `Starting Prometheus Server`",
         "iconColor": "green",
         "instant": false,
         "name": "Prometheus Start logs",
@@ -115,7 +115,7 @@
                 "uid": "P8E80F9AEF21F6940"
               },
               "editorMode": "code",
-              "expr": "{app=\"prometheus\", instance=~\"$cluster\"}",
+              "expr": "{container=\"prometheus\", instance=~\"$cluster\"}",
               "queryType": "range",
               "refId": "A"
             }
@@ -568,7 +568,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{job=~\"($cluster)-prometheus.*\", quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{cluster_id}} - 0.99 quantile",
@@ -582,7 +582,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{job=~\"($cluster)-prometheus.*\", quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{cluster_id}} - 0.9 quantile",
@@ -596,7 +596,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_rule_evaluation_duration_seconds{app=\"prometheus\",quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
+          "expr": "prometheus_rule_evaluation_duration_seconds{job=~\"($cluster)-prometheus.*\", quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{cluster_id}} - 0.5 quantile",
@@ -701,7 +701,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
+          "expr": "prometheus_notifications_latency_seconds{job=~\"($cluster)-prometheus.*\", quantile=\"0.99\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{cluster_id}} - 0.99 quantile",
@@ -715,7 +715,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
+          "expr": "prometheus_notifications_latency_seconds{job=~\"($cluster)-prometheus.*\", quantile=\"0.9\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{cluster_id}} - 0.9 quantile",
@@ -729,7 +729,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_notifications_latency_seconds{app=\"prometheus\",quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
+          "expr": "prometheus_notifications_latency_seconds{job=~\"($cluster)-prometheus.*\", quantile=\"0.5\", cluster_id=~\"($cluster)\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{cluster_id}} - 0.5 quantile",
@@ -1389,7 +1389,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "max (\n    (\n        kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n        - \n        kubelet_volume_stats_available_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    )\n    / kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", app=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    * 100\n) by (persistentvolumeclaim)",
+          "expr": "max (\n    (\n        kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", job=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n        - \n        kubelet_volume_stats_available_bytes{cluster_type=~\"management_cluster\", job=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    )\n    / kubelet_volume_stats_capacity_bytes{cluster_type=~\"management_cluster\", job=\"kubelet\", persistentvolumeclaim=~\"prometheus-($cluster)-db-prometheus-($cluster)-.*\"}\n    * 100\n) by (persistentvolumeclaim)",
           "legendFormat": "{{persistentvolumeclaim}}",
           "range": true,
           "refId": "A"
@@ -1416,7 +1416,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Number of samples scraped by app / job.\n\nShows which jobs scrape the most data.\n\nMetric: `scrape_samples_scraped`",
+      "description": "Number of samples scraped by job.\n\nShows which jobs scrape the most data.\n\nMetric: `scrape_samples_scraped`",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1475,9 +1475,9 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(10, sum(scrape_samples_scraped{cluster_id=~\"$cluster\"}) by (app, job, cluster_id))",
+          "expr": "topk(10, sum(scrape_samples_scraped{cluster_id=~\"$cluster\"}) by (job, cluster_id))",
           "instant": true,
-          "legendFormat": "{{app}} | {{job}} | {{cluster_id}}",
+          "legendFormat": "{{job}} | {{cluster_id}}",
           "range": false,
           "refId": "A"
         }
@@ -1625,7 +1625,7 @@
           "exemplar": false,
           "expr": "topk(10, max_over_time(scrape_series_added{cluster_id=~\"$cluster\"}[$__rate_interval]))",
           "instant": true,
-          "legendFormat": "{{job}} | {{app}} | {{cluster_id}}",
+          "legendFormat": "{{job}} | {{cluster_id}}",
           "range": false,
           "refId": "A"
         }
