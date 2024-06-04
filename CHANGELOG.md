@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.16.1] - 2024-06-04
+
 ## [3.16.0] - 2024-05-30
 
 ### Changed
@@ -1063,7 +1065,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.16.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.16.1...HEAD
+[3.16.1]: https://github.com/giantswarm/dashboards/compare/v3.16.0...v3.16.1
 [3.16.0]: https://github.com/giantswarm/dashboards/compare/v3.15.1...v3.16.0
 [3.15.1]: https://github.com/giantswarm/dashboards/compare/v3.15.0...v3.15.1
 [3.15.0]: https://github.com/giantswarm/dashboards/compare/v3.14.2...v3.15.0
