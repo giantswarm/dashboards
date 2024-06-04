@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Replace Cluster ID with cluster in dashboard labels.
+- remotewrite: improve legends
 
 ### Fixed
 
