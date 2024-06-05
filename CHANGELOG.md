@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add missing datasource to api-performance dashboard and fix tags.
 - Lint the capi and capa aggregated-error-logs dashboards to have proper datasource variables.
 
+### Removed
+
+- Remove vintage azure dashboards.
+
 ## [3.16.1] - 2024-06-04
 
 ### Changed
