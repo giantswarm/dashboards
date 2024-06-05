@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Lint the capi and capa aggregated-error-logs dashboards to have proper datasource variables.
+
 ### Removed
 
 - Remove vintage azure dashboards.
