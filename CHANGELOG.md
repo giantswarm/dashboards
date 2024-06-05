@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Add missing datasource to api-security dashboard.
+
 ## [3.16.1] - 2024-06-04
 
 ### Changed
