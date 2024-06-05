@@ -11,15 +11,112 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add script to update all mimir dashboards from mixins.
 
-<<<<<<< HEAD
-=======
+### Changed
+
+- Replace Cluster ID with cluster in dashboard labels.
+
+### Fixed
+
+- Add missing datasource to api-security dashboard.
+- Add missing datasource to api-performance dashboard and fix tags.
+- Add missing datasource to `api-performance` dashboard and fix tags.
+- Add missing datasource to `certificate` dashboard and fix tags.
+- Lint the capi and capa aggregated-error-logs dashboards to have proper datasource variables.
+
+### Removed
+
+- Remove vintage azure dashboards.
+
+## [3.16.1] - 2024-06-04
+
+### Changed
+
+- Get rid of the `app` label in Atlas dashboards.
+
+## [3.16.0] - 2024-05-30
+
+### Changed
+
+- Move SLO reporting dashboard to be public.
+
+### Fixed
+
+- Add missing data source to atlas dashboards.
+- Fix missing provider specific dashboards.
+- Fix prometheus-cost-estimation dashboard.
+- Update alertmanager-overview dashboard (angular deprecation).
+- Update fluentbit dashboard (angular deprecation).
+- Update operatorkit dashboard (angular deprecation).
+- Update prometheus-overview dashboard (angular deprecation).
+- Update prometheus-remote-write dashboard (angular deprecation).
+
+### Removed
+
+- Remove prometheus benchmark dashboard.
+- Remove EFK dashboards.
+- Removed KVM dashboards.
+
+## [3.15.1] - 2024-05-29
+
+### Fix
+
+- Fix missing ingress slo in slo reporting.
+
+## [3.15.0] - 2024-05-23
+
+### Added
+
+- Add datasource variable to Prometheus dashboard
+
+### Fixed
+
+- Adjust panel positions to fill width and move Mimir related panel under related section
+
+## [3.14.2] - 2024-05-20
+
+### Changed
+
+- ServiceMonitors Overview dashboard: add RAM usage estimation
+
+## [3.14.1] - 2024-05-15
+
+### Changed
+
+- Change "Node utilization" dashboard to use allocatable over capacity, to better reflect the available resources of the nodes.
+
+## [3.14.0] - 2024-05-15
+
+### Fixed
+
+- Fix loki and mimir mixins recording rules
+- Fix atlas dashboard tags.
+- Fix storage related panes on zot's dashboards
+- prometheus: scraping info can now be filtered by cluster
+- add some basic linting configuration so we can track down issues in dashboards.
+
+### Added
+
+- ServiceMonitors overview dashboard
+- ServiceMonitors details dashboard
+
+## [3.13.0] - 2024-04-24
+
+### Changed
+
+- Change "Worker node utilization" dashboard to "Node utilization", also allowing to analyze data for control plane nodes.
+
+## [3.12.0] - 2024-04-23
+
+### Added
+
+- Add dashboard "Worker node utilization".
+
 ## [3.11.4] - 2024-04-17
 
 ### Changed
 
 - Updated "In-cluster container registry (Zot)" dashboard to use metric `kubelet_volume_stats_used_bytes` for storage used.
 
->>>>>>> a399ac2e6810d2995c4d83d285514f4bc6c2ad0c
 ## [3.11.3] - 2024-04-17
 
 ### Changed
@@ -66,7 +163,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -  Add a CAPA aggregated error logs dashboard.
-  
+
 ## [3.10.4] - 2024-04-10
 
 ### Fixed
@@ -509,7 +606,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add AWS ENA Performance 
+- Add AWS ENA Performance
 - Updated team labels for team-rocket
 - Add graph in Node Overview to identify emptydir growth
 - Update kube-mixins to 0.12
@@ -992,7 +1089,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.11.4...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.16.1...HEAD
+[3.16.1]: https://github.com/giantswarm/dashboards/compare/v3.16.0...v3.16.1
+[3.16.0]: https://github.com/giantswarm/dashboards/compare/v3.15.1...v3.16.0
+[3.15.1]: https://github.com/giantswarm/dashboards/compare/v3.15.0...v3.15.1
+[3.15.0]: https://github.com/giantswarm/dashboards/compare/v3.14.2...v3.15.0
+[3.14.2]: https://github.com/giantswarm/dashboards/compare/v3.14.1...v3.14.2
+[3.14.1]: https://github.com/giantswarm/dashboards/compare/v3.14.0...v3.14.1
+[3.14.0]: https://github.com/giantswarm/dashboards/compare/v3.13.0...v3.14.0
+[3.13.0]: https://github.com/giantswarm/dashboards/compare/v3.12.0...v3.13.0
+[3.12.0]: https://github.com/giantswarm/dashboards/compare/v3.11.4...v3.12.0
 [3.11.4]: https://github.com/giantswarm/dashboards/compare/v3.11.3...v3.11.4
 [3.11.3]: https://github.com/giantswarm/dashboards/compare/v3.11.2...v3.11.3
 [3.11.2]: https://github.com/giantswarm/dashboards/compare/v3.11.1...v3.11.2

@@ -2,9 +2,14 @@
 
 This project currently contains Giant Swarm public dashboards.
 
-The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place and in the same format.
+The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place.
 
-## Sub-charts
+## Management cluster's dashboards
+
+The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana.
+The "public" ones are accessible by the customer, and the "private" ones are only accessible by Giant Swarm employees.
+
+### Sub-charts
 
 This chart is divided in 4 different charts, to get around helm charts size limitations:
 - `helm/dashboards/charts/public_dashboards/` for public dashboards.
@@ -12,11 +17,27 @@ This chart is divided in 4 different charts, to get around helm charts size limi
 - `helm/dashboards/charts/private_dashboards_mz/` for private dashboards starting with letters M to Z.
 - `helm/dashboards/` for other dashboards.
 
-## Management cluster's dashboards
+### Dashboard format
 
-The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana.
-The "public" ones are accessible by the customer, and the "private" ones are only accessible by Giant Swarm employees.
-Those dashboards are currently in JSON and will eventually be replaced to jsonnet format.
+All dashboards should have proper tags to facilitate their discovery.
+To that end, we advise the following tags:
+- `owner:team-name`: Team that owns the dashboard
+- `component:component_name`: Name of the component this dashboard is about
+- `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
+
+### Linting
+
+Atlas introduced a dashboard linter to ensure some basic dashboard rules are followed (e.g. always have a datasource present) to help with the migration to Mimir. 
+This will most likely be moved to CI later but until it is you can run it like this:
+
+```sh
+# Install the tool
+go install github.com/grafana/dashboard-linter@latest
+### Run on a specific dashboard
+dashboard-linter lint -c linter/config.yaml <dashboard_location>
+```
+
+If you need help with the tool or its output, please contact @team-atlas.
 
 ## Grafana Cloud dashboards
 

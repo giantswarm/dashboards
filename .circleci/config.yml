@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  architect: giantswarm/architect@5.1.1
+  architect: giantswarm/architect@5.2.0
 
 jobs:
   build-and-deploy-dashboards:
     docker:
-      - image: cimg/go:1.22.2
+      - image: cimg/go:1.22.4
     steps:
       - run: go install github.com/google/go-jsonnet/cmd/jsonnet@latest
       - run: git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib
@@ -28,6 +28,7 @@ workflows:
 
       - architect/push-to-app-catalog:
           context: "architect"
+          executor: app-build-suite
           name: app-catalog
           app_catalog: "control-plane-catalog"
           app_catalog_test: "control-plane-test-catalog"
