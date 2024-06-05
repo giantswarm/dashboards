@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Add missing datasource to api-security dashboard.
+- Add missing datasource to api-performance dashboard and fix tags.
 - Add missing datasource to `api-performance` dashboard and fix tags.
 - Add missing datasource to `certificate` dashboard and fix tags.
 - Lint the capi and capa aggregated-error-logs dashboards to have proper datasource variables.
