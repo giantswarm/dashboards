@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add script to update all mimir dashboards from mixins.
+
 ### Changed
 
 - Replace Cluster ID with cluster in dashboard labels.
@@ -118,6 +122,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Move `node-problem-detector` to be aws only.
+
 
 ### Fixed
 
