@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
+  "id": 103,
   "links": [
     {
       "asDropdown": false,
@@ -406,7 +407,7 @@
           "expr": "(\n  prometheus_remote_storage_highest_timestamp_in_seconds{cluster_id=~\"$cluster\", instance=~\"$instance\"} \n-  \n  ignoring(remote_name, url) group_right(instance) (prometheus_remote_storage_queue_highest_sent_timestamp_seconds{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"} != 0)\n)\n",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -502,11 +503,119 @@
           "expr": "clamp_min(\n  rate(prometheus_remote_storage_highest_timestamp_in_seconds{cluster_id=~\"$cluster\", instance=~\"$instance\"}[5m])  \n- \n  ignoring (remote_name, url) group_right(instance) rate(prometheus_remote_storage_queue_highest_sent_timestamp_seconds{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m])\n, 0)\n",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
       "title": "Rate[5m]",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 26,
+      "panels": [],
+      "title": "Pods",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "count(prometheus_agent_active_series{cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "instant": false,
+          "legendFormat": "{{cluster_id}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Agent replicas",
       "type": "timeseries"
     },
     {
@@ -519,7 +628,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 24
       },
       "id": 18,
       "panels": [],
@@ -599,7 +708,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 25
       },
       "id": 4,
       "options": {
@@ -624,7 +733,7 @@
           "expr": "rate(\n  prometheus_remote_storage_samples_in_total{cluster_id=~\"$cluster\", instance=~\"$instance\"}[5m])\n- \n  ignoring(remote_name, url) group_right(instance) (rate(prometheus_remote_storage_succeeded_samples_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m]) or rate(prometheus_remote_storage_samples_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m]))\n- \n  (rate(prometheus_remote_storage_dropped_samples_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m]) or rate(prometheus_remote_storage_samples_dropped_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m]))\n",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -641,7 +750,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 32
       },
       "id": 19,
       "panels": [],
@@ -721,7 +830,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 33
       },
       "id": 5,
       "options": {
@@ -746,7 +855,7 @@
           "expr": "prometheus_remote_storage_shards{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -817,7 +926,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 33
+        "y": 40
       },
       "id": 6,
       "options": {
@@ -842,7 +951,7 @@
           "expr": "prometheus_remote_storage_shards_max{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -913,7 +1022,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 33
+        "y": 40
       },
       "id": 7,
       "options": {
@@ -938,7 +1047,7 @@
           "expr": "prometheus_remote_storage_shards_min{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1009,7 +1118,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 33
+        "y": 40
       },
       "id": 8,
       "options": {
@@ -1034,7 +1143,7 @@
           "expr": "prometheus_remote_storage_shards_desired{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1051,7 +1160,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 47
       },
       "id": 20,
       "panels": [],
@@ -1114,8 +1223,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1131,7 +1239,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 48
       },
       "id": 9,
       "options": {
@@ -1156,7 +1264,7 @@
           "expr": "prometheus_remote_storage_shard_capacity{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1210,8 +1318,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1227,7 +1334,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 48
       },
       "id": 10,
       "options": {
@@ -1252,7 +1359,7 @@
           "expr": "prometheus_remote_storage_pending_samples{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"} or prometheus_remote_storage_samples_pending{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1269,7 +1376,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 48
+        "y": 55
       },
       "id": 21,
       "panels": [],
@@ -1332,8 +1439,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1349,7 +1455,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 49
+        "y": 56
       },
       "id": 11,
       "options": {
@@ -1428,8 +1534,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1445,7 +1550,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 49
+        "y": 56
       },
       "id": 12,
       "options": {
@@ -1487,7 +1592,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 63
       },
       "id": 22,
       "panels": [],
@@ -1550,8 +1655,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1567,7 +1671,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 57
+        "y": 64
       },
       "id": 13,
       "options": {
@@ -1592,7 +1696,7 @@
           "expr": "rate(prometheus_remote_storage_dropped_samples_total{cluster_id=~\"$cluster\", instance=~\"$instance\"}[5m]) or rate(prometheus_remote_storage_samples_dropped_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1646,8 +1750,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1663,7 +1766,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 57
+        "y": 64
       },
       "id": 14,
       "options": {
@@ -1688,7 +1791,7 @@
           "expr": "rate(prometheus_remote_storage_failed_samples_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1742,8 +1845,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1759,7 +1861,7 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 57
+        "y": 64
       },
       "id": 15,
       "options": {
@@ -1784,7 +1886,7 @@
           "expr": "rate(prometheus_remote_storage_retried_samples_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m]) or rate(prometheus_remote_storage_samples_retried_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -1838,8 +1940,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1855,7 +1956,7 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 57
+        "y": 64
       },
       "id": 16,
       "options": {
@@ -1880,7 +1981,7 @@
           "expr": "rate(prometheus_remote_storage_enqueue_retries_total{cluster_id=~\"$cluster\", instance=~\"$instance\", url=~\"$url\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster_id}}:{{instance}} {{remote_name}}:{{url}}",
+          "legendFormat": "{{cluster_id}}:{{pod}} to {{url}}",
           "refId": "A"
         }
       ],
@@ -2031,6 +2132,6 @@
   "timezone": "UTC",
   "title": "Prometheus / Remote Write",
   "uid": "promRW001",
-  "version": 4,
+  "version": 3,
   "weekStart": ""
 }
