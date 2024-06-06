@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace Cluster ID with cluster in dashboard labels.
 - remotewrite: improve legends
 - remotewrite: add count of agent replicas
+- Reviewed labels used in turtles dashboards
 
 ### Fixed
 
