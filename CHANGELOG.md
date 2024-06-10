@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.17.0] - 2024-06-07
+
 ### Added
 
 - Add script to update all mimir dashboards from mixins.
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - remotewrite: improve legends
 - remotewrite: add count of agent replicas
 - Reviewed labels used in turtles dashboards
+- servicemonitors-overview: add info about agent pods
 
 ### Fixed
 
@@ -1092,7 +1095,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.16.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.17.0...HEAD
+[3.17.0]: https://github.com/giantswarm/dashboards/compare/v3.16.1...v3.17.0
 [3.16.1]: https://github.com/giantswarm/dashboards/compare/v3.16.0...v3.16.1
 [3.16.0]: https://github.com/giantswarm/dashboards/compare/v3.15.1...v3.16.0
 [3.15.1]: https://github.com/giantswarm/dashboards/compare/v3.15.0...v3.15.1
