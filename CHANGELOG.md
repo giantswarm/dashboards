@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `namespace` and `pvc_name` selector to `zot` dashboard.
+
 ## [3.17.0] - 2024-06-07
 
 ### Added
