@@ -103,6 +103,7 @@
       "type": "stat"
     },
     {
+      "datasource": "$datasource",
       "description": "Successful dex responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -210,7 +211,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "datasource": "default",
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "sum (increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",job=\"dex\", code=~\"^[1]..$|[2]..$|^[3]..$\",handler!=\"/healthz\"}[5m]))by (code)",
           "format": "time_series",
@@ -220,7 +221,7 @@
           "refId": "A"
         },
         {
-          "datasource": "default",
+          "datasource": "$datasource",
           "expr": "health",
           "format": "time_series",
           "intervalFactor": 1,
@@ -231,6 +232,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Number of dex error responses in the last 5 minutes. Displays the average value in the selected time window.",
       "fieldConfig": {
         "defaults": {
@@ -407,6 +409,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "description": "Excluding health checks to /healthz",
       "fieldConfig": {
         "defaults": {
@@ -490,7 +493,7 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "datasource": "default",
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "sum(increase(http_requests_total{cluster_id=\"$cluster\",organization=~\"$organization\",job=\"dex\",handler!=\"/healthz\"}[2m])) by (handler, method, code)",
           "format": "time_series",
@@ -521,9 +524,9 @@
           "text": "default",
           "value": "default"
         },
-        "hide": 2,
+        "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -568,7 +571,8 @@
           "text": "talos",
           "value": "talos"
         },
-        "definition": "label_values(http_requests_total{job=\"dex\", organization=\"$organization\"}, cluster_id)",
+        "datasource": "$datasource",
+        "definition": "label_values(http_requests_total{job=\"dex\", organization=\"$organization\"}, cluster_id)",        
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
