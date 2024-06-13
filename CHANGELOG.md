@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Make `Certificate Details` dashboard public
+
 ## [3.18.0] - 2024-06-12
 
 ### Added
