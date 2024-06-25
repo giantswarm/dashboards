@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed the dashboard 'Webhook Health'. 
+- Removed the dashboard 'Webhook Health'.
+- Get rid of the `app` label in Phoenix dashboards.
 
 ## [3.19.0] - 2024-06-13
 
