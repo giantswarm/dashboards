@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Removed the dashboard 'Webhook Health'. 
+
 ## [3.19.0] - 2024-06-13
 
 ### Changed
