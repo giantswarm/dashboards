@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.20.0] - 2024-06-25
+
 ### Removed
 
 - Removed the dashboard 'Webhook Health'. 
@@ -1116,7 +1118,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.19.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.20.0...HEAD
+[3.20.0]: https://github.com/giantswarm/dashboards/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/giantswarm/dashboards/compare/v3.18.0...v3.19.0
 [3.18.0]: https://github.com/giantswarm/dashboards/compare/v3.17.0...v3.18.0
 [3.17.0]: https://github.com/giantswarm/dashboards/compare/v3.16.1...v3.17.0
