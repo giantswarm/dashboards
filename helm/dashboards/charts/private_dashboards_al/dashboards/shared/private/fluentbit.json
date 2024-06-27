@@ -24,6 +24,21 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 42,
+      "panels": [],
+      "repeat": "cluster",
+      "repeatDirection": "h",
+      "title": "Cluster info for $cluster",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "$datasource"
@@ -69,7 +84,7 @@
         "h": 2,
         "w": 2,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 6,
       "maxDataPoints": 100,
@@ -89,19 +104,21 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(kube_pod_info{pod=~\".*fluent-logshipping.*\"})",
+          "expr": "sum(kube_pod_info{pod=~\".*fluent-logshipping.*\", cluster_id=~\"$cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Active Fluent-bit",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -155,7 +172,7 @@
         "h": 2,
         "w": 2,
         "x": 2,
-        "y": 0
+        "y": 1
       },
       "id": 4,
       "maxDataPoints": 100,
@@ -175,15 +192,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_node_status_condition{condition=\"Ready\",status=\"true\"})",
+          "expr": "sum(kube_node_status_condition{condition=\"Ready\",status=\"true\", cluster_id=~\"$cluster\"})",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -242,7 +260,7 @@
         "h": 2,
         "w": 2,
         "x": 4,
-        "y": 0
+        "y": 1
       },
       "id": 36,
       "maxDataPoints": 100,
@@ -262,15 +280,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_node_status_condition{condition!=\"Ready\",status=\"true\"})",
+          "expr": "sum(kube_node_status_condition{condition!=\"Ready\",status=\"true\", cluster_id=~\"$cluster\"})",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -284,7 +303,10 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -323,7 +345,7 @@
         "h": 2,
         "w": 3,
         "x": 6,
-        "y": 0
+        "y": 1
       },
       "id": 33,
       "maxDataPoints": 100,
@@ -343,7 +365,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
@@ -359,7 +381,8 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\"}[$__rate_interval]))",
+          "editorMode": "code",
+          "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\", cluster_id=~\"$cluster\"}[$__rate_interval]))",
           "instant": false,
           "refId": "A"
         }
@@ -411,7 +434,7 @@
         "h": 2,
         "w": 3,
         "x": 9,
-        "y": 0
+        "y": 1
       },
       "id": 37,
       "maxDataPoints": 100,
@@ -431,15 +454,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "1 - sum(:node_memory_MemAvailable_bytes:sum) / sum(kube_node_status_allocatable{resource=\"memory\"})",
+          "expr": "1 - sum(:node_memory_MemAvailable_bytes:sum{cluster_id=~\"$cluster\"}) / sum(kube_node_status_allocatable{resource=\"memory\", cluster_id=~\"$cluster\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -493,7 +517,7 @@
         "h": 2,
         "w": 3,
         "x": 12,
-        "y": 0
+        "y": 1
       },
       "id": 34,
       "maxDataPoints": 100,
@@ -513,15 +537,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\"}) / sum(kube_node_status_allocatable{resource=\"cpu\"})",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", cluster_id=~\"$cluster\"}) / sum(kube_node_status_allocatable{resource=\"cpu\", cluster_id=~\"$cluster\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -575,7 +600,7 @@
         "h": 2,
         "w": 3,
         "x": 15,
-        "y": 0
+        "y": 1
       },
       "id": 38,
       "maxDataPoints": 100,
@@ -595,15 +620,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\"}) / sum(kube_node_status_allocatable{resource=\"memory\"})",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", cluster_id=~\"$cluster\"}) / sum(kube_node_status_allocatable{resource=\"memory\", cluster_id=~\"$cluster\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -657,7 +683,7 @@
         "h": 2,
         "w": 3,
         "x": 18,
-        "y": 0
+        "y": 1
       },
       "id": 35,
       "maxDataPoints": 100,
@@ -677,15 +703,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\"}) / sum(kube_node_status_allocatable{resource=\"cpu\"})",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", cluster_id=~\"$cluster\"}) / sum(kube_node_status_allocatable{resource=\"cpu\", cluster_id=~\"$cluster\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -739,7 +766,7 @@
         "h": 2,
         "w": 3,
         "x": 21,
-        "y": 0
+        "y": 1
       },
       "id": 39,
       "maxDataPoints": 100,
@@ -759,15 +786,16 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\"}) / sum(kube_node_status_allocatable{resource=\"memory\"})",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", cluster_id=~\"$cluster\"}) / sum(kube_node_status_allocatable{resource=\"memory\", cluster_id=~\"$cluster\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -779,7 +807,23 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 43,
+      "panels": [],
+      "title": "Fluentbit info",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -840,7 +884,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 2
+        "y": 7
       },
       "id": 2,
       "options": {
@@ -853,6 +897,7 @@
           "showLegend": false
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "multi",
           "sort": "desc"
         }
@@ -873,13 +918,15 @@
             "9": "c",
             "10": "e"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(fluentbit_input_bytes_total[5m])) by (instance, name)",
+          "expr": "sum(rate(fluentbit_input_bytes_total{cluster_id=~\"$cluster\"}[5m])) by (instance, name, cluster_id)",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ instance }}/{{name}}",
+          "legendFormat": "{{cluster_id}}/{{ instance }}/{{name}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -887,7 +934,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -949,7 +999,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 2
+        "y": 7
       },
       "id": 9,
       "options": {
@@ -962,6 +1012,7 @@
           "showLegend": false
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "multi",
           "sort": "desc"
         }
@@ -982,12 +1033,14 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "sum(rate(fluentbit_output_proc_bytes_total[5m])) by (instance, name)",
+          "editorMode": "code",
+          "expr": "sum(rate(fluentbit_output_proc_bytes_total{cluster_id=~\"$cluster\"}[5m])) by (instance, name, cluster_id)",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ pod }}/{{name}}",
+          "legendFormat": "{{cluster_id}}/{{ instance }}/{{name}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -995,7 +1048,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1056,7 +1112,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 13
       },
       "id": 40,
       "options": {
@@ -1069,6 +1125,7 @@
           "showLegend": false
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "multi",
           "sort": "desc"
         }
@@ -1089,12 +1146,14 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "sum(rate(fluentbit_input_records_total[5m])) by (instance, name)",
+          "editorMode": "code",
+          "expr": "sum(rate(fluentbit_input_records_total{cluster_id=~\"$cluster\"}[5m])) by (instance, name, cluster_id)",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ instance }}/{{name}}",
+          "legendFormat": "{{cluster_id}}/{{ instance }}/{{name}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1102,7 +1161,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1164,7 +1226,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 13
       },
       "id": 41,
       "options": {
@@ -1177,6 +1239,7 @@
           "showLegend": false
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "multi",
           "sort": "desc"
         }
@@ -1197,12 +1260,14 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "sum(rate(fluentbit_output_proc_records_total[5m])) by (instance, name)",
+          "editorMode": "code",
+          "expr": "sum(rate(fluentbit_output_proc_records_total{cluster_id=~\"$cluster\"}[5m])) by (instance, name, cluster_id)",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ pod }}/{{name}}",
+          "legendFormat": "{{cluster_id}}/{{ instance }}/{{name}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1210,7 +1275,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1313,7 +1381,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 19
       },
       "id": 11,
       "options": {
@@ -1328,6 +1396,7 @@
           "showLegend": false
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "multi",
           "sort": "desc"
         }
@@ -1348,12 +1417,14 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "sum(rate(fluentbit_output_retries_total[$__rate_interval])) by (instance, name)",
+          "editorMode": "code",
+          "expr": "sum(rate(fluentbit_output_retries_total{cluster_id=~\"$cluster\"}[$__rate_interval])) by (instance, name, cluster_id)",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}} Retries to {{name}}",
+          "legendFormat": "{{cluster_id}} - {{instance}} Retries to {{name}}",
+          "range": true,
           "refId": "A"
         },
         {
@@ -1370,11 +1441,13 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "sum(rate(fluentbit_output_retries_failed_total[$__rate_interval])) by (instance, name)",
+          "editorMode": "code",
+          "expr": "sum(rate(fluentbit_output_retries_failed_total{cluster_id=~\"$cluster\"}[$__rate_interval])) by (instance, name, cluster_id)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}} Failed Retries to {{ name }}",
+          "legendFormat": "{{cluster_id}} - {{instance}} Failed Retries to {{ name }}",
+          "range": true,
           "refId": "B"
         }
       ],
@@ -1382,7 +1455,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1485,7 +1561,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 14
+        "y": 19
       },
       "id": 10,
       "options": {
@@ -1498,6 +1574,7 @@
           "showLegend": true
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "multi",
           "sort": "none"
         }
@@ -1518,12 +1595,14 @@
             "9": "c",
             "10": "e"
           },
-          "expr": "sum(rate(fluentbit_output_errors_total[$__rate_interval])) by (instance, name)",
+          "editorMode": "code",
+          "expr": "sum(rate(fluentbit_output_errors_total{cluster_id=~\"$cluster\"}[$__rate_interval])) by (instance, name, clusetr_id)",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ instance }}/{{ name }}",
+          "legendFormat": "{{cluster_id}} - {{ instance }}/{{ name }}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1531,7 +1610,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "5s",
+  "refresh": "1m",
   "schemaVersion": 39,
   "tags": [
     "owner:team-atlas",
@@ -1542,7 +1621,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "default",
           "value": "default"
         },
@@ -1553,10 +1632,44 @@
         "name": "datasource",
         "options": [],
         "query": "prometheus",
+        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "staging",
+            "testing"
+          ],
+          "value": [
+            "staging",
+            "testing"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(fluentbit_input_bytes_total,cluster_id)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(fluentbit_input_bytes_total,cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -1564,6 +1677,7 @@
     "from": "now-3h",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {
     "refresh_intervals": [
       "5s",
