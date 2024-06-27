@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add "BPF map pressure" graph to "Cilium performance" dashboard.
-- kube-builder: show logs
+- Add kube-builder logs in "Kube-Builder Operators" dashboard.
 
 ### Changed
 
