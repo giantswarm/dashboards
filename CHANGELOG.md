@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add "BPF map pressure" graph to "Cilium performance" dashboard.
+
+### Changed
+
+- fluentbit dashboard: cluster selection
+
 ### Removed
 
 - Removed the dashboard 'Webhook Health'.
