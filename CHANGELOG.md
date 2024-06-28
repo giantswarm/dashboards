@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fluentbit dashboard: cluster selection
 
+### Fixed
+
+- Mimir Cost Estimation: fix RAM usage
+
 ### Removed
 
 - Removed the dashboard 'Webhook Health'. 
