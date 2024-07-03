@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.21.0] - 2024-07-03
 
+### Changed
+
+- Get rid of the `app` label in Phoenix dashboards.
+
 ## [3.20.0] - 2024-07-01
 
 ### Added
@@ -27,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed the dashboard 'Webhook Health'.
-- Get rid of the `app` label in Phoenix dashboards.
 
 ## [3.19.0] - 2024-06-13
 
