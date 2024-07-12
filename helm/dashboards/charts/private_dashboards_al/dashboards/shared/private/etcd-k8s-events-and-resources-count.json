@@ -124,7 +124,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum (etcd_kubernetes_resources_count{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\"}) by (kind)",
+          "expr": "sum ( label_replace(etcd_kubernetes_resources_count{namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\") or label_replace(etcd_kubernetes_resources_count{exported_namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") ) by (kind) / 2",
           "instant": false,
           "interval": "",
           "legendFormat": "{{kind}}",
@@ -219,9 +219,9 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum (etcd_kubernetes_resources_count{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\"}) by (exported_namespace)",
+          "expr": "sum ( label_replace(etcd_kubernetes_resources_count{namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\") or label_replace(etcd_kubernetes_resources_count{exported_namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") ) by (target_namespace) / 2",
           "interval": "",
-          "legendFormat": "{{exported_namespace}}",
+          "legendFormat": "{{target_namespace}}",
           "range": true,
           "refId": "A"
         }
@@ -313,7 +313,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(etcd_kubernetes_resources_count{cluster_id=\"$cluster\", kind=\"events\",exported_namespace=~\"$namespace\"})",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{kind=\"events\",cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{kind=\"events\",cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) / 2",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -406,10 +406,10 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(etcd_kubernetes_events_count{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\"}[1h])) by (exported_namespace)",
+          "expr": "sum(label_replace(rate(etcd_kubernetes_events_count{cluster_id=\"$cluster\", namespace=~\"$namespace\"}[1h]), \"target_namespace\", \"$1\", \"namespace\", \"(.*)\") or label_replace(rate(etcd_kubernetes_events_count{exported_namespace=~\"$namespace\", cluster_id=~\"$cluster\"}[1h]), \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\")) by (target_namespace) / 2 ",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{exported_namespace}}",
+          "legendFormat": "{{target_namespace}}",
           "range": true,
           "refId": "B"
         }
@@ -501,7 +501,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}) by (kind)",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) by (kind) / 2",
           "hide": false,
           "instant": false,
           "legendFormat": "{{kind}}",
@@ -597,7 +597,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}) by (reason)",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) by (reason) / 2",
           "hide": false,
           "instant": false,
           "legendFormat": "{{reason}}",
@@ -693,10 +693,10 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}) by (exported_namespace)",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) by (reason) / 2",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{exported_namespace}}",
+          "legendFormat": "{{target_namespace}}",
           "range": true,
           "refId": "B"
         }
