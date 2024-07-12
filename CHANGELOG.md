@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed etcd count dashboard replacing the namespace to expoted_namespace.
 
+## [3.21.0] - 2024-07-03
+
+### Changed
+
+- Get rid of the `app` label in Phoenix dashboards.
+
 ## [3.20.0] - 2024-07-01
 
 ### Added
@@ -28,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed the dashboard 'Webhook Health'. 
+- Removed the dashboard 'Webhook Health'.
 
 ## [3.19.0] - 2024-06-13
 
@@ -1135,7 +1141,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.20.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.21.0...HEAD
+[3.21.0]: https://github.com/giantswarm/dashboards/compare/v3.20.0...v3.21.0
 [3.20.0]: https://github.com/giantswarm/dashboards/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/giantswarm/dashboards/compare/v3.18.0...v3.19.0
 [3.18.0]: https://github.com/giantswarm/dashboards/compare/v3.17.0...v3.18.0
