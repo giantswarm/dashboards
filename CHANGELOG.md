@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- mimir query stats dashboard
+
 ### Changed
 
 - Fixed etcd count dashboard replacing the namespace to expoted_namespace.
