@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.22.0] - 2024-08-01
+
 ### Added
 
 - mimir query stats dashboard
@@ -1149,7 +1151,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.21.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.22.0...HEAD
+[3.22.0]: https://github.com/giantswarm/dashboards/compare/v3.21.0...v3.22.0
 [3.21.0]: https://github.com/giantswarm/dashboards/compare/v3.20.0...v3.21.0
 [3.20.0]: https://github.com/giantswarm/dashboards/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/giantswarm/dashboards/compare/v3.18.0...v3.19.0
