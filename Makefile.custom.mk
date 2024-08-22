@@ -6,7 +6,7 @@ SHELL:=/bin/bash -O globstar
 
 dashboards = helm/dashboards/dashboards/**/*.json helm/dashboards/charts/**/*.json
 
-install-tools: ## Installat dependencies tools
+install-tools: ## Install dependencies tools
 	./scripts/install-tools.sh
 
 update-mimir-mixin: install-tools ## Update Mimir mixin dashboards
