@@ -26,11 +26,11 @@ mixtool generate dashboards mixin.libsonnet -d "$TMPDIR/dashboards"
 
 tags="$(cat $SCRIPT_DIR/tags.json)"
 for file in "$TMPDIR/dashboards"/*.json; do
-		echo "$file"
-		(
-				set -x
-						$TOOLS_DIR/yq '.tags += '"$tags"'' -i "$file"
-		)
+	echo "$file"
+	(
+		set -x
+		$TOOLS_DIR/yq '.tags += '"$tags"'' -i "$file"
+	)
 done
 
 set -x
