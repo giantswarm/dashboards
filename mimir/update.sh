@@ -13,17 +13,10 @@ BRANCH="main"
 MIXIN_URL=https://github.com/grafana/mimir/operations/mimir-mixin@$BRANCH
 helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_mz/dashboards/shared/private"
 
+set -x
 cd mimir
 rm -rf vendor jsonnetfile.*
 
 jb init
 jb install $MIXIN_URL
-mixtool generate dashboards mixin.libsonnet --directory=dashboards_out
-
-for file in dashboards_out/*; do
-  # Process each file here
-  echo "$file"
-  
-  echo "Copying dashboard to $helmDir"
-  cp "$file" "$helmDir"
-done
+mixtool generate dashboards mixin.libsonnet --directory=$helmDir

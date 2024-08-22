@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added Makefile.custom.mk to group scripts usage
+  - Added `make update-mixin` to update mixin dasbhboards
+  - Added `make lint-dashboards` to dashboards linting
+  - Added `make install-tools` to install required tools
+
+- Added `scripts/update-alloy-mixin.sh` to update the Alloy mixin dashboards
+
 ### Changed
 
 - Updated all dashboars using `decbytes` unit to use `bytes` (IEC units) instead.
