@@ -3,7 +3,6 @@
 set -eu
 
 DASHBOARD_LINTER_VERSION="eb2bc3ba25e3f0ae816b45ed3d05700002f76871"
-GRIZZLY_VERSION="v0.4.3"
 MIXTOOL_VERSION="448a81c91e517aa4259e7d3e039c19fed9771864"
 
 JB_VERSION="v0.5.1"
@@ -78,7 +77,6 @@ main() {
 				install_tool "" "${JB_BIN}" "${JB_VERSION}" "https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/${JB_VERSION}/jb-${OS}-${ARCH}"
 				install_tool "" "${YQ_BIN}" "${YQ_VERSION}" "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_${OS}_${ARCH}"
 
-				go_install "github.com/grafana/grizzly/cmd/grr" "$GRIZZLY_VERSION"
 				go_install "github.com/monitoring-mixins/mixtool/cmd/mixtool" "$MIXTOOL_VERSION"
 				go_install "github.com/grafana/dashboard-linter" "$DASHBOARD_LINTER_VERSION"
 }
