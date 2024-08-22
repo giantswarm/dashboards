@@ -1,6 +1,6 @@
 ##@ Dashboards
 
-.PHONY: install-tools update-mimir-mixin update-alloy-mixin lint-dashboards
+.PHONY: install-tools lint-dashboards update-alertmanager-mixin update-alloy-mixin update-kubernetes-mixin update-mimir-mixin
 
 SHELL:=/bin/bash -O globstar
 
@@ -9,13 +9,19 @@ dashboards = helm/dashboards/dashboards/**/*.json helm/dashboards/charts/**/*.js
 install-tools: ## Install dependencies tools
 	./scripts/install-tools.sh
 
-update-mimir-mixin: install-tools ## Update Mimir mixin dashboards
-	./mimir/update.sh
+update-alertmanager-mixin: ## Update Alertmanager mixin dashboards
+	./scripts/update-monitoring-mixin-dashboards.sh
 
 update-alloy-mixin: install-tools ## Update Alloy mixin dashboards
 	./scripts/update-alloy-mixin.sh
 
-update-mixin: update-mimir-mixin update-alloy-mixin ## Update all mixins dashboards
+update-kubernetes-mixin: ## Update Kubernetes mixin dashboards
+	./scripts/sync-kube-mixin.sh
+
+update-mimir-mixin: install-tools ## Update Mimir mixin dashboards
+	./mimir/update.sh
+
+update-mixin: update-alertmanager-mixin update-alloy-mixin update-kubernetes-mixin update-mimir-mixin ## Update all mixins dashboards
 
 lint-dashboards: install-tools ## Run dashboard-linter for all dashboards in the helm/dashboards directory
 		@for file in $(dashboards); do \

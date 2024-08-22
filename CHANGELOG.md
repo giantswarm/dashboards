@@ -18,9 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `scripts/update-alloy-mixin.sh` to update the Alloy mixin dashboards
 
+- Added `update-alertmanager-mixin` and `update-kubernetes-mixin` Makefile targets
+
 ### Changed
 
 - Updated all dashboars using `decbytes` unit to use `bytes` (IEC units) instead.
+
+### Fixed
+
+- Fix dashboards destination path in `update-monitoring-mixin-dashboards.sh` script
 
 ## [3.22.0] - 2024-08-01
 
