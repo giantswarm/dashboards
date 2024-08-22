@@ -21,4 +21,17 @@ set -x
 git clone https://github.com/grafana/alloy.git --depth 1 "$TMPDIR/alloy"
 cd "$alloy_mixin_dir"
 "$TOOLS_DIR/jb" install
-mixtool generate dashboards mixin.libsonnet -d "$helm_dir"
+mixtool generate dashboards mixin.libsonnet -d "$TMPDIR/dashboards"
+{ set +x; } 2>/dev/null
+
+tags="$(cat $SCRIPT_DIR/tags.json)"
+for file in "$TMPDIR/dashboards"/*.json; do
+	echo "$file"
+	(
+		set -x
+		$TOOLS_DIR/yq '.tags += '"$tags"'' -i "$file"
+	)
+done
+
+set -x
+mv "$TMPDIR/dashboards"/*.json "$helm_dir"

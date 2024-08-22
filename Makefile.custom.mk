@@ -13,7 +13,7 @@ update-alertmanager-mixin: ## Update Alertmanager mixin dashboards
 	./scripts/update-monitoring-mixin-dashboards.sh
 
 update-alloy-mixin: install-tools ## Update Alloy mixin dashboards
-	./scripts/update-alloy-mixin.sh
+	./alloy/update-alloy-mixin.sh
 
 update-kubernetes-mixin: ## Update Kubernetes mixin dashboards
 	./scripts/sync-kube-mixin.sh

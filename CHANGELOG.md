@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Alloy mixin dashboards
+
 - Added Makefile.custom.mk to group scripts usage
   - Added `make update-mixin` to update mixin dasbhboards
   - Added `make lint-dashboards` to dashboards linting
