@@ -31,10 +31,7 @@ Atlas introduced a dashboard linter to ensure some basic dashboard rules are fol
 This will most likely be moved to CI later but until it is you can run it like this:
 
 ```sh
-# Install the tool
-go install github.com/grafana/dashboard-linter@latest
-### Run on a specific dashboard
-dashboard-linter lint -c linter/config.yaml <dashboard_location>
+make lint-dashboards
 ```
 
 If you need help with the tool or its output, please contact @team-atlas.
