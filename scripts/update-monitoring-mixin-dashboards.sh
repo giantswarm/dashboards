@@ -58,8 +58,8 @@ echo_warning_customupdates() {
   echo "and make sure you didn't lose these custom updates."
   echo ""
   echo "known custom changes:"
-  echo "- alertmanager: select specific integration"
-  echo "- alertmanager: show logs"
+  echo "- alertmanager: integrations filter"
+  echo "- alertmanager: logs panel"
   echo ""
 }
 
