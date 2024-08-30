@@ -34,6 +34,7 @@ main() {
       echo "$gst"
       echo_changes > "$TMPDIR"/tmp_changes
       sed -i '/^## \[Unreleased\]/r '"$TMPDIR"'/tmp_changes' CHANGELOG.md
+      echo_warning_customupdates
   fi
 
 }
@@ -49,5 +50,17 @@ echo_changes() {
   echo "\`\`\`"
 }
 
+echo_warning_customupdates() {
+  echo ""
+  echo "### Warning"
+  echo ""
+  echo "These dashboards have custom updates, please review the changes"
+  echo "and make sure you didn't lose these custom updates."
+  echo ""
+  echo "known custom changes:"
+  echo "- alertmanager: select specific integration"
+  echo "- alertmanager: show logs"
+  echo ""
+}
 
 main "$@"

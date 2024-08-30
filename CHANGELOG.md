@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated all dashboars using `decbytes` unit to use `bytes` (IEC units) instead.
+- alertmanager dashboard: show related logs
 
 ### Fixed
 
