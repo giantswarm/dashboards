@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix Alloy mixins tags.
 
+### Changed
+
+- Updated alertmanager dashboard to show related logs
+
 ## [3.23.0] - 2024-08-22
 
 ### Added
@@ -29,7 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated all dashboars using `decbytes` unit to use `bytes` (IEC units) instead.
-- Updated alertmanager dashboard to show related logs
 
 ### Fixed
 
