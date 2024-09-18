@@ -13,6 +13,7 @@ BRANCH="main"
 MIXIN_URL=https://github.com/grafana/loki/production/loki-mixin@$BRANCH
 helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_al/dashboards/shared/private"
 
+set -x
 cd loki
 rm -rf vendor jsonnetfile.*
 
@@ -32,11 +33,17 @@ for file in dashboards_out/*; do
     jq '.uid = "loki-" + .uid' "$file" > "$file.out" && mv "$file.out" "$file"
   fi
 
-  ## Needed until this is fixed https://github.com/grafana/loki/pull/12846
-  if [[ $(basename "$file") == "loki-deletion.json" ]]; then
-    sed -i 's/container=\\"compactor\\"/container=\\"loki\\", pod=~\\"(loki.*|enterprise-logs)-backend.*\\"/g' "$file"
+  if [[ $(basename "$file") == "loki-bloom-compactor.json" ]] || [[ $(basename "$file") == "loki-bloom-gateway.json" ]]; then
+    rm "$file"
+    continue
   fi
+
+  ## Needed until this is fixed https://github.com/grafana/loki/pull/12846
+  #if [[ $(basename "$file") == "loki-deletion.json" ]]; then
+  #  sed -i 's/container=\\"compactor\\"/container=\\"loki\\", pod=~\\"(loki.*|enterprise-logs)-backend.*\\"/g' "$file"
+  #fi
 
   echo "Copying dashboard to $helmDir"
   cp "$file" "$helmDir"
+
 done

@@ -11,12 +11,15 @@ loki{
     per_node_label: 'node',
     per_cluster_label: 'cluster_id',
 
-    canary+: {
-      enabled: true,
-    },
-
-    promtail+: {
-      enabled: true,
+    operational: {
+      memcached: false,
+      consul: false,
+      bigTable: false,
+      dynamo: false,
+      gcs: false,
+      s3: true,
+      azureBlob: true,
+      boltDB: false,
     },
   },
 }
