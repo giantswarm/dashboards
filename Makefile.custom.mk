@@ -21,7 +21,10 @@ update-kubernetes-mixin: ##     Update Kubernetes mixin dashboards
 update-mimir-mixin: install-tools ##        Update Mimir mixin dashboards
 	./mimir/update.sh
 
-update-mixin: update-alertmanager-mixin update-alloy-mixin update-kubernetes-mixin update-mimir-mixin ##        Update all mixins dashboards
+update-loki-mixin: install-tools ##        Update Loki mixin dashboards
+	./loki/update.sh
+
+update-mixin: update-alertmanager-mixin update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin ##        Update all mixins dashboards
 
 lint-dashboards: install-tools ##        Run dashboard-linter for all dashboards in the helm/dashboards directory
 		@for file in $(dashboards); do \

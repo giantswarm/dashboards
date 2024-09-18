@@ -11,6 +11,10 @@ loki{
     per_node_label: 'node',
     per_cluster_label: 'cluster_id',
 
+    blooms: {
+      enabled: false,
+    },
+
     operational: {
       memcached: false,
       consul: false,

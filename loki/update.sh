@@ -33,15 +33,18 @@ for file in dashboards_out/*; do
     jq '.uid = "loki-" + .uid' "$file" > "$file.out" && mv "$file.out" "$file"
   fi
 
-  if [[ $(basename "$file") == "loki-bloom-compactor.json" ]] || [[ $(basename "$file") == "loki-bloom-gateway.json" ]]; then
-    rm "$file"
-    continue
+  ## Needed to fix the log panels as we are using a different label to differentiate loki components
+  if [[ $(basename "$file") == "loki-retention.json" ]]; then
+    # shellcheck disable=SC2016
+    sed -i 's/"{cluster_id=~\\"$cluster\\", job=~\\"($namespace)\/(loki.*|enterprise-logs)-backend\\"}"/"{cluster_id=~\\"$cluster\\", job=~\\"($namespace)\/loki\\", component=\\"backend\\"}"/g' "$file"
+  elif [[ $(basename "$file") == "loki-operational.json" ]]; then
+    # shellcheck disable=SC2016
+    sed -i 's/{cluster_id=\\"$cluster\\", namespace=\\"$namespace\\", job=~\\"($namespace)\/(loki.*|enterprise-logs)-backend\\"} |/{cluster_id=\\"$cluster\\", namespace=\\"$namespace\\", job=~\\"($namespace)\/loki\\", component=\\"backend\\"} |/g' "$file"
+    # shellcheck disable=SC2016
+    sed -i 's/{cluster_id=\\"$cluster\\", namespace=\\"$namespace\\", job=~\\"($namespace)\/(loki.*|enterprise-logs)-read\\"} |/{cluster_id=\\"$cluster\\", namespace=\\"$namespace\\", job=~\\"($namespace)\/loki\\", component=\\"read\\"} |/g' "$file"
+    # shellcheck disable=SC2016
+    sed -i 's/{cluster_id=\\"$cluster\\", namespace=\\"$namespace\\", job=~\\"($namespace)\/(loki.*|enterprise-logs)-write\\"} |/{cluster_id=\\"$cluster\\", namespace=\\"$namespace\\", job=~\\"($namespace)\/loki\\", component=\\"write\\"} |/g' "$file"
   fi
-
-  ## Needed until this is fixed https://github.com/grafana/loki/pull/12846
-  #if [[ $(basename "$file") == "loki-deletion.json" ]]; then
-  #  sed -i 's/container=\\"compactor\\"/container=\\"loki\\", pod=~\\"(loki.*|enterprise-logs)-backend.*\\"/g' "$file"
-  #fi
 
   echo "Copying dashboard to $helmDir"
   cp "$file" "$helmDir"
