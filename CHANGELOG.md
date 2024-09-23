@@ -7,15 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Fix Alloy mixins tags.
-
 ### Changed
 
 - Updated alertmanager dashboard to show related logs
 - Add loki mixins dashboards update script.
 - Update mimir mixins dashboards via script.
+
+### Fixed
+
+- Fix Alloy mixins tags.
 
 ## [3.23.0] - 2024-08-22
 
