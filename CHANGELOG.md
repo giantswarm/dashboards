@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Monitoring Dashboard Updated
+```
+ M helm/dashboards/charts/public_dashboards/dashboards/shared/public/alertmanager-overview.json
+```
+
+### Changed
+
 - Change ownership from BigMac to Shield
 
 ## [3.24.0] - 2024-09-23
