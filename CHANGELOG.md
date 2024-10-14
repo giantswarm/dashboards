@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.25.0] - 2024-10-14
+
 ### Added
 
 - Added "Loki - Slow Queries" dashboard
@@ -1194,7 +1196,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.24.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.25.0...HEAD
+[3.25.0]: https://github.com/giantswarm/dashboards/compare/v3.24.0...v3.25.0
 [3.24.0]: https://github.com/giantswarm/dashboards/compare/v3.23.0...v3.24.0
 [3.23.0]: https://github.com/giantswarm/dashboards/compare/v3.22.0...v3.23.0
 [3.22.0]: https://github.com/giantswarm/dashboards/compare/v3.21.0...v3.22.0
