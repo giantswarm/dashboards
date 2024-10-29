@@ -1,11 +1,9 @@
-local loki = import 'loki-mixin/mixin-ssd.libsonnet';
-
-loki{
+(import 'loki-mixin/mixin-ssd.libsonnet') + {
   _config+:: {
     tags: [
-      "owner:team-atlas",
-      "topic:observability",
-      "component:loki"
+      'owner:team-atlas',
+      'topic:observability',
+      'component:loki',
     ],
 
     per_node_label: 'node',
@@ -13,6 +11,10 @@ loki{
 
     blooms: {
       enabled: false,
+    },
+
+    canary+: {
+      enabled: true,
     },
 
     operational: {

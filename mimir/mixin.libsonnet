@@ -1,11 +1,9 @@
-local mimir = import 'mimir-mixin/mixin.libsonnet';
-
-mimir{
+(import 'mimir-mixin/mixin.libsonnet') + {
   _config+:: {
     tags: [
-      "owner:team-atlas",
-      "topic:observability",
-      "component:mimir"
+      'owner:team-atlas',
+      'topic:observability',
+      'component:mimir',
     ],
 
     per_cluster_label: 'cluster_id',
