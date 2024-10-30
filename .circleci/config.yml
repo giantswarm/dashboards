@@ -6,134 +6,138 @@ orbs:
 jobs:
   build-and-deploy-dashboards:
     docker:
-      - image: cimg/go:1.23.2
+    - image: cimg/go:1.23.2
     steps:
-      - run: go install github.com/google/go-jsonnet/cmd/jsonnet@latest
-      - run: git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib
-      - checkout
-      - run: ./scripts/make-dashboards.sh
-      - run:
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              ./scripts/upload-dashboards.sh
-            fi
+    - run: go install github.com/google/go-jsonnet/cmd/jsonnet@latest
+    - run: git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib
+    - checkout
+    - run: ./scripts/make-dashboards.sh
+    - run:
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "main" ]; then
+            ./scripts/upload-dashboards.sh
+          fi
 
 workflows:
   package-and-push-chart-on-tag:
     jobs:
-      - build-and-deploy-dashboards:
-          filters:
-            tags:
-              only: /^v.*/
+    - build-and-deploy-dashboards:
+        filters:
+          tags:
+            only: /^v.*/
 
-      - architect/push-to-app-catalog:
-          context: "architect"
-          executor: app-build-suite
-          name: app-catalog
-          app_catalog: "control-plane-catalog"
-          app_catalog_test: "control-plane-test-catalog"
-          chart: "dashboards"
+    - architect/push-to-app-catalog:
+        context: architect
+        executor: app-build-suite
+        name: app-catalog
+        app_catalog: control-plane-catalog
+        app_catalog_test: control-plane-test-catalog
+        chart: dashboards
           # Trigger job on git tag.
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - build-and-deploy-dashboards
+        filters:
+          tags:
+            only: /^v.*/
+          branches:
+            ignore:
+            - main
+            - master
+        requires:
+        - build-and-deploy-dashboards
 
-      - architect/push-to-app-collection:
-          context: "architect"
-          name: aws-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "aws-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+    - architect/push-to-app-collection:
+        context: architect
+        name: aws-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: aws-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
 
-      - architect/push-to-app-collection:
-          context: "architect"
-          name: azure-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "azure-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+    - architect/push-to-app-collection:
+        context: architect
+        name: azure-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: azure-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
 
-      - architect/push-to-app-collection:
-          context: "architect"
-          name: vsphere-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "vsphere-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-      - architect/push-to-app-collection:
+    - architect/push-to-app-collection:
+        context: architect
+        name: vsphere-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: vsphere-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
+    - architect/push-to-app-collection:
 
-          context: architect
-          name: cloud-director-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "cloud-director-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+        context: architect
+        name: cloud-director-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: cloud-director-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
 
-      - architect/push-to-app-collection:
-          context: architect
-          name: capa-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "capa-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+    - architect/push-to-app-collection:
+        context: architect
+        name: capa-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: capa-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
 
-      - architect/push-to-app-collection:
-          context: architect
-          name: capz-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "capz-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+    - architect/push-to-app-collection:
+        context: architect
+        name: capz-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: capz-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
 
-      - architect/push-to-app-collection:
-          context: architect
-          name: gcp-app-collection
-          app_name: "dashboards"
-          app_namespace: "monitoring"
-          app_collection_repo: "gcp-app-collection"
-          requires:
-            - app-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+    - architect/push-to-app-collection:
+        context: architect
+        name: gcp-app-collection
+        app_name: dashboards
+        app_namespace: monitoring
+        app_collection_repo: gcp-app-collection
+        requires:
+        - app-catalog
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
