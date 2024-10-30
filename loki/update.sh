@@ -15,7 +15,7 @@ helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_al/dashboards/shared/p
 
 set -x
 cd loki
-rm -rf vendor jsonnetfile.*
+rm -rf vendor jsonnetfile.* dashboards_out
 
 jb init
 jb install $MIXIN_URL

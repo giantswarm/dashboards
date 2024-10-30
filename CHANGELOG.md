@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Resync alloy, loki and mimir mixins from upstream.
+
 ## [3.25.0] - 2024-10-14
 
 ### Added
