@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed "Management cluster Overview" dashboard
+
 ## [3.26.0] - 2024-10-30
 
 ### Changed
