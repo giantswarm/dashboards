@@ -5,7 +5,7 @@
 # This script updates the Alloy mixin dashboards from the upstream repository.
 #
 # Usage:
-#   ./update-alloy-mixin.sh
+#   ./update.sh
 
 set -eu
 

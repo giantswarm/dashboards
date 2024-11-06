@@ -30,7 +30,7 @@
             "type": "dashboards"
          }
       ],
-      "refresh": "10s",
+      "refresh": "5m",
       "rows": [
          {
             "collapse": false,
@@ -38,7 +38,7 @@
             "panels": [
                {
                   "content": "<p>\n  This dashboard shows health metrics for the ruler read path when remote operational mode is enabled.\n  It is broken into sections for each service on the ruler read path, and organized by the order in which the read request flows.\n  <br/>\n  For each service, there are three panels showing (1) requests per second to that service, (2) average, median, and p99 latency of requests to that service, and (3) p99 latency of requests to each instance of that service.\n</p>\n",
-                  "datasource": "$datasource",
+                  "datasource": null,
                   "description": "",
                   "id": 1,
                   "mode": "markdown",
@@ -93,7 +93,13 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(\n  rate(\n    cortex_request_duration_seconds_count{\n      cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\",\n      route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"\n    }[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum (rate(cortex_request_duration_seconds_count{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\",route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval])) < ($latency_metrics * +Inf)",
+                        "format": "time_series",
+                        "instant": true,
+                        "refId": "A_classic"
+                     },
+                     {
+                        "expr": "sum (histogram_count(rate(cortex_request_duration_seconds{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\",route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]))) < ($latency_metrics * -Inf)",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -315,14 +321,20 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n < ($latency_metrics * +Inf)",
+                        "format": "time_series",
+                        "legendFormat": "{{status}}",
+                        "refId": "A_classic"
+                     },
+                     {
+                        "expr": "sum by (status) (\n  label_replace(label_replace(histogram_count(rate(cortex_request_duration_seconds{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval])),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n < ($latency_metrics * -Inf)",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -364,29 +376,47 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (cluster_id_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (cluster_id_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3 < ($latency_metrics * +Inf)",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
-                        "refId": "A"
+                        "refId": "A_classic"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (cluster_id_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum (cluster_id_job_route:cortex_request_duration_seconds:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3 < ($latency_metrics * -Inf)",
+                        "format": "time_series",
+                        "legendFormat": "99th percentile",
+                        "refId": "A_native"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.50, sum by (le) (cluster_id_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3 < ($latency_metrics * +Inf)",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
-                        "refId": "B"
+                        "refId": "B_classic"
                      },
                      {
-                        "expr": "1e3 * sum(cluster_id_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}) / sum(cluster_id_job_route:cortex_request_duration_seconds_count:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})",
+                        "expr": "histogram_quantile(0.50, sum (cluster_id_job_route:cortex_request_duration_seconds:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3 < ($latency_metrics * -Inf)",
+                        "format": "time_series",
+                        "legendFormat": "50th percentile",
+                        "refId": "B_native"
+                     },
+                     {
+                        "expr": "1e3 * sum(cluster_id_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}) /\nsum(cluster_id_job_route:cortex_request_duration_seconds_count:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})\n < ($latency_metrics * +Inf)",
                         "format": "time_series",
                         "legendFormat": "Average",
-                        "refId": "C"
+                        "refId": "C_classic"
+                     },
+                     {
+                        "expr": "1e3 * sum(histogram_sum(cluster_id_job_route:cortex_request_duration_seconds:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) /\nsum(histogram_count(cluster_id_job_route:cortex_request_duration_seconds:sum_rate{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}))\n < ($latency_metrics * -Inf)",
+                        "format": "time_series",
+                        "legendFormat": "Average",
+                        "refId": "C_native"
                      }
                   ],
                   "title": "Latency",
@@ -433,7 +463,14 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, pod) (rate(cortex_request_duration_seconds_bucket{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by (le,pod) (rate(cortex_request_duration_seconds_bucket{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]))) < ($latency_metrics * +Inf)",
+                        "format": "time_series",
+                        "legendFormat": "",
+                        "legendLink": null
+                     },
+                     {
+                        "exemplar": true,
+                        "expr": "histogram_quantile(0.99, sum by (pod) (rate(cortex_request_duration_seconds{cluster_id=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]))) < ($latency_metrics * -Inf)",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -623,7 +660,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -673,7 +710,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -816,7 +853,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -866,7 +903,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -916,7 +953,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -1112,7 +1149,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -1161,7 +1198,7 @@
                         "showLegend": true
                      },
                      "tooltip": {
-                        "mode": "single",
+                        "mode": "multi",
                         "sort": "none"
                      }
                   },
@@ -1304,7 +1341,7 @@
                },
                "datasource": "$datasource",
                "hide": 0,
-               "includeAll": true,
+               "includeAll": false,
                "label": "namespace",
                "multi": true,
                "name": "namespace",
@@ -1317,6 +1354,35 @@
                "tags": [ ],
                "tagsQuery": "",
                "type": "query",
+               "useTags": false
+            },
+            {
+               "current": {
+                  "selected": true,
+                  "text": "classic",
+                  "value": "1"
+               },
+               "description": "Choose between showing latencies based on low precision classic or high precision native histogram metrics.",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Latency metrics",
+               "multi": false,
+               "name": "latency_metrics",
+               "options": [
+                  {
+                     "selected": false,
+                     "text": "native",
+                     "value": "-1"
+                  },
+                  {
+                     "selected": true,
+                     "text": "classic",
+                     "value": "1"
+                  }
+               ],
+               "query": "native : -1,classic : 1",
+               "skipUrlSync": false,
+               "type": "custom",
                "useTags": false
             }
          ]

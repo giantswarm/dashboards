@@ -1,11 +1,9 @@
-local mimir = import 'mimir-mixin/mixin-compiled.libsonnet';
-
-mimir{
+(import 'mimir-mixin/mixin.libsonnet') + {
   _config+:: {
     tags: [
-      "owner:team-atlas",
-      "topic:observability",
-      "component:mimir"
+      'owner:team-atlas',
+      'topic:observability',
+      'component:mimir',
     ],
 
     per_cluster_label: 'cluster_id',
@@ -16,28 +14,49 @@ mimir{
     gateway_enabled: false,
     // Whether alerts for experimental ingest storage are enabled.
     ingest_storage_enabled: false,
-    // Disable all autoscaling components because we currently do not use it
+    // Disable autoscaling components we do not use
+    autoscaling_hpa_prefix: 'mimir-',
+    // Whether autoscaling panels and alerts should be enabled for specific Mimir services.
     autoscaling: {
       query_frontend: {
         enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'query-frontend',
       },
       ruler_query_frontend: {
         enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'ruler-query-frontend',
       },
       querier: {
-        enabled: false,
+        enabled: true,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'querier',
       },
       ruler_querier: {
         enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'ruler-querier',
+      },
+      store_gateway: {
+        enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'store-gateway',
       },
       distributor: {
-        enabled: false,
+        enabled: true,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'distributor',
       },
       ruler: {
         enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'ruler',
       },
       gateway: {
+        enabled: true,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'gateway',
+      },
+      ingester: {
         enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'ingester',
+      },
+      compactor: {
+        enabled: false,
+        hpa_name: $._config.autoscaling_hpa_prefix + 'compactor',
       },
     },
   },
