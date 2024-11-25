@@ -6,27 +6,35 @@ SHELL:=/bin/bash -O globstar
 
 dashboards = helm/dashboards/dashboards/**/*.json helm/dashboards/charts/**/*.json
 
-install-tools: ##        Install dependencies tools
+# Install dependencies tools
+install-tools:
 	./scripts/install-tools.sh
 
-update-alertmanager-mixin: ##   Update Alertmanager mixin dashboards
+# Update Alertmanager mixin dashboards
+update-alertmanager-mixin:
 	./scripts/update-monitoring-mixin-dashboards.sh
 
-update-alloy-mixin: install-tools ##        Update Alloy mixin dashboards
+# Update Alloy mixin dashboards
+update-alloy-mixin: install-tools
 	./alloy/update.sh
 
-update-kubernetes-mixin: ##     Update Kubernetes mixin dashboards
+# Update Kubernetes mixin dashboards
+update-kubernetes-mixin:
 	./scripts/sync-kube-mixin.sh
 
-update-mimir-mixin: install-tools ##        Update Mimir mixin dashboards
+# Update Mimir mixin dashboards
+update-mimir-mixin: install-tools
 	./mimir/update.sh
 
-update-loki-mixin: install-tools ##        Update Loki mixin dashboards
+# Update Loki mixin dashboards
+update-loki-mixin: install-tools
 	./loki/update.sh
 
-update-mixin: update-alertmanager-mixin update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin ##        Update all mixins dashboards
+# Update all mixins dashboards
+update-mixin: update-alertmanager-mixin update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin
 
-lint-dashboards: install-tools ##        Run dashboard-linter for all dashboards in the helm/dashboards directory
+# Run dashboard-linter for all dashboards in the helm/dashboards directory
+lint-dashboards: install-tools
 		@for file in $(dashboards); do \
 			echo "------ Linting $$file"; \
 			dashboard-linter lint -c linter/config.yaml $$file; \
