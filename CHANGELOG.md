@@ -9,8 +9,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fixed etcd count dashboard replacing the namespace to expoted_namespace.
 - Fixed nodes overview dashboard to avoid master duplicating numbers.
+
+## [3.26.1] - 2024-11-12
+
+### Added
+
+- Add `Mimir / Continuous test` dashboard.
+
+### Fixed
+
+- Fixed "Management cluster Overview" dashboard
+
+## [3.26.0] - 2024-10-30
+
+### Changed
+
+- Resync alloy, loki and mimir mixins from upstream.
+
+## [3.25.0] - 2024-10-14
+
+### Added
+
+- Added "Loki - Slow Queries" dashboard
+
+### Changed
+
+- Change ownership from BigMac to Shield
+
+## [3.24.0] - 2024-09-23
+
+### Changed
+
+- Updated alertmanager dashboard to show related logs
+- Add loki mixins dashboards update script.
+- Update mimir mixins dashboards via script.
+
+### Fixed
+
+- Fix Alloy mixins tags.
+
+## [3.23.0] - 2024-08-22
+
+### Added
+
+- Added Alloy mixin dashboards
+
+- Added Makefile.custom.mk to group scripts usage
+  - Added `make update-mixin` to update mixin dasbhboards
+  - Added `make lint-dashboards` to dashboards linting
+  - Added `make install-tools` to install required tools
+
+- Added `scripts/update-alloy-mixin.sh` to update the Alloy mixin dashboards
+
+- Added `update-alertmanager-mixin` and `update-kubernetes-mixin` Makefile targets
+
+### Changed
+
+- Updated all dashboars using `decbytes` unit to use `bytes` (IEC units) instead.
+
+### Fixed
+
+- Fix dashboards destination path in `update-monitoring-mixin-dashboards.sh` script
+
+## [3.22.0] - 2024-08-01
+
+### Added
+
+- mimir query stats dashboard
+
+### Changed
+
+- Fixed etcd count dashboard replacing the namespace to expoted_namespace.
+
+### Removed
+
+- Remove Linkerd Control Plane dashboard
+
+## [3.21.0] - 2024-07-03
+
+### Changed
+
+- Get rid of the `app` label in Phoenix dashboards.
 
 ## [3.20.0] - 2024-07-01
 
@@ -1136,7 +1216,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.20.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.26.1...HEAD
+[3.26.1]: https://github.com/giantswarm/dashboards/compare/v3.26.0...v3.26.1
+[3.26.0]: https://github.com/giantswarm/dashboards/compare/v3.25.0...v3.26.0
+[3.25.0]: https://github.com/giantswarm/dashboards/compare/v3.24.0...v3.25.0
+[3.24.0]: https://github.com/giantswarm/dashboards/compare/v3.23.0...v3.24.0
+[3.23.0]: https://github.com/giantswarm/dashboards/compare/v3.22.0...v3.23.0
+[3.22.0]: https://github.com/giantswarm/dashboards/compare/v3.21.0...v3.22.0
+[3.21.0]: https://github.com/giantswarm/dashboards/compare/v3.20.0...v3.21.0
 [3.20.0]: https://github.com/giantswarm/dashboards/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/giantswarm/dashboards/compare/v3.18.0...v3.19.0
 [3.18.0]: https://github.com/giantswarm/dashboards/compare/v3.17.0...v3.18.0

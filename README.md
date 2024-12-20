@@ -31,15 +31,24 @@ Atlas introduced a dashboard linter to ensure some basic dashboard rules are fol
 This will most likely be moved to CI later but until it is you can run it like this:
 
 ```sh
-# Install the tool
-go install github.com/grafana/dashboard-linter@latest
-### Run on a specific dashboard
-dashboard-linter lint -c linter/config.yaml <dashboard_location>
+make lint-dashboards
 ```
 
 If you need help with the tool or its output, please contact @team-atlas.
 
 ## Grafana Cloud dashboards
+
+### Requirements
+
+* jsonnet: https://github.com/google/jsonnet
+
+`pip install jsonnet`
+
+* grafonnet: https://github.com/grafana/grafonnet-lib
+
+`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
+
+### Building and uploading
 
 The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Grafana Cloud.
 
@@ -60,30 +69,27 @@ To upload a dashboard while editing, run:
 ./scripts/upload-dashboard.sh metrics.json
 ```
 
-
 ## Mixins Dashboards
 
-### Requirements
+### Update
 
-* jsonnet: https://github.com/google/jsonnet
-
-`pip install jsonnet`
-
-* grafonnet: https://github.com/grafana/grafonnet-lib
-
-`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
-
-### Update 
-
-* To Update the `kubernetes-mixin` dashboards:
-
-  * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
-  * Run `./scripts/sync-kube-mixin.sh (?my-fancy-branch-or-tag)` to update the `helm/dashboards/dashboards/mixin` folder.
-
-* To Update the `alertmanager-monitoring-mixins` dashboards:
+* Alertmanager dashboard
 
   * The Github Action `update-monitoring-mixins` runs automatically every month and it creates a PR to update the dashboard.
-  * Or you can run the action named `update-monitoring-mixins` manually.
+  * Run `make update-alertmanager-mixin` manually.
+
+* Alloy dashboards
+
+  * Run `make update-alloy-mixin` manually.
+
+* Kubernetes dashboards
+
+  * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin).
+  * Run `make update-kubernetes-mixin` manually.
+
+* Mimir dashboards
+
+  * Run `make update-mimir-mixin` manually.
 
 ## Origins of the dashboards
 
