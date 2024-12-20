@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Fixed etcd count dashboard replacing the namespace to expoted_namespace.
+- Fixed nodes overview dashboard to avoid master duplicating numbers.
 
 ## [3.20.0] - 2024-07-01
 
@@ -28,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed the dashboard 'Webhook Health'. 
+- Removed the dashboard 'Webhook Health'.
 
 ## [3.19.0] - 2024-06-13
 
