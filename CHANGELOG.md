@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Fixed nodes overview dashboard to avoid master duplicating numbers.
+- Add observability organization label to GS private dashboards.
 
 ## [3.26.1] - 2024-11-12
 
