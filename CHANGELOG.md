@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.28.0] - 2025-01-13
+
 ### Added
 
 - Add `Promtail overview` dashboard.
@@ -1227,7 +1229,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.27.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.28.0...HEAD
+[3.28.0]: https://github.com/giantswarm/dashboards/compare/v3.27.0...v3.28.0
 [3.27.0]: https://github.com/giantswarm/dashboards/compare/v3.26.1...v3.27.0
 [3.26.1]: https://github.com/giantswarm/dashboards/compare/v3.26.0...v3.26.1
 [3.26.0]: https://github.com/giantswarm/dashboards/compare/v3.25.0...v3.26.0
