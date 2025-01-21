@@ -1,24 +1,4 @@
 {
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": {
-          "type": "grafana",
-          "uid": "-- Grafana --"
-        },
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
-  },
-  "editable": true,
-  "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": 26,
   "links": [
     {
       "asDropdown": true,
@@ -42,55 +22,12 @@
       "description": "Logs volume grouped by \"level\" label.",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "bars",
             "fillOpacity": 50,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
             "stacking": {
-              "group": "A",
               "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
             }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
           },
           "unit": "none"
         },
@@ -204,36 +141,25 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 0
+        "w": 24
       },
       "id": 1,
       "interval": "30s",
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
         "tooltip": {
           "mode": "multi",
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.3.1",
+      "pluginVersion": "v10.0.0",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum by (level) (\n    count_over_time(\n        {\n            cluster_id=~\"$cluster\",\n            namespace=~\"$namespace\",\n            scrape_job=~\"$job\",\n            instance=~\"$instance\",\n            level=~\"$level\"\n        }\n        |~ \"$regex_search\"\n        [$__interval]\n    )\n)\n",
-          "legendFormat": "{{ level }}",
-          "queryType": "range",
-          "refId": "A"
+          "expr": "sum by (level) (count_over_time({cluster_id=~\"$cluster\",namespace=~\"$namespace\",scrape_job=~\"$scrape_job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__interval]))\n",
+          "legendFormat": "{{ level }}"
         }
       ],
       "title": "Logs volume",
@@ -253,47 +179,34 @@
         "type": "datasource",
         "uid": "-- Mixed --"
       },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 18,
-        "w": 24,
-        "x": 0,
-        "y": 6
+        "w": 24
       },
       "id": 2,
       "options": {
         "dedupStrategy": "exact",
         "enableLogDetails": true,
         "prettifyLogMessage": true,
-        "showCommonLabels": false,
-        "showLabels": false,
         "showTime": false,
-        "sortOrder": "Descending",
         "wrapLogMessage": true
       },
-      "pluginVersion": "11.3.1",
+      "pluginVersion": "v10.0.0",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
           },
-          "editorMode": "code",
-          "expr": "{\n    cluster_id=~\"$cluster\",\n    namespace=~\"$namespace\",\n    scrape_job=~\"$job\",\n    instance=~\"$instance\",\n    level=~\"$level\"\n} \n|~ \"$regex_search\"\n\n\n",
-          "queryType": "range",
-          "refId": "A"
+          "expr": "{cluster_id=~\"$cluster\",namespace=~\"$namespace\",scrape_job=~\"$scrape_job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
         }
       ],
       "title": "Logs",
       "type": "logs"
     }
   ],
-  "preload": false,
   "refresh": "10s",
-  "schemaVersion": 40,
+  "schemaVersion": 36,
   "tags": [
     "alloy-mixin",
     "owner:team-atlas",
@@ -306,7 +219,6 @@
         "label": "Loki data source",
         "name": "loki_datasource",
         "query": "loki",
-        "refresh": 1,
         "regex": "",
         "type": "datasource"
       },
@@ -316,17 +228,11 @@
           "type": "loki",
           "uid": "${loki_datasource}"
         },
-        "definition": "",
         "includeAll": true,
         "label": "Cluster",
         "multi": true,
         "name": "cluster",
-        "query": {
-          "label": "cluster_id",
-          "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "{}",
-          "type": 1
-        },
+        "query": "label_values({}, cluster_id)",
         "refresh": 2,
         "sort": 1,
         "type": "query"
@@ -337,17 +243,11 @@
           "type": "loki",
           "uid": "${loki_datasource}"
         },
-        "definition": "",
         "includeAll": true,
         "label": "Namespace",
         "multi": true,
         "name": "namespace",
-        "query": {
-          "label": "namespace",
-          "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "{cluster_id=~\"$cluster\"}",
-          "type": 1
-        },
+        "query": "label_values({cluster_id=~\"$cluster\"}, namespace)",
         "refresh": 2,
         "sort": 1,
         "type": "query"
@@ -358,17 +258,11 @@
           "type": "loki",
           "uid": "${loki_datasource}"
         },
-        "definition": "",
         "includeAll": true,
         "label": "Job",
         "multi": true,
-        "name": "job",
-        "query": {
-          "label": "scrape_job",
-          "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "{cluster_id=~\"$cluster\",namespace=~\"$namespace\"}",
-          "type": 1
-        },
+        "name": "scrape_job",
+        "query": "label_values({cluster_id=~\"$cluster\",namespace=~\"$namespace\"}, scrape_job)",
         "refresh": 2,
         "sort": 1,
         "type": "query"
@@ -379,17 +273,11 @@
           "type": "loki",
           "uid": "${loki_datasource}"
         },
-        "definition": "",
         "includeAll": true,
         "label": "Instance",
         "multi": true,
         "name": "instance",
-        "query": {
-          "label": "instance",
-          "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "{cluster_id=~\"$cluster\",namespace=~\"$namespace\",scrape_job=~\"$job\"}",
-          "type": 1
-        },
+        "query": "label_values({cluster_id=~\"$cluster\",namespace=~\"$namespace\",scrape_job=~\"$scrape_job\"}, instance)",
         "refresh": 2,
         "sort": 1,
         "type": "query"
@@ -400,23 +288,18 @@
           "type": "loki",
           "uid": "${loki_datasource}"
         },
-        "definition": "",
         "includeAll": true,
         "label": "Level",
         "multi": true,
         "name": "level",
-        "query": {
-          "label": "level",
-          "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "{cluster_id=~\"$cluster\",namespace=~\"$namespace\",scrape_job=~\"$job\",instance=~\"$instance\"}",
-          "type": 1
-        },
+        "query": "label_values({cluster_id=~\"$cluster\",namespace=~\"$namespace\",scrape_job=~\"$scrape_job\",instance=~\"$instance\"}, level)",
         "refresh": 2,
         "sort": 1,
         "type": "query"
       },
       {
         "current": {
+          "selected": false,
           "text": "",
           "value": ""
         },
@@ -438,10 +321,7 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
   "timezone": "utc",
   "title": "Alloy / Logs Overview",
-  "uid": "53c1ecddc3a1d5d4b8d6cd0c23676c31",
-  "version": 1,
-  "weekStart": ""
+  "uid": "53c1ecddc3a1d5d4b8d6cd0c23676c31"
 }
