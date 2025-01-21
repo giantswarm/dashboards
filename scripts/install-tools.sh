@@ -5,7 +5,7 @@ set -eu
 DASHBOARD_LINTER_VERSION="eb2bc3ba25e3f0ae816b45ed3d05700002f76871"
 MIXTOOL_VERSION="448a81c91e517aa4259e7d3e039c19fed9771864"
 
-JB_VERSION="v0.5.1"
+JB_VERSION="v0.6.0"
 JB_BIN="jb"
 
 YQ_VERSION="v4.44.3"
@@ -74,6 +74,7 @@ go_install() {
 main() {
 				command -v go &>/dev/null || { echo "go is required but not installed"; exit 1; }
 
+                mkdir -p "${TOOLS_DIR}"
 				install_tool "" "${JB_BIN}" "${JB_VERSION}" "https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/${JB_VERSION}/jb-${OS}-${ARCH}"
 				install_tool "" "${YQ_BIN}" "${YQ_VERSION}" "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_${OS}_${ARCH}"
 
