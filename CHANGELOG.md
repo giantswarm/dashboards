@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update DNS dashboard to include memory requests.
+- Added `Cluster Overview`dashboard.
 
 ## [3.28.0] - 2025-01-13
 
