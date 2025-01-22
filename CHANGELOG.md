@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix datasource for the new `Cluster Overview` dashboard.
+
 ## [3.29.0] - 2025-01-22
 
 ### Changed
