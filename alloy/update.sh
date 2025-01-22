@@ -33,5 +33,13 @@ for file in "$TMPDIR/dashboards"/*.json; do
 	)
 done
 
+# Fix alloy-logs specific issues
+sed -i 's/{,/{/g' "$TMPDIR"/dashboards/alloy-logs.json
+sed -i 's/job/scrape_job/g' "$TMPDIR"/dashboards/alloy-logs.json
+
+# Fix cluster selector on all dashboards
+sed -i 's/cluster=/cluster_id=/g' "$TMPDIR"/dashboards/*.json
+sed -i 's/\(.*label_values(.*cluster\)\().*\)/\1_id\2/g' "$TMPDIR"/dashboards/*.json
+
 set -x
 mv "$TMPDIR/dashboards"/*.json "$helm_dir"

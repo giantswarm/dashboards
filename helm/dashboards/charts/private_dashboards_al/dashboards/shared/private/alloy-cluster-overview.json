@@ -4,7 +4,7 @@
       {
         "datasource": "$loki_datasource",
         "enable": true,
-        "expr": "{cluster=\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
+        "expr": "{cluster_id=\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
         "iconColor": "rgba(0, 211, 255, 1)",
         "instant": false,
         "name": "Deployments",
@@ -47,7 +47,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "count(cluster_node_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
+          "expr": "count(cluster_node_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
           "instant": true,
           "legendFormat": "__auto",
           "range": false
@@ -87,7 +87,7 @@
                   {
                     "targetBlank": false,
                     "title": "Detail dashboard for node",
-                    "url": "/d/4047e755d822da63c8158cde32ae4dce/alloy-cluster-node?var-instance=${__data.fields.instance}&var-datasource=${datasource}&var-loki_datasource=${loki_datasource}&var-job=${job}&var-cluster=${cluster}&var-namespace=${namespace}"
+                    "url": "/d/4047e755d822da63c8158cde32ae4dce/alloy-cluster-node?var-instance=${__data.fields.instance}&var-datasource=${datasource}&var-loki_datasource=${loki_datasource}&var-job=${job}&var-cluster_id=${cluster}&var-namespace=${namespace}"
                   }
                 ]
               }
@@ -104,7 +104,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "cluster_node_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}\n",
+          "expr": "cluster_node_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}\n",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -189,7 +189,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "clamp((\n  sum(stddev by (state) (cluster_node_peers{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}) != 0) or\n  (sum(abs(sum without (state) (cluster_node_peers{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) - scalar(count(cluster_node_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) != 0))\n  ),\n  1, 1\n)\n",
+          "expr": "clamp((\n  sum(stddev by (state) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}) != 0) or\n  (sum(abs(sum without (state) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) - scalar(count(cluster_node_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) != 0))\n  ),\n  1, 1\n)\n",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -243,7 +243,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "ceil(clamp((\n  sum(stddev by (state) (cluster_node_peers{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) or\n  (sum(abs(sum without (state) (cluster_node_peers{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) - scalar(count(cluster_node_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}))))\n  ),\n  0, 1\n))\n",
+          "expr": "ceil(clamp((\n  sum(stddev by (state) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) or\n  (sum(abs(sum without (state) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})) - scalar(count(cluster_node_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}))))\n  ),\n  0, 1\n))\n",
           "instant": false,
           "legendFormat": "Converged",
           "range": true
@@ -269,7 +269,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "sum by(instance) (cluster_node_peers{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
+          "expr": "sum by(instance) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -310,7 +310,7 @@
         "label": "cluster",
         "name": "cluster",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components, cluster)\n",
+          "query": "label_values(alloy_component_controller_running_components, cluster_id)\n",
           "refId": "cluster"
         },
         "refresh": 2,
@@ -322,7 +322,7 @@
         "label": "namespace",
         "name": "namespace",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\"}, namespace)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\"}, namespace)\n",
           "refId": "namespace"
         },
         "refresh": 2,
@@ -334,7 +334,7 @@
         "label": "job",
         "name": "job",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
           "refId": "job"
         },
         "refresh": 2,

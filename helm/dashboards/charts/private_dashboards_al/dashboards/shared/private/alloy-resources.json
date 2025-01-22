@@ -4,7 +4,7 @@
       {
         "datasource": "$loki_datasource",
         "enable": true,
-        "expr": "{cluster=\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
+        "expr": "{cluster_id=\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
         "iconColor": "rgba(0, 211, 255, 1)",
         "instant": false,
         "name": "Deployments",
@@ -45,7 +45,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(alloy_resources_process_cpu_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(alloy_resources_process_cpu_seconds_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -71,7 +71,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "alloy_resources_process_resident_memory_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
+          "expr": "alloy_resources_process_resident_memory_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -101,7 +101,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(go_gc_duration_seconds_count{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[5m])\nand on(instance)\nalloy_build_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
+          "expr": "rate(go_gc_duration_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[5m])\nand on(instance)\nalloy_build_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -127,7 +127,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "go_goroutines{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\nand on(instance)\nalloy_build_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
+          "expr": "go_goroutines{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\nand on(instance)\nalloy_build_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -153,7 +153,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\nand on(instance)\nalloy_build_info{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
+          "expr": "go_memstats_heap_inuse_bytes{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\nand on(instance)\nalloy_build_info{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -186,7 +186,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(alloy_resources_machine_rx_bytes_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(alloy_resources_machine_rx_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -219,7 +219,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(alloy_resources_machine_tx_bytes_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(alloy_resources_machine_tx_bytes_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true
@@ -260,7 +260,7 @@
         "label": "cluster",
         "name": "cluster",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components, cluster)\n",
+          "query": "label_values(alloy_component_controller_running_components, cluster_id)\n",
           "refId": "cluster"
         },
         "refresh": 2,
@@ -272,7 +272,7 @@
         "label": "namespace",
         "name": "namespace",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\"}, namespace)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\"}, namespace)\n",
           "refId": "namespace"
         },
         "refresh": 2,
@@ -284,7 +284,7 @@
         "label": "job",
         "name": "job",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
           "refId": "job"
         },
         "refresh": 2,
@@ -299,7 +299,7 @@
         "multi": true,
         "name": "instance",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}, instance)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}, instance)\n",
           "refId": "instance"
         },
         "refresh": 2,

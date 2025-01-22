@@ -49,7 +49,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(otelcol_receiver_accepted_spans_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(otelcol_receiver_accepted_spans_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{ pod }} / {{ transport }}",
           "range": true
@@ -81,7 +81,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(otelcol_receiver_refused_spans_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(otelcol_receiver_refused_spans_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{ pod }} / {{ transport }}",
           "range": true
@@ -128,7 +128,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "sum by (le) (increase(rpc_server_duration_milliseconds_bucket{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\", rpc_service=\"opentelemetry.proto.collector.trace.v1.TraceService\"}[$__rate_interval]))\n",
+          "expr": "sum by (le) (increase(rpc_server_duration_milliseconds_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\", rpc_service=\"opentelemetry.proto.collector.trace.v1.TraceService\"}[$__rate_interval]))\n",
           "format": "heatmap",
           "instant": false,
           "legendFormat": "{{le}}",
@@ -192,7 +192,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "sum by (le) (increase(otelcol_processor_batch_batch_send_size_bucket{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))\n",
+          "expr": "sum by (le) (increase(otelcol_processor_batch_batch_send_size_bucket{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))\n",
           "format": "heatmap",
           "instant": false,
           "legendFormat": "{{le}}",
@@ -214,7 +214,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "otelcol_processor_batch_metadata_cardinality{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
+          "expr": "otelcol_processor_batch_metadata_cardinality{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}\n",
           "instant": false,
           "legendFormat": "{{ pod }}",
           "range": true
@@ -235,7 +235,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(otelcol_processor_batch_timeout_trigger_send_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(otelcol_processor_batch_timeout_trigger_send_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{ pod }}",
           "range": true
@@ -278,7 +278,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(otelcol_exporter_sent_spans_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(otelcol_exporter_sent_spans_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{ pod }}",
           "range": true
@@ -310,7 +310,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "rate(otelcol_exporter_send_failed_spans_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
+          "expr": "rate(otelcol_exporter_send_failed_spans_total{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\n",
           "instant": false,
           "legendFormat": "{{ pod }}",
           "range": true
@@ -351,7 +351,7 @@
         "label": "cluster",
         "name": "cluster",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components, cluster)\n",
+          "query": "label_values(alloy_component_controller_running_components, cluster_id)\n",
           "refId": "cluster"
         },
         "refresh": 2,
@@ -363,7 +363,7 @@
         "label": "namespace",
         "name": "namespace",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\"}, namespace)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\"}, namespace)\n",
           "refId": "namespace"
         },
         "refresh": 2,
@@ -375,7 +375,7 @@
         "label": "job",
         "name": "job",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
           "refId": "job"
         },
         "refresh": 2,
@@ -390,7 +390,7 @@
         "multi": true,
         "name": "instance",
         "query": {
-          "query": "label_values(alloy_component_controller_running_components{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}, instance)\n",
+          "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}, instance)\n",
           "refId": "instance"
         },
         "refresh": 2,
