@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add team label to karpenter dashboard.
 
+### Removed
+
+- Remove `CAPI Overview` dashboard.
+
 ## [3.29.1] - 2025-01-22
 
 ### Fixed
