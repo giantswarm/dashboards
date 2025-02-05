@@ -116,3 +116,9 @@ Comes from `prometheus-mixins`, with the addition of support for multiple cluste
 Comes from https://github.com/kedacore/keda/blob/main/config/grafana/keda-dashboard.json
 
 We added multi-cluster support and tags (team owner)
+
+## Release of these dashboards
+
+If you want to release changes in this dashboard repository, you only have to create a branch with the name `main#release#minor`. No replacements here, just literally that branch name :) 
+
+The Automation in place will make the necessary changes and create a correctly versioned branch of the code. It will open up a Pull Request you need to check an merge, which will trigger the release and cleanup the temporary `main#release#minor`-branch again. Afterwards the release will automatically get rolled out to all installations. 
