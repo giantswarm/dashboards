@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.30.0] - 2025-02-05
+
 ### Changed
 
 - Add team label to karpenter dashboard.
@@ -1256,7 +1258,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.29.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.30.0...HEAD
+[3.30.0]: https://github.com/giantswarm/dashboards/compare/v3.29.1...v3.30.0
 [3.29.1]: https://github.com/giantswarm/dashboards/compare/v3.29.0...v3.29.1
 [3.29.0]: https://github.com/giantswarm/dashboards/compare/v3.28.0...v3.29.0
 [3.28.0]: https://github.com/giantswarm/dashboards/compare/v3.27.0...v3.28.0
