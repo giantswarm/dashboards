@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update the home dashboard
+  - Change Alerts link to point to Alerting > Active notifications
+  - Replace Node overview with Cluster overview dashboard
+  - Fix broken Custom dashboards link
+
 ## [4.0.0] - 2025-02-13
 
 ### Changed
