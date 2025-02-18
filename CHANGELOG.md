@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Monitoring Dashboard Updated
+```
+ M helm/dashboards/charts/public_dashboards/dashboards/shared/public/alertmanager-overview.json
+```
+
+### Changed
+
 - Add team label to karpenter dashboard.
 - Add grafana organization label to public dashboards
 
