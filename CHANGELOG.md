@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update the home dashboard
+  - Change Alerts link to point to Alerting > Active notifications
+  - Add grafana organization link
+  - Add new data ingestion link
+  - Replace Node overview with Cluster overview dashboard
+  - Fix broken Custom dashboards link
+
+### Fixed
+
+- Fix Cluster overview dashboard to consistently open links in new tabs.
+
 ## [4.0.0] - 2025-02-13
 
 ### Changed
