@@ -14,8 +14,7 @@ git clone --depth 1 "$github_repo" "$github_repo_directory"
 pushd "$github_repo_directory" > /dev/null || exit 1
 mapfile teams < <(find repositories -name '*.yaml' -printf '%f\n' | cut -d. -f1)
 popd > /dev/null || exit 1
-echo "Found teams: ${#teams[@]}"
-echo ${teams[@]}
+echo "Found ${#teams[@]} teams:" ${teams[*]}
 
 # Check all dashboards
 failures=0
