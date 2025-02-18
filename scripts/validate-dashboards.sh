@@ -18,12 +18,13 @@ echo "Found ${#teams[@]} teams:" ${teams[*]}
 
 # Check all dashboards
 failures=0
+log_length=19
 exec 5< <(find helm/dashboards/ -name "*.json" | grep -vE "$exculde_string")
 while read -ru 5 f; do
     # Find owner tag
     if owners=$(jq -r '.tags[]?|select(.|test("^owner:"))' "$f" 2>/dev/null); then
       if [ -z "$owners" ]; then
-          echo "Owner tag missing  $f"
+          printf "%-${log_length}s %s\n" "Owner tag missing" "$f"
           failures=$((failures+1))
           continue
       fi
@@ -32,13 +33,13 @@ while read -ru 5 f; do
         team="${owner#owner:}"
         # Check if owner tag matches a team name
         if [[ ! "${teams[*]}" =~ ${team} ]]; then
-            echo "Owner team invalid $f"
+            printf "%-${log_length}s %s\n" "Owner team invalid" "$f"
             failures=$((failures+1))
             continue
         fi
       done
     else
-      echo "Error parsing      $f"
+      printf "%-${log_length}s %s\n" "Error parsing" "$f"
       failures=$((failures+1))
       continue
     fi
@@ -46,12 +47,12 @@ while read -ru 5 f; do
     # Check uid
     uid=$(jq -r '.uid|strings' "$f")
     if [ -z "$uid" ]; then
-        echo "Missing uid        $f"
+        printf "%-${log_length}s %s\n" "Missing uid" "$f"
         failures=$((failures+1))
         continue
     fi
 
-    echo "OK                 $f"
+    printf "%-${log_length}s %s\n" "OK" "$f"
 done
 exec 5<&-
 
