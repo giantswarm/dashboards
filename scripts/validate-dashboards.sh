@@ -4,7 +4,7 @@ set -eu
 
 # List of files to exclude
 excludes=( "values.schema.json" "home.json" )
-exculde_string="$(IFS="|"; echo "${excludes[*]}")"
+excludes_string="$(IFS="|"; echo "${excludes[*]}")"
 
 # Find valid team names
 github_repo="https://github.com/giantswarm/github.git"
@@ -19,7 +19,7 @@ echo "Found ${#teams[@]} teams:" ${teams[*]}
 # Check all dashboards
 failures=0
 log_length=19
-exec 5< <(find helm/dashboards/ -name "*.json" | grep -vE "$exculde_string")
+exec 5< <(find helm/dashboards/ -name "*.json" | grep -vE "$excludes_string")
 while read -ru 5 f; do
     # Find owner tag
     if owners=$(jq -r '.tags[]?|select(.|test("^owner:"))' "$f" 2>/dev/null); then
