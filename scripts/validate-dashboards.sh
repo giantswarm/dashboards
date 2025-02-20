@@ -4,7 +4,7 @@ set -eu
 
 # List of files to exclude
 excludes=( "values.schema.json" "home.json" )
-exculde_string=$(IFS="|"; echo "${excludes[*]}")
+exculde_string="$(IFS="|"; echo "${excludes[*]}")"
 
 # Find valid team names
 github_repo="https://github.com/giantswarm/github.git"
