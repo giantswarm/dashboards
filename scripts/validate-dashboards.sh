@@ -24,8 +24,7 @@ echo "Found ${#teams[@]} teams:" ${teams[*]}
 # Check all dashboards
 failures=0
 log_length=19
-exec 5< <(find helm/dashboards/ -name "*.json" | grep -vE "$excludes_string")
-while read -ru 5 f; do
+find helm/dashboards/ -name "*.json" | grep -vE "$excludes_string" | while read -r f; do
     # Find owner tag
     if owners=$(jq -r '.tags[]?|select(.|test("^owner:"))' "$f" 2>/dev/null); then
       if [ -z "$owners" ]; then
@@ -59,6 +58,5 @@ while read -ru 5 f; do
 
     printf "%-${log_length}s %s\n" "OK" "$f"
 done
-exec 5<&-
 
 test $failures -gt 0 && exit 1
