@@ -11,9 +11,9 @@ github_repo="https://github.com/giantswarm/github.git"
 github_repo_directory="$(mktemp -d -t validate-dashboards.XXXXXXXXXX)"
 trap 'rm -rf "$github_repo_directory"' EXIT
 git clone --depth 1 "$github_repo" "$github_repo_directory"
-pushd "$github_repo_directory" > /dev/null || exit 1
+cd "$github_repo_directory"
 mapfile teams < <(find repositories -name '*.yaml' -printf '%f\n' | cut -d. -f1)
-popd > /dev/null || exit 1
+cd -
 echo "Found ${#teams[@]} teams:" ${teams[*]}
 
 # Check all dashboards
