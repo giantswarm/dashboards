@@ -1,5 +1,10 @@
 #!/bin/bash
-
+# This script does some sanity checks on dashboards:
+# - Check for owner tag presence
+# - Match owners against list of team names retrieved from https://github.com/giantswarm/github
+# - Check for uid presence
+#
+# It won't change any files, and does not require any extra argument. Just run it from the root of the repository, then check its logs and return value.
 set -eu
 
 # List of files to exclude
