@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2025-02-25
+
 ### Added
 
 - Add Loki log volume dashboard
@@ -1284,7 +1286,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/giantswarm/dashboards/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/giantswarm/dashboards/compare/v3.30.0...v4.0.0
 [3.30.0]: https://github.com/giantswarm/dashboards/compare/v3.29.1...v3.30.0
 [3.29.1]: https://github.com/giantswarm/dashboards/compare/v3.29.0...v3.29.1
