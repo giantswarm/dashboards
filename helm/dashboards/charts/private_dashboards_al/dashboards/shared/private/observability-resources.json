@@ -1,0 +1,723 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Overview of resource usage for observability applications",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": 146,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "panels": [],
+      "title": "Documentation",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "This dashboard shows resource usage for observability-related apps.\n\nFor per-application details, you can have a look at more specific dashboards:\n- [Loki cost estimation](/d/loki-cost-estimation/loki-cost-estimation)\n- [Mimir cost estimation](/d/d37ffc71-9200-4f0b-8f9a-9e2af9f6b3232/mimir-cost-estimation)\n- [Alloy resources](/d/d6a8574c31f3d7cb8f1345ec84d15a67/alloy-resources)",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.5.1",
+      "title": "Observability resource usage",
+      "type": "text"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 5,
+      "panels": [],
+      "title": "Data",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"loki|mimir|monitoring\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (namespace, cluster_id)",
+          "legendFormat": "{{namespace}} namespace on {{cluster_id}}",
+          "range": true,
+          "refId": "namespaces"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"alloy.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "alloy {{cluster_id}}",
+          "range": true,
+          "refId": "alloy"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"promtail.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "promtail {{cluster_id}}",
+          "range": true,
+          "refId": "promtail"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"grafana-agent.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "grafana-agent {{cluster_id}}",
+          "range": true,
+          "refId": "grafana-agent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\".*prometheus-agent.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "prometheus-agent {{cluster_id}}",
+          "range": true,
+          "refId": "prometheus-agent"
+        }
+      ],
+      "title": "CPU usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{namespace=~\"loki|mimir|monitoring\", cluster_id=~\"$cluster\"}) by (namespace, cluster_id)",
+          "legendFormat": "{{namespace}} namespace on {{cluster_id}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{pod=~\"alloy.*\", cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "alloy on {{cluster_id}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{pod=~\"promtail.*\", cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "promtail on {{cluster_id}}",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{pod=~\"grafana-agent.*\", cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "grafana-agent on {{cluster_id}}",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{pod=~\".*prometheus-agent.*\", cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "prometheus-agent on {{cluster_id}}",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "RAM usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_receive_bytes_total{namespace=~\"loki|mimir|monitoring\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (namespace, cluster_id)",
+          "legendFormat": "{{namespace}} namespace on {{cluster_id}}",
+          "range": true,
+          "refId": "rx-namespaces"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_receive_bytes_total{pod=~\"alloy.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "alloy on {{cluster_id}}",
+          "range": true,
+          "refId": "rx-alloy"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_receive_bytes_total{pod=~\"promtail.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "promtail on {{cluster_id}}",
+          "range": true,
+          "refId": "rx-promtail"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_receive_bytes_total{pod=~\"grafana-agent.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "grafana-agent on {{cluster_id}}",
+          "range": true,
+          "refId": "rx-grafana-agent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_receive_bytes_total{pod=~\".*prometheus-agent.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "prometheus-agent on {{cluster_id}}",
+          "range": true,
+          "refId": "rx-prometheus-agent"
+        }
+      ],
+      "title": "Network usage - received",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=~\"loki|mimir|monitoring\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (namespace, cluster_id)",
+          "hide": false,
+          "legendFormat": "{{namespace}} namespace on {{cluster_id}}",
+          "range": true,
+          "refId": "tx-namespaces"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_transmit_bytes_total{pod=~\"alloy.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "alloy on {{cluster_id}}",
+          "range": true,
+          "refId": "tx-alloy"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_transmit_bytes_total{pod=~\"promtail.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "promtail on {{cluster_id}}",
+          "range": true,
+          "refId": "tx-promtail"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_transmit_bytes_total{pod=~\"grafana-agent.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "grafana-agent on {{cluster_id}}",
+          "range": true,
+          "refId": "tx-grafana-agent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_transmit_bytes_total{pod=~\".*prometheus-agent.*\", cluster_id=~\"$cluster\"}[$__rate_interval])) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "prometheus-agent on {{cluster_id}}",
+          "range": true,
+          "refId": "tx-prometheus-agent"
+        }
+      ],
+      "title": "Network usage - transmitted",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [
+    "owner:team-atlas",
+    "topic:observability"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "label_values(capi_cluster_info,cluster_id)",
+        "description": "",
+        "includeAll": true,
+        "multi": true,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(capi_cluster_info,cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Observability Resource Usage",
+  "uid": "observability-resource-usage",
+  "version": 4,
+  "weekStart": ""
+}
