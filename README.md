@@ -12,10 +12,10 @@ The "public" ones are accessible by the customer, and the "private" ones are onl
 ### Sub-charts
 
 This chart is divided in 4 different charts, to get around helm charts size limitations:
-- `helm/dashboards/charts/public_dashboards/` for public dashboards.
-- `helm/dashboards/charts/private_dashboards_al/` for private dashboards starting with letters A to L.
-- `helm/dashboards/charts/private_dashboards_mz/` for private dashboards starting with letters M to Z.
-- `helm/dashboards/` for other dashboards.
+- [`helm/dashboards/charts/public_dashboards`](helm/dashboards/charts/public_dashboards) for public dashboards.
+- [`helm/dashboards/charts/private_dashboards_al`](helm/dashboards/charts/private_dashboards_al) for private dashboards starting with letters A to L.
+- [`helm/dashboards/charts/private_dashboards_mz`](helm/dashboards/charts/private_dashboards_mz) for private dashboards starting with letters M to Z.
+- [`helm/dashboards`](helm/dashboards) for other dashboards.
 
 ### Dashboard format
 
