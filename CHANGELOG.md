@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `Observability Resource Usage` dashboard
+- Add **Observability Resource Usage** dashboard
+- Add **Backstage** dashboard
 
 ## [4.2.0] - 2025-03-05
 
