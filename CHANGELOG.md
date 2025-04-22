@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- alerts timeline dashboard:
+    - fix silences count
+    - add links to silences, alerts, notifications
+    - fix consistency between alerts timeline and alerts list
+
 ## [4.4.0] - 2025-03-24
 
 ### Added
