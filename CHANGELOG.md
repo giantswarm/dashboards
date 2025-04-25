@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - fix silences count
     - add links to silences, alerts, notifications
     - fix consistency between alerts timeline and alerts list
+    - update title
 
 ## [4.4.0] - 2025-03-24
 
