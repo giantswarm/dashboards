@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Chunged
+
+- Cluster Overview dashboard: improve alerts links
+
 ## [4.4.1] - 2025-04-28
 
 ### Changed
