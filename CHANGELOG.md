@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- dns dashboard: fixed logs row
+
 ## [4.4.2] - 2025-04-28
 
 ### Chunged
