@@ -1,0 +1,2022 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "usage-insights-6-loki-query-fair-usage-drilldown",
+    "url": "/d/cdybdibbio2dcd/usage-insights-6-loki-query-fair-usage-drilldown",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2024-09-25T14:19:53Z",
+    "updated": "2025-03-18T11:59:34Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 7,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 352,
+    "folderUid": "OBOLo6Tnk",
+    "folderTitle": "GrafanaCloud",
+    "folderUrl": "/dashboards/f/OBOLo6Tnk/grafanacloud",
+    "provisioned": true,
+    "provisionedExternalId": "dashboard.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "__inputs": [
+      {
+        "description": "Provisioned Loki log stream for usage insights in Grafana Cloud.",
+        "label": "loki-datasource",
+        "name": "DS_LOKI",
+        "pluginId": "loki",
+        "pluginName": "Loki",
+        "type": "datasource"
+      },
+      {
+        "description": "Provisioned Prometheus metrics on general usage in Grafana Cloud.",
+        "label": "prometheus",
+        "name": "DS_PROMETHEUS",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus",
+        "type": "datasource"
+      }
+    ],
+    "description": "This dashboard exists to help identify queries that are heavy hitters relative to your Query Fair Usage Ratio.",
+    "editable": false,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 21936,
+    "graphTooltip": 0,
+    "id": 2240,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "dashboard",
+        "includeVars": false,
+        "keepTime": true,
+        "targetBlank": false,
+        "title": "Usage Insights Overview",
+        "tooltip": "",
+        "type": "link",
+        "url": "/d/XU8HAD5Gk/usage-insights-1-overview"
+      }
+    ],
+    "panels": [
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "explore/other"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "dashboard"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "grafana-alerts"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #D"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Explore Logs App"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 9,
+          "x": 0,
+          "y": 0
+        },
+        "options": {
+          "displayLabels": [
+            "percent",
+            "name"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true,
+            "values": [
+              "value",
+              "percent"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\" | source!~\"grafana-alert|grafana-lokiexplore-app\"| dashboard_id=\"\" | unwrap bytes(total_bytes) [$__range]))",
+            "legendFormat": "explore/other",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id!=\"\" | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "legendFormat": "dashboards",
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-alert\" | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "legendFormat": "grafana-alerts",
+            "queryType": "instant",
+            "refId": "C"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-lokiexplore-app\" | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "D"
+          }
+        ],
+        "title": "query bytes breakdown",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "explore/other"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "dashboard"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "grafana-alerts"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #D"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Explore Logs App"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 9,
+          "x": 9,
+          "y": 0
+        },
+        "options": {
+          "displayLabels": [
+            "percent",
+            "name"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true,
+            "values": [
+              "value",
+              "percent"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(count_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"\"| dashboard_id=\"\" [$__range]))",
+            "legendFormat": "explore/other",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(count_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id!=\"\"[$__range]))",
+            "hide": false,
+            "legendFormat": "dashboards",
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(count_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-alert\"[$__range]))",
+            "hide": false,
+            "legendFormat": "grafana-alerts",
+            "queryType": "instant",
+            "refId": "C"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(count_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-lokiexplore-app\"[$__range]))",
+            "hide": false,
+            "legendFormat": "grafana-alerts",
+            "queryType": "instant",
+            "refId": "D"
+          }
+        ],
+        "title": "query types count",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "dashboards"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "grafana-alert"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "explore/other"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #D"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Explore Logs App"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 6,
+          "x": 18,
+          "y": 0
+        },
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"\"| dashboard_id!=\"\"  | unwrap bytes(total_bytes)[$__range]))",
+            "legendFormat": "dashboards",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-alert\" | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "legendFormat": "grafana-alert",
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!~\"grafana-alert|grafana-lokiexplore-app\"| dashboard_id=\"\"  | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "legendFormat": "explore/other",
+            "queryType": "instant",
+            "refId": "C"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum(sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-lokiexplore-app\"  | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "legendFormat": "explore/other",
+            "queryType": "instant",
+            "refId": "D"
+          }
+        ],
+        "title": "bytes by source",
+        "transformations": [
+          {
+            "disabled": true,
+            "id": "merge"
+          },
+          {
+            "disabled": true,
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              }
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "displayName",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "panel_id"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 979
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query_hash"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 136
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "grafana_username"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 269
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 13,
+          "x": 0,
+          "y": 10
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "bytes"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "topk(20, sum by (grafana_username) (sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\" | grafana_username!=\"\"  | unwrap bytes(total_bytes)[$__range])))",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "topk(10000,\n    sum by (query_hash) (\n        count_over_time(\n            {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id=\"\" | total_bytes > 1MB\n            [$__range]\n        )\n    ) > 0\n)",
+            "hide": true,
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "60\n/\n(\n    topk(10000,\n        sum by (query_hash) (\n            count_over_time(\n                {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id=\"\" | total_bytes > 1MB\n                [$__range]\n            )\n        ) > 0\n    )\n    /\n    ($__range_s/60)\n)",
+            "hide": true,
+            "queryType": "instant",
+            "refId": "C"
+          }
+        ],
+        "title": "Top Users",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "query_hash",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Value #A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "query_hash",
+                  "grafana_username",
+                  "Value #A",
+                  "Value #B",
+                  "Value #C"
+                ]
+              }
+            }
+          },
+          {
+            "id": "limit",
+            "options": {
+              "limitField": "10"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "renameByName": {
+                "Value #B": "# of queries in range",
+                "Value #C": "Estimated interval"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Loki Instance ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 127
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 11,
+          "x": 13,
+          "y": 10
+        },
+        "options": {
+          "cellHeight": "sm",
+          "frameIndex": 0,
+          "showHeader": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "grafanacloud-giantswarm-usage-insights"
+            },
+            "editorMode": "code",
+            "expr": "sum by (user) (sum_over_time({org_id=\"$orgID\"} |= \"request timings\" | logfmt | user=~\"$instance\"| path=~\"/loki/api/v1/.*\" | unwrap bytes(total_bytes)[$__range]))",
+            "hide": false,
+            "legendFormat": "{{$user}}",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (user, name) (label_replace(grafanacloud_logs_instance_info{org_id=~\"$orgID\",id=~\"$instance\"}, \"user\", \"$1\", \"id\", \"(.*)\"))",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "Bytes by Loki Instance",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "user",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "byVariable": false,
+              "include": {
+                "names": [
+                  "user",
+                  "Value #A",
+                  "name"
+                ]
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Value #A": 2,
+                "name": 1,
+                "user": 0
+              },
+              "renameByName": {
+                "Value #A": "bytes",
+                "name": "Cloud Logs Stack Name",
+                "user": "Loki Instance ID"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 20
+        },
+        "title": "explore/other",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "This panel shows queries executed via the default Explore page and queries executed from non-Grafana frontend sources, such as logcli.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "displayName",
+                  "value": "total bytes queried"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "panel_id"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 979
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query_hash"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 136
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "grafana_username"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 206
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "bytes per query"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Estimated interval"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "s"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "user"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Loki Instance ID"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 21
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "bytes per query"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "topk(20, sum by (query_hash, query, panel_id, grafana_username, user) (sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"\"| dashboard_id=\"\"  | unwrap bytes(total_bytes)[$__range])))",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "topk(10000,\n    sum by (query_hash) (\n        count_over_time(\n            {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id=\"\" | total_bytes > 1MB\n            [$__range]\n        )\n    ) > 0\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "60\n/\n(\n    topk(10000,\n        sum by (query_hash) (\n            count_over_time(\n                {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id=\"\" | total_bytes > 1MB\n                [$__range]\n            )\n        ) > 0\n    )\n    /\n    ($__range_s/60)\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "C"
+          }
+        ],
+        "title": "Explore/Other Queries",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "query_hash",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Value #A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "query_hash",
+                  "query",
+                  "user",
+                  "Value #A",
+                  "Value #B",
+                  "Value #C",
+                  "grafana_username"
+                ]
+              }
+            }
+          },
+          {
+            "id": "limit",
+            "options": {
+              "limitField": "10"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Value #A": 4,
+                "Value #B": 5,
+                "Value #C": 6,
+                "grafana_username": 2,
+                "query": 3,
+                "query_hash": 0,
+                "user": 1
+              },
+              "renameByName": {
+                "Value #B": "# of queries in range",
+                "Value #C": "Estimated interval"
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "bytes per query",
+              "binary": {
+                "left": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #A"
+                  }
+                },
+                "operator": "/",
+                "right": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "# of queries in range"
+                  }
+                }
+              },
+              "mode": "binary",
+              "reduce": {
+                "include": [
+                  "Value #A"
+                ],
+                "reducer": "sum"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        },
+        "title": "dashboards",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "displayName",
+                  "value": "total bytes queried"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "panel_id"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 979
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query_hash"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 136
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "grafana_username"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 269
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Estimated interval"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "s"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "bytes per query"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "user"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Loki Instance ID"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 33
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "bytes"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "topk(20, sum by (query_hash, query, dashboard_id, dashboard_title, panel_title, panel_id, grafana_username, user) (sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt | user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id!=\"\"  | unwrap bytes(total_bytes)[$__range])))",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "topk(10000,\n    sum by (query_hash) (\n        count_over_time(\n            {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id!=\"\"\n                | total_bytes > 1MB\n            [$__range]\n        )\n    ) > 0\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "60\n/\n(\n    topk(10000,\n        sum by (query_hash) (\n            count_over_time(\n                {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source!=\"grafana-alert\"| dashboard_id!=\"\"\n                    | total_bytes > 1MB\n                [$__range]\n            )\n        ) > 0\n    )\n    /\n    ($__range_s/60)\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "C"
+          }
+        ],
+        "title": "Dashboard Queries",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "query_hash",
+              "mode": "inner"
+            }
+          },
+          {
+            "disabled": true,
+            "id": "sortBy",
+            "options": {
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Value #A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "query_hash",
+                  "dashboard_id",
+                  "dashboard_title",
+                  "grafana_username",
+                  "panel_id",
+                  "query",
+                  "user",
+                  "Value #A",
+                  "Value #B",
+                  "Value #C",
+                  "panel_title"
+                ]
+              }
+            }
+          },
+          {
+            "id": "limit",
+            "options": {
+              "limitField": "10"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Value #A": 8,
+                "Value #B": 9,
+                "Value #C": 10,
+                "dashboard_id": 3,
+                "dashboard_title": 4,
+                "grafana_username": 0,
+                "panel_id": 5,
+                "panel_title": 6,
+                "query": 7,
+                "query_hash": 2,
+                "user": 1
+              },
+              "renameByName": {
+                "Value #B": "# of queries in range",
+                "Value #C": "Estimated interval"
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "bytes per query",
+              "binary": {
+                "left": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #A"
+                  }
+                },
+                "operator": "/",
+                "right": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "# of queries in range"
+                  }
+                }
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 44
+        },
+        "title": "grafana alerts",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "If *some* rulers in this table do not show rule_folder and rule_name values then they are likely Grafana Recorded Queries and not Grafana Managed Alerts",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "displayName",
+                  "value": "total bytes queried"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "panel_id"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 207
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query_hash"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 139
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "grafana_username"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 269
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "rule_folder"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 168
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "rule_name"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 499
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "estimated interval"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "s"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "bytes per query"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "user"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Loki Instance ID"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 45
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "topk(20, sum by (query_hash, query, rule_name, rule_folder, user) (sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-alert\"| unwrap bytes(total_bytes)[$__range])))",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "topk(10000,\n    sum by (query_hash) (\n        count_over_time(\n            {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-alert\" | total_bytes > 1MB\n            [$__range]\n        )\n    ) > 0\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "60\n/\n(\n    topk(10000,\n        sum by (query_hash) (\n            count_over_time(\n                {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-alert\" | total_bytes > 1MB\n                [$__range]\n            )\n        ) > 0\n    )\n    /\n    ($__range_s/60)\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "C"
+          }
+        ],
+        "title": "Grafana Alerts",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "query_hash",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Value #A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "byVariable": false,
+              "include": {
+                "names": [
+                  "query_hash",
+                  "query",
+                  "rule_folder",
+                  "user",
+                  "Value #A",
+                  "Value #B",
+                  "Value #C",
+                  "rule_name"
+                ]
+              }
+            }
+          },
+          {
+            "id": "limit",
+            "options": {
+              "limitField": "10"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Value #A": 5,
+                "Value #B": 6,
+                "Value #C": 7,
+                "query": 2,
+                "query_hash": 0,
+                "rule_folder": 3,
+                "rule_name": 4,
+                "user": 1
+              },
+              "renameByName": {
+                "Value #A": "",
+                "Value #B": "# of queries in range",
+                "Value #C": "estimated interval"
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "bytes per query",
+              "binary": {
+                "left": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #A"
+                  }
+                },
+                "operator": "/",
+                "right": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "# of queries in range"
+                  }
+                }
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 56
+        },
+        "title": "Explore Logs App",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "displayName",
+                  "value": "total bytes queried"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "panel_id"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 527
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "query_hash"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 136
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "grafana_username"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 269
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Estimated interval"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "s"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "bytes per query"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "user"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Loki Instance ID"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 57
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "topk(20, sum by (query_hash, query, panel_id, grafana_username, user) (sum_over_time({org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\"| source=\"grafana-lokiexplore-app\" | unwrap bytes(total_bytes)[$__range])))",
+            "queryType": "instant",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "topk(10000,\n    sum by (query_hash) (\n        count_over_time(\n            {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\" |source=\"grafana-lokiexplore-app\"| dashboard_id=\"\" | total_bytes > 1MB\n            [$__range]\n        )\n    ) > 0\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "60\n/\n(\n    topk(10000,\n        sum by (query_hash) (\n            count_over_time(\n                {org_id=\"$orgID\"} |= \"request timings\" |logfmt| user=~\"$instance\" | path=~\"/loki/api/v1/.*\" | source=\"grafana-lokiexplore-app\"| dashboard_id=\"\" | total_bytes > 1MB\n                [$__range]\n            )\n        ) > 0\n    )\n    /\n    ($__range_s/60)\n)",
+            "hide": false,
+            "queryType": "instant",
+            "refId": "C"
+          }
+        ],
+        "title": "Explore Logs Queries",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "query_hash",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Value #A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "query_hash",
+                  "grafana_username",
+                  "user",
+                  "Value #A",
+                  "Value #B",
+                  "Value #C",
+                  "query"
+                ]
+              }
+            }
+          },
+          {
+            "id": "limit",
+            "options": {
+              "limitField": "10"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Value #A": 4,
+                "Value #B": 5,
+                "Value #C": 6,
+                "grafana_username": 2,
+                "query": 3,
+                "query_hash": 0,
+                "user": 1
+              },
+              "renameByName": {
+                "Value #B": "# of queries in range",
+                "Value #C": "Estimated interval"
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "bytes per query",
+              "binary": {
+                "left": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #A"
+                  }
+                },
+                "operator": "/",
+                "right": {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "# of queries in range"
+                  }
+                }
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 40,
+    "tags": [
+      "grafanacloud"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "grafanacloud-ops-usage-insights",
+            "value": "grafanacloud-usage-insights"
+          },
+          "description": "choose the usage insights logs datasource",
+          "includeAll": false,
+          "label": "Usage Insights Logs",
+          "name": "usageInsightsDS",
+          "query": "loki",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "grafanacloud-usage",
+            "value": "grafanacloud-usage"
+          },
+          "label": "Usage (metrics) Datasource",
+          "name": "metricsUsageDatasource",
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-giantswarm-usage-insights"
+          },
+          "definition": "",
+          "includeAll": true,
+          "multi": true,
+          "name": "instance",
+          "query": {
+            "label": "instance_id",
+            "refId": "LokiVariableQueryEditor-VariableQuery",
+            "stream": "{instance_type=\"logs\"}",
+            "type": 1
+          },
+          "refresh": 2,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "1",
+            "value": "1"
+          },
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-giantswarm-usage-insights"
+          },
+          "definition": "",
+          "includeAll": false,
+          "label": "orgID",
+          "name": "orgID",
+          "query": {
+            "label": "org_id",
+            "refId": "LokiVariableQueryEditor-VariableQuery",
+            "stream": "",
+            "type": 1
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Usage Insights - 6 - Loki Query Fair Usage Drilldown",
+    "uid": "cdybdibbio2dcd",
+    "version": 7,
+    "weekStart": ""
+  }
+}

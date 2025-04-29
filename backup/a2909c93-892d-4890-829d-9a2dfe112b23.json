@@ -1,0 +1,230 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "cluster-info-vintage",
+    "url": "/d/a2909c93-892d-4890-829d-9a2dfe112b23/cluster-info-vintage",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2023-08-25T08:26:19Z",
+    "updated": "2023-10-03T15:24:01Z",
+    "updatedBy": "theo3",
+    "createdBy": "theo3",
+    "version": 12,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Show vintage clusters metadata informations like release, provider, installation, customer, etc ...",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1409,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 25,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": true,
+            "enablePagination": true,
+            "fields": "",
+            "reducer": [
+              "count"
+            ],
+            "show": true
+          },
+          "frameIndex": 0,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "installation"
+            }
+          ]
+        },
+        "pluginVersion": "10.2.0-60853",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "aggregation:giantswarm:cluster_release_version",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(aggregation:kubelet:version) by (cluster_id, installation)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "Clusters",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "cluster_id",
+              "mode": "outerTabular"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 1": true,
+                "Time 2": true,
+                "Total": false,
+                "Value": false,
+                "Value #A": true,
+                "__name__": true,
+                "cluster_type": true,
+                "installation 2": true,
+                "prometheus": true,
+                "prometheus_replica": true
+              },
+              "indexByName": {
+                "Time 1": 12,
+                "Time 2": 15,
+                "Value #A": 14,
+                "Value #B": 5,
+                "__name__": 13,
+                "cluster_id": 0,
+                "cluster_type": 1,
+                "customer": 2,
+                "installation 1": 3,
+                "installation 2": 4,
+                "pipeline": 6,
+                "prometheus": 7,
+                "prometheus_replica": 8,
+                "provider": 9,
+                "region": 10,
+                "release_version": 11
+              },
+              "renameByName": {
+                "Value": "kubelets",
+                "Value #B": "kubelets",
+                "aggregation:giantswarm:cluster_release_version{cluster_id=\"03czy\", cluster_type=\"management_cluster\", customer=\"panamax\", installation=\"puma\", pipeline=\"stable\", prometheus=\"puma-prometheus/puma\", prometheus_replica=\"prometheus-puma-0\", provider=\"kvm\", region=\"onprem\", release_version=\"16.2.1\"}": ""
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Cluster info (vintage)",
+    "uid": "a2909c93-892d-4890-829d-9a2dfe112b23",
+    "version": 12,
+    "weekStart": ""
+  }
+}
