@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add Konfigure Operator dashboard
+
 ## [4.4.3] - 2025-04-29
 
 ### Fixed
