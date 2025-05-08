@@ -1,0 +1,27 @@
+name: backup-grafana-cloud-dashboards
+
+on:
+  schedule:
+    # At 11:00 on the 1st of each month
+    - cron:  '0 11 1 * *' # CHANGE 
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Backup Grafana Dashboards 
+      run: ./scripts/get-dashboards.sh "" dashboards/grafana-cloud
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v7.0.8
+      with:
+        title: "[AUTO] Backup Grafana Cloud dashboards"
+        branch: backup-grafana-cloud-dashboards
+        base: main
+        body: |
+          Backup Grafana Cloud dashboards
+
+          This PR contains the latest dashboards from Grafana Cloud.
