@@ -1,0 +1,2755 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "alerts-analysis",
+    "url": "/d/TBwN5ZzMk/alerts-analysis",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2020-05-23T11:17:09Z",
+    "updated": "2024-02-22T14:03:32Z",
+    "updatedBy": "teem0w",
+    "createdBy": "salisburyjoe",
+    "version": 62,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "$$hashKey": "object:428",
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 62,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 20,
+        "panels": [],
+        "title": "Documentation",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 1
+        },
+        "id": 21,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "# Count-based vs time-based:\n\nOur data is very bad at counting number of changes in status.\nSo, some graphs try to count number of times alerts fired, but they lack precision. We may miss some alerts.\n\nNewer graphs count the time alerts spent firing.\n\nNote that time can be more than 100%, when the same alert fires multiple occurences.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.0.0-67348",
+        "title": "Documentation",
+        "type": "text"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 9
+        },
+        "id": 22,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 24,
+              "x": 0,
+              "y": 10
+            },
+            "id": 18,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.0-60853",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~\"$alertname\", customer=~'($customer)|$^', provider=~'($provider)|$^',installation=~\"($installation)|$^\"}[1d:1m]\n    )\n) by (alertname)",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Alerting time per alert",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "left",
+                  "fillOpacity": 80,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineWidth": 1,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 19
+            },
+            "id": 24,
+            "options": {
+              "barRadius": 0,
+              "barWidth": 0.97,
+              "fullHighlight": false,
+              "groupWidth": 0.7,
+              "legend": {
+                "calcs": [],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "orientation": "auto",
+              "showValue": "auto",
+              "stacking": "none",
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              },
+              "xTickLabelRotation": 0,
+              "xTickLabelSpacing": 0
+            },
+            "pluginVersion": "10.2.0-60853",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(\n    aggregation:prometheus:alerts{cluster_id!~'^$|giantswarm', pipeline=~'($pipeline)|$^', severity=~'($severity)|$^', customer=~'($customer)|$^', team=~'($team)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}\n    ) by (installation, cluster_id)",
+                "format": "time_series",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "{{ installation }}/{{ cluster_id  }}",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Currently Alerting Clusters",
+            "type": "barchart"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 35,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "decimals": 0,
+                "links": [],
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Average Plus 2 Stddev (Last 7 Days)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.fillBelowTo",
+                      "value": "Average Minus 2 Stddev (Last 7 Days)"
+                    },
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 0
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Average Minus 2 Stddev (Last 7 Days)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 19
+            },
+            "id": 23,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.0.1-cloud.3.f250259e",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~\"$alertname\", customer=~'($customer)|$^', provider=~'($provider)|$^',installation=~\"($installation)|$^\"}[7d:1m]\n    )\n)",
+                "interval": "",
+                "legendFormat": "Alerting time (Last 7 Days)",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    avg_over_time(\n        aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"$severity\", pipeline=~\"$pipeline\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d:1m]\n    )\n)",
+                "interval": "",
+                "legendFormat": "Average time (Last 7 Days)",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    avg_over_time(\n        aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"$severity\", pipeline=~\"$pipeline\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d:1m]\n    )\n)\n + (2 * sum(\n    stddev_over_time(\n        aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"$severity\", pipeline=~\"$pipeline\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d:1m]\n    )\n))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Average Plus 2 Stddev (Last 7 Days)",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    avg_over_time(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"page\", pipeline=~\"stable\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d:1m]\n    )\n) - (2 * sum(\n    stddev_over_time(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"page\", pipeline=~\"stable\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d:1m])\n    )\n)",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Average Minus 2 Stddev (Last 7 Days)",
+                "range": true,
+                "refId": "D"
+              }
+            ],
+            "title": "Alerting time (Last 7 Days)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Sum for selected range",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "inspect": false
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "": {
+                        "text": ""
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    },
+                    {
+                      "id": "displayName",
+                      "value": "Time spent firing"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "alertname"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Alert Name"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 28
+            },
+            "id": 25,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time spent firing"
+                }
+              ]
+            },
+            "pluginVersion": "11.0.0-67348",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~\"$alertname\", customer=~'($customer)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}[$__range:1m]\n    )\n) by (alertname) > 0",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Most Firing Alerts",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "indexByName": {},
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Sum for selected range",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "inspect": false
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "": {
+                        "text": ""
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    },
+                    {
+                      "id": "displayName",
+                      "value": "Time spent firing"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "cluster_id"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Cluster ID"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "installation"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Installation"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 28
+            },
+            "id": 26,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time spent firing"
+                }
+              ]
+            },
+            "pluginVersion": "11.0.0-67348",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}[$__range:1m]\n    )\n) by (installation, cluster_id) > 0",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Most Firing Clusters",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 3,
+                    "cluster_id": 2,
+                    "installation": 1
+                  },
+                  "renameByName": {
+                    "Time": ""
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Sum for selected range",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "inspect": false
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "": {
+                        "text": ""
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "alertname"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Alert Name"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "cluster_id"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Cluster ID"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Time spent firing"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Cluster ID"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 37
+            },
+            "id": 27,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time spent firing"
+                }
+              ]
+            },
+            "pluginVersion": "11.0.0-67348",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~\"$alertname\", customer=~'($customer)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}[$__range:1m]\n    )\n) by (alertname, installation, cluster_id) > 0",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Most Firing Alerts & Clusters",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 4,
+                    "alertname": 1,
+                    "cluster_id": 3,
+                    "installation": 2
+                  },
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Sum for selected range",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "inspect": false
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "": {
+                        "text": ""
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "team"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Team"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Time spent firing"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 37
+            },
+            "id": 28,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time spent firing"
+                }
+              ]
+            },
+            "pluginVersion": "11.0.0-67348",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}[$__range:1m]\n    )\n) by (team) > 0",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Most Firing teams",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "indexByName": {},
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Sum for selected range",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "inspect": false
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "": {
+                        "text": ""
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "topic"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Topic"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Time spent firing"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 46
+            },
+            "id": 29,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time spent firing"
+                }
+              ]
+            },
+            "pluginVersion": "11.0.0-67348",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}[$__range:1m]\n    )\n) by (topic) > 0",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Most Firing Alerts per Topic",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 2,
+                    "topic": 1
+                  },
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Sum for selected range",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "inspect": false
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "": {
+                        "text": ""
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "team"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Team"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Time spent firing"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 46
+            },
+            "id": 30,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time spent firing"
+                }
+              ]
+            },
+            "pluginVersion": "11.0.0-67348",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(\n    sum_over_time(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', installation=~'($installation)|$^'}[$__range:1m]\n    )\n) by (area) > 0",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Most Firing Area",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "indexByName": {},
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "table"
+          }
+        ],
+        "title": "Time-based",
+        "type": "row"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 19,
+        "panels": [],
+        "title": "Count-based",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ]
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 11
+        },
+        "id": 6,
+        "mappingTypes": [
+          {
+            "$$hashKey": "object:229",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:230",
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "options": {
+          "autoSizeColumns": true,
+          "autoSizePolygons": true,
+          "autoSizeRows": true,
+          "compositeConfig": {
+            "animationSpeed": "2500",
+            "composites": [],
+            "enabled": true
+          },
+          "ellipseCharacters": 18,
+          "ellipseEnabled": false,
+          "globalAutoScaleFonts": true,
+          "globalClickthrough": "",
+          "globalClickthroughNewTabEnabled": false,
+          "globalClickthroughSanitizedEnabled": false,
+          "globalDecimals": 2,
+          "globalDisplayMode": "all",
+          "globalDisplayTextTriggeredEmpty": "OK",
+          "globalFillColor": "#56A64B",
+          "globalFontSize": 12,
+          "globalGradientsEnabled": false,
+          "globalOperator": "last",
+          "globalPolygonBorderColor": "black",
+          "globalPolygonBorderSize": 1,
+          "globalPolygonSize": 50,
+          "globalRegexPattern": "",
+          "globalShape": "hexagon_pointed_top",
+          "globalShowValueEnabled": true,
+          "globalTextFontAutoColor": "#000000",
+          "globalTextFontAutoColorEnabled": true,
+          "globalTextFontColor": "#000000",
+          "globalThresholdsConfig": [
+            {
+              "color": "#d44a3a",
+              "state": 2,
+              "value": 1
+            }
+          ],
+          "globalTooltipsEnabled": true,
+          "globalTooltipsShowTimestampEnabled": true,
+          "globalUnitFormat": "none",
+          "layoutDisplayLimit": 100,
+          "layoutNumColumns": 8,
+          "layoutNumRows": 8,
+          "overrideConfig": {
+            "overrides": []
+          },
+          "panelId": 0,
+          "radius": 100,
+          "sortByDirection": 1,
+          "sortByField": "name",
+          "tooltipDisplayMode": "all",
+          "tooltipDisplayTextTriggeredEmpty": "OK",
+          "tooltipPrimarySortByField": "thresholdLevel",
+          "tooltipPrimarySortDirection": 2,
+          "tooltipSecondarySortByField": "value",
+          "tooltipSecondarySortDirection": 2
+        },
+        "pluginVersion": "2.0.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    aggregation:prometheus:alerts{cluster_id!~'^$|giantswarm', pipeline=~'($pipeline)|$^', severity=~'($severity)|$^', customer=~'($customer)|$^', team=~'($team)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}\n    ) by (installation, cluster_id)",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{ installation }}/{{ cluster_id  }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Currently Alerting Clusters",
+        "type": "grafana-polystat-panel"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 35,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 0,
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Average Plus 2 Stddev (Last 7 Days)"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillBelowTo",
+                  "value": "Average Minus 2 Stddev (Last 7 Days)"
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Average Minus 2 Stddev (Last 7 Days)"
+              },
+              "properties": [
+                {
+                  "id": "custom.lineWidth",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 11
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "10.0.1-cloud.3.f250259e",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[7d]\n    )\n)",
+            "interval": "",
+            "legendFormat": "Number Of Alerts (Last 7 Days)",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    avg_over_time(\n        changes(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"$severity\", pipeline=~\"$pipeline\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d]\n        )[7d:]\n    )\n)",
+            "interval": "",
+            "legendFormat": "Average Of Alerts (Last 7 Days)",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    avg_over_time(\n        changes(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"$severity\", pipeline=~\"$pipeline\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d]\n        )[7d:]\n    )\n)\n + (2 * sum(\n    stddev_over_time(\n        changes(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"$severity\", pipeline=~\"$pipeline\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d]\n        )[7d:]\n    )\n))",
+            "interval": "",
+            "legendFormat": "Average Plus 2 Stddev (Last 7 Days)",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    avg_over_time(\n        changes(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"page\", pipeline=~\"stable\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d]\n        )[7d:]\n    )\n) - (2 * sum(\n    stddev_over_time(\n        changes(\n            aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\", severity=~\"page\", pipeline=~\"stable\", team=~\"$team\", alertname=~\"$alertname\", customer=~\"$customer\", provider=~\"$provider\"}[7d])\n        [7d:])\n    )\n)",
+            "interval": "",
+            "legendFormat": "Average Minus 2 Stddev (Last 7 Days)",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Number Of Alerts (Last 7 Days)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Sum for selected range",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "": {
+                    "text": ""
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Number Of Times Fired"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "alertname"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Alert Name"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 20
+        },
+        "id": 8,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Number Of Times Fired"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0-67348",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~\"$alertname\", customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[$__range]\n    )\n) by (alertname) > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Most Fired Alerts",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Sum for selected range",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "": {
+                    "text": ""
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Number Of Alerts Fired"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "cluster_id"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Cluster ID"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "installation"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Installation"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 20
+        },
+        "id": 11,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Number Of Alerts Fired"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0-67348",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[$__range]\n    )\n) by (installation, cluster_id) > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Most Fired Clusters",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 3,
+                "cluster_id": 2,
+                "installation": 1
+              },
+              "renameByName": {
+                "Time": ""
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Sum for selected range",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "": {
+                    "text": ""
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "alertname"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Alert Name"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "cluster_id"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Cluster ID"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Number Of Times Fired"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Cluster ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 29
+        },
+        "id": 12,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Number Of Times Fired"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0-67348",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~\"$alertname\", customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[$__range]\n    )\n) by (alertname, installation, cluster_id) > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Most Fired Alerts & Clusters",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 4,
+                "alertname": 1,
+                "cluster_id": 3,
+                "installation": 2
+              },
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Sum for selected range",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "": {
+                    "text": ""
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "team"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Team"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Number Of Times Fired"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 29
+        },
+        "id": 15,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Number Of Times Fired"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0-67348",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[$__range]\n    )\n) by (team) > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Most Fired Teams",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Sum for selected range",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "": {
+                    "text": ""
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "topic"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Topic"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Number Of Times Fired"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 38
+        },
+        "id": 16,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Number Of Times Fired"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0-67348",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[$__range]\n    )\n) by (topic) > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Most Fired Alerts per Topic",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 2,
+                "topic": 1
+              },
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Sum for selected range",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "": {
+                    "text": ""
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "team"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Team"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Number Of Times Fired"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 38
+        },
+        "id": 17,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Number Of Times Fired"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0-67348",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(\n    changes(\n        aggregation:prometheus:alerts{severity=~'($severity)|$^', pipeline=~'($pipeline)|$^', team=~'($team)|$^', alertname=~'($alertname)|$^', customer=~'($customer)|$^', provider=~'($provider)|$^', alertname!~\"^Inhibition.*\", installation=~'($installation)|$^'}[$__range]\n    )\n) by (area) > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Most Fired Area",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [
+      "owner:team-atlas"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts, team)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Team",
+          "multi": true,
+          "name": "team",
+          "options": [],
+          "query": "label_values(aggregation:prometheus:alerts, team)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\"}, alertname)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Alert",
+          "multi": true,
+          "name": "alertname",
+          "options": [],
+          "query": "label_values(aggregation:prometheus:alerts{alertname!~\"^(Inhibition.+|Heartbeat)\"}, alertname)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts, customer)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Customer",
+          "multi": true,
+          "name": "customer",
+          "options": [],
+          "query": "label_values(aggregation:prometheus:alerts, customer)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": "aws",
+            "value": "aws"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts, provider)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Provider",
+          "multi": true,
+          "name": "provider",
+          "options": [],
+          "query": "label_values(aggregation:prometheus:alerts, provider)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": "page",
+            "value": "page"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts,severity)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Severity",
+          "multi": true,
+          "name": "severity",
+          "options": [],
+          "query": {
+            "query": "label_values(aggregation:prometheus:alerts,severity)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": "stable",
+            "value": "stable"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts,pipeline)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Pipeline",
+          "multi": true,
+          "name": "pipeline",
+          "options": [],
+          "query": {
+            "query": "label_values(aggregation:prometheus:alerts,pipeline)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts,installation)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Installation",
+          "multi": true,
+          "name": "installation",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:prometheus:alerts,installation)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-14d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "",
+    "title": "Alerts Analysis",
+    "uid": "TBwN5ZzMk",
+    "version": 62,
+    "weekStart": ""
+  }
+}

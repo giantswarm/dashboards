@@ -1,0 +1,816 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "service-level",
+    "url": "/d/service-level/service-level",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2025-04-03T13:20:26Z",
+    "updated": "2025-04-29T10:36:19Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "sa-autogen-Dashboard CI",
+    "version": 13,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 40,
+    "folderUid": "bm_2ocRGz",
+    "folderTitle": "Official",
+    "folderUrl": "/dashboards/f/bm_2ocRGz/official",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "__inputs": [],
+    "__requires": [],
+    "annotations": {
+      "list": []
+    },
+    "editable": false,
+    "gnetId": null,
+    "graphTooltip": 1,
+    "hideControls": false,
+    "id": 2511,
+    "links": [],
+    "panels": [
+      {
+        "columns": [],
+        "datasource": null,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "links": [],
+        "styles": null,
+        "targets": [
+          {
+            "expr": "sum(\n        slo_errors_per_request:ratio_rate1h{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_high\n        and\n        slo_errors_per_request:ratio_rate5m{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_high\n        or\n        slo_errors_per_request:ratio_rate6h{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_low\n        and\n        slo_errors_per_request:ratio_rate30m{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_low\n      ) by (service, customer, installation, cluster_id)",
+            "format": "table",
+            "instant": true,
+            "intervalFactor": 2,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Currently Alerting Services",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 5,
+                "cluster_id": 4,
+                "customer": 2,
+                "installation": 3,
+                "service": 1
+              },
+              "renameByName": {
+                "Value": "",
+                "cluster_id": "Cluster ID",
+                "customer": "Customer",
+                "installation": "Installation",
+                "service": "Service"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 3,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "sideWidth": null,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "percentage": false,
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "repeat": null,
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(\n      slo_errors_per_request:ratio_rate1h{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_high\n      and\n      slo_errors_per_request:ratio_rate5m{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_high\n      or\n      slo_errors_per_request:ratio_rate6h{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_low\n      and\n      slo_errors_per_request:ratio_rate30m{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"} > on (service, cluster_id, installation, label_application_giantswarm_io_team) group_left (cluster_type, class) slo_threshold_low\n    ) by (service, customer, installation, cluster_id)",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Alert",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "none",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          },
+          {
+            "format": "none",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          }
+        ]
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 9
+        },
+        "id": 4,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "sideWidth": null,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "percentage": false,
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "repeat": null,
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "slo_requests{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Requests",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "none",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          },
+          {
+            "format": "none",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          }
+        ]
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 9
+        },
+        "id": 5,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "sideWidth": null,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "percentage": false,
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "repeat": null,
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "slo_errors{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Errors",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "none",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          },
+          {
+            "format": "none",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          }
+        ]
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 9
+        },
+        "id": 6,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "sideWidth": null,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "percentage": false,
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "repeat": null,
+        "seriesOverrides": [
+          {
+            "alias": "/.*(5m)/",
+            "color": "#8AB8FF"
+          },
+          {
+            "alias": "/.*(1h)/",
+            "color": "#1250B0"
+          },
+          {
+            "alias": "/.*(SLO High Threshold)/",
+            "color": "#E02F44",
+            "linewidth": 3
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "slo_errors_per_request:ratio_rate5m{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}} (5m)",
+            "refId": "A"
+          },
+          {
+            "expr": "slo_errors_per_request:ratio_rate1h{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}} (1h)",
+            "refId": "B"
+          },
+          {
+            "expr": "min(slo_threshold_high{service=~\"$service\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}) by (service)",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "SLO High Threshold - {{service}}",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "High Burn Rate",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          }
+        ]
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 9
+        },
+        "id": 7,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "sideWidth": null,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "percentage": false,
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "repeat": null,
+        "seriesOverrides": [
+          {
+            "alias": "/.*(30m)/",
+            "color": "#CA95E5"
+          },
+          {
+            "alias": "/.*(6h)/",
+            "color": "#7C2EA3"
+          },
+          {
+            "alias": "/.*(SLO Low Threshold)/",
+            "color": "#E02F44",
+            "linewidth": 3
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "slo_errors_per_request:ratio_rate30m{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}} (30m)",
+            "refId": "A"
+          },
+          {
+            "expr": "slo_errors_per_request:ratio_rate6h{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{service}} / {{installation}} / {{cluster_id}} (6h)",
+            "refId": "B"
+          },
+          {
+            "expr": "min(slo_threshold_low{service=~\"$service\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}) by (service)",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "SLO Low Threshold - {{service}}",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Low Burn Rate",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": 0,
+            "show": true
+          }
+        ]
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 90
+                },
+                {
+                  "color": "green",
+                  "value": 99
+                }
+              ]
+            },
+            "unit": "percentunit"
+          }
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 27
+        },
+        "id": 8,
+        "links": [],
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "7.5.7",
+        "targets": [
+          {
+            "expr": "1- min(slo_target{pipeline=~\"$pipeline\", service=~\"$service\", customer=~\"$customer\", installation=~\"$installation\", cluster_id=~\"$cluster_id\"}) by (service)",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "SLO targets",
+        "transparent": false,
+        "type": "gauge"
+      }
+    ],
+    "refresh": "1m",
+    "rows": [],
+    "schemaVersion": 16,
+    "style": "dark",
+    "tags": [
+      "owner:team-atlas"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "stable",
+            "value": "stable"
+          },
+          "datasource": "Cortex",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Pipeline",
+          "multi": false,
+          "name": "pipeline",
+          "options": [],
+          "query": "label_values(slo_requests, pipeline)",
+          "refresh": 1,
+          "regex": "",
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "null",
+            "value": "null"
+          },
+          "datasource": "Cortex",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Service",
+          "multi": false,
+          "name": "service",
+          "options": [],
+          "query": "label_values(slo_requests{pipeline=~\"$pipeline\"}, service)",
+          "refresh": 1,
+          "regex": "",
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "null",
+            "value": "null"
+          },
+          "datasource": "Cortex",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Customer",
+          "multi": false,
+          "name": "customer",
+          "options": [],
+          "query": "label_values(slo_requests{pipeline=~\"$pipeline\"}, customer)",
+          "refresh": 1,
+          "regex": "",
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "null",
+            "value": "null"
+          },
+          "datasource": "Cortex",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Installation",
+          "multi": false,
+          "name": "installation",
+          "options": [],
+          "query": "label_values(slo_requests{pipeline=~\"$pipeline\", customer=~\"$customer\"}, installation)",
+          "refresh": 1,
+          "regex": "",
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "null",
+            "value": "null"
+          },
+          "datasource": "Cortex",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Cluster ID",
+          "multi": false,
+          "name": "cluster_id",
+          "options": [],
+          "query": "label_values(slo_requests{pipeline=~\"$pipeline\", installation=~\"$installation\", customer=~\"$customer\"}, cluster_id)",
+          "refresh": 1,
+          "regex": "",
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "utc",
+    "title": "Service Level",
+    "uid": "service-level",
+    "version": 13
+  }
+}

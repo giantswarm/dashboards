@@ -1,0 +1,340 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "apps-out-of-date",
+    "url": "/d/85BCbc17z/apps-out-of-date",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2022-01-13T13:40:01Z",
+    "updated": "2023-09-12T06:36:45Z",
+    "updatedBy": "marian2",
+    "createdBy": "salisburyjoe",
+    "version": 8,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 31,
+    "folderUid": "JflJ8w6Wk",
+    "folderTitle": "Playground",
+    "folderUrl": "/dashboards/f/JflJ8w6Wk/playground",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 365,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "Check Customer Board for Upgrade Issue",
+                "url": "https://github.com/giantswarm/${customer_board:text}?card_filter_query=label%3Aapp%2F﻿${__data.fields.App}﻿"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 23,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 13,
+        "links": [],
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "10.2.0-60139",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "exemplar": false,
+            "expr": "sum(aggregation:giantswarm:app_upgrade_available{catalog!~\"control-plane-catalog|default|giantswarm-playground|giantswarm-playground-test\", customer!=\"giantswarm\", customer=~\"$customer\", app=~\"${team:pipe}\", app=~\"$app\"}) by (app, customer, latest_version)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Apps Out Of Date",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value #A": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value #A": 3,
+                "app": 2,
+                "customer": 1
+              },
+              "renameByName": {
+                "Value #A": "",
+                "app": "App",
+                "customer": "Customer"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "tags": [
+      "owner:team-honeybadger"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(prometheus_tsdb_head_series{customer!=\"giantswarm\"}, customer)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Customer",
+          "multi": false,
+          "name": "customer",
+          "options": [],
+          "query": {
+            "query": "label_values(prometheus_tsdb_head_series{customer!=\"giantswarm\"}, customer)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "hide": 0,
+          "includeAll": true,
+          "label": "Team",
+          "multi": false,
+          "name": "team",
+          "options": [
+            {
+              "selected": true,
+              "text": "All",
+              "value": "$__all"
+            },
+            {
+              "selected": false,
+              "text": "atlas",
+              "value": "efk-stack-app|grafana|prometheus-operator-app|promtail"
+            },
+            {
+              "selected": false,
+              "text": "cabbage",
+              "value": "cert-manager-app|cloudflared|external-dns-app|kong-app|nginx-ingress-controller-app"
+            },
+            {
+              "selected": false,
+              "text": "honeybadger",
+              "value": "flux-app"
+            },
+            {
+              "selected": false,
+              "text": "rainbow",
+              "value": "oauth2-proxy"
+            },
+            {
+              "selected": false,
+              "text": "zachurity",
+              "value": "falco-app|starboard-app|starboard-exporter|trivy-app"
+            },
+            {
+              "selected": false,
+              "text": "unowned",
+              "value": "rook-operator|strimzi-kafka-operator-app"
+            }
+          ],
+          "query": "atlas : efk-stack-app|grafana|prometheus-operator-app|promtail,cabbage : cert-manager-app|cloudflared|external-dns-app|kong-app|nginx-ingress-controller-app,honeybadger : flux-app,rainbow : oauth2-proxy,zachurity : falco-app|starboard-app|starboard-exporter|trivy-app,unowned : rook-operator|strimzi-kafka-operator-app",
+          "queryValue": "",
+          "skipUrlSync": false,
+          "type": "custom"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:giantswarm:app_deployed_workload_cluster_total{catalog!~\"control-plane-catalog|default|giantswarm-playground|giantswarm-playground-test\", customer!=\"giantswarm\", customer=~\"$customer\"}, app)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "App",
+          "multi": false,
+          "name": "app",
+          "options": [],
+          "query": {
+            "query": "label_values(aggregation:giantswarm:app_deployed_workload_cluster_total{catalog!~\"control-plane-catalog|default|giantswarm-playground|giantswarm-playground-test\", customer!=\"giantswarm\", customer=~\"$customer\"}, app)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": "1",
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "hide": 2,
+          "name": "adidas",
+          "query": "adidas/projects/2",
+          "skipUrlSync": false,
+          "type": "constant"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "utc",
+    "title": "Apps Out Of Date",
+    "uid": "85BCbc17z",
+    "version": 8,
+    "weekStart": ""
+  }
+}

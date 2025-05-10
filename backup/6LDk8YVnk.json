@@ -1,0 +1,386 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "managed-apps-upgrades",
+    "url": "/d/6LDk8YVnk/managed-apps-upgrades",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2021-09-02T10:09:54Z",
+    "updated": "2024-03-18T11:04:27Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 22,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 238,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Count of how many App CRs exist for each App that are not using the latest version. Pre-installed Apps are not present since they are upgraded with the Workload Cluster.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 22,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "displayMode": "gradient",
+          "maxVizHeight": 300,
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "namePlacement": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "sizing": "auto",
+          "text": {},
+          "valueMode": "color"
+        },
+        "pluginVersion": "11.0.0-67977",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "sum by (app) (aggregation:giantswarm:app_upgrade_available{customer=~\"$customer\"}) * on (app) group_left(team) operations_release_latest_info{team=~\"$team\"}",
+            "interval": "",
+            "legendFormat": "{{app}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "App installations with an upgrade available",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "List of App CRs with an upgrade available. If an App is installed in a cluster multiple times this is shown in the App Count column.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 16,
+          "w": 24,
+          "x": 0,
+          "y": 9
+        },
+        "id": 6,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.0.0-67977",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "sum (\naggregation:giantswarm:app_upgrade_available{customer=~\"$customer\"} unless operations_release_latest_info\n) without (prometheus, prometheus_replica, catalog, cluster_type, region, provider, pipeline) + on (app) group_left(team) operations_release_latest_info{team=~\"$team\"}",
+            "format": "table",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "App installations with an upgrade available",
+        "transformations": [
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "app",
+                  "customer",
+                  "installation",
+                  "latest_version",
+                  "namespace",
+                  "version",
+                  "team"
+                ]
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "includeByName": {},
+              "indexByName": {
+                "app": 0,
+                "customer": 1,
+                "installation": 2,
+                "latest_version": 6,
+                "namespace": 3,
+                "team": 4,
+                "version": 5
+              },
+              "renameByName": {
+                "Value #A": "App Count",
+                "app": "App",
+                "catalog": "Catalog",
+                "customer": "Customer",
+                "installation": "Installation",
+                "latest_version": "Latest Version",
+                "namespace": "Cluster",
+                "team": "Team",
+                "version": "Version"
+              }
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "App": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "App Count": {
+                  "aggregations": [
+                    "max"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Catalog": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Cluster": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Count": {
+                  "aggregations": [
+                    "max"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Customer": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Installation": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Latest Version": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Team": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Version": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [
+      "owner:team-honeybadger"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(customer)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Customer",
+          "multi": false,
+          "name": "customer",
+          "options": [],
+          "query": {
+            "query": "label_values(customer)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 5,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": "phoenix",
+            "value": "phoenix"
+          },
+          "definition": "label_values(operations_release_latest_info,team)",
+          "hide": 0,
+          "includeAll": true,
+          "multi": false,
+          "name": "team",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(operations_release_latest_info,team)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timeRangeUpdatedDuringEditOrView": false,
+    "timepicker": {},
+    "timezone": "utc",
+    "title": "Managed Apps Upgrades",
+    "uid": "6LDk8YVnk",
+    "version": 22,
+    "weekStart": ""
+  }
+}

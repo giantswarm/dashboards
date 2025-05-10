@@ -1,0 +1,837 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "aws-ec2-spot-instance-usage",
+    "url": "/d/SAXyh9MGk/aws-ec2-spot-instance-usage",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2020-07-09T11:48:26Z",
+    "updated": "2023-08-18T11:59:44Z",
+    "updatedBy": "marian2",
+    "createdBy": "anvddriesch",
+    "version": 12,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "This dashboard shows how AWS spot instances are distributed in our clusters",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 74,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "decimals": 0,
+        "description": "Which percentage of instances on our Installations are Spot",
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 10,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 15,
+          "x": 0,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "id": 4,
+        "legend": {
+          "alignAsTable": false,
+          "avg": true,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": true,
+          "min": true,
+          "rightSide": false,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": true,
+        "pluginVersion": "10.2.0-59542pre",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{lifecycle=\"spot\", pipeline=~\"$pipeline\", customer=~\"$customer\", installation=~\"$installation\"})",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Total Number of Spot Instances",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:723",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:724",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Which lifecycle (spot vs scheduled) is used for EC2 Instances and how much",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 5,
+          "x": 15,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "displayMode": "lcd",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": false,
+          "valueMode": "color"
+        },
+        "pluginVersion": "10.2.0-59542pre",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{pipeline=~\"$pipeline\", customer=~\"$customer\", installation=~\"$installation\"}) by (lifecycle)",
+            "interval": "",
+            "legendFormat": "{{ lifecycle }}",
+            "refId": "A"
+          }
+        ],
+        "title": "EC2 Instances by lifecycle",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Spot instances devided by all instances",
+        "fieldConfig": {
+          "defaults": {
+            "decimals": 1,
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 4,
+          "x": 20,
+          "y": 0
+        },
+        "id": 9,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "10.2.0-59542pre",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{lifecycle=\"spot\",pipeline=~\"$pipeline\",customer=~\"$customer\",installation=~\"$installation\"}) / sum(aggregation:aws:instance_lifecycle{lifecycle!=\"spot\",pipeline=~\"$pipeline\",customer=~\"$customer\",installation=~\"$installation\"})",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Spot percentage",
+        "type": "stat"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "decimals": 0,
+        "description": "Which percentage of instances on our Installations are Spot",
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 9
+        },
+        "hiddenSeries": false,
+        "id": 3,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": true,
+          "min": true,
+          "rightSide": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": true,
+        "pluginVersion": "10.2.0-59542pre",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{lifecycle=\"spot\", pipeline=~\"$pipeline\", customer=~\"$customer\"}) by (installation) / sum(aggregation:aws:instance_types) by (installation) *100",
+            "interval": "",
+            "legendFormat": "{{ installation }}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Percent of Spot Instances by Installation",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:723",
+            "decimals": 0,
+            "format": "percent",
+            "logBase": 1,
+            "min": "0",
+            "show": true
+          },
+          {
+            "$$hashKey": "object:724",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "decimals": 0,
+        "description": "Which percentage of instances for our customers are Spot",
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 9
+        },
+        "hiddenSeries": false,
+        "id": 5,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": true,
+          "min": true,
+          "rightSide": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": true,
+        "pluginVersion": "10.2.0-59542pre",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{lifecycle=\"spot\", pipeline=~\"$pipeline\"}) by (customer) / sum(aggregation:aws:instance_types) by (customer) *100",
+            "interval": "",
+            "legendFormat": "{{ installation }}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Percent of Spot Instances by Customer",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:723",
+            "decimals": 0,
+            "format": "percent",
+            "logBase": 1,
+            "min": "0",
+            "show": true
+          },
+          {
+            "$$hashKey": "object:724",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "decimals": 0,
+        "description": "How many spot instances are there per installation?",
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "hiddenSeries": false,
+        "id": 6,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": true,
+          "min": true,
+          "rightSide": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": true,
+        "pluginVersion": "10.2.0-59542pre",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{lifecycle=\"spot\", pipeline=~\"$pipeline\", customer=~\"$customer\"}) by (installation)",
+            "interval": "",
+            "legendFormat": "{{ installation }}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Spot Instances by Installation",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:723",
+            "decimals": 0,
+            "format": "none",
+            "logBase": 1,
+            "min": "0",
+            "show": true
+          },
+          {
+            "$$hashKey": "object:724",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "decimals": 0,
+        "description": "How many spot instances are there per customer?",
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "hiddenSeries": false,
+        "id": 7,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": true,
+          "min": true,
+          "rightSide": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": true,
+        "pluginVersion": "10.2.0-59542pre",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "expr": "sum(aggregation:aws:instance_lifecycle{lifecycle=\"spot\", pipeline=~\"$pipeline\"}) by (customer)",
+            "interval": "",
+            "legendFormat": "{{ installation }}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Spot Instances by Customer",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:723",
+            "decimals": 0,
+            "format": "none",
+            "logBase": 1,
+            "min": "0",
+            "show": true
+          },
+          {
+            "$$hashKey": "object:724",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+      "owner:team-phoenix"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:aws:instance_lifecycle, pipeline)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Pipeline",
+          "multi": false,
+          "name": "pipeline",
+          "options": [],
+          "query": {
+            "query": "label_values(aggregation:aws:instance_lifecycle, pipeline)",
+            "refId": "Cortex-pipeline-Variable-Query"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:aws:instance_lifecycle, customer)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Customer",
+          "multi": false,
+          "name": "customer",
+          "options": [],
+          "query": {
+            "query": "label_values(aggregation:aws:instance_lifecycle, customer)",
+            "refId": "Cortex-customer-Variable-Query"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:aws:instance_lifecycle{customer=~\"$customer\"}, installation)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Installation",
+          "multi": false,
+          "name": "installation",
+          "options": [],
+          "query": {
+            "query": "label_values(aggregation:aws:instance_lifecycle{customer=~\"$customer\"}, installation)",
+            "refId": "Cortex-installation-Variable-Query"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "utc",
+    "title": "AWS EC2 Spot Instance Usage",
+    "uid": "SAXyh9MGk",
+    "version": 12,
+    "weekStart": ""
+  }
+}
