@@ -7,6 +7,470 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2025-05-07
+
+### Added
+
+- Add Konfigure Operator dashboard
+
+## [4.4.3] - 2025-04-29
+
+### Fixed
+
+- dns dashboard: fixed logs row
+
+## [4.4.2] - 2025-04-28
+
+### Chunged
+
+- Cluster Overview dashboard: improve alerts links
+
+## [4.4.1] - 2025-04-28
+
+### Changed
+
+- alerts timeline dashboard:
+    - fix silences count
+    - add links to silences, alerts, notifications
+    - fix consistency between alerts timeline and alerts list
+    - update title
+- alertmanager overview update to mimir alertmanager
+
+## [4.4.0] - 2025-03-24
+
+### Added
+
+- Add Cilium Agent logs dashboard.
+
+## [4.3.1] - 2025-03-20
+
+### Fixed
+
+- Mimir Continuous Tests: fix datasource selector
+
+## [4.3.0] - 2025-03-12
+
+### Added
+
+- Add **Observability Resource Usage** dashboard
+- Add **Backstage** dashboard
+
+## [4.2.0] - 2025-03-05
+
+### Added
+
+- Add Envoy Gateway dashboards
+
+## [4.1.0] - 2025-02-25
+
+### Added
+
+- Add Loki log volume dashboard
+
+### Changed
+
+- Update the home dashboard
+  - Change Alerts link to point to Alerting > Active notifications
+  - Add grafana organization link
+  - Add new data ingestion link
+  - Replace Node overview with Cluster overview dashboard
+  - Fix broken Custom dashboards link
+
+### Fixed
+
+- Fix Cluster overview dashboard to consistently open links in new tabs.
+
+## [4.0.0] - 2025-02-13
+
+### Changed
+
+- Update Cilium Performance BPF map pressure panel datasource.
+- Dashboard labels for observability-operator provisioning.
+
+
+## [3.30.0] - 2025-02-05
+
+### Changed
+
+- Add team label to karpenter dashboard.
+- Add grafana organization label to public dashboards
+
+### Removed
+
+- Remove `CAPI Overview` dashboard.
+
+## [3.29.1] - 2025-01-22
+
+### Fixed
+
+- Fix datasource for the new `Cluster Overview` dashboard.
+
+## [3.29.0] - 2025-01-22
+
+### Changed
+
+- Update DNS dashboard to include memory requests.
+- Added `Cluster Overview`dashboard.
+
+### Fixed
+
+- fix alloy mixins generation
+- fix alloy mixins
+- fix Alloy / Logs Overview dashboard.
+
+## [3.28.0] - 2025-01-13
+
+### Added
+
+- Add `Promtail overview` dashboard.
+
+### Changed
+
+- Updated DNS dashboard and show memory usage using cAdvisor metrics.
+
+## [3.27.0] - 2025-01-10
+
+### Changed
+
+- Fixed nodes overview dashboard to avoid master duplicating numbers.
+- Add observability organization label to GS private dashboards.
+
+## [3.26.1] - 2024-11-12
+
+### Added
+
+- Add `Mimir / Continuous test` dashboard.
+
+### Fixed
+
+- Fixed "Management cluster Overview" dashboard
+
+## [3.26.0] - 2024-10-30
+
+### Changed
+
+- Resync alloy, loki and mimir mixins from upstream.
+
+## [3.25.0] - 2024-10-14
+
+### Added
+
+- Added "Loki - Slow Queries" dashboard
+
+### Changed
+
+- Change ownership from BigMac to Shield
+
+## [3.24.0] - 2024-09-23
+
+### Changed
+
+- Updated alertmanager dashboard to show related logs
+- Add loki mixins dashboards update script.
+- Update mimir mixins dashboards via script.
+
+### Fixed
+
+- Fix Alloy mixins tags.
+
+## [3.23.0] - 2024-08-22
+
+### Added
+
+- Added Alloy mixin dashboards
+
+- Added Makefile.custom.mk to group scripts usage
+  - Added `make update-mixin` to update mixin dasbhboards
+  - Added `make lint-dashboards` to dashboards linting
+  - Added `make install-tools` to install required tools
+
+- Added `scripts/update-alloy-mixin.sh` to update the Alloy mixin dashboards
+
+- Added `update-alertmanager-mixin` and `update-kubernetes-mixin` Makefile targets
+
+### Changed
+
+- Updated all dashboars using `decbytes` unit to use `bytes` (IEC units) instead.
+
+### Fixed
+
+- Fix dashboards destination path in `update-monitoring-mixin-dashboards.sh` script
+
+## [3.22.0] - 2024-08-01
+
+### Added
+
+- mimir query stats dashboard
+
+### Changed
+
+- Fixed etcd count dashboard replacing the namespace to expoted_namespace.
+
+### Removed
+
+- Remove Linkerd Control Plane dashboard
+
+## [3.21.0] - 2024-07-03
+
+### Changed
+
+- Get rid of the `app` label in Phoenix dashboards.
+
+## [3.20.0] - 2024-07-01
+
+### Added
+
+- Add "BPF map pressure" graph to "Cilium performance" dashboard.
+- Add kube-builder logs in "Kube-Builder Operators" dashboard.
+
+### Changed
+
+- fluentbit dashboard: cluster selection
+
+### Fixed
+
+- Mimir Cost Estimation: fix RAM usage
+
+### Removed
+
+- Removed the dashboard 'Webhook Health'.
+
+## [3.19.0] - 2024-06-13
+
+### Changed
+
+- Make `Certificate Details` dashboard public
+- Migrate deprecated angular panels.
+
+## [3.18.0] - 2024-06-12
+
+### Added
+
+- Added missing datasource to all dashboards and panels.
+
+### Removed
+
+- Ger rid the of useless analytics panels.
+
+## [3.17.0] - 2024-06-07
+
+### Added
+
+- Add script to update all mimir dashboards from mixins.
+
+### Changed
+
+- Replace Cluster ID with cluster in dashboard labels.
+- remotewrite: improve legends
+- remotewrite: add count of agent replicas
+- Reviewed labels used in turtles dashboards
+- servicemonitors-overview: add info about agent pods
+
+### Fixed
+
+- Add missing datasource to api-security dashboard.
+- Add missing datasource to api-performance dashboard and fix tags.
+- Add missing datasource to `api-performance` dashboard and fix tags.
+- Add missing datasource to `certificate` dashboard and fix tags.
+- Lint the capi and capa aggregated-error-logs dashboards to have proper datasource variables.
+
+### Removed
+
+- Remove vintage azure dashboards.
+
+## [3.16.1] - 2024-06-04
+
+### Changed
+
+- Get rid of the `app` label in Atlas dashboards.
+
+## [3.16.0] - 2024-05-30
+
+### Changed
+
+- Move SLO reporting dashboard to be public.
+
+### Fixed
+
+- Add missing data source to atlas dashboards.
+- Fix missing provider specific dashboards.
+- Fix prometheus-cost-estimation dashboard.
+- Update alertmanager-overview dashboard (angular deprecation).
+- Update fluentbit dashboard (angular deprecation).
+- Update operatorkit dashboard (angular deprecation).
+- Update prometheus-overview dashboard (angular deprecation).
+- Update prometheus-remote-write dashboard (angular deprecation).
+
+### Removed
+
+- Remove prometheus benchmark dashboard.
+- Remove EFK dashboards.
+- Removed KVM dashboards.
+
+## [3.15.1] - 2024-05-29
+
+### Fix
+
+- Fix missing ingress slo in slo reporting.
+
+## [3.15.0] - 2024-05-23
+
+### Added
+
+- Add datasource variable to Prometheus dashboard
+
+### Fixed
+
+- Adjust panel positions to fill width and move Mimir related panel under related section
+
+## [3.14.2] - 2024-05-20
+
+### Changed
+
+- ServiceMonitors Overview dashboard: add RAM usage estimation
+
+## [3.14.1] - 2024-05-15
+
+### Changed
+
+- Change "Node utilization" dashboard to use allocatable over capacity, to better reflect the available resources of the nodes.
+
+## [3.14.0] - 2024-05-15
+
+### Fixed
+
+- Fix loki and mimir mixins recording rules
+- Fix atlas dashboard tags.
+- Fix storage related panes on zot's dashboards
+- prometheus: scraping info can now be filtered by cluster
+- add some basic linting configuration so we can track down issues in dashboards.
+
+### Added
+
+- ServiceMonitors overview dashboard
+- ServiceMonitors details dashboard
+
+## [3.13.0] - 2024-04-24
+
+### Changed
+
+- Change "Worker node utilization" dashboard to "Node utilization", also allowing to analyze data for control plane nodes.
+
+## [3.12.0] - 2024-04-23
+
+### Added
+
+- Add dashboard "Worker node utilization".
+
+## [3.11.4] - 2024-04-17
+
+### Changed
+
+- Updated "In-cluster container registry (Zot)" dashboard to use metric `kubelet_volume_stats_used_bytes` for storage used.
+
+## [3.11.3] - 2024-04-17
+
+### Changed
+
+- Move `node-problem-detector` to be aws only.
+
+
+### Fixed
+
+- Fix Grafana Cloud service-level dashboard in case we have duplicate clusrer names in different installations.
+- Invalid datasource variable name in mimir cost estimate dashboard.
+
+## [3.11.2] - 2024-04-16
+
+### Fixed
+
+- Fix `Mimir / writes resources` disk usage related graphs.
+
+## [3.11.1] - 2024-04-16
+
+### Changed
+
+- Improved many details on the dashboard "In-cluster container registry (Zot)".
+- Change `net-exporter` dashboard ownership from turtles to cabbage.
+- Change `cluster-total.json` dashboard ownership from turtles to cabbage.
+- Change `namespace-by-pod.json` dashboard ownership from turtles to cabbage.
+- Change `namespace-by-workload.json` dashboard ownership from turtles to cabbage.
+- Change `pod-total.json` dashboard ownership from turtles to cabbage.
+- Change `workload-total.json` dashboard ownership from turtles to cabbage.
+- Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
+- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
+- Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old table with new table panel.
+
+### Fixed
+
+- Fix `Mimir / Reads resources` Disk usage graphs.
+
+### Removed
+
+- Remove "Microstorage" dashboard.
+
+## [3.11.0] - 2024-04-11
+
+### Added
+
+-  Add a CAPA aggregated error logs dashboard.
+
+## [3.10.4] - 2024-04-10
+
+### Fixed
+
+- Fixes "All Dex requests" panel showing "No data" by increasing query interval to 2m.
+
+## [3.10.3] - 2024-04-10
+
+### Changed
+
+- Remove `app` and `namespace` labels from the prometheus - remotewrite's nginx graphs.
+
+### Fixed
+
+- Fix cpu throttling panel in prometheus dashboard
+
+## [3.10.2] - 2024-04-10
+
+### Fixed
+
+- Fix and update Flux Control Plane dashboard in various ways.
+
+### Changed
+
+- The private Zot dashboard is updated because of a namespace change, and some minor fixes are applied.
+
+## [3.10.1] - 2024-04-08
+
+### Fixed
+
+- Fix Mimir / Compactor / Overview dashboard.
+
+## [3.10.0] - 2024-04-03
+
+### Added
+
+- Add private dashboard about in-cluster container image registry (Zot)
+
+### Fixed
+
+- Fix `Mimir / Overview resources` dashboard
+
+## [3.9.0] - 2024-03-27
+
+### Added
+
+- Add dashboard for loki-canary (private for now)
+
+### Changed
+
+- Migrate panels from graph to timeseries in DNS dashboard.
+- Add promxy cpu and memory graphs to prometheus cost dashboard.
+- Add promxy cpu and memory graphs to mimir cost dashboard.
+
+## [3.8.5] - 2024-03-26
+
 ### Added
 
 - Add public Cilium performance dashboard.
@@ -14,6 +478,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix all dashboards that were only supporting only role=master to now support role=~control-plane|master.
+- Fix Mimir - Prometheus cost dashboard to compare over real data (not missing on data from old prometheus instances)
 
 ## [3.8.4] - 2024-03-11
 
@@ -392,7 +857,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add AWS ENA Performance 
+- Add AWS ENA Performance
 - Updated team labels for team-rocket
 - Add graph in Node Overview to identify emptydir growth
 - Update kube-mixins to 0.12
@@ -875,7 +1340,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v3.8.4...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.5.0...HEAD
+[4.5.0]: https://github.com/giantswarm/dashboards/compare/v4.4.3...v4.5.0
+[4.4.3]: https://github.com/giantswarm/dashboards/compare/v4.4.2...v4.4.3
+[4.4.2]: https://github.com/giantswarm/dashboards/compare/v4.4.1...v4.4.2
+[4.4.1]: https://github.com/giantswarm/dashboards/compare/v4.4.0...v4.4.1
+[4.4.0]: https://github.com/giantswarm/dashboards/compare/v4.3.1...v4.4.0
+[4.3.1]: https://github.com/giantswarm/dashboards/compare/v4.3.0...v4.3.1
+[4.3.0]: https://github.com/giantswarm/dashboards/compare/v4.2.0...v4.3.0
+[4.2.0]: https://github.com/giantswarm/dashboards/compare/v4.1.0...v4.2.0
+[4.1.0]: https://github.com/giantswarm/dashboards/compare/v4.0.0...v4.1.0
+[4.0.0]: https://github.com/giantswarm/dashboards/compare/v3.30.0...v4.0.0
+[3.30.0]: https://github.com/giantswarm/dashboards/compare/v3.29.1...v3.30.0
+[3.29.1]: https://github.com/giantswarm/dashboards/compare/v3.29.0...v3.29.1
+[3.29.0]: https://github.com/giantswarm/dashboards/compare/v3.28.0...v3.29.0
+[3.28.0]: https://github.com/giantswarm/dashboards/compare/v3.27.0...v3.28.0
+[3.27.0]: https://github.com/giantswarm/dashboards/compare/v3.26.1...v3.27.0
+[3.26.1]: https://github.com/giantswarm/dashboards/compare/v3.26.0...v3.26.1
+[3.26.0]: https://github.com/giantswarm/dashboards/compare/v3.25.0...v3.26.0
+[3.25.0]: https://github.com/giantswarm/dashboards/compare/v3.24.0...v3.25.0
+[3.24.0]: https://github.com/giantswarm/dashboards/compare/v3.23.0...v3.24.0
+[3.23.0]: https://github.com/giantswarm/dashboards/compare/v3.22.0...v3.23.0
+[3.22.0]: https://github.com/giantswarm/dashboards/compare/v3.21.0...v3.22.0
+[3.21.0]: https://github.com/giantswarm/dashboards/compare/v3.20.0...v3.21.0
+[3.20.0]: https://github.com/giantswarm/dashboards/compare/v3.19.0...v3.20.0
+[3.19.0]: https://github.com/giantswarm/dashboards/compare/v3.18.0...v3.19.0
+[3.18.0]: https://github.com/giantswarm/dashboards/compare/v3.17.0...v3.18.0
+[3.17.0]: https://github.com/giantswarm/dashboards/compare/v3.16.1...v3.17.0
+[3.16.1]: https://github.com/giantswarm/dashboards/compare/v3.16.0...v3.16.1
+[3.16.0]: https://github.com/giantswarm/dashboards/compare/v3.15.1...v3.16.0
+[3.15.1]: https://github.com/giantswarm/dashboards/compare/v3.15.0...v3.15.1
+[3.15.0]: https://github.com/giantswarm/dashboards/compare/v3.14.2...v3.15.0
+[3.14.2]: https://github.com/giantswarm/dashboards/compare/v3.14.1...v3.14.2
+[3.14.1]: https://github.com/giantswarm/dashboards/compare/v3.14.0...v3.14.1
+[3.14.0]: https://github.com/giantswarm/dashboards/compare/v3.13.0...v3.14.0
+[3.13.0]: https://github.com/giantswarm/dashboards/compare/v3.12.0...v3.13.0
+[3.12.0]: https://github.com/giantswarm/dashboards/compare/v3.11.4...v3.12.0
+[3.11.4]: https://github.com/giantswarm/dashboards/compare/v3.11.3...v3.11.4
+[3.11.3]: https://github.com/giantswarm/dashboards/compare/v3.11.2...v3.11.3
+[3.11.2]: https://github.com/giantswarm/dashboards/compare/v3.11.1...v3.11.2
+[3.11.1]: https://github.com/giantswarm/dashboards/compare/v3.11.0...v3.11.1
+[3.11.0]: https://github.com/giantswarm/dashboards/compare/v3.10.4...v3.11.0
+[3.10.4]: https://github.com/giantswarm/dashboards/compare/v3.10.3...v3.10.4
+[3.10.3]: https://github.com/giantswarm/dashboards/compare/v3.10.2...v3.10.3
+[3.10.2]: https://github.com/giantswarm/dashboards/compare/v3.10.1...v3.10.2
+[3.10.1]: https://github.com/giantswarm/dashboards/compare/v3.10.0...v3.10.1
+[3.10.0]: https://github.com/giantswarm/dashboards/compare/v3.9.0...v3.10.0
+[3.9.0]: https://github.com/giantswarm/dashboards/compare/v3.8.5...v3.9.0
+[3.8.5]: https://github.com/giantswarm/dashboards/compare/v3.8.4...v3.8.5
 [3.8.4]: https://github.com/giantswarm/dashboards/compare/v3.8.3...v3.8.4
 [3.8.3]: https://github.com/giantswarm/dashboards/compare/v3.8.2...v3.8.3
 [3.8.2]: https://github.com/giantswarm/dashboards/compare/v3.8.1...v3.8.2

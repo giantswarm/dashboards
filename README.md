@@ -2,23 +2,53 @@
 
 This project currently contains Giant Swarm public dashboards.
 
-The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place and in the same format.
-
-## Sub-charts
-
-This chart is divided in 4 different charts, to get around helm charts size limitations:
-- `helm/dashboards/charts/public_dashboards/` for public dashboards.
-- `helm/dashboards/charts/private_dashboards_al/` for private dashboards starting with letters A to L.
-- `helm/dashboards/charts/private_dashboards_mz/` for private dashboards starting with letters M to Z.
-- `helm/dashboards/` for other dashboards.
+The goal of this repository is to have both public and Grafana Cloud dashboards defined in one place.
 
 ## Management cluster's dashboards
 
 The dashboards located under `helm/dashboards` are the dashboards hosted on each management cluster's grafana.
 The "public" ones are accessible by the customer, and the "private" ones are only accessible by Giant Swarm employees.
-Those dashboards are currently in JSON and will eventually be replaced to jsonnet format.
+
+### Sub-charts
+
+This chart is divided in 4 different charts, to get around helm charts size limitations:
+- [`helm/dashboards/charts/public_dashboards`](helm/dashboards/charts/public_dashboards) for public dashboards.
+- [`helm/dashboards/charts/private_dashboards_al`](helm/dashboards/charts/private_dashboards_al) for private dashboards starting with letters A to L.
+- [`helm/dashboards/charts/private_dashboards_mz`](helm/dashboards/charts/private_dashboards_mz) for private dashboards starting with letters M to Z.
+- [`helm/dashboards`](helm/dashboards) for other dashboards.
+
+### Dashboard format
+
+All dashboards should have proper tags to facilitate their discovery.
+To that end, we advise the following tags:
+- `owner:team-name`: Team that owns the dashboard
+- `component:component_name`: Name of the component this dashboard is about
+- `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
+
+### Linting
+
+Atlas introduced a dashboard linter to ensure some basic dashboard rules are followed (e.g. always have a datasource present) to help with the migration to Mimir. 
+This will most likely be moved to CI later but until it is you can run it like this:
+
+```sh
+make lint-dashboards
+```
+
+If you need help with the tool or its output, please contact @team-atlas.
 
 ## Grafana Cloud dashboards
+
+### Requirements
+
+* jsonnet: https://github.com/google/jsonnet
+
+`pip install jsonnet`
+
+* grafonnet: https://github.com/grafana/grafonnet-lib
+
+`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
+
+### Building and uploading
 
 The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Grafana Cloud.
 
@@ -39,30 +69,27 @@ To upload a dashboard while editing, run:
 ./scripts/upload-dashboard.sh metrics.json
 ```
 
-
 ## Mixins Dashboards
 
-### Requirements
+### Update
 
-* jsonnet: https://github.com/google/jsonnet
-
-`pip install jsonnet`
-
-* grafonnet: https://github.com/grafana/grafonnet-lib
-
-`git clone https://github.com/grafana/grafonnet-lib.git $GOPATH/src/github.com/grafana/grafonnet-lib`
-
-### Update 
-
-* To Update the `kubernetes-mixin` dashboards:
-
-  * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin)
-  * Run `./scripts/sync-kube-mixin.sh (?my-fancy-branch-or-tag)` to update the `helm/dashboards/dashboards/mixin` folder.
-
-* To Update the `alertmanager-monitoring-mixins` dashboards:
+* Alertmanager dashboard
 
   * The Github Action `update-monitoring-mixins` runs automatically every month and it creates a PR to update the dashboard.
-  * Or you can run the action named `update-monitoring-mixins` manually.
+  * Run `make update-alertmanager-mixin` manually.
+
+* Alloy dashboards
+
+  * Run `make update-alloy-mixin` manually.
+
+* Kubernetes dashboards
+
+  * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin).
+  * Run `make update-kubernetes-mixin` manually.
+
+* Mimir dashboards
+
+  * Run `make update-mimir-mixin` manually.
 
 ## Origins of the dashboards
 
@@ -89,3 +116,9 @@ Comes from `prometheus-mixins`, with the addition of support for multiple cluste
 Comes from https://github.com/kedacore/keda/blob/main/config/grafana/keda-dashboard.json
 
 We added multi-cluster support and tags (team owner)
+
+## Release of these dashboards
+
+If you want to release changes in this dashboard repository, you only have to create a branch with the name `main#release#minor`. No replacements here, just literally that branch name :) 
+
+The Automation in place will make the necessary changes and create a correctly versioned branch of the code. It will open up a Pull Request you need to check an merge, which will trigger the release and cleanup the temporary `main#release#minor`-branch again. Afterwards the release will automatically get rolled out to all installations. 

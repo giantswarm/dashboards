@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -14,12 +17,15 @@
   },
   "description": "An overview on the success rate of authentication via the old Giant Swarm REST API (if present).",
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "iteration": 1639068259091,
   "links": [],
   "panels": [
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 7,
         "w": 24,
@@ -28,14 +34,32 @@
       },
       "id": 22,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "# API Security\n\nThis Dashboard gives an overview on success and error responses for the old Giant Swarm `api` components running on your management cluster.\nAs we are in the process of replacing these services with SSO, this dashboard will mostly be interesting to you if your installation is on `kvm`, you have clusters in versions older than `v16.0.1` on cloud providers or you are not using `SSO` to authenticate yet.\nAccordingly, if you can not see metrics here it is because these legacy components are no longer present on your management cluster.\n\n\nAll graph metrics are calculated based on error/success rate within a sliding 5 minute window. The single stats show the average of these metrics within the selected time frame.\n\n**HTTP Response Codes** [More Info](https://restfulapi.net/http-status-codes/)\n\n`1xx` Info `2xx` Success `3xx` Redirect `4xx` Client error `5xx` Server error\n",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.2",
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "About this dashboard",
       "type": "text"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Percentage of successful responses across all api requests in the last 5 minutes. Displays the average value in the selected time window.",
       "fieldConfig": {
         "defaults": {
@@ -79,12 +103,18 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.2",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "exemplar": true,
           "expr": "sum (increase(endpoint_total{code=~\"^[2]..$\", app=\"api\"}[5m]))/sum (increase(endpoint_total{app=\"api\"}[5m]))",
           "interval": "",
@@ -96,7 +126,10 @@
       "type": "stat"
     },
     {
-      "datasource": "default",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Successful api responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -104,6 +137,9 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -115,6 +151,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -188,20 +225,26 @@
         "y": 7
       },
       "id": 8,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
-          "mode": "single"
+          "maxHeight": 600,
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "exemplar": true,
           "expr": "sum (increase(endpoint_total{code=~\"^[2]..$\", app=\"api\"}[5m])) by (code)",
           "format": "time_series",
@@ -211,6 +254,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "health",
           "format": "time_series",
           "intervalFactor": 1,
@@ -221,6 +268,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Number of api endpoint error responses in the last 5 minutes. Displays the average value in the selected time window.",
       "fieldConfig": {
         "defaults": {
@@ -259,12 +310,18 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.2",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "exemplar": true,
           "expr": "sum (increase(endpoint_total{code=~\"^[^2]..$\", app=\"api\"}[5m]))",
           "interval": "",
@@ -276,7 +333,10 @@
       "type": "stat"
     },
     {
-      "datasource": "default",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Error api responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -284,6 +344,9 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -295,6 +358,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -368,20 +432,26 @@
         "y": 13
       },
       "id": 9,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
-          "mode": "single"
+          "maxHeight": 600,
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "exemplar": true,
           "expr": "sum (increase(endpoint_total{code=~\"^[^2]..$\", app=\"api\"}[5m])) by (code)",
           "format": "time_series",
@@ -395,6 +465,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Percentage of successful responses across all cluster-service requests in the last 5 minutes. Displays the average value in the selected time window.",
       "fieldConfig": {
         "defaults": {
@@ -438,12 +512,18 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.2",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "exemplar": true,
           "expr": "sum (increase(endpoint_total{code=~\"^[2]..$\", app=\"cluster-service\"}[5m]))/sum (increase(endpoint_total{app=\"cluster-service\"}[5m]))",
           "interval": "",
@@ -455,7 +535,10 @@
       "type": "stat"
     },
     {
-      "datasource": "default",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Successful cluster-service responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -463,6 +546,9 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -474,6 +560,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -547,22 +634,28 @@
         "y": 19
       },
       "id": 6,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
             "last"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
-          "mode": "single"
+          "maxHeight": 600,
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "sum (increase(endpoint_total{code=~\"^[2]..$\", app=\"cluster-service\"}[5m])) by (code)",
           "format": "time_series",
           "intervalFactor": 1,
@@ -570,6 +663,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "health",
           "format": "time_series",
           "intervalFactor": 1,
@@ -580,7 +677,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "default",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Error cluster-service responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -588,6 +688,9 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -599,6 +702,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -672,22 +776,28 @@
         "y": 19
       },
       "id": 7,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
             "last"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
-          "mode": "single"
+          "maxHeight": 600,
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "sum (increase(endpoint_total{code=~\"^[^2]..$\", app=\"cluster-service\"}[5m])) by (code)",
           "format": "time_series",
           "intervalFactor": 1,
@@ -699,7 +809,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "default",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Error endpoint responses in the last 5 minutes.",
       "fieldConfig": {
         "defaults": {
@@ -741,8 +854,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -761,14 +873,14 @@
         "y": 25
       },
       "id": 2,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
             "last"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single"
@@ -777,6 +889,10 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "sum(increase(api_endpoint_authtoken_creator_failed_attempts_total[5m]))",
           "format": "time_series",
           "instant": false,
@@ -785,6 +901,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "sum(increase(api_service_authentication_giantswarm_failed_attempts_total[5m]))",
           "format": "time_series",
           "hide": true,
@@ -793,6 +913,10 @@
           "refId": "B"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "sum(increase(api_service_authentication_jwt_failed_attempts_total[5m]))",
           "format": "time_series",
           "hide": true,
@@ -801,6 +925,10 @@
           "refId": "C"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
           "expr": "sum(increase(endpoint_total{code=\"401\"}[5m]))",
           "format": "time_series",
           "hide": false,
@@ -815,22 +943,40 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 30,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
-    "owner:team-bigmac",
-    "provider:kvm",
+    "owner:team-shield",
     "provider:aws",
     "provider:azure",
     "topic:management-cluster"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-30m",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {
     "refresh_intervals": [
       "5s",
@@ -859,5 +1005,6 @@
   "timezone": "UTC",
   "title": "API Security",
   "uid": "API_Security",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }

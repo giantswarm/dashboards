@@ -43,7 +43,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -120,11 +120,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum (etcd_kubernetes_resources_count{cluster_id=\"$cluster\", namespace=~\"$namespace\"}) by (kind)",
+          "expr": "sum ( label_replace(etcd_kubernetes_resources_count{namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\") or label_replace(etcd_kubernetes_resources_count{exported_namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") ) by (kind) / 2",
           "instant": false,
           "interval": "",
           "legendFormat": "{{kind}}",
@@ -137,7 +137,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -215,13 +215,13 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum (etcd_kubernetes_resources_count{cluster_id=\"$cluster\", namespace=~\"$namespace\"}) by (namespace)",
+          "expr": "sum ( label_replace(etcd_kubernetes_resources_count{namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\") or label_replace(etcd_kubernetes_resources_count{exported_namespace=~\"$namespace\", cluster_id=~\"$cluster\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") ) by (target_namespace) / 2",
           "interval": "",
-          "legendFormat": "{{namespace}}",
+          "legendFormat": "{{target_namespace}}",
           "range": true,
           "refId": "A"
         }
@@ -245,7 +245,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -309,11 +309,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(etcd_kubernetes_resources_count{cluster_id=\"$cluster\", kind=\"events\",namespace=~\"$namespace\"})",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{kind=\"events\",cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{kind=\"events\",cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) / 2",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -326,7 +326,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -403,13 +403,13 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(etcd_kubernetes_events_count{cluster_id=\"$cluster\", namespace=~\"$namespace\"}[1h])) by (namespace)",
+          "expr": "sum(label_replace(rate(etcd_kubernetes_events_count{cluster_id=\"$cluster\", namespace=~\"$namespace\"}[1h]), \"target_namespace\", \"$1\", \"namespace\", \"(.*)\") or label_replace(rate(etcd_kubernetes_events_count{exported_namespace=~\"$namespace\", cluster_id=~\"$cluster\"}[1h]), \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\")) by (target_namespace) / 2 ",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{namespace}}",
+          "legendFormat": "{{target_namespace}}",
           "range": true,
           "refId": "B"
         }
@@ -420,7 +420,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -498,10 +498,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}) by (kind)",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) by (kind) / 2",
           "hide": false,
           "instant": false,
           "legendFormat": "{{kind}}",
@@ -516,7 +516,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -594,10 +594,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}) by (reason)",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) by (reason) / 2",
           "hide": false,
           "instant": false,
           "legendFormat": "{{reason}}",
@@ -612,7 +612,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -690,13 +690,13 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}) by (namespace)",
+          "expr": "sum(label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"exported_namespace\", \"(.*)\") or label_replace(etcd_kubernetes_events_count{cluster_id=\"$cluster\",namespace=~\"$namespace\"}, \"target_namespace\", \"$1\", \"namespace\", \"(.*)\")) by (reason) / 2",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{namespace}}",
+          "legendFormat": "{{target_namespace}}",
           "range": true,
           "refId": "B"
         }
@@ -710,10 +710,25 @@
   "schemaVersion": 38,
   "style": "dark",
   "tags": [
-    "owner:team-phoenix"
+    "owner:team-phoenix",
+    "component:etcd"
   ],
   "templating": {
     "list": [
+      {
+        "current": {
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "label": "Data source",
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": true,
@@ -722,12 +737,12 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
         "definition": "label_values(etcd_kubernetes_resources_count, cluster_id)",
         "hide": 0,
         "includeAll": false,
-        "label": "Cluster ID",
+        "label": "Cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
@@ -735,7 +750,7 @@
           "query": "label_values(etcd_kubernetes_resources_count, cluster_id)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -754,9 +769,9 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "${datasource}"
         },
-        "definition": "label_values(etcd_kubernetes_resources_count, namespace)",
+        "definition": "label_values(etcd_kubernetes_resources_count, exported_namespace)",
         "hide": 0,
         "includeAll": true,
         "label": "Namespace",
@@ -764,10 +779,10 @@
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "label_values(etcd_kubernetes_resources_count, namespace)",
+          "query": "label_values(etcd_kubernetes_resources_count, exported_namespace)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,

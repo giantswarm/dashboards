@@ -24,16 +24,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 57,
+  "id": 56,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -42,76 +37,106 @@
       },
       "id": 17,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Requests",
       "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
-      "decimals": 0,
       "description": "Rate of requests made to CoreDNS.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
         "y": 1
       },
-      "hiddenSeries": false,
       "id": 15,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "paceLength": 10,
-      "percentage": false,
-      "pluginVersion": "10.0.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(app) (rate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", zone!=\"dropped\",zone=\"$zone\"}[5m]))",
+          "expr": "sum by(app) (rate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", zone!=\"dropped\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -120,98 +145,107 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "DNS Request Rate in zone ${zone}",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:116",
-          "format": "reqps",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:117",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
-      "decimals": 0,
       "description": "Rate of responses returned by CoreDNS, broken down by response code.\n\nWe expect some degree of `NXDOMAIN` responses.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 12,
         "y": 1
       },
-      "hiddenSeries": false,
       "id": 6,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": 250,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 250
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "paceLength": 10,
-      "percentage": false,
-      "pluginVersion": "10.0.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate({__name__=~\"coredns_dns_response_rcode_count_total|coredns_dns_responses_total\", cluster_id=\"$cluster\", organization=\"$organization\", zone=\"$zone\"}[5m])) by (rcode)",
+          "expr": "sum(rate({__name__=~\"coredns_dns_response_rcode_count_total|coredns_dns_responses_total\", cluster_id=\"$cluster\", organization=\"$organization\", zone=\"$zone\"}[$__rate_interval])) by (rcode)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -220,45 +254,11 @@
           "refId": "B"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "DNS Response Rate By Code in zone ${zone}",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:541",
-          "format": "reqps",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:542",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -267,22 +267,13 @@
       },
       "id": 21,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Latency - overall",
       "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "- Mean is defined here as the sum of all samples (latency durations), divided by the number of samples.\n- 50th percentile is the value under which 50% of samples fall (equivalent to the median).\n- 95th percentile is the value under which 95% of samples fall.\n\n\n- Lower latencies are, on the whole, better.\n- If the mean is equal or close to the 50th percentile, we have a symmetrical distribution (a bell curve).\n- If the mean is lower than the 50th percentile, the distribution is skewed to the left, or negatively skewed.\n- If the mean is greater than the 50th percentile, the distribution is skewed to the right, or positively skewed.\n\n\n- We expect the 50th percentile to be lower than the mean (positively skewed), as most requests execute quickly.",
       "fieldConfig": {
@@ -291,11 +282,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -304,6 +297,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -326,8 +320,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               },
               {
                 "color": "red",
@@ -346,7 +339,6 @@
         "y": 9
       },
       "id": 2,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
@@ -358,20 +350,21 @@
           "width": 250
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[5m])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[5m]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[$__rate_interval])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -382,11 +375,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -398,11 +391,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -414,11 +407,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -432,18 +425,9 @@
       "type": "timeseries"
     },
     {
-      "cards": {},
-      "color": {
-        "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
-        "colorScheme": "interpolatePlasma",
-        "exponent": 0.5,
-        "mode": "opacity"
-      },
-      "dataFormat": "tsbuckets",
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "For each cumulative bucket exposed by CoreDNS, the percentage of requests that take less than that amount of time to complete.\n\nE.g:\n- 0.001s = 95% means that 95% of requests took less than 0.001s to complete.\n- 0.128s = 99.9% means that 99.9% of requests took less than 0.128s to complete.\n\nAs buckets are cumulative, buckets for higher latencies (e.g: 0.128 is higher than 0.001s) include the values of the smaller lower latencies.",
       "fieldConfig": {
@@ -467,14 +451,7 @@
         "x": 12,
         "y": 9
       },
-      "heatmap": {},
-      "hideZeroBuckets": false,
-      "highlightCards": true,
       "id": 12,
-      "legend": {
-        "show": false
-      },
-      "links": [],
       "options": {
         "calculate": false,
         "calculation": {},
@@ -503,7 +480,8 @@
         },
         "showValue": "never",
         "tooltip": {
-          "show": true,
+          "mode": "single",
+          "showColorScale": false,
           "yHistogram": false
         },
         "yAxis": {
@@ -512,17 +490,16 @@
           "unit": "short"
         }
       },
-      "pluginVersion": "10.0.3",
-      "reverseYBuckets": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",zone=\"$zone\"}[5m])) by (le) / ignoring (le) group_left sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",zone=\"$zone\"}[5m]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",zone=\"$zone\"}[$__rate_interval])) by (le) / ignoring (le) group_left sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "heatmap",
           "interval": "",
           "intervalFactor": 1,
@@ -532,20 +509,7 @@
         }
       ],
       "title": "DNS Request Latency By Percentage of Cumulative Bucket zone ${zone}",
-      "tooltip": {
-        "show": true,
-        "showHistogram": false
-      },
-      "type": "heatmap",
-      "xAxis": {
-        "show": true
-      },
-      "yAxis": {
-        "format": "short",
-        "logBase": 1,
-        "show": true
-      },
-      "yBucketBound": "auto"
+      "type": "heatmap"
     },
     {
       "collapsed": false,
@@ -563,7 +527,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "- Mean is defined here as the sum of all samples (latency durations), divided by the number of samples.\n- 50th percentile is the value under which 50% of samples fall (equivalent to the median).\n- 95th percentile is the value under which 95% of samples fall.\n\n\n- Lower latencies are, on the whole, better.\n- If the mean is equal or close to the 50th percentile, we have a symmetrical distribution (a bell curve).\n- If the mean is lower than the 50th percentile, the distribution is skewed to the left, or negatively skewed.\n- If the mean is greater than the 50th percentile, the distribution is skewed to the right, or positively skewed.\n\n\n- We expect the 50th percentile to be lower than the mean (positively skewed), as most requests execute quickly.",
       "fieldConfig": {
@@ -572,11 +536,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -585,6 +551,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -607,8 +574,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               },
               {
                 "color": "red",
@@ -627,7 +593,6 @@
         "y": 17
       },
       "id": 28,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
@@ -639,20 +604,21 @@
           "width": 250
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[5m])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[5m]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -663,11 +629,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -679,11 +645,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -695,11 +661,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -713,18 +679,9 @@
       "type": "timeseries"
     },
     {
-      "cards": {},
-      "color": {
-        "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
-        "colorScheme": "interpolatePlasma",
-        "exponent": 0.5,
-        "mode": "opacity"
-      },
-      "dataFormat": "tsbuckets",
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "For each cumulative bucket exposed by CoreDNS, the percentage of requests that take less than that amount of time to complete.\n\nE.g:\n- 0.001s = 95% means that 95% of requests took less than 0.001s to complete.\n- 0.128s = 99.9% means that 99.9% of requests took less than 0.128s to complete.\n\nAs buckets are cumulative, buckets for higher latencies (e.g: 0.128 is higher than 0.001s) include the values of the smaller lower latencies.",
       "fieldConfig": {
@@ -748,14 +705,7 @@
         "x": 12,
         "y": 17
       },
-      "heatmap": {},
-      "hideZeroBuckets": false,
-      "highlightCards": true,
       "id": 29,
-      "legend": {
-        "show": false
-      },
-      "links": [],
       "options": {
         "calculate": false,
         "calculation": {},
@@ -784,7 +734,8 @@
         },
         "showValue": "never",
         "tooltip": {
-          "show": true,
+          "mode": "single",
+          "showColorScale": false,
           "yHistogram": false
         },
         "yAxis": {
@@ -793,17 +744,16 @@
           "unit": "short"
         }
       },
-      "pluginVersion": "10.0.3",
-      "reverseYBuckets": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"coredns\",zone=\"$zone\"}[5m])) by (le) / ignoring (le) group_left sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"coredns\",zone=\"$zone\"}[5m]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval])) by (le) / ignoring (le) group_left sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"coredns\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "heatmap",
           "interval": "",
           "intervalFactor": 1,
@@ -813,20 +763,7 @@
         }
       ],
       "title": "DNS Request Latency By Percentage of Cumulative Bucket zone ${zone}",
-      "tooltip": {
-        "show": true,
-        "showHistogram": false
-      },
-      "type": "heatmap",
-      "xAxis": {
-        "show": true
-      },
-      "yAxis": {
-        "format": "short",
-        "logBase": 1,
-        "show": true
-      },
-      "yBucketBound": "auto"
+      "type": "heatmap"
     },
     {
       "collapsed": false,
@@ -844,7 +781,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "- Mean is defined here as the sum of all samples (latency durations), divided by the number of samples.\n- 50th percentile is the value under which 50% of samples fall (equivalent to the median).\n- 95th percentile is the value under which 95% of samples fall.\n\n\n- Lower latencies are, on the whole, better.\n- If the mean is equal or close to the 50th percentile, we have a symmetrical distribution (a bell curve).\n- If the mean is lower than the 50th percentile, the distribution is skewed to the left, or negatively skewed.\n- If the mean is greater than the 50th percentile, the distribution is skewed to the right, or positively skewed.\n\n\n- We expect the 50th percentile to be lower than the mean (positively skewed), as most requests execute quickly.",
       "fieldConfig": {
@@ -853,11 +790,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -866,6 +805,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -888,8 +828,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               },
               {
                 "color": "red",
@@ -908,7 +847,6 @@
         "y": 25
       },
       "id": 32,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
@@ -920,20 +858,21 @@
           "width": 250
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_sum{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval])) / sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -944,11 +883,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -960,11 +899,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -976,11 +915,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -994,18 +933,9 @@
       "type": "timeseries"
     },
     {
-      "cards": {},
-      "color": {
-        "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
-        "colorScheme": "interpolatePlasma",
-        "exponent": 0.5,
-        "mode": "opacity"
-      },
-      "dataFormat": "tsbuckets",
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "For each cumulative bucket exposed by CoreDNS, the percentage of requests that take less than that amount of time to complete.\n\nE.g:\n- 0.001s = 95% means that 95% of requests took less than 0.001s to complete.\n- 0.128s = 99.9% means that 99.9% of requests took less than 0.128s to complete.\n\nAs buckets are cumulative, buckets for higher latencies (e.g: 0.128 is higher than 0.001s) include the values of the smaller lower latencies.",
       "fieldConfig": {
@@ -1029,14 +959,7 @@
         "x": 12,
         "y": 25
       },
-      "heatmap": {},
-      "hideZeroBuckets": false,
-      "highlightCards": true,
       "id": 33,
-      "legend": {
-        "show": false
-      },
-      "links": [],
       "options": {
         "calculate": false,
         "calculation": {},
@@ -1065,7 +988,8 @@
         },
         "showValue": "never",
         "tooltip": {
-          "show": true,
+          "mode": "single",
+          "showColorScale": false,
           "yHistogram": false
         },
         "yAxis": {
@@ -1074,17 +998,16 @@
           "unit": "short"
         }
       },
-      "pluginVersion": "10.0.3",
-      "reverseYBuckets": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m])) by (le) / ignoring (le) group_left sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m]))",
+          "expr": "sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval])) by (le) / ignoring (le) group_left sum(irate(coredns_dns_request_duration_seconds_count{cluster_id=\"$cluster\", organization=\"$organization\", le!=\"+Inf\",app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval]))",
           "format": "heatmap",
           "interval": "",
           "intervalFactor": 1,
@@ -1094,27 +1017,10 @@
         }
       ],
       "title": "DNS Request Latency By Percentage of Cumulative Bucket zone ${zone}",
-      "tooltip": {
-        "show": true,
-        "showHistogram": false
-      },
-      "type": "heatmap",
-      "xAxis": {
-        "show": true
-      },
-      "yAxis": {
-        "format": "short",
-        "logBase": 1,
-        "show": true
-      },
-      "yBucketBound": "auto"
+      "type": "heatmap"
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1123,74 +1029,102 @@
       },
       "id": 19,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Resources - upstream coreDNS",
       "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
         "y": 33
       },
-      "hiddenSeries": false,
       "id": 11,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": 250,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 250
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "paceLength": 10,
-      "percentage": false,
-      "pluginVersion": "10.0.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "exemplar": true,
-          "expr": "rate(container_cpu_usage_seconds_total{container=\"coredns\", cluster_id=\"$cluster\", organization=\"$organization\"}[5m])",
+          "expr": "rate(container_cpu_usage_seconds_total{container=\"coredns\", cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1198,434 +1132,170 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "CoreDNS Pod CPU Usage",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:696",
-          "format": "none",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:697",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Average"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "line"
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 12,
         "y": 33
       },
-      "hiddenSeries": false,
       "id": 9,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": 250,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 250
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "paceLength": 10,
-      "percentage": false,
-      "pluginVersion": "10.0.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "go_memstats_alloc_bytes{app=\"coredns\", cluster_id=\"$cluster\", organization=\"$organization\"}",
+          "expr": "container_memory_usage_bytes{pod=~\"coredns-.*\", container=\"coredns\", cluster_id=\"$cluster\", organization=\"$organization\"}",
           "format": "time_series",
+          "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ pod }}",
+          "legendFormat": "Memory - {{ pod }}",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$prometheus_datasource"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "avg(container_memory_usage_bytes{pod=~\"coredns-.*\", container=\"coredns\", cluster_id=\"$cluster\", organization=\"$organization\"})",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Memory - Average",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$prometheus_datasource"
+          },
+          "editorMode": "code",
+          "expr": "kube_pod_container_resource_requests{pod=~\"coredns-.*\", container=\"coredns\", cluster_id=\"$cluster\", organization=\"$organization\", resource=\"memory\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Requests - {{pod}}",
+          "range": true,
+          "refId": "C"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "CoreDNS Pod Memory Usage",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:848",
-          "format": "decbytes",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:849",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 42
-      },
-      "id": 34,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 53
-          },
-          "hiddenSeries": false,
-          "id": 26,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": 250,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "9.5.2",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "rate(container_cpu_usage_seconds_total{container=\"node-cache\", cluster_id=\"$cluster\", organization=\"$organization\"}[5m])",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{ pod }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Node-local DNS cache Pod CPU Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:333",
-              "format": "none",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "$$hashKey": "object:334",
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 53
-          },
-          "hiddenSeries": false,
-          "id": 27,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": 250,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "9.5.2",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "go_memstats_alloc_bytes{app=\"k8s-dns-node-cache\", cluster_id=\"$cluster\", organization=\"$organization\"}",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{ pod }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Node-local DNS cache Pod Memory Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:389",
-              "format": "decbytes",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "$$hashKey": "object:390",
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "description": "Ideally the lines on this chart should always be around 0. If they are not, it means DNS requests load is not spread evenly across the CoreDNS replicas running in the cluster. Please be aware that this chart is more accurate when the number of DNS queries is higher.",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "axisSoftMax": 30,
-                "axisSoftMin": -30,
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 14,
-            "w": 24,
-            "x": 0,
-            "y": 62
-          },
-          "id": 25,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "right",
-              "showLegend": false
-            },
-            "tooltip": {
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "(sum by (pod) (rate(coredns_dns_requests_total{app=\"coredns\",cluster_id=\"$cluster\", organization=\"$organization\"}[5m])) / ignoring (pod) group_left sum(rate(coredns_dns_requests_total{app=\"coredns\",cluster_id=\"$cluster\", organization=\"$organization\"}[5m])) * 100) - ignoring (pod) group_left 100 / sum(kube_deployment_status_replicas{deployment=~\"coredns-workers|coredns-controlplane\",cluster_id=\"$cluster\", organization=\"$organization\"})",
-              "interval": "",
-              "legendFormat": "{{pod}}",
-              "refId": "A"
-            }
-          ],
-          "title": "% difference of requests handled compared to expected rate",
-          "type": "timeseries"
-        }
-      ],
-      "title": "Resources - node-local DNS cache",
-      "type": "row"
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1633,7 +1303,327 @@
         "h": 1,
         "w": 24,
         "x": 0,
+        "y": 42
+      },
+      "id": 34,
+      "panels": [],
+      "title": "Resources - node-local DNS cache",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$prometheus_datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
         "y": 43
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 250
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$prometheus_datasource"
+          },
+          "exemplar": true,
+          "expr": "rate(container_cpu_usage_seconds_total{container=\"node-cache\", cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{ pod }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Node-local DNS cache Pod CPU Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$prometheus_datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 43
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 250
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$prometheus_datasource"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "container_memory_usage_bytes{pod=~\"k8s-dns-node-cache-.*\", container=\"node-cache\", cluster_id=\"$cluster\", organization=\"$organization\"}",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{ pod }}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Node-local DNS cache Pod Memory Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$prometheus_datasource"
+      },
+      "description": "Ideally the lines on this chart should always be around 0. If they are not, it means DNS requests load is not spread evenly across the CoreDNS replicas running in the cluster. Please be aware that this chart is more accurate when the number of DNS queries is higher.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 30,
+            "axisSoftMin": -30,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$prometheus_datasource"
+          },
+          "exemplar": true,
+          "expr": "(sum by (pod) (rate(coredns_dns_requests_total{app=\"coredns\",cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])) / ignoring (pod) group_left sum(rate(coredns_dns_requests_total{app=\"coredns\",cluster_id=\"$cluster\", organization=\"$organization\"}[$__rate_interval])) * 100) - ignoring (pod) group_left 100 / sum(kube_deployment_status_replicas{deployment=~\"coredns-workers|coredns-controlplane\",cluster_id=\"$cluster\", organization=\"$organization\"})",
+          "interval": "",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "title": "% difference of requests handled compared to expected rate",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 66
       },
       "id": 35,
       "panels": [],
@@ -1643,7 +1633,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1651,11 +1641,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1664,6 +1656,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1686,8 +1679,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1703,7 +1695,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 67
       },
       "id": 37,
       "options": {
@@ -1714,18 +1706,20 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[5m])) by (le,node))",
+          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\",zone=\"$zone\"}[$__rate_interval])) by (le,node))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1737,7 +1731,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1745,11 +1739,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1758,6 +1754,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1780,8 +1777,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1797,7 +1793,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 75
       },
       "id": 38,
       "options": {
@@ -1808,18 +1804,20 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\",zone=\"$zone\"}[5m])) by (le,node))",
+          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\",zone=\"$zone\"}[$__rate_interval])) by (le,node))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1831,7 +1829,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1839,11 +1837,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1852,6 +1852,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1874,8 +1875,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1891,7 +1891,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 60
+        "y": 83
       },
       "id": 39,
       "options": {
@@ -1902,18 +1902,20 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\",zone=\"$zone\"}[5m])) by (le,node))",
+          "expr": "histogram_quantile(0.99, sum(irate(coredns_dns_request_duration_seconds_bucket{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\",zone=\"$zone\"}[$__rate_interval])) by (le,node))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1928,7 +1930,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 70
+        "y": 93
       },
       "id": 40,
       "panels": [],
@@ -1938,7 +1940,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "",
       "fieldConfig": {
@@ -1947,11 +1949,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1960,6 +1964,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -1985,8 +1990,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2001,7 +2005,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 71
+        "y": 94
       },
       "id": 41,
       "options": {
@@ -2014,19 +2018,21 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\", type=\"success\"}[5m])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[5m]))",
+          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\", type=\"success\"}[$__rate_interval])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "hits ratio: success",
           "range": true,
@@ -2035,11 +2041,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\", type=\"denial\"}[5m])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[5m]))",
+          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\", type=\"denial\"}[$__rate_interval])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[$__rate_interval]))",
           "hide": false,
           "instant": false,
           "legendFormat": "hits ratio: denial",
@@ -2049,11 +2055,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "1 - (sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[5m])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[5m])))",
+          "expr": "1 - (sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[$__rate_interval])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"coredns\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "legendFormat": "miss",
@@ -2062,13 +2068,12 @@
         }
       ],
       "title": "CoreDNS hits and miss ratios",
-      "transformations": [],
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -2076,11 +2081,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -2089,6 +2096,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -2114,8 +2122,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2130,7 +2137,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 71
+        "y": 94
       },
       "id": 42,
       "options": {
@@ -2143,19 +2150,21 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\", type=\"success\"}[5m])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[5m]))",
+          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\", type=\"success\"}[$__rate_interval])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "hits ratio: success",
           "range": true,
@@ -2164,11 +2173,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\", type=\"denial\"}[5m])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[5m]))",
+          "expr": "sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\", type=\"denial\"}[$__rate_interval])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[$__rate_interval]))",
           "hide": false,
           "instant": false,
           "legendFormat": "hits ratio: denial",
@@ -2178,11 +2187,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "1 - (sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[5m])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[5m])))",
+          "expr": "1 - (sum(rate(coredns_cache_hits_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[$__rate_interval])) / sum(rate(coredns_cache_requests_total{cluster_id=\"$cluster\", organization=\"$organization\", app=\"k8s-dns-node-cache\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "legendFormat": "miss",
@@ -2191,13 +2200,12 @@
         }
       ],
       "title": "NodeLocal hits and miss ratios",
-      "transformations": [],
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "$prometheus_datasource"
       },
       "description": "Number of items per second that the cache has prefetched.",
       "fieldConfig": {
@@ -2206,11 +2214,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -2219,6 +2229,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2240,8 +2251,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2256,7 +2266,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 79
+        "y": 102
       },
       "id": 43,
       "options": {
@@ -2267,18 +2277,20 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "$prometheus_datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (app) (rate(coredns_cache_prefetch_total{cluster_id=\"$cluster\", organization=\"$organization\", zones=\"$zone\"}[5m]))",
+          "expr": "sum by (app) (rate(coredns_cache_prefetch_total{cluster_id=\"$cluster\", organization=\"$organization\", zones=\"$zone\"}[$__rate_interval]))",
           "legendFormat": "{{ app }}",
           "range": true,
           "refId": "A"
@@ -2293,7 +2305,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 87
+        "y": 110
       },
       "id": 44,
       "panels": [],
@@ -2303,17 +2315,22 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "$loki_datasource"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
       },
       "gridPos": {
         "h": 7,
         "w": 20,
         "x": 0,
-        "y": 88
+        "y": 111
       },
       "id": 45,
       "options": {
         "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
@@ -2322,14 +2339,16 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "$loki_datasource"
           },
+          "direction": "backward",
           "editorMode": "code",
-          "expr": "{app=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`",
+          "expr": "{service_name=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`",
           "queryType": "range",
           "refId": "A"
         }
@@ -2340,7 +2359,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "$loki_datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -2360,8 +2379,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2376,7 +2394,7 @@
         "h": 7,
         "w": 4,
         "x": 20,
-        "y": 88
+        "y": 111
       },
       "id": 46,
       "options": {
@@ -2391,15 +2409,16 @@
         },
         "showHeader": false
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "$loki_datasource"
           },
+          "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (type) (count_over_time({app=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`[5m]))",
+          "expr": "sum by (type) (count_over_time({service_name=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`[$__auto]))",
           "hide": false,
           "queryType": "instant",
           "refId": "A"
@@ -2424,46 +2443,53 @@
       "type": "table"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 41,
   "tags": [
-    "owner:team-phoenix"
+    "owner:team-cabbage"
   ],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
           "text": "default",
           "value": "default"
         },
-        "hide": 2,
-        "includeAll": false,
-        "multi": false,
-        "name": "datasource",
+        "label": "Prometheus data source",
+        "name": "prometheus_datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
-          "selected": false,
+          "text": "Loki",
+          "value": "gs-loki"
+        },
+        "includeAll": false,
+        "label": "Loki data source",
+        "name": "loki_datasource",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "current": {
           "text": "giantswarm",
           "value": "giantswarm"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$datasource"
+          "uid": "$prometheus_datasource"
         },
         "definition": "label_values(kubernetes_build_info{}, organization)",
-        "hide": 0,
         "includeAll": false,
         "label": "Organization",
-        "multi": false,
         "name": "organization",
         "options": [],
         "query": {
@@ -2472,28 +2498,20 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {
-          "selected": false,
-          "text": "c68pn",
-          "value": "c68pn"
+          "text": "golem",
+          "value": "golem"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$datasource"
+          "uid": "$prometheus_datasource"
         },
         "definition": "label_values(kubernetes_build_info{organization=\"$organization\"}, cluster_id)",
-        "hide": 0,
         "includeAll": false,
         "label": "Cluster",
-        "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
@@ -2502,55 +2520,56 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {
-          "selected": true,
           "text": "cluster.local.",
           "value": "cluster.local."
         },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$prometheus_datasource"
+        },
         "definition": "label_values(coredns_dns_requests_total,zone)",
-        "hide": 0,
         "includeAll": false,
         "label": "DNS zone",
-        "multi": false,
         "name": "zone",
         "options": [],
         "query": {
           "query": "label_values(coredns_dns_requests_total,zone)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
-        "current": {},
-        "hide": 0,
+        "current": {
+          "text": "",
+          "value": ""
+        },
         "label": "Logs Filter",
         "name": "filter",
-        "options": [],
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
         "query": "",
-        "skipUrlSync": false,
         "type": "textbox"
       },
       {
+        "baseFilters": [],
         "datasource": {
           "type": "loki",
-          "uid": "P8E80F9AEF21F6940"
+          "uid": "$loki_datasource"
         },
         "filters": [],
-        "hide": 0,
         "name": "Filters",
-        "skipUrlSync": false,
         "type": "adhoc"
       }
     ]
@@ -2559,34 +2578,9 @@
     "from": "now-30m",
     "to": "now"
   },
-  "timepicker": {
-    "refresh_intervals": [
-      "5s",
-      "10s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h",
-      "2h",
-      "1d"
-    ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
-    ]
-  },
+  "timepicker": {},
   "timezone": "UTC",
   "title": "DNS",
   "uid": "Yu9tkufmk",
-  "version": 2,
-  "weekStart": ""
+  "version": 60
 }

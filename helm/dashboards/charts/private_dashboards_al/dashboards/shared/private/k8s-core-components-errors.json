@@ -27,6 +27,7 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -97,7 +98,6 @@
       },
       "targets": [
         {
-          "datasource": "default",
           "exemplar": true,
           "expr": "sum(increase(rest_client_requests_total{app=~\"kube-controller-manager|kube-proxy|kube-scheduler|kubelet\", code=~\"5..|<error>\", cluster_id=\"$cluster_id\"}[5m])) by (app)",
           "hide": false,
@@ -110,6 +110,7 @@
       "type": "timeseries"
     },
     {
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -180,7 +181,6 @@
       },
       "targets": [
         {
-          "datasource": "default",
           "exemplar": true,
           "expr": "sum(increase(cloudprovider_azure_api_request_errors{app=~\"kube-controller-manager|kube-scheduler\", cluster_id=\"$cluster_id\"}[5m])) by (app)",
           "hide": false,
@@ -189,7 +189,6 @@
           "refId": "A"
         },
         {
-          "datasource": "default",
           "exemplar": true,
           "expr": "sum(increase(cloudprovider_aws_api_request_errors{app=~\"kube-controller-manager|kube-scheduler\", cluster_id=\"$cluster_id\"}[5m])) by (app)",
           "hide": false,
@@ -211,12 +210,33 @@
     "list": [
       {
         "current": {
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
           "selected": true,
           "text": "gollum",
           "value": "gollum"
         },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(rest_client_requests_total, cluster_id)",
-        "description": "Cluster ID",
+        "description": "Cluster",
         "hide": 0,
         "includeAll": false,
         "multi": false,

@@ -30,42 +30,7 @@
   "panels": [
     {
       "datasource": {
-        "uid": "$datasource"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 35,
-      "options": {
-        "analyticsOptions": {
-          "dashboard": "$__dashboard",
-          "flatten": false,
-          "heartbeatAlways": false,
-          "heartbeatInterval": 60,
-          "postEnd": false,
-          "postHeartbeat": false,
-          "postStart": true,
-          "server": "/analytics-plugin/write",
-          "showDetails": false
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "  ",
-      "transparent": true,
-      "type": "macropower-analytics-panel"
-    },
-    {
-      "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Last number of worker nodes in the selected time interval",
@@ -110,6 +75,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "count(kube_node_role{cluster_id=\"$cluster\",organization=~\"$organization\",role=\"worker\"})",
@@ -123,6 +89,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Last number of control plane nodes in the selected time interval",
@@ -167,6 +134,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "count(kube_node_role{cluster_id=\"$cluster\",organization=~\"$organization\",role=~\"control-plane|master\"})",
@@ -180,6 +148,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Worker and control plane nodes over time",
@@ -266,15 +235,17 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
-          "expr": "count(kube_node_role{cluster_id=\"$cluster\",organization=~\"$organization\",role=~\"control-plane|master\"})",
+          "expr": "count(count(kube_node_role{cluster_id=\"$cluster\",organization=~\"$organization\",role=~\"control-plane|master\"}) by (node))",
           "interval": "",
           "legendFormat": "Control plane nodes",
           "refId": "A"
         },
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "count(kube_node_role{cluster_id=\"$cluster\",organization=~\"$organization\",role=\"worker\"})",
@@ -289,6 +260,7 @@
     {
       "collapsed": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "gridPos": {
@@ -302,6 +274,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "refId": "A"
@@ -312,6 +285,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Average CPU usage over all nodes, including worker nodes and control plane, for the selected time frame",
@@ -368,6 +342,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "1 - avg(irate(node_cpu_seconds_total{mode=\"idle\",cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}[5m]))",
@@ -381,6 +356,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "CPU time time usage per node",
@@ -466,6 +442,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "100 * (1 - avg(irate(node_cpu_seconds_total{mode=\"idle\",cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}[5m])) by (node))",
@@ -483,6 +460,7 @@
     {
       "collapsed": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "gridPos": {
@@ -496,6 +474,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "refId": "A"
@@ -506,6 +485,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Load as reported by node_exporter via the node_load1 metric",
@@ -593,6 +573,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "avg(node_load1{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) by (node)",
@@ -610,6 +591,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Load as reported by node_exporter via the node_load5 metric",
@@ -697,6 +679,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "avg(node_load5{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) by (node)",
@@ -714,6 +697,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Load as reported by node_exporter via the node_load15 metric",
@@ -801,6 +785,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "avg(node_load15{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) by (node)",
@@ -819,6 +804,7 @@
     {
       "collapsed": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "gridPos": {
@@ -832,6 +818,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "refId": "A"
@@ -842,6 +829,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "RAM in all nodes, including worker nodes and control plane",
@@ -857,7 +845,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -887,6 +875,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "sum(node_memory_MemTotal_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"})",
@@ -900,6 +889,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "RAM used in all nodes, including worker nodes and control plane",
@@ -956,6 +946,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "1 - sum(node_memory_MemFree_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) / sum(node_memory_MemTotal_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"})",
@@ -969,6 +960,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "As reported by node-exporter via the node_memory_MemFree_bytes and node_memory_MemTotal_bytes metrics",
@@ -1055,6 +1047,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "1 - sum(node_memory_MemFree_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) by (node) / sum(node_memory_MemTotal_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) by (node)",
@@ -1072,6 +1065,7 @@
     {
       "collapsed": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "gridPos": {
@@ -1085,6 +1079,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "refId": "A"
@@ -1095,6 +1090,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -1180,6 +1176,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "sum(rate(node_network_receive_bytes_total{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}[5m])) by (node, device)",
@@ -1196,6 +1193,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -1281,6 +1279,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "sum(rate(node_network_transmit_bytes_total{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}[5m])) by (node, device)",
@@ -1298,6 +1297,7 @@
     {
       "collapsed": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "gridPos": {
@@ -1311,6 +1311,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "refId": "A"
@@ -1321,6 +1322,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Total of disk storage available in all nodes",
@@ -1336,7 +1338,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -1366,6 +1368,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "sum(node_filesystem_size_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"})",
@@ -1379,6 +1382,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Total of disk usage in all nodes",
@@ -1426,6 +1430,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "1 - sum(node_filesystem_free_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) / sum(node_filesystem_size_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"})",
@@ -1439,6 +1444,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Only showing disks with usage above 10 percent. Not including persistent volumes.",
@@ -1524,6 +1530,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "expr": "1 - sum(node_filesystem_free_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"} / node_filesystem_size_bytes{cluster_id=\"$cluster\",organization=~\"$organization\",node!=\"\"}) by (node, device, mountpoint) > 0.1",
@@ -1626,6 +1633,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -1660,8 +1668,9 @@
           "text": "default",
           "value": "default"
         },
-        "hide": 2,
+        "hide": 0,
         "includeAll": false,
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
