@@ -1,0 +1,742 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": false,
+    "slug": "usage-insights-5-metrics-ingestion",
+    "url": "/d/cdn9jukg55bswb/usage-insights-5-metrics-ingestion",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2024-06-20T19:59:18Z",
+    "updated": "2024-09-23T23:42:35Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 2,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "OBOLo6Tnk",
+    "folderTitle": "",
+    "folderUrl": "/dashboards/f/OBOLo6Tnk/da39a3e",
+    "provisioned": true,
+    "provisionedExternalId": "dashboard.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      },
+      "organization": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      }
+    }
+  },
+  "dashboard": {
+    "__inputs": [
+      {
+        "description": "Provisioned Loki log stream for usage insights in Grafana Cloud.",
+        "label": "loki-datasource",
+        "name": "DS_LOKI",
+        "pluginId": "loki",
+        "pluginName": "Loki",
+        "type": "datasource"
+      },
+      {
+        "description": "Provisioned Prometheus metrics on general usage in Grafana Cloud.",
+        "label": "prometheus",
+        "name": "DS_PROMETHEUS",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus",
+        "type": "datasource"
+      }
+    ],
+    "description": "This is a Usage Insights dashboard that shows stats about metrics ingestion and discard rates for metric samples, exemplars and metadata.",
+    "editable": false,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 21249,
+    "graphTooltip": 1,
+    "id": 2061,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Select Instance",
+                      "url": "/d/cdn9jukg55bswb/usage-insights-5-metrics-ingestion?var-instance=${__data.fields.id}&${__url_time_range}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 20,
+          "x": 0,
+          "y": 0
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(\n    max by (id, name, type) (grafanacloud_instance_info)\n)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Hosted Metrics Instance"
+          },
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max by (id, name, type) (grafanacloud_instance_info)\n* on (id) group_left ()\n(\n    sum by (id) (\n        sum_over_time(grafanacloud_instance_samples_per_second[$__range:1m])\n    )\n    / ($__range_s / 60)\n)\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Ingested Samples"
+          },
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max by (id, name, type) (grafanacloud_instance_info)\n* on (id) group_left ()\n(\n    sum by (id) (\n        sum_over_time(grafanacloud_instance_samples_discarded_per_second[$__range:1m])\n    )\n    / ($__range_s / 60)\n)\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Discarded Samples"
+          },
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max by (id) (grafanacloud_instance_info)\n* on (id) group_left ()\n(\n    sum by (id) (\n        sum_over_time(grafanacloud_instance_exemplars_discarded_per_second[$__range:1m])\n    )\n    / ($__range_s / 60)\n)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Discarded Exemplars"
+          },
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max by (id) (grafanacloud_instance_info)\n* on (id) group_left ()\n(\n    sum by (id) (\n        sum_over_time(grafanacloud_instance_metadata_discarded_per_second[$__range:1m])\n    )\n    / ($__range_s / 60)\n)\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Discarded Metadata"
+          },
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max by (id, name, type) (grafanacloud_instance_info)\n* on (id) group_left ()\n(\n    sum by (id) (\n        sum_over_time(grafanacloud_instance_exemplars_per_second[$__range:1m])\n    )\n    / ($__range_s / 60)\n)\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Ingested Exemplars"
+          },
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max by (id, name, type) (grafanacloud_instance_info)\n* on (id) group_left ()\n(\n    sum by (id) (\n        sum_over_time(grafanacloud_instance_metadata_per_second[$__range:1m])\n    )\n    / ($__range_s / 60)\n)\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "Ingested Metadata"
+          }
+        ],
+        "title": "Hosted Metrics Instances",
+        "transformations": [
+          {
+            "id": "merge"
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": false,
+                "Value #Hosted Metrics Instance": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value #Discarded Exemplars": 8,
+                "Value #Discarded Metadata": 10,
+                "Value #Discarded Samples": 6,
+                "Value #Hosted Metrics Instance": 4,
+                "Value #Ingested Exemplars": 7,
+                "Value #Ingested Metadata": 9,
+                "Value #Ingested Samples": 5,
+                "id": 1,
+                "name": 2,
+                "type": 3
+              },
+              "renameByName": {
+                "Value": "Avg Discarded Rate Over Selected Period (samples/sec)",
+                "Value #Discarded Exemplars": "Avg Discarded Exemplars",
+                "Value #Discarded Metadata": "Avg Discarded Metadata",
+                "Value #Discarded Samples": "Avg Discarded Samples",
+                "Value #Ingested Exemplars": "Avg Ingested Exemplars",
+                "Value #Ingested Metadata": "Avg Ingested Metadata",
+                "Value #Ingested Samples": "Avg Ingested Samples",
+                "id": "ID",
+                "name": "Name",
+                "type": "Type"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "description": "",
+        "gridPos": {
+          "h": 7,
+          "w": 4,
+          "x": 20,
+          "y": 0
+        },
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "This panel shows list of Hosted Metrics instances, together with average rate of ingested and discarded samples, exemplars and metadata.\n\nAverage is computed over entire selected time range.\n\nClicking on instance will select the instance in following panels.",
+          "mode": "markdown"
+        },
+        "title": "Hosted Metrics Instances",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            }
+          }
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 20,
+          "x": 0,
+          "y": 7
+        },
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum by (id) (grafanacloud_instance_samples_per_second{id=~\"$instance\"})\n* on (id) group_left(name)\nmax by (id, name) (grafanacloud_instance_info{id=~\"$instance\"})\n> 0\n",
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "{{name}} - samples",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum by (id) (grafanacloud_instance_exemplars_per_second{id=~\"$instance\"})\n* on (id) group_left(name)\nmax by (id, name) (grafanacloud_instance_info{id=~\"$instance\"})\n> 0\n",
+            "hide": false,
+            "legendFormat": "{{name}} - exemplars",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum by (id) (grafanacloud_instance_metadata_per_second{id=~\"$instance\"})\n* on (id) group_left(name)\nmax by (id, name) (grafanacloud_instance_info{id=~\"$instance\"})\n> 0\n",
+            "hide": false,
+            "legendFormat": "{{name}} - metadata",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Ingested Samples, Exemplars, Metadata / second (Instance: $instance)",
+        "type": "timeseries"
+      },
+      {
+        "description": "",
+        "gridPos": {
+          "h": 10,
+          "w": 4,
+          "x": 20,
+          "y": 7
+        },
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "This panel shows rate of received samples, exemplars and metadata.\n\nDeduplicated and discarded samples, exemplars and metadata are not counted.",
+          "mode": "markdown"
+        },
+        "title": "Ingestion Rate",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            }
+          }
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 6,
+          "x": 0,
+          "y": 17
+        },
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "editorMode": "code",
+            "expr": "sum by (id, reason) (grafanacloud_instance_samples_discarded_per_second{id=~\"$instance\"})\n* on (id) group_left(name)\nmax by (id, name) (grafanacloud_instance_info{id=~\"$instance\"})\n> 0\n\n",
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "{{name}} - {{reason}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Discarded Samples / second (Instance: $instance)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            }
+          }
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 7,
+          "x": 6,
+          "y": 17
+        },
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "editorMode": "code",
+            "expr": "sum by (id, reason) (grafanacloud_instance_exemplars_discarded_per_second{id=~\"$instance\"})\n* on (id) group_left(name)\nmax by (id, name) (grafanacloud_instance_info{id=~\"$instance\"})\n> 0",
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "{{name}} - {{reason}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Discarded Exemplars / second (Instance: $instance)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            }
+          }
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 7,
+          "x": 13,
+          "y": 17
+        },
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "editorMode": "code",
+            "expr": "sum by (id, reason) (grafanacloud_instance_metadata_discarded_per_second{id=~\"$instance\"})\n* on (id) group_left(name)\nmax by (id, name) (grafanacloud_instance_info{id=~\"$instance\"})\n> 0",
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "{{name}} - {{reason}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Discarded Metadata / second (Instance: $instance)",
+        "type": "timeseries"
+      },
+      {
+        "description": "",
+        "gridPos": {
+          "h": 11,
+          "w": 4,
+          "x": 20,
+          "y": 17
+        },
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "These panels shows rate of discarded samples, exemplars and metadata, together with discard reason.",
+          "mode": "markdown"
+        },
+        "title": "Discard Rate",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "gridPos": {
+          "h": 14,
+          "w": 20,
+          "x": 0,
+          "y": 28
+        },
+        "options": {
+          "dedupStrategy": "numbers",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "{instance_type=\"metrics\", instance_id=~\"$instance\"} |~ \"error while ingesting|failed to process sample due to error|failed to process exemplar due to error|failed to push aggregation result|the sample has been rejected\" | logfmt | line_format \"{{.err}}\"",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Ingestion Error Details (Instance: $instance)",
+        "type": "logs"
+      },
+      {
+        "description": "",
+        "gridPos": {
+          "h": 14,
+          "w": 4,
+          "x": 20,
+          "y": 28
+        },
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "This panel shows log messages from relevant Hosted Metrics components that discard samples, exemplars or metadata.\n\nFor description of errors, please consult [Grafana Mimir Errors catalog](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/#errors-catalog).\n\nTo change configuration values mentioned in the log messages, please contact Grafana support.",
+          "mode": "markdown"
+        },
+        "title": "Log Messages for Discarded values",
+        "type": "text"
+      }
+    ],
+    "refresh": "5m",
+    "schemaVersion": 39,
+    "tags": [
+      "grafanacloud"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-usage"
+          },
+          "definition": "label_values(grafanacloud_instance_info{type=~\"prometheus|graphite.*\"},id)",
+          "description": "ID of Hosted Metrics Instance",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Hosted Metrics Instance",
+          "multi": true,
+          "name": "instance",
+          "query": {
+            "qryType": 1,
+            "query": "label_values(grafanacloud_instance_info{type=~\"prometheus|graphite.*\"},id)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 3,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timezone": "utc",
+    "title": "Usage Insights - 5 - Metrics Ingestion",
+    "uid": "cdn9jukg55bswb",
+    "version": 2,
+    "weekStart": ""
+  }
+}
