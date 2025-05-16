@@ -485,11 +485,109 @@
         }
       ],
       "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "gs-loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 11,
+        "x": 0,
+        "y": 23
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "gs-loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (k8sNamespace, ciliumNetworkPolicyName) (rate({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level =~ `error|warning` | msg =~ `Unable to add CiliumNetworkPolicy`[1m]))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Failing Cilium Network Policies ",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "labelsToFields": true,
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field": true,
+              "Last *": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Field": 0,
+              "Last *": 3,
+              "ciliumNetworkPolicyName": 2,
+              "k8sNamespace": 1
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "preload": false,
   "refresh": "",
-  "schemaVersion": 40,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": [
