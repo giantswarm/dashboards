@@ -548,28 +548,21 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (k8sNamespace, ciliumNetworkPolicyName) (rate({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level =~ `error|warning` | msg =~ `Unable to add CiliumNetworkPolicy`[1m]))",
-          "queryType": "range",
+          "expr": "sum by (k8sNamespace, ciliumNetworkPolicyName) (rate({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level =~ `error|warning` | msg =~ `Unable to add CiliumNetworkPolicy`[$__auto]))",
+          "queryType": "instant",
           "refId": "A"
         }
       ],
       "title": "Failing Cilium Network Policies ",
       "transformations": [
         {
-          "id": "reduce",
-          "options": {
-            "labelsToFields": true,
-            "reducers": [
-              "lastNotNull"
-            ]
-          }
-        },
-        {
           "id": "organize",
           "options": {
             "excludeByName": {
               "Field": true,
-              "Last *": true
+              "Last *": true,
+              "Time": true,
+              "Value #A": true
             },
             "includeByName": {},
             "indexByName": {
