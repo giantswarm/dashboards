@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - Grafana Cloud Dashboard Backup Workflow
+- Update Cilium Agent logs dashboard and show cluster info
 
 ## [4.5.0] - 2025-05-07
 
