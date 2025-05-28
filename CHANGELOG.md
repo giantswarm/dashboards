@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Grafana Cloud Dashboard Backup Workflow
 - Update Cilium Agent logs dashboard and show cluster info
 
+### Changed
+
+- Add failed netpols panel to Cilium Agent logs dashboard
+
 ## [4.5.0] - 2025-05-07
 
 ### Added
