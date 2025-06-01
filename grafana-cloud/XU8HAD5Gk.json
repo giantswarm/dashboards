@@ -1,0 +1,964 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": false,
+    "slug": "usage-insights-1-overview",
+    "url": "/d/XU8HAD5Gk/usage-insights-1-overview",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2021-10-22T22:07:09Z",
+    "updated": "2025-03-18T11:59:34Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 43,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "OBOLo6Tnk",
+    "folderTitle": "",
+    "folderUrl": "/dashboards/f/OBOLo6Tnk/da39a3e",
+    "provisioned": true,
+    "provisionedExternalId": "dashboard.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      },
+      "organization": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      }
+    }
+  },
+  "dashboard": {
+    "__inputs": [
+      {
+        "description": "Provisioned Loki log stream for usage insights in Grafana Cloud.",
+        "label": "loki-datasource",
+        "name": "DS_LOKI",
+        "pluginId": "loki",
+        "pluginName": "Loki",
+        "type": "datasource"
+      },
+      {
+        "description": "Provisioned Prometheus metrics on general usage in Grafana Cloud.",
+        "label": "prometheus",
+        "name": "DS_PROMETHEUS",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus",
+        "type": "datasource"
+      }
+    ],
+    "description": "This is a Usage Insights dashboard expecting Grafana events in logfmt instead of json.",
+    "editable": false,
+    "gnetId": 15083,
+    "graphTooltip": 0,
+    "id": 297,
+    "links": [
+      {
+        "icon": "cloud",
+        "keepTime": true,
+        "targetBlank": false,
+        "title": "Data Source Insights",
+        "tooltip": "",
+        "type": "link",
+        "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources"
+      },
+      {
+        "icon": "bolt",
+        "keepTime": true,
+        "targetBlank": false,
+        "title": "Query Errors Insights",
+        "tooltip": "",
+        "type": "link",
+        "url": "/d/MpmkYhRVz/usage-insights-3-query-errors"
+      }
+    ],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "title": "Usage Insight KPI",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "purple",
+              "mode": "fixed"
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 1
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "fields": "/^Value \\#A$/"
+          },
+          "textMode": "value"
+        },
+        "targets": [
+          {
+            "expr": "sum(count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} [$__range]))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Total usage insights events",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "purple",
+              "mode": "fixed"
+            },
+            "custom": {
+              "filterable": false
+            }
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 1
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "fields": "/^Value \\#A$/"
+          },
+          "textMode": "value"
+        },
+        "targets": [
+          {
+            "expr": "count(sum by (datasourceId) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | error=\"\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" [$__range])))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Data sources Used",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "purple",
+              "mode": "fixed"
+            }
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 12,
+          "y": 1
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "fields": "/^Value \\#A$/"
+          },
+          "textMode": "value"
+        },
+        "targets": [
+          {
+            "expr": "count(sum by (dashboardId) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\" } | logfmt |  error=\"\" [$__range])))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Dashboards Used",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "purple",
+              "mode": "fixed"
+            }
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 18,
+          "y": 1
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "fields": "/^Value \\#A$/"
+          },
+          "textMode": "value"
+        },
+        "targets": [
+          {
+            "expr": "count(sum by (userId) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt [$__range])))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Users Seen",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "title": "Usage Insight Details",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 3,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "always",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "unit": "short",
+            "unitScale": true
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Request Successes"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "semi-dark-blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Request Errors"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "semi-dark-red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Dashboard Views"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "semi-dark-green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "interval": "5m",
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum by(host) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"data-request\" | error = \"\" [$__interval]))",
+            "legendFormat": "Data Request Successes",
+            "queryType": "range",
+            "refId": "A"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum by(host) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"data-request\" | error != \"\" [$__interval]))",
+            "hide": false,
+            "legendFormat": "Data Request Errors",
+            "queryType": "range",
+            "refId": "B"
+          },
+          {
+            "editorMode": "code",
+            "expr": "sum by(host) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"dashboard-view\" [$__interval]))",
+            "hide": false,
+            "legendFormat": "Dashboard Views",
+            "queryType": "range",
+            "refId": "C"
+          }
+        ],
+        "title": "Usage insights events",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Views"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "lcd-gauge"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-BlPu"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 14
+        },
+        "interval": "",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Views"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (dashboardId,dashboardName,folderName) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"dashboard-view\" [$__range])))",
+            "legendFormat": "{{dashboardName}}",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 dashboards",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "dashboardId": true,
+                "folderName": true
+              },
+              "renameByName": {
+                "Value #A": "Views",
+                "dashboardName": "Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "links": [
+              {
+                "title": "Go to datasource usage insights",
+                "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources?var-datasource_id=${__data.fields.ID}&var-datasource_name=${__data.fields.Name:percentencode}&${__url_time_range}"
+              }
+            ]
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Query Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "lcd-gauge"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-BlPu"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 41
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 14
+        },
+        "interval": "",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Query Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (datasourceName, datasourceId) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" [$__range])))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 data sources",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Query Count",
+                "datasourceId": "ID",
+                "datasourceName": "Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Views"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "lcd-gauge"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-BlPu"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 14
+        },
+        "interval": "",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Views"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (username) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"dashboard-view\" [$__range])))",
+            "legendFormat": "{{username}}",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 users",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Views",
+                "username": "Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "Click on the error count to view errors",
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "lcd-gauge"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "View errors",
+                      "url": "/d/MpmkYhRVz/usage-insights-3-query-errors?var-search=${__data.fields.UID}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "UID"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 21
+        },
+        "interval": "",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Error Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (dashboardUid,dashboardName) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"data-request\" | error!=\"\" [$__range])))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 dashboards with errors",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Error Count",
+                "dashboardName": "Name",
+                "dashboardUid": "UID"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "Click on the data source name or ID to view details, click on the error count to view errors",
+        "fieldConfig": {
+          "defaults": {
+            "links": [
+              {
+                "title": "Go to data source usage insights",
+                "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources?var-datasource_id=${__data.fields.ID}&var-datasource_name=${__data.fields.Name:percentencode}&${__url_time_range}"
+              }
+            ]
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "lcd-gauge"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "View errors",
+                      "url": "/d/MpmkYhRVz/usage-insights-3-query-errors?var-search=${__data.fields.Name}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 41
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 21
+        },
+        "interval": "",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Error Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (datasourceName, datasourceId) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | error!=\"\" [$__range])))",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 data sources with errors",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Error Count",
+                "datasourceId": "ID",
+                "datasourceName": "Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "Click on the error count to view errors",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "displayMode": "auto",
+              "filterable": false
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "lcd-gauge"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "View errors",
+                      "url": "/d/MpmkYhRVz/usage-insights-3-query-errors?var-search=${__data.fields.Username}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 21
+        },
+        "interval": "",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Error Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (username) (count_over_time({instance_type=\"grafana\", instance_id=~\"$instance_id\"} | logfmt | eventName=\"data-request\" | error!=\"\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" [$__range])))",
+            "legendFormat": "{{username}}",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 users seeing errors",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Error Count",
+                "username": "Username"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 32,
+    "style": "dark",
+    "tags": [
+      "grafanacloud"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-usage"
+          },
+          "definition": "grafanacloud_grafana_instance_info{}",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Instance",
+          "multi": false,
+          "name": "instance_id",
+          "query": {
+            "query": "grafanacloud_grafana_instance_info{}",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/,id=\"(?<value>[^\"]+)|,slug=\"(?<text>[^\"]+)/g",
+          "skipUrlSync": false,
+          "sort": 5,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timezone": "",
+    "title": "Usage Insights - 1 - Overview",
+    "uid": "XU8HAD5Gk",
+    "version": 43
+  }
+}

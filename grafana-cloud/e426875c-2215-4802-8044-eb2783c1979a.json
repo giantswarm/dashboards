@@ -1,0 +1,453 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": false,
+    "slug": "cabbage-apps",
+    "url": "/d/e426875c-2215-4802-8044-eb2783c1979a/cabbage-apps",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2023-10-11T08:05:26Z",
+    "updated": "2024-03-01T16:22:06Z",
+    "updatedBy": "matias3",
+    "createdBy": "matias3",
+    "version": 4,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "JflJ8w6Wk",
+    "folderTitle": "",
+    "folderUrl": "/dashboards/f/JflJ8w6Wk/da39a3e",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      },
+      "organization": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1520,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 22,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.0.0-67429",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:giantswarm:app_deployed_management_cluster_total{installation=~\".*\", app=~\"oauth2-proxy\", app_version=~\".*\", version=~\".*\"}\n",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:giantswarm:app_deployed_management_cluster_total{installation=~\".*\", app=~\".*nginx.*\", app_version=~\".*\", version=~\".*\"}\n",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "MC Apps",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "keepLabels": [
+                "version",
+                "installation",
+                "app"
+              ],
+              "valueLabel": "__name__"
+            }
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "aggregation:giantswarm:app_deployed_management_cluster_total": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "app": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "installation": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "version": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "aggregation:giantswarm:app_deployed_management_cluster_total": {
+                  "aggregations": []
+                },
+                "aggregation:giantswarm:app_deployed_management_cluster_total (lastNotNull)": {
+                  "aggregations": [
+                    "sum"
+                  ],
+                  "operation": "aggregate"
+                },
+                "app": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "installation": {
+                  "aggregations": [
+                    "uniqueValues"
+                  ],
+                  "operation": "aggregate"
+                },
+                "version": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "aggregation:giantswarm:app_deployed_management_cluster_total (lastNotNull) (sum)": "Total",
+                "app": "App",
+                "installation (uniqueValues)": "Installations",
+                "version": "Version"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 13,
+          "w": 22,
+          "x": 0,
+          "y": 10
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.0.0-67429",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:giantswarm:app_deployed_management_cluster_total{installation=~\".*\", app=~\"$app\", app_version=~\".*\", version=~\".*\"}\n",
+            "hide": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:giantswarm:app_deployed_workload_cluster_total{installation=~\".*\", app=~\"$app\", app_version=~\".*\", version=~\".*\"}",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "WC with filter",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "keepLabels": [
+                "version",
+                "installation",
+                "app",
+                "customer"
+              ],
+              "valueLabel": "__name__"
+            }
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "aggregation:giantswarm:app_deployed_management_cluster_total": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "app": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "customer": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "installation": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "version": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "aggregation:giantswarm:app_deployed_management_cluster_total": {
+                  "aggregations": []
+                },
+                "aggregation:giantswarm:app_deployed_management_cluster_total (lastNotNull)": {
+                  "aggregations": [
+                    "sum"
+                  ],
+                  "operation": "aggregate"
+                },
+                "app": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "customer": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "installation": {
+                  "aggregations": [
+                    "uniqueValues"
+                  ],
+                  "operation": "aggregate"
+                },
+                "version": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "aggregation:giantswarm:app_deployed_management_cluster_total (lastNotNull) (sum)": "Total",
+                "app": "App",
+                "installation (uniqueValues)": "Installations",
+                "version": "Version"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "name": "app",
+          "options": [
+            {
+              "selected": false,
+              "text": "",
+              "value": ""
+            }
+          ],
+          "query": "",
+          "skipUrlSync": false,
+          "type": "textbox"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Cabbage apps",
+    "uid": "e426875c-2215-4802-8044-eb2783c1979a",
+    "version": 4,
+    "weekStart": ""
+  }
+}
