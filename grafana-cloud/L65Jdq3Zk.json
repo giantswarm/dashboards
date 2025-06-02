@@ -1,0 +1,628 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": false,
+    "slug": "alerts-timeline",
+    "url": "/d/L65Jdq3Zk/alerts-timeline",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2023-10-02T09:45:36Z",
+    "updated": "2025-02-11T13:39:51Z",
+    "updatedBy": "herve3",
+    "createdBy": "herve3",
+    "version": 4,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      },
+      "organization": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "$$hashKey": "object:54",
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Installation-wide information on alerts, inhibitions, and silences",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1479,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 17,
+        "panels": [],
+        "title": "Overview",
+        "type": "row"
+      },
+      {
+        "description": "",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 9,
+          "x": 0,
+          "y": 1
+        },
+        "id": 19,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "This dashboard provides metrics about alerts and silences on a installation/cluster level (workload cluster or management cluster).\n\n**Alert:** An alert is created by Prometheus based on a set of rules. For example, when some metric exceeds a configured threshold.\n\nAlerts are defined in the [prometheus-rules](https://github.com/giantswarm/prometheus-rules) repository. To learn about a particular alert, you can search that repository for the alert name.\n\n**Silence:** A silence is a specific override rule to supress one or several alerts from firing. Silences are interpreted by alertmanager. They are not cluster specific, but instead are effective for the entire installation.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.5.0-81938",
+        "title": "About this dashboard",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic-by-name"
+            },
+            "mappings": [],
+            "min": 0,
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 9,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.5.0-81938",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(count(aggregation:prometheus:alerts{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'})by(alertname))",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "Firing (filtered)",
+            "range": false,
+            "refId": "Active"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(sum(max_over_time(aggregation:prometheus:alerts{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "Fired over period (filtered)",
+            "range": false,
+            "refId": "active over period"
+          }
+        ],
+        "title": "Global alerts stats",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 7,
+          "x": 17,
+          "y": 1
+        },
+        "id": 13,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.5.0-81938",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:alertmanager:silences_active_total{installation=\"$installation\"})",
+            "interval": "",
+            "legendFormat": "Active",
+            "range": true,
+            "refId": "total"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:alertmanager:silences_expired_total{installation=\"$installation\"})",
+            "interval": "",
+            "legendFormat": "Expired",
+            "range": true,
+            "refId": "expired"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:alertmanager:silences_pending_total{installation=\"$installation\"})",
+            "interval": "",
+            "legendFormat": "Pending",
+            "range": true,
+            "refId": "pending"
+          }
+        ],
+        "title": "Global silences",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 15,
+        "panels": [],
+        "title": "Metrics",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisPlacement": "auto",
+              "fillOpacity": 70,
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineWidth": 0,
+              "spanNulls": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 24,
+          "x": 0,
+          "y": 7
+        },
+        "id": 22,
+        "options": {
+          "alignValue": "left",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "never",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.5.0-81938",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:prometheus:alerts{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', severity=~'($severity)|$^', team=~'($team)|$^'})by(alertname, cluster_id)",
+            "instant": false,
+            "legendFormat": "{{alertname}} on {{cluster_id}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Alerts timeline",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic-by-name"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "json-view"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 19
+        },
+        "id": 23,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "enablePagination": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "11.5.0-81938",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(max_over_time(aggregation:prometheus:alerts{alertname=~'($alertname)|$^',cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname, cluster_id, team, severity)",
+            "instant": true,
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Firing alerts for selected period",
+        "transformations": [
+          {
+            "id": "seriesToRows",
+            "options": {}
+          },
+          {
+            "id": "extractFields",
+            "options": {
+              "format": "kvp",
+              "jsonPaths": [
+                {
+                  "alias": "alertname",
+                  "path": "alertname"
+                }
+              ],
+              "keepTime": false,
+              "replace": false,
+              "source": "Metric"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Metric": true,
+                "Time": true
+              },
+              "indexByName": {
+                "Metric": 1,
+                "Time": 0,
+                "Value": 5,
+                "alertname": 2,
+                "severity": 3,
+                "team": 4
+              },
+              "renameByName": {
+                "Value": "Quantity"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 40,
+    "tags": [
+      "owner:team-atlas"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "default",
+            "value": "default"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "leopard",
+            "value": "leopard"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts,installation)",
+          "includeAll": true,
+          "label": "Installation",
+          "name": "installation",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:prometheus:alerts,installation)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": "",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "definition": "label_values(aggregation:prometheus:alerts{installation=~\"$installation\"},cluster_id)",
+          "includeAll": true,
+          "label": "Cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:prometheus:alerts{installation=~\"$installation\"},cluster_id)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": [
+              "page"
+            ],
+            "value": [
+              "page"
+            ]
+          },
+          "definition": "label_values(aggregation:prometheus:alerts{installation=~\"$installation\", cluster_id=~\"$cluster\"},severity)",
+          "includeAll": true,
+          "label": "Severity",
+          "multi": true,
+          "name": "severity",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:prometheus:alerts{installation=~\"$installation\", cluster_id=~\"$cluster\"},severity)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": [
+              "atlas"
+            ],
+            "value": [
+              "atlas"
+            ]
+          },
+          "definition": "label_values(aggregation:prometheus:alerts{installation=~\"$installation\", cluster_id=~\"$cluster\"},team)",
+          "includeAll": true,
+          "label": "Team",
+          "multi": true,
+          "name": "team",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:prometheus:alerts{installation=~\"$installation\", cluster_id=~\"$cluster\"},team)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "definition": "query_result(count(max_over_time(aggregation:prometheus:alerts{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
+          "includeAll": true,
+          "multi": true,
+          "name": "alertname",
+          "options": [],
+          "query": {
+            "qryType": 3,
+            "query": "query_result(count(max_over_time(aggregation:prometheus:alerts{alertname!~\"^(Heartbeat|InvalidLabellingSchema)\",cluster_id=~'($cluster)|$^', team=~'($team)|$^', severity=~'($severity)|$^'}[$__range:])) by (alertname))",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "/.*{alertname=\"(.*)\"}.*/",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-2d",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "UTC",
+    "title": "Alerts timeline",
+    "uid": "L65Jdq3Zk",
+    "version": 4,
+    "weekStart": ""
+  }
+}

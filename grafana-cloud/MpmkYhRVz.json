@@ -1,0 +1,1000 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": false,
+    "slug": "usage-insights-3-query-errors",
+    "url": "/d/MpmkYhRVz/usage-insights-3-query-errors",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2022-09-05T09:19:16Z",
+    "updated": "2025-03-18T21:08:54Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 5,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "OBOLo6Tnk",
+    "folderTitle": "",
+    "folderUrl": "/dashboards/f/OBOLo6Tnk/da39a3e",
+    "provisioned": true,
+    "provisionedExternalId": "dashboard.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      },
+      "organization": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      }
+    }
+  },
+  "dashboard": {
+    "__inputs": [
+      {
+        "description": "Provisioned Loki log stream for usage insights in Grafana Cloud.",
+        "label": "loki-datasource",
+        "name": "DS_LOKI",
+        "pluginId": "loki",
+        "pluginName": "Loki",
+        "type": "datasource"
+      },
+      {
+        "description": "Provisioned Prometheus metrics on general usage in Grafana Cloud.",
+        "label": "prometheus",
+        "name": "DS_PROMETHEUS",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus",
+        "type": "datasource"
+      }
+    ],
+    "description": "A dashboard for visualizing and analyzing query errors.",
+    "editable": false,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 17027,
+    "graphTooltip": 0,
+    "id": 787,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": true,
+        "targetBlank": true,
+        "title": "Explore Logs",
+        "tooltip": "Search for matching logs in explore",
+        "type": "link",
+        "url": "/explore?left={\"datasource\":\"grafanacloud-ops-usage-insights\",\"queries\":[{\"datasource\":{\"type\":\"loki\",\"uid\":\"grafanacloud-usage-insights\"},\"editorMode\":\"code\",\"expr\":\"{instance_type%3D\\\"grafana\\\"} |%3D \\\"eventName%3Ddata-request\\\" |%3D \\\"error%3D\\\" |~ \\\"${search}\\\"\",\"queryType\":\"range\",\"refId\":\"A\"}],\"range\":{\"from\":\"now-7d\",\"to\":\"now\"}}&orgId=1"
+      },
+      {
+        "icon": "dashboard",
+        "keepTime": true,
+        "title": "Usage Insights Overview",
+        "type": "link",
+        "url": "/d/XU8HAD5Gk/usage-insights-1-overview"
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "gridPos": {
+          "h": 11,
+          "w": 7,
+          "x": 0,
+          "y": 0
+        },
+        "options": {
+          "content": "**About:** This dashboard exists to help you find and understand errors occuring during data requests. \n\n**Search:** The search box above looks at the entire log line, and supports [some regex](https://grafana.com/docs/loki/latest/logql/log_queries/#log-stream-selector).\nTry searching for things like username, data source, or HTTP status code.\n\n**Categories:** The categories here are derived from common errors seen in various data sources. Use 'Explore' from the panel menu to see how we've achieved this. Save a copy of this dashboard so you can make edits and add your own categories.\n\n**Diving in:** The logs panel to the right is similar to what you'll find on the explore page. Click on the \"Explore Logs\" link if you'd like to interact with them there. Note that the category label won't be available in Explore.\n",
+          "mode": "markdown"
+        },
+        "title": "How to use this dashboard",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "This panel displays raw datasource errors from logs with a new category (`errorClass`) label attached. Categories are based on a set of regex rules to match common patterns.",
+        "gridPos": {
+          "h": 11,
+          "w": 17,
+          "x": 7,
+          "y": 0
+        },
+        "interval": "1h",
+        "maxDataPoints": 20,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": true
+        },
+        "targets": [
+          {
+            "expr": "{instance_type=\"grafana\"} |= \"eventName=data-request\" |~ \"error=\\\".+\\\"\" |~ \"$search\"\n    # pop out error into error field and only look at those lines\n    | regexp `error=\"(?P<rawError>.+)\"`\n    \n    # trim leading and trailing whitespace\n    | label_format errorStr=`{{ regexReplaceAll \"^ | $\" .rawError \"\" }}`\n    # trim runs of spaces with a single space\n    | label_format errorStr=`{{ regexReplaceAll \"[ ]+\" .errorStr \" \" }}`\n    \n    # todo: maybe not so many labels\n    # backslashes and newlines make regex hurt even more\n    | label_format error=`{{ replace \"\\\\n\" \" \" .errorStr | lower }}`\n    | label_format error=`{{ regexReplaceAll \"[\\\\\\\\]\" .error \"\" }}`\n    | label_format error=`{{ regexReplaceAll \"^ | $\" .error \"\" }}`   \n    \n    # scrub URIs and TCP addresses\n    | label_format error=`{{ regexReplaceAll \"\\\"http[s|]://.+\\\"\" .error \"URI\"}}` \n    | label_format error=`{{ regexReplaceAll \"tcp .+:\" .error \"TCP\" }}`\n    \n    # categorize\n    | label_format errorClass=`{{ \"other\" }}`\n    \n    # timeouts\n    | label_format errorClass=`{{ if contains \"timeout\" .error }}{{\"timeout\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # bad request & invalid query\n    | label_format errorClass=`{{ if contains \"invalidquery\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"parse error\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"unsupported protocol scheme\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"query error:\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"invalid: compilation failed\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"invalid: error @\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"rror 400\" .error }}{{\"bad request\"}}{{else}}{{.errorClass}}{{end}}`\n\n    # errors from aggregated metrics\n    | label_format errorClass=`{{ if contains \"execution: can't query aggregated metric\" .error }}{{\"aggregation\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # too much data requested by query\n    | label_format errorClass=`{{ if contains \"maximum of series\" .error }}{{\"query too large\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"too many samples\" .error }}{{\"query too large\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"too many datapoints\" .error }}{{\"query too large\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"number of chunks\" .error }}{{\"query too large\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"exceeds max-points-per-req-hard limit\" .error }}{{\"query too large\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"query time range exceeds the limit\" .error }}{{\"query too large\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # too many requests\n    | label_format errorClass=`{{ if contains \"too many outstanding requests\" .error }}{{\"too many requests\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # server errors\n    | label_format errorClass=`{{ if contains \"server error\" .error }}{{\"server error\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"500\" .error }}{{\"server error\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"502\" .error }}{{\"server error\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"503\" .error }}{{\"server error\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # missing data\n    | label_format errorClass=`{{ if contains \"404\" .error }}{{\"missing resource\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"not found\" .error }}{{\"missing resource\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"no such host\" .error }}{{\"missing resource\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # authN/authZ\n    | label_format errorClass=`{{ if contains \"401\" .error }}{{\"authN/authZ\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"403\" .error }}{{\"authN/authZ\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"unauthorized\" .error }}{{\"authN/authZ\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"authenticate user\" .error }}{{\"authN/authZ\"}}{{else}}{{.errorClass}}{{end}}`\n    | label_format errorClass=`{{ if contains \"access denied\" .error }}{{\"authN/authZ\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # aborted requests\n    | label_format errorClass=`{{ if contains \"query error: -1 request was aborted\" .error }}{{\"query cancelled\"}}{{else}}{{.errorClass}}{{end}}`\n    \n    # logfmt the line so this panel is rich\n    | logfmt\n    | label_format level=\"err\"\n    \n    # scrub the line now\n    | line_format `category=\"{{.errorClass}}\", message=\"{{.errorStr}}\"`\n    \n    # since this query is huge and we don't want to be doing it multiple times, this allows for some convenience in the time series categories panel\n    | label_format hour=`{{.t | substr 0 14}}00`    \n    \n    # finally, filter\n    | errorClass=~\"$category\"",
+            "hide": false,
+            "legendFormat": "{{error}}",
+            "queryType": "range",
+            "refId": "error count"
+          }
+        ],
+        "title": "Error Logs",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Dashboard --"
+        },
+        "description": "This panel counts the log lines by (`errorClass`). This and all other panels use a query to the logs panel, to make the dashboard load faster.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          }
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 6,
+          "x": 0,
+          "y": 11
+        },
+        "interval": "1h",
+        "maxDataPoints": 20,
+        "options": {
+          "displayMode": "lcd",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "fields": "",
+            "values": true
+          },
+          "showUnfilled": true
+        },
+        "targets": [
+          {
+            "panelId": 2,
+            "refId": "A"
+          }
+        ],
+        "title": "Log Lines per Error Category",
+        "transformations": [
+          {
+            "id": "extractFields",
+            "options": {
+              "replace": true,
+              "source": "labels"
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "errorClass"
+                ]
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "mode": "reduceRow",
+              "reduce": {
+                "include": [
+                  "errorClass"
+                ],
+                "reducer": "count"
+              }
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Count": {
+                  "aggregations": [
+                    "sum"
+                  ],
+                  "operation": "aggregate"
+                },
+                "errorClass": {
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Count (sum)"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Dashboard --"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "points",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "always",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "noValue": "0"
+          }
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 7,
+          "x": 6,
+          "y": 11
+        },
+        "interval": "1h",
+        "maxDataPoints": 20,
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "panelId": 2,
+            "refId": "A"
+          }
+        ],
+        "title": "Error Categories per Hour",
+        "transformations": [
+          {
+            "id": "extractFields",
+            "options": {
+              "source": "labels"
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "errorClass",
+                  "hour"
+                ]
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "",
+              "mode": "reduceRow",
+              "reduce": {
+                "include": [
+                  "errorClass"
+                ],
+                "reducer": "count"
+              },
+              "replaceFields": false
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Count": {
+                  "aggregations": [
+                    "sum"
+                  ],
+                  "operation": "aggregate"
+                },
+                "errorClass": {
+                  "operation": "groupby"
+                },
+                "hour": {
+                  "operation": "groupby"
+                },
+                "time_5_min": {
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "convertFieldType",
+            "options": {
+              "conversions": [
+                {
+                  "destinationType": "time",
+                  "targetField": "hour"
+                }
+              ]
+            }
+          },
+          {
+            "id": "prepareTimeSeries",
+            "options": {
+              "format": "many"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "Count \\(sum\\) (.*)",
+              "renamePattern": "$1"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Dashboard --"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "filterable": false,
+              "inspect": true
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 80
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Category"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 116
+                },
+                {
+                  "id": "links"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 11,
+          "x": 13,
+          "y": 11
+        },
+        "interval": "30ms",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "panelId": 2,
+            "refId": "A"
+          }
+        ],
+        "title": "Error Messages",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "id": true,
+                "labels": true,
+                "tsNs": true
+              }
+            }
+          },
+          {
+            "id": "extractFields",
+            "options": {
+              "format": "kvp",
+              "replace": true,
+              "source": "Line"
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "mode": "reduceRow",
+              "reduce": {
+                "include": [
+                  "message"
+                ],
+                "reducer": "count"
+              }
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Count": {
+                  "aggregations": [
+                    "sum"
+                  ],
+                  "operation": "aggregate"
+                },
+                "category": {
+                  "operation": "groupby"
+                },
+                "message": {
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "renameByName": {
+                "Count (sum)": "Count",
+                "category": "Category",
+                "message": "Message"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "filterable": false,
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 90
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 8,
+          "x": 0,
+          "y": 20
+        },
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Error Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (username) (count_over_time({instance_type=\"grafana\"} |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" | regexp `username=(?P<username>[^ ]+ )` [$__range])))",
+            "legendFormat": "{{username}}",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Users",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Error Count",
+                "username": "Username"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "filterable": false,
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 90
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Folder"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 124
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 8,
+          "x": 8,
+          "y": 20
+        },
+        "interval": "30ms",
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Error Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(20, sum by (dashboardName, folderName) (\n    count_over_time({instance_type=\"grafana\"} \n        |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" != \"dashboardId=0\"\n        | regexp `folderName=(?P<folderName>.+) dashboardName=(?P<dashboardName>.+) dashboardId=`\n        | label_format dashboardName=`{{replace \"\\\"\" \"\" .dashboardName}}`\n        | label_format folderName=`{{replace \"\\\"\" \"\" .folderName}}`\n[$__range])))",
+            "legendFormat": "{{error}}",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Dashboards",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "dashboardId": true,
+                "panelId": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value #A": 3,
+                "dashboardName": 1,
+                "folderName": 2
+              },
+              "renameByName": {
+                "Value #A": "Error Count",
+                "dashboardName": "Name",
+                "error": "Error",
+                "folderName": "Folder"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "filterable": false,
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Count"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "continuous-YlRd"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 90
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 47
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 8,
+          "x": 16,
+          "y": 20
+        },
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Error Count"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "topk(10, sum by (name, id) (\n    count_over_time({instance_type=\"grafana\"} \n        |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" !=\"-- Mixed --\" != \"-- Grafana --\"\n        | regexp `datasourceName=(?P<name>.+) datasourceId=(?P<id>.+) datasourceType=(?P<type>.+)`\n        | label_format name=`{{replace \"\\\"\" \"\" .name}}`\n[$__range])))",
+            "legendFormat": "{{username}}",
+            "queryType": "instant",
+            "refId": "A"
+          }
+        ],
+        "title": "Data Sources",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "renameByName": {
+                "Value #A": "Error Count",
+                "datasourceId": "ID",
+                "datasourceName": "Name",
+                "id": "ID",
+                "name": "Name",
+                "username": "Username"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": [
+      "grafanacloud"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": true,
+            "text": "",
+            "value": ""
+          },
+          "description": "Search for an error, user, datasource, or dashboard! Or all of them!",
+          "hide": 0,
+          "label": "Search",
+          "name": "search",
+          "options": [
+            {
+              "selected": true,
+              "text": "",
+              "value": ""
+            }
+          ],
+          "query": "",
+          "skipUrlSync": false,
+          "type": "textbox"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "hide": 0,
+          "includeAll": true,
+          "label": "Error Category",
+          "multi": true,
+          "name": "category",
+          "options": [
+            {
+              "selected": true,
+              "text": "All",
+              "value": "$__all"
+            },
+            {
+              "selected": false,
+              "text": "other",
+              "value": "other"
+            },
+            {
+              "selected": false,
+              "text": "bad request",
+              "value": "bad request"
+            },
+            {
+              "selected": false,
+              "text": "query too large",
+              "value": "query too large"
+            },
+            {
+              "selected": false,
+              "text": "server error",
+              "value": "server error"
+            },
+            {
+              "selected": false,
+              "text": "authN/authZ",
+              "value": "authN/authZ"
+            },
+            {
+              "selected": false,
+              "text": "timeout",
+              "value": "timeout"
+            },
+            {
+              "selected": false,
+              "text": "too many requests",
+              "value": "too many requests"
+            },
+            {
+              "selected": false,
+              "text": "query cancelled",
+              "value": "query cancelled"
+            },
+            {
+              "selected": false,
+              "text": "missing resource",
+              "value": "missing resource"
+            }
+          ],
+          "query": "other,bad request,query too large,server error,authN/authZ,timeout,too many requests,query cancelled,missing resource",
+          "queryValue": "",
+          "skipUrlSync": false,
+          "type": "custom"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "hidden": false
+    },
+    "timezone": "",
+    "title": "Usage Insights - 3 - Query Errors",
+    "uid": "MpmkYhRVz",
+    "version": 5,
+    "weekStart": ""
+  }
+}
