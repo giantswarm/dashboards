@@ -1,0 +1,1534 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": false,
+    "slug": "f09f92be-mimir-and-loki-resource-and-hpa-monitor",
+    "url": "/d/fac17f43-b176-4271-8452-9105788074dc/f09f92be-mimir-and-loki-resource-and-hpa-monitor",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2025-07-07T13:26:44Z",
+    "updated": "2025-07-07T13:50:22Z",
+    "updatedBy": "quentin3",
+    "createdBy": "quentin3",
+    "version": 18,
+    "hasAcl": false,
+    "isFolder": false,
+    "apiVersion": "v0alpha1",
+    "folderId": 0,
+    "folderUid": "eer7t721ek9oge",
+    "folderTitle": "",
+    "folderUrl": "/dashboards/f/eer7t721ek9oge/da39a3e",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      },
+      "organization": {
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Core monitoring focused on basic resource usage and HPA scaling for Mimir and Loki SSD components",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 2517,
+    "links": [],
+    "panels": [
+      {
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "# 💾 Core Resource & HPA Monitoring\n\n**Focus Areas:** Basic resource usage (memory, CPU, requests, limits) and HPA scaling for **Mimir** (8 components) and **Loki SSD** (3 components: read, write, backend).\n\n**Filtering:** Use the template variables above to filter by cluster, customer, installation, provider, region, and component.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "12.1.0-90058",
+        "title": "🎯 Core Resource & HPA Monitoring",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Memory Usage"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total CPU Usage"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "cores"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Memory Efficiency"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "id": 2,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}) + sum(aggregation:loki:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"})",
+            "hide": false,
+            "legendFormat": "Total Memory Usage",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:mimir:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}) + sum(aggregation:loki:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"})",
+            "legendFormat": "Total CPU Usage",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "avg((aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} / aggregation:mimir:memory_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}) or (aggregation:loki:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} / aggregation:loki:memory_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}))",
+            "legendFormat": "Avg Memory Efficiency",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:hpa:current_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"})",
+            "legendFormat": "Mimir HPA Replicas",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:hpa:current_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"})",
+            "legendFormat": "Loki HPA Replicas",
+            "range": true,
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:hpa:max_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"})",
+            "legendFormat": "Mimir HPA Max Replicas",
+            "range": true,
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "sum(aggregation:hpa:max_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"})",
+            "legendFormat": "Loki HPA Max Replicas",
+            "range": true,
+            "refId": "G"
+          }
+        ],
+        "title": "📊 Executive Summary",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 10
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - {{customer}}/{{installation}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - {{customer}}/{{installation}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "💾 Memory Usage by Component",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "cores"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 10
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - {{customer}}/{{installation}}/{{provider}}/{{region}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - {{customer}}/{{installation}}/{{provider}}/{{region}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "⚡ CPU Usage by Component",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 18
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} / aggregation:mimir:memory_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Memory Efficiency",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} / aggregation:loki:memory_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Memory Efficiency",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "🎯 Memory Efficiency Ratios",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 18
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} / aggregation:mimir:cpu_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - CPU Efficiency",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} / aggregation:loki:cpu_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - CPU Efficiency",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "⚡ CPU Efficiency Ratios",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 26
+        },
+        "id": 7,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:memory_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Requests",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:memory_limits{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Limits",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Usage",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:memory_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Requests",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:memory_limits{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Limits",
+            "range": true,
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Usage",
+            "range": true,
+            "refId": "F"
+          }
+        ],
+        "title": "📊 Memory: Requests vs Limits vs Usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "cores"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 26
+        },
+        "id": 8,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:cpu_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Requests",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:cpu_limits{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Limits",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Usage",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:cpu_requests{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Requests",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:cpu_limits{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Limits",
+            "range": true,
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:cpu_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Usage",
+            "range": true,
+            "refId": "F"
+          }
+        ],
+        "title": "📊 CPU: Requests vs Limits vs Usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 34
+        },
+        "id": 9,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:mimir:memory_limits{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} - aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Mimir {{component}} - Memory Headroom",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:loki:memory_limits{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"} - aggregation:loki:memory_usage{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\"}",
+            "legendFormat": "Loki {{component}} - Memory Headroom",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "📏 Resource Headroom (Limits - Usage)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 34
+        },
+        "id": 10,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:current_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"}",
+            "legendFormat": "Mimir {{component}} - Current Replicas",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:desired_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"}",
+            "legendFormat": "Mimir {{component}} - Desired Replicas",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:max_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"}",
+            "legendFormat": "Mimir {{component}} - Max Replicas",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:current_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"}",
+            "legendFormat": "Loki {{component}} - Current Replicas",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:desired_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"}",
+            "legendFormat": "Loki {{component}} - Desired Replicas",
+            "range": true,
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:max_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"}",
+            "legendFormat": "Loki {{component}} - Max Replicas",
+            "range": true,
+            "refId": "F"
+          }
+        ],
+        "title": "🔄 HPA Scaling Status",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*Scaling Events.*"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 42
+        },
+        "id": 11,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.1.0-90058",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:current_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"} / aggregation:hpa:max_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"}",
+            "legendFormat": "Mimir {{component}} - HPA Utilization",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:current_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"} / aggregation:hpa:max_replicas{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"}",
+            "legendFormat": "Loki {{component}} - HPA Utilization",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:scaling_events_1h{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"distributor|ingester|querier|query-frontend|query-scheduler|compactor|ruler|store-gateway\"}",
+            "legendFormat": "Mimir {{component}} - Scaling Events (1h)",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "expr": "aggregation:hpa:scaling_events_1h{customer=~\"$customer\", installation=~\"$installation\", component=~\"$component\", component=~\"read|write|backend\"}",
+            "legendFormat": "Loki {{component}} - Scaling Events (1h)",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "📈 HPA Utilization & Scaling Events",
+        "type": "timeseries"
+      },
+      {
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 42
+        },
+        "id": 12,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "## 💾 Core Resource & HPA Monitoring Summary\n\n### **📊 What This Dashboard Shows:**\n\n**✅ Resource Monitoring**\n- Memory & CPU usage by component\n- Resource requests and limits by component\n- **Efficiency ratios** (calculated in dashboard)\n- **Resource headroom** (calculated in dashboard)\n\n**✅ HPA Scaling Intelligence**\n- Current vs desired vs max replicas by component\n- HPA utilization percentages (calculated in dashboard)\n- Scaling event frequency (churn detection)\n\n### **🔧 Recording Rules Required: Only ~18**\n- Phase 1: Basic resource metrics (12 rules)\n- Phase 2: HPA scaling metrics (6 rules)\n- **No efficiency recording rules needed** - calculated on-demand!\n\n### **🎛️ Component Selector**\n**All panels now respect the component selector**, including HPA metrics! You can:\n- View all components (default)\n- Filter to specific components (e.g., only \"distributor\")\n- Compare multiple components side-by-side\n- Focus on problematic components\n\n### **🚀 Smart Approach**\nEfficiency metrics are calculated directly in dashboard queries:\n- `usage / requests` = efficiency ratio\n- `limits - usage` = headroom\n- `current_replicas / max_replicas` = HPA utilization\n\nThis keeps recording rules minimal while providing full insights!",
+          "mode": "markdown"
+        },
+        "pluginVersion": "12.1.0-90058",
+        "title": "🎯 Implementation Guide",
+        "type": "text"
+      }
+    ],
+    "preload": false,
+    "refresh": "30s",
+    "schemaVersion": 41,
+    "tags": [
+      "mimir",
+      "loki",
+      "resources",
+      "hpa",
+      "giantswarm"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:mimir:memory_usage,customer)",
+          "includeAll": true,
+          "label": "Customer",
+          "multi": true,
+          "name": "customer",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:mimir:memory_usage,customer)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:mimir:memory_usage{customer=~\"$customer\"},installation)",
+          "includeAll": true,
+          "label": "Installation",
+          "multi": true,
+          "name": "installation",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:mimir:memory_usage{customer=~\"$customer\"},installation)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\"},component)",
+          "includeAll": true,
+          "label": "Component",
+          "multi": true,
+          "name": "component",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:mimir:memory_usage{customer=~\"$customer\", installation=~\"$installation\"},component)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "💾 Mimir & Loki Resource & HPA Monitor",
+    "uid": "fac17f43-b176-4271-8452-9105788074dc",
+    "version": 18
+  }
+}
