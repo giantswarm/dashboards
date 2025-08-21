@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Grafana Cloud Dashboard Backup Workflow
 - Update Cilium Agent logs dashboard and show cluster info
+- Mimir Rate Control dashboard
 
 ### Changed
 
