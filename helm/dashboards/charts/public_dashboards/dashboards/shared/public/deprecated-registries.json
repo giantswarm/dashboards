@@ -1,0 +1,464 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 168,
+  "links": [],
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "Giant Swarm started an initiative in mid-2025 to consolidate the use of container registries and phaase out some deprecated ones.\n\nThis dashboard informs about all containers in Kubernetes clusters using images from one of the deprecated registries. As these images will be deleted eventually, the goal is to reduce the usage to zero.\n\n[Related GitHub issue](https://github.com/giantswarm/roadmap/issues/3935)\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.1.0",
+      "title": "About this dashboard",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Image"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 762
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 22,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Number of containers"
+          }
+        ]
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(kube_pod_container_info{image=~\"^(quay\\\\.io/giantswarm/|docker\\\\.io/giantswarm/|giantswarm\\\\.azurecr\\\\.io/|giantswarmpublic\\\\.azurecr\\\\.io/).*\"} OR kube_pod_init_container_info{image=~\"^(quay\\\\.io/giantswarm/|docker\\\\.io/giantswarm/|giantswarm\\\\.azurecr\\\\.io/|giantswarmpublic\\\\.azurecr\\\\.io/).*\"}) by (image)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Number of containers by image",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Number of containers",
+              "image": "Image"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_info{image=~\"^(quay\\\\.io/giantswarm/|docker\\\\.io/giantswarm/|giantswarm\\\\.azurecr\\\\.io/|giantswarmpublic\\\\.azurecr\\\\.io/).*\"} OR kube_pod_init_container_info{image=~\"^(quay\\\\.io/giantswarm/|docker\\\\.io/giantswarm/|giantswarm\\\\.azurecr\\\\.io/|giantswarmpublic\\\\.azurecr\\\\.io/).*\"})",
+          "legendFormat": "Containers",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Number of containers using deprecated registries",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "customer"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 164
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "organization"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 187
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cluster_id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 141
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "namespace"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 255
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "container"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 194
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "image"
+          }
+        ]
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "kube_pod_container_info{image=~\"^(quay\\\\.io/giantswarm/|docker\\\\.io/giantswarm/|giantswarm\\\\.azurecr\\\\.io/|giantswarmpublic\\\\.azurecr\\\\.io/).*\"} OR kube_pod_init_container_info{image=~\"^(quay\\\\.io/giantswarm/|docker\\\\.io/giantswarm/|giantswarm\\\\.azurecr\\\\.io/|giantswarmpublic\\\\.azurecr\\\\.io/).*\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Containers using deprecated registries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "app": true,
+              "cluster_type": true,
+              "container": false,
+              "container_id": true,
+              "endpoint": true,
+              "image": false,
+              "image_spec": true,
+              "installation": true,
+              "instance": true,
+              "job": true,
+              "node": true,
+              "pipeline": true,
+              "pod": true,
+              "provider": true,
+              "region": true,
+              "service": true,
+              "service_priority": true,
+              "uid": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 4,
+              "Value": 24,
+              "__name__": 5,
+              "app": 6,
+              "cluster_id": 2,
+              "cluster_type": 7,
+              "container": 8,
+              "container_id": 9,
+              "customer": 0,
+              "endpoint": 10,
+              "image": 11,
+              "image_spec": 12,
+              "installation": 13,
+              "instance": 14,
+              "job": 15,
+              "namespace": 3,
+              "node": 16,
+              "organization": 1,
+              "pipeline": 17,
+              "pod": 18,
+              "provider": 19,
+              "region": 20,
+              "service": 21,
+              "service_priority": 22,
+              "uid": 23
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [
+    "owner:team-honeybadger"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Deprecated container registries in use",
+  "uid": "deprecated-registries",
+  "version": 5
+}
