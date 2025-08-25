@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.6.0] - 2025-08-25
+
 ### Added 
 
 - Grafana Cloud Dashboard Backup Workflow
@@ -1351,7 +1353,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add public grafana dashboards.
 
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/giantswarm/dashboards/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/giantswarm/dashboards/compare/v4.4.3...v4.5.0
 [4.4.3]: https://github.com/giantswarm/dashboards/compare/v4.4.2...v4.4.3
 [4.4.2]: https://github.com/giantswarm/dashboards/compare/v4.4.1...v4.4.2
