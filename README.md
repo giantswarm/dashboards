@@ -117,6 +117,10 @@ Comes from https://github.com/kedacore/keda/blob/main/config/grafana/keda-dashbo
 
 We added multi-cluster support and tags (team owner)
 
+#### Mimir Cardinality
+
+They come from https://github.com/cerndb/grafana-mimir-cardinality-dashboards
+
 ## Release of these dashboards
 
 If you want to release changes in this dashboard repository, you only have to create a branch with the name `main#release#minor`. No replacements here, just literally that branch name :) 
