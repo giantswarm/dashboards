@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.7.0] - 2025-08-26
 
+### Added
+
+- Add dashboard "Deprecated container registries in use"
+
 ## [4.6.0] - 2025-08-25
 
 ### Added 
