@@ -9,12 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [4.7.1] - 2025-08-28
 
+### Fixed
+
+- "storage lock" graph was displaying wrong data in the zot dashboard
+
 ## [4.7.0] - 2025-08-26
 
 ### Added
 
 - Add dashboard "Deprecated container registries in use"
-- fix: "storage lock" graph was wring in zot dashboard
 
 ## [4.6.0] - 2025-08-25
 
