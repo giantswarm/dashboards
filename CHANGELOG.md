@@ -7,12 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.7.1] - 2025-08-28
+
+### Fixed
+
+- "storage lock" graph was displaying wrong data in the zot dashboard
+
 ## [4.7.0] - 2025-08-26
 
 ### Added
 
 - Add dashboard "Deprecated container registries in use"
-- fix: "storage lock" graph was wring in zot dashboard
 
 ## [4.6.0] - 2025-08-25
 
@@ -1370,7 +1375,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.7.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.7.1...HEAD
+[4.7.1]: https://github.com/giantswarm/dashboards/compare/v4.7.0...v4.7.1
 [4.7.0]: https://github.com/giantswarm/dashboards/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/giantswarm/dashboards/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/giantswarm/dashboards/compare/v4.4.3...v4.5.0
