@@ -2,8 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -12,10 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add dashboard "Deprecated container registries in use"
+- fix: "storage lock" graph was wring in zot dashboard
 
 ## [4.6.0] - 2025-08-25
 
-### Added 
+### Added
 
 - Grafana Cloud Dashboard Backup Workflow
 - Update Cilium Agent logs dashboard and show cluster info
@@ -49,10 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - alerts timeline dashboard:
-    - fix silences count
-    - add links to silences, alerts, notifications
-    - fix consistency between alerts timeline and alerts list
-    - update title
+  - fix silences count
+  - add links to silences, alerts, notifications
+  - fix consistency between alerts timeline and alerts list
+  - update title
 - alertmanager overview update to mimir alertmanager
 
 ## [4.4.0] - 2025-03-24
@@ -105,7 +106,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update Cilium Performance BPF map pressure panel datasource.
 - Dashboard labels for observability-operator provisioning.
-
 
 ## [3.30.0] - 2025-02-05
 
@@ -199,6 +199,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Alloy mixin dashboards
 
 - Added Makefile.custom.mk to group scripts usage
+
   - Added `make update-mixin` to update mixin dasbhboards
   - Added `make lint-dashboards` to dashboards linting
   - Added `make install-tools` to install required tools
@@ -352,7 +353,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Change "Node utilization" dashboard to use allocatable over capacity, to better reflect the available resources of the nodes.
+- Change "Node utilization" dashboard to use allocatable over capacity, to better reflect the available
+  resources of the nodes.
 
 ## [3.14.0] - 2024-05-15
 
@@ -373,7 +375,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Change "Worker node utilization" dashboard to "Node utilization", also allowing to analyze data for control plane nodes.
+- Change "Worker node utilization" dashboard to "Node utilization", also allowing to analyze data for control
+  plane nodes.
 
 ## [3.12.0] - 2024-04-23
 
@@ -385,7 +388,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated "In-cluster container registry (Zot)" dashboard to use metric `kubelet_volume_stats_used_bytes` for storage used.
+- Updated "In-cluster container registry (Zot)" dashboard to use metric `kubelet_volume_stats_used_bytes` for
+  storage used.
 
 ## [3.11.3] - 2024-04-17
 
@@ -393,10 +397,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Move `node-problem-detector` to be aws only.
 
-
 ### Fixed
 
-- Fix Grafana Cloud service-level dashboard in case we have duplicate clusrer names in different installations.
+- Fix Grafana Cloud service-level dashboard in case we have duplicate clusrer names in different
+  installations.
 - Invalid datasource variable name in mimir cost estimate dashboard.
 
 ## [3.11.2] - 2024-04-16
@@ -417,8 +421,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change `pod-total.json` dashboard ownership from turtles to cabbage.
 - Change `workload-total.json` dashboard ownership from turtles to cabbage.
 - Update "Ingress NGINX Controller Connection Distribution" dashboard file to schema version 39.
-- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new time series panels.
-- Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old table with new table panel.
+- Update "Giant Swarm / Kubernetes Persistent Volumes" dashboard file to replace old graph panels with new
+  time series panels.
+- Update "Security: Falco Dashboard" dashboard file to replace old graph panel with new time series panel, old
+  table with new table panel.
 
 ### Fixed
 
@@ -432,7 +438,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--  Add a CAPA aggregated error logs dashboard.
+- Add a CAPA aggregated error logs dashboard.
 
 ## [3.10.4] - 2024-04-10
 
@@ -497,7 +503,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix all dashboards that were only supporting only role=master to now support role=~control-plane|master.
-- Fix Mimir - Prometheus cost dashboard to compare over real data (not missing on data from old prometheus instances)
+- Fix Mimir - Prometheus cost dashboard to compare over real data (not missing on data from old prometheus
+  instances)
 
 ## [3.8.4] - 2024-03-11
 
@@ -655,7 +662,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update Loki Cost Estimation dashboard.
-- [BREAKING] Split the chart in sub-chart to get around chart size limitation - all values are moved to a `global` section.
+- [BREAKING] Split the chart in sub-chart to get around chart size limitation - all values are moved to a
+  `global` section.
 
 ## [2.47.0] - 2023-10-11
 
@@ -761,7 +769,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Dashboards: Rename `nginx-ingress-controller` to `ingress-nginx`. ([#331](https://github.com/giantswarm/dashboards/pull/331))
+- Dashboards: Rename `nginx-ingress-controller` to `ingress-nginx`.
+  ([#331](https://github.com/giantswarm/dashboards/pull/331))
 - Allow filtering by DNS zone in the `DNS` dashboard.
 
 ## [2.34.0] - 2023-07-12
@@ -786,7 +795,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Improved the DNS dashboard in order to be quicker and richer, especially considering node-local DNS cache and coredns as separate components.
+- Improved the DNS dashboard in order to be quicker and richer, especially considering node-local DNS cache
+  and coredns as separate components.
 
 ## [2.31.2] - 2023-07-10
 
@@ -868,7 +878,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.27.0] - 2023-04-17
 
-###  Changed
+### Changed
 
 - Move cilium dashboard to public dashboards.
 
@@ -881,7 +891,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add graph in Node Overview to identify emptydir growth
 - Update kube-mixins to 0.12
 - Added Etcd health for monitoring the Etcd key space status
-- Adjusted the K8s Api Perfomance master nodes memory dashoboard and using `node_memory_MemAvailable_bytes` instead of `node_memory_MemFree_bytes`
+- Adjusted the K8s Api Perfomance master nodes memory dashoboard and using `node_memory_MemAvailable_bytes`
+  instead of `node_memory_MemFree_bytes`
 
 ## [2.25.0] - 2023-03-24
 
@@ -916,6 +927,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Monitoring Dashboard Updated
+
 ```
 ?? helm/dashboards/dashboards/shared/public/alertmanager-overview.json
 ```
@@ -980,12 +992,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add official kong ingress controller dashboard rev 2 from https://grafana.com/grafana/dashboards/15662-kong-ingress-controller/
+- Add official kong ingress controller dashboard rev 2 from
+  https://grafana.com/grafana/dashboards/15662-kong-ingress-controller/
 - TESTING guidelines
 
 ### Changed
 
-- Added uid for some dashboards when missing (etcd, managed-apps-efk-stack-app, management-cluster-kubernetes, microstorage, prometheus-remote-write, workload-cluster-kubernetes)
+- Added uid for some dashboards when missing (etcd, managed-apps-efk-stack-app, management-cluster-kubernetes,
+  microstorage, prometheus-remote-write, workload-cluster-kubernetes)
 
 ## [2.18.0] - 2022-11-22
 
@@ -1122,7 +1136,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update `etcd-k8s-resources-count` to `etcd-k8s-events-and-resources-count`
 
-
 ## [2.9.0] - 2022-05-18
 
 ### Added
@@ -1130,7 +1143,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add dashboard for Fluentbit.
 
 ## [2.8.0] - 2022-05-17
-
 
 ### Added
 
@@ -1357,7 +1369,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add public grafana dashboards.
-
 
 [Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.7.0...HEAD
 [4.7.0]: https://github.com/giantswarm/dashboards/compare/v4.6.0...v4.7.0
