@@ -1,0 +1,1713 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 192,
+  "links": [],
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 13,
+        "x": 0,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Intro\n\nThis dashboard compares actual resource usage for Loki compared to [official sizing rules](https://grafana.com/docs/loki/latest/setup/size/).\n\n# How to read it\n\nOn top of the dashboard, you see your actual volume of processed data, and how it compares to different types of cluster sizes.\n\n- The green \"actual\" line is the real actual resource usage on this cluster.\n- The red \"reserved\" line is the reserved resources (via pod's resource `requests`).\n- The thin purple \"small\", \"medium\" and \"big\" lines are estimations of expected resource usage according to Grafana sizing rules.\n\n# How do estimations work\n\nGrafana defines 3 cluster types:\n- small, up to 3TB/day of ingested logs\n- medium, up to 30TB/day of ingested logs\n- big, over 30TB/day. We considered a 300TB/day limit for these.\n\nWe compute 3 ratios, showing what percentage of each type your cluster's data ingestion is.\n\nThen, for each graph, we compute:\n```\n(small expected resource usage) * (ratio to small)\n```\nThis gives a basic projection of optimal resource usage according to sizing guide.\n\n# limitations\n\nOn small clusters (less than 10% of `small`), we may be higher than expected because of incompressible resources.\n\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.1.1",
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 11,
+        "x": 13,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(loki_distributor_bytes_received_total{}[1d]))",
+          "hide": false,
+          "legendFormat": "Reveived bytes",
+          "range": true,
+          "refId": "Actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "vector(3000000000000)",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "small cluster",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "vector(30000000000000)",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "medium cluster",
+          "range": true,
+          "refId": "medium"
+        }
+      ],
+      "title": "Total loki ingested bytes per day",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ratio to medium"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ratio to big"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 13,
+        "y": 4
+      },
+      "id": 3,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "ratio to small",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "ratio to medium",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ratio_big",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "ratio to big",
+          "range": true,
+          "refId": "big"
+        }
+      ],
+      "title": "Total loki ingested bytes per day",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 12,
+      "panels": [],
+      "title": "Simple Scalable setup",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "Distributors + Ingesters",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "small cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "medium cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "big cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(12+8) * $ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "small cluster sizing",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(180+80) * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "medium cluster sizing",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(600+200) * $ratio_big",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "big cluster sizing",
+          "range": true,
+          "refId": "big"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"loki\", pod=~\"loki-write-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", pod=~\"loki-write-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Write Path CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "Distributors + Ingesters",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "small cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "medium cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "big cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(36+2)*1024*1024*1204 * $ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "small cluster sizing",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(540+40)*1024*1024*1204 * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "medium cluster sizing",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(1200+100)*1024*1024*1204 * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "big cluster sizing",
+          "range": true,
+          "refId": "big"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"loki\", pod=~\"loki-write-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", pod=~\"loki-write-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Write Path RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "Queriers + Query Frontends",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "small cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "medium cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "big cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(10+2) * $ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "small cluster sizing",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(150+8) * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "medium cluster sizing",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(375+16) * $ratio_big",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "big cluster sizing",
+          "range": true,
+          "refId": "big"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"loki\", pod=~\"loki-read-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", pod=~\"loki-read-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Read Path CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "Queriers + Query Frontends",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "small cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "medium cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "big cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(10+4)*1024*1024*1204 * $ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "small cluster sizing",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(200+16)*1024*1024*1204 * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "medium cluster sizing",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(750+64)*1024*1024*1204 * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "big cluster sizing",
+          "range": true,
+          "refId": "big"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"loki\", pod=~\"loki-read-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", pod=~\"loki-read-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Read Path RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "Compactor + Index Gateway + Query Scheduler + Ruler",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "small cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "medium cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "big cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(2+2+2) * $ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "small cluster sizing",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(5+2+6) * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "medium cluster sizing",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(20+4+6) * $ratio_big",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "big cluster sizing",
+          "range": true,
+          "refId": "big"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"loki\", pod=~\"loki-backend-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", pod=~\"loki-backend-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Backend Path CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "Compactor + Index Gateway + Query Scheduler + Ruler",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "small cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "medium cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "big cluster sizing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 26
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(8+1+10)*1024*1024*1204 * $ratio_small",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "small cluster sizing",
+          "range": true,
+          "refId": "small"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(40+1+20)*1024*1024*1204 * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "medium cluster sizing",
+          "range": true,
+          "refId": "medium"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "(80+1+40)*1024*1024*1204 * $ratio_medium",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "big cluster sizing",
+          "range": true,
+          "refId": "big"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"loki\", pod=~\"loki-backend-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"loki\", pod=~\"loki-backend-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Backend Path RAM",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [
+    "owner:team-atlas",
+    "topic:observability",
+    "component:loki"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 3000000000000",
+          "value": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 3000000000000"
+        },
+        "description": "",
+        "hide": 2,
+        "name": "ratio_small",
+        "query": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 3000000000000",
+        "skipUrlSync": true,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "text": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 30000000000000",
+          "value": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 30000000000000"
+        },
+        "hide": 2,
+        "name": "ratio_medium",
+        "query": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 30000000000000",
+        "skipUrlSync": true,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "text": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 300000000000000",
+          "value": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 300000000000000"
+        },
+        "hide": 2,
+        "name": "ratio_big",
+        "query": "sum(increase(loki_distributor_bytes_received_total{}[1d])) / 300000000000000",
+        "skipUrlSync": true,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Loki / Resource Efficiency",
+  "uid": "loki-resource-efficiency",
+  "version": 14
+}
