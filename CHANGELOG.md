@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.8.0] - 2025-09-11
+
 ### Changed
 
 - Switch aws dashboards to be deployed in CAPA, plus some cleanup of unused dashboards.
@@ -1379,7 +1381,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.7.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.8.0...HEAD
+[4.8.0]: https://github.com/giantswarm/dashboards/compare/v4.7.1...v4.8.0
 [4.7.1]: https://github.com/giantswarm/dashboards/compare/v4.7.0...v4.7.1
 [4.7.0]: https://github.com/giantswarm/dashboards/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/giantswarm/dashboards/compare/v4.5.0...v4.6.0
