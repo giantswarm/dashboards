@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add dashboard "Observability Platform Product Signals"
 
+### Changed
+
+- Switch aws dashboards to be deployed in CAPA, plus some cleanup of unused dashboards.
+
 ## [4.7.1] - 2025-08-28
 
 ### Fixed
