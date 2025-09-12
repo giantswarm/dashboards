@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add Falco dashboards.
+
 ## [4.8.0] - 2025-09-11
 
 ### Changed
