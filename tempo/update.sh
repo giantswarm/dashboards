@@ -35,16 +35,37 @@ for file in "$TMPDIR/dashboards"/*.json; do
 		continue
 	fi
 	
+  # Skip the block-builder dashboard as this component is used it our chart (this is the replacement for the compactor)
+	if [[ "$filename" == "tempo-block-builder.json" ]]; then
+		echo "Skipping $file (block-builder dashboard not needed)"
+		continue
+	fi
+
 	echo "$file"
-	
+
 	# Fix rollout progress title
 	if [[ "$filename" == "tempo-rollout-progress.json" ]]; then
 		jq '.title = "Tempo / Rollout progress"' "$file" > "$file.out" && mv "$file.out" "$file"
 	fi
 	
+	# Fix operational title
+	if [[ "$filename" == "tempo-operational.json" ]]; then
+		jq '.title = "Tempo / Operational"' "$file" > "$file.out" && mv "$file.out" "$file"
+	fi
+
+	# Remove Gateway row from tempo-reads dashboard
+	if [[ "$filename" == "tempo-reads.json" ]]; then
+		jq '.rows |= .[1:]' "$file" > "$file.out" && mv "$file.out" "$file"
+	fi
+
+	# Remove Gateway and Envoy Proxy rows from tempo-writes dashboard
+	if [[ "$filename" == "tempo-writes.json" ]]; then
+		jq '.rows |= .[3:]' "$file" > "$file.out" && mv "$file.out" "$file"
+	fi
+
 	# Add tags
 	"$TOOLS_DIR/yq" '.tags += '"$tags"'' -i "$file"
-	
+
 	# Generate UID from title if UID is missing or empty
 	current_uid=$(jq -r '.uid // ""' "$file")
 	if [[ -z "$current_uid" || "$current_uid" == "null" ]]; then
@@ -56,7 +77,7 @@ for file in "$TMPDIR/dashboards"/*.json; do
 		# Add tempo- prefix to existing uid
 		jq '.uid = "tempo-" + .uid' "$file" > "$file.out" && mv "$file.out" "$file"
 	fi
-	
+
 	# Copy to helm directory
 	cp "$file" "$helm_dir"
 done
