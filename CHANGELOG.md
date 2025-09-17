@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed `cluster` variable filter for Falco private dashboard.
+
 ## [4.8.1] - 2025-09-17
 
 ### Added
