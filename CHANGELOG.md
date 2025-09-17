@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add Tempo mixin dashboards.
+
 ### Fixed
 
 - Fixed `cluster` variable filter for Falco private dashboard.
@@ -16,7 +20,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Add Falco dashboards.
-- Add Tempo mixin dashboards.
 
 ## [4.8.0] - 2025-09-11
 
