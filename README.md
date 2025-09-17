@@ -91,6 +91,14 @@ To upload a dashboard while editing, run:
 
   * Run `make update-mimir-mixin` manually.
 
+* Loki dashboards
+
+  * Run `make update-loki-mixin` manually.
+
+* Tempo dashboards
+
+  * Run `make update-tempo-mixin` manually.
+
 ## Origins of the dashboards
 
 Some dashboards are crafted by us (Giant Swarm) or forked from public dashboards.
