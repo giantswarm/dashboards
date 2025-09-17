@@ -24,12 +24,12 @@ cd "$alloy_mixin_dir"
 mixtool generate dashboards mixin.libsonnet -d "$TMPDIR/dashboards"
 { set +x; } 2>/dev/null
 
-tags="$(cat $SCRIPT_DIR/tags.json)"
+tags="$(cat "$SCRIPT_DIR"/tags.json)"
 for file in "$TMPDIR/dashboards"/*.json; do
 	echo "$file"
 	(
 		set -x
-		$TOOLS_DIR/yq '.tags += '"$tags"'' -i "$file"
+		"$TOOLS_DIR"/yq '.tags += '"$tags"'' -i "$file"
 	)
 done
 

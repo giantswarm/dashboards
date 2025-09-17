@@ -19,4 +19,4 @@ rm -rf vendor jsonnetfile.*
 
 jb init
 jb install $MIXIN_URL
-mixtool generate dashboards mixin.libsonnet --directory=$helmDir
+mixtool generate dashboards mixin.libsonnet --directory="$helmDir"
