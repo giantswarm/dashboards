@@ -1,0 +1,2755 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 193,
+  "links": [],
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Intro\n\nThis dashboard compares actual resource usage for Mimir compared to [official sizing rules](https://grafana.com/docs/mimir/latest/manage/run-production-environment/planning-capacity/).\n\n# How to read it\n\nOn top of the dashboard, you see your actual volume of processed data.\n\n- The green \"actual\" line is the real actual resource usage on this cluster.\n- The red \"reserved\" line is the reserved resources (via pod's resource `requests`).\n- The purple \"expected\" line is the estimation of expected resource usage according to Grafana sizing rules.\n\n# limitations\n\nOn small clusters, we may be higher than expected because of incompressible resources.\n\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.1.1",
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "recps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Active Series"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queries"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "reqps"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ingested_metrics",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Ingested Metrics",
+          "range": true,
+          "refId": "ingested"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$active_series",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Active Series",
+          "range": true,
+          "refId": "series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Queries",
+          "range": true,
+          "refId": "queries"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "recps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Active Series"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queries"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "reqps"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ingested_metrics",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Ingested Metrics",
+          "range": true,
+          "refId": "ingested"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$active_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Active Series",
+          "range": true,
+          "refId": "series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Queries",
+          "range": true,
+          "refId": "queries"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "recps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Active Series"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queries"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "reqps"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 6
+      },
+      "id": 33,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ingested_metrics",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Ingested Metrics",
+          "range": true,
+          "refId": "ingested"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$active_series",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Active Series",
+          "range": true,
+          "refId": "series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Queries",
+          "range": true,
+          "refId": "queries"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 12,
+      "panels": [],
+      "title": "Mimir Micro Services",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The distributor component resources utilization is determined by the number of received samples per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$ingested_metrics / 25000",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"distributor\", pod=~\"mimir-distributor-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"distributor\", pod=~\"mimir-distributor-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Distributor CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The distributor component resources utilization is determined by the number of received samples per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($ingested_metrics / 25000) * 1024 * 1024 * 1024",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"distributor\", pod=~\"mimir-distributor-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"distributor\", pod=~\"mimir-distributor-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Distributor RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The ingester component resources’ utilization is determined by the number of series that are in memory.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$active_series / 300000",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"ingester\", pod=~\"mimir-ingester-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"ingester\", pod=~\"mimir-ingester-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Ingester CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The ingester component resources’ utilization is determined by the number of series that are in memory.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($active_series / 300000) * 1024 * 1024 * 1024 * 2.5",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"ingester\", pod=~\"mimir-ingester-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"ingester\", pod=~\"mimir-ingester-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Ingester RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The query-frontend component resources utilization is determined by the number of queries per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries / 250",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"query-frontend\", pod=~\"mimir-query-frontend-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"query-frontend\", pod=~\"mimir-query-frontend-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Query-frontend CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The query-frontend component resources utilization is determined by the number of queries per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($queries / 250) * 1024 * 1024 * 1024",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"query-frontend\", pod=~\"mimir-query-frontend-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"query-frontend\", pod=~\"mimir-query-frontend-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Query-frontend RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The query-scheduler component resources’ utilization is determined by the number of queries per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries / 500",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"query-scheduler\", pod=~\"mimir-query-scheduler-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"query-scheduler\", pod=~\"mimir-query-scheduler-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Query-scheduler CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The query-scheduler component resources’ utilization is determined by the number of queries per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($queries / 500) * 1024 * 1024 * 100",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"query-scheduler\", pod=~\"mimir-query-scheduler-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"query-scheduler\", pod=~\"mimir-query-scheduler-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Query-scheduler RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The querier component resources utilization is determined by the number of queries per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries / 10",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"querier\", pod=~\"mimir-querier-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"querier\", pod=~\"mimir-querier-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Querier CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The querier component resources utilization is determined by the number of queries per second.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 41
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($queries) * 1024 * 1024 * 1024",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"querier\", pod=~\"mimir-querier-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"querier\", pod=~\"mimir-querier-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Querier RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The store-gateway component resources’ utilization is determined by the number of queries per second and active series before ingesters replication.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 48
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$queries / 10",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"store-gateway\", pod=~\"mimir-store-gateway-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"store-gateway\", pod=~\"mimir-store-gateway-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Store-gateway CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The store-gateway component resources’ utilization is determined by the number of queries per second and active series before ingesters replication.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 48
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($queries / 10) * 1024 * 1024 * 1024",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"store-gateway\", pod=~\"mimir-store-gateway-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"store-gateway\", pod=~\"mimir-store-gateway-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Store-gateway RAM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The compactor component resources utilization is determined by the number of active series.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 55
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "$active_series / 20000000",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"compactor\", pod=~\"mimir-compactor-.*\", cluster_type=\"management_cluster\"}[$__rate_interval]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"compactor\", pod=~\"mimir-compactor-.*\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Compactor CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
+      },
+      "description": "The compactor component resources utilization is determined by the number of active series.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Actual usage"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reserved"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 55
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "($active_series / 20000000) * 1024 * 1024 * 1024 * 4",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Expected",
+          "range": true,
+          "refId": "expected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(container_memory_usage_bytes{container=\"compactor\", pod=~\"mimir-compactor-.*\", cluster_type=\"management_cluster\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Actual usage",
+          "range": true,
+          "refId": "actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gs-mimir"
+          },
+          "editorMode": "code",
+          "expr": "sum(kube_pod_container_resource_requests{container=\"compactor\", pod=~\"mimir-compactor-.*\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "requests"
+        }
+      ],
+      "title": "Compactor RAM",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [
+    "owner:team-atlas",
+    "topic:observability",
+    "component:mimir"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "sum(irate(cortex_distributor_samples_in_total{cluster_type=\"management_cluster\", pod=~\"mimir-distributor-.*\"}[$__rate_interval]))",
+          "value": "sum(irate(cortex_distributor_samples_in_total{cluster_type=\"management_cluster\", pod=~\"mimir-distributor-.*\"}[$__rate_interval]))"
+        },
+        "description": "",
+        "hide": 2,
+        "name": "ingested_metrics",
+        "query": "sum(irate(cortex_distributor_samples_in_total{cluster_type=\"management_cluster\", pod=~\"mimir-distributor-.*\"}[$__rate_interval]))",
+        "skipUrlSync": true,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "text": "sum(max by (pod) (cortex_ingester_active_series{cluster_type=\"management_cluster\", pod=~\"mimir-ingester-.*\"}))",
+          "value": "sum(max by (pod) (cortex_ingester_active_series{cluster_type=\"management_cluster\", pod=~\"mimir-ingester-.*\"}))"
+        },
+        "description": "",
+        "hide": 2,
+        "name": "active_series",
+        "query": "sum(max by (pod) (cortex_ingester_active_series{cluster_type=\"management_cluster\", pod=~\"mimir-ingester-.*\"}))",
+        "skipUrlSync": true,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "text": "sum(irate(cortex_query_frontend_queries_total{cluster_type=\"management_cluster\", pod=~\"mimir-query-frontend-.*\"}[$__rate_interval]))",
+          "value": "sum(irate(cortex_query_frontend_queries_total{cluster_type=\"management_cluster\", pod=~\"mimir-query-frontend-.*\"}[$__rate_interval]))"
+        },
+        "description": "",
+        "hide": 2,
+        "name": "queries",
+        "query": "sum(irate(cortex_query_frontend_queries_total{cluster_type=\"management_cluster\", pod=~\"mimir-query-frontend-.*\"}[$__rate_interval]))",
+        "skipUrlSync": true,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Mimir / Resource Efficiency",
+  "uid": "mimir-resource-efficiency",
+  "version": 10
+}
