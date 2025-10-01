@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Monitoring Dashboard Updated
+```
+ M helm/dashboards/charts/public_dashboards/dashboards/shared/public/alertmanager-overview.json
+```
+
 ### Added
 
 - Add Tempo mixin dashboards.
