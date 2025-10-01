@@ -9,11 +9,11 @@
     "slug": "images-from-deprecated-registries",
     "url": "/d/madffwn/images-from-deprecated-registries",
     "expires": "0001-01-01T00:00:00Z",
-    "created": "2025-08-25T13:39:16Z",
-    "updated": "2025-08-29T12:55:55Z",
+    "created": "2025-08-25T13:39:17Z",
+    "updated": "2025-09-10T10:40:06Z",
     "updatedBy": "marian2",
     "createdBy": "marian2",
-    "version": 13,
+    "version": 26,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -65,8 +65,8 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
-          "w": 24,
+          "h": 7,
+          "w": 12,
           "x": 0,
           "y": 0
         },
@@ -77,12 +77,442 @@
             "showLineNumbers": false,
             "showMiniMap": false
           },
-          "content": "# Images from deprecated registries\n\nThis dashboards shows aggregated numbers of containers in use, using images from deprecated registries. For more information about the individual images and containers, there is a dashboard in every management cluster's Grafana.\n\nRelated [GitHub issue](https://github.com/giantswarm/roadmap/issues/3935)",
+          "content": "# Containers from deprecated registries\n\nOur goal is to phase out the use of `quay.io/giantswarm/` and `docker.io/giantswarm` for container images. This dashboards shows aggregated data about containers created through images from deprecated registries.\n\nNote the filter options above. The **Image** filter allows to enter a substring of an image identifier, to narrow down the dashboard data to a particular image.\n\nFor more information about the individual images and containers, you can also follow the links on the installation names to jump into a dashboard for that installation.\n\n[Related GitHub issue](https://github.com/giantswarm/roadmap/issues/3935)",
           "mode": "markdown"
         },
-        "pluginVersion": "12.2.0-16890666601.patch2",
+        "pluginVersion": "12.2.0-17556714384",
         "title": "About this dashboard",
         "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Total containers still running using images from deprecated registries",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 18,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} or aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"})",
+            "legendFormat": "Total",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Total containers",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 7
+        },
+        "id": 19,
+        "panels": [],
+        "title": "Statistics",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Number of customers running containers from deprecated registries (current snapshot)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "yellow",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 8
+        },
+        "id": 20,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} OR aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (customer))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Customers",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Number of installations running containers from deprecated registries (current snapshot)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "yellow",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 4,
+          "y": 8
+        },
+        "id": 21,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} OR aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (installation))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Installations",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Number of clusters running containers from deprecated registries (current snapshot)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "yellow",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 8,
+          "y": 8
+        },
+        "id": 22,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} OR aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (cluster_id))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Clusters",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Number of distinct images from deprecated registries used in running containers",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "yellow",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 12,
+          "y": 8
+        },
+        "id": 23,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} OR aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (image))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Images",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "Number of containers from deprecated registries running",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "yellow",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 16,
+          "y": 8
+        },
+        "id": 24,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} OR aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"})",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Containers",
+        "type": "stat"
       },
       {
         "datasource": {
@@ -100,7 +530,13 @@
               "cellOptions": {
                 "type": "auto"
               },
+              "footer": {
+                "reducers": []
+              },
               "inspect": false,
+              "tooltip": {
+                "placement": "auto"
+              },
               "wrapHeaderText": false
             },
             "mappings": [],
@@ -152,22 +588,14 @@
           ]
         },
         "gridPos": {
-          "h": 15,
-          "w": 7,
+          "h": 13,
+          "w": 8,
           "x": 0,
-          "y": 5
+          "y": 13
         },
         "id": 10,
         "options": {
           "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": [
             {
@@ -176,7 +604,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.0-16890666601.patch2",
+        "pluginVersion": "12.2.0-17556714384",
         "targets": [
           {
             "datasource": {
@@ -185,7 +613,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"}) by (customer)",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (customer)",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -199,7 +627,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}) by (customer)",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (customer)",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -259,7 +687,13 @@
               "cellOptions": {
                 "type": "auto"
               },
+              "footer": {
+                "reducers": []
+              },
               "inspect": false,
+              "tooltip": {
+                "placement": "auto"
+              },
               "wrapHeaderText": false
             },
             "mappings": [],
@@ -290,7 +724,7 @@
                     {
                       "targetBlank": true,
                       "title": "Show details",
-                      "url": "https://grafana-${__value.raw}.teleport.giantswarm.io/d/deprecated-registries/deprecated-container-registries-in-use?orgId=1&from=now-6h&to=now&timezone=utc"
+                      "url": "https://grafana-${__value.raw}.teleport.giantswarm.io/d/deprecated-registries/deprecated-container-registries-in-use?orgId=1"
                     }
                   ]
                 },
@@ -303,22 +737,14 @@
           ]
         },
         "gridPos": {
-          "h": 15,
-          "w": 7,
-          "x": 7,
-          "y": 5
+          "h": 13,
+          "w": 8,
+          "x": 8,
+          "y": 13
         },
         "id": 8,
         "options": {
           "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": [
             {
@@ -327,7 +753,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.0-16890666601.patch2",
+        "pluginVersion": "12.2.0-17556714384",
         "targets": [
           {
             "datasource": {
@@ -336,7 +762,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"}) by (installation)",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (installation)",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -350,7 +776,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}) by (installation)",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (installation)",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -409,7 +835,153 @@
               "cellOptions": {
                 "type": "auto"
               },
+              "footer": {
+                "reducers": []
+              },
               "inspect": false,
+              "tooltip": {
+                "placement": "auto"
+              },
+              "wrapHeaderText": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Provider"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 182
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 13
+        },
+        "id": 14,
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "Installation"
+            }
+          ]
+        },
+        "pluginVersion": "12.2.0-17556714384",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (provider)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "dockerhub"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (provider)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "quay"
+          }
+        ],
+        "title": "List by provider",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "provider",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time 1": true,
+                "Time 2": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Time 1": 3,
+                "Time 2": 4,
+                "Value #dockerhub": 1,
+                "Value #quay": 2,
+                "provider": 0
+              },
+              "renameByName": {
+                "Value #dockerhub": "Containers using docker hub",
+                "Value #quay": "Containers using quay",
+                "cluster_type": "Cluster type",
+                "installation": "Installation",
+                "provider": "Provider"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false,
+              "tooltip": {
+                "placement": "auto"
+              },
               "wrapHeaderText": false
             },
             "mappings": [],
@@ -470,21 +1042,13 @@
         },
         "gridPos": {
           "h": 6,
-          "w": 6,
-          "x": 14,
-          "y": 14
+          "w": 8,
+          "x": 16,
+          "y": 20
         },
         "id": 11,
         "options": {
           "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": [
             {
@@ -493,7 +1057,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.0-16890666601.patch2",
+        "pluginVersion": "12.2.0-17556714384",
         "targets": [
           {
             "datasource": {
@@ -502,7 +1066,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"}) by (cluster_type)",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (cluster_type)",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -516,7 +1080,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}) by (cluster_type)",
+            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (cluster_type)",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -561,351 +1125,222 @@
         "type": "table"
       },
       {
-        "collapsed": false,
+        "collapsed": true,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 20
+          "y": 26
         },
         "id": 15,
-        "panels": [],
-        "title": "List of images",
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false,
+                  "tooltip": {
+                    "placement": "auto"
+                  },
+                  "wrapHeaderText": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 15,
+              "w": 12,
+              "x": 0,
+              "y": 73
+            },
+            "id": 16,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true
+            },
+            "pluginVersion": "12.2.0-17245430286",
+            "targets": [
+              {
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (image)",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Dockerhub",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "Time": 1,
+                    "Value": 2,
+                    "image": 0
+                  },
+                  "renameByName": {
+                    "Time": "",
+                    "Value": "Containers",
+                    "image": "Image"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false,
+                  "tooltip": {
+                    "placement": "auto"
+                  },
+                  "wrapHeaderText": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 15,
+              "w": 12,
+              "x": 12,
+              "y": 73
+            },
+            "id": 17,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": false,
+                  "displayName": "Image"
+                }
+              ]
+            },
+            "pluginVersion": "12.2.0-17245430286",
+            "targets": [
+              {
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (image)",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Quay",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "Time": 1,
+                    "Value": 2,
+                    "image": 0
+                  },
+                  "renameByName": {
+                    "Time": "",
+                    "Value": "Containers",
+                    "image": "Image"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          }
+        ],
+        "title": "Images by registry",
         "type": "row"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "inspect": false,
-              "wrapHeaderText": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Provider"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 182
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 6,
-          "x": 14,
-          "y": 5
-        },
-        "id": 14,
-        "options": {
-          "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "Installation"
-            }
-          ]
-        },
-        "pluginVersion": "12.2.0-16890666601.patch2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"}) by (provider)",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "dockerhub"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}) by (provider)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "quay"
-          }
-        ],
-        "title": "List by provider",
-        "transformations": [
-          {
-            "id": "joinByField",
-            "options": {
-              "byField": "provider",
-              "mode": "outer"
-            }
-          },
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time 1": true,
-                "Time 2": true
-              },
-              "includeByName": {},
-              "indexByName": {
-                "Time 1": 3,
-                "Time 2": 4,
-                "Value #dockerhub": 1,
-                "Value #quay": 2,
-                "provider": 0
-              },
-              "renameByName": {
-                "Value #dockerhub": "Containers using docker hub",
-                "Value #quay": "Containers using quay",
-                "cluster_type": "Cluster type",
-                "installation": "Installation",
-                "provider": "Provider"
-              }
-            }
-          }
-        ],
-        "type": "table"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true,
-              "inspect": false,
-              "wrapHeaderText": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 15,
-          "w": 12,
-          "x": 0,
-          "y": 21
-        },
-        "id": 16,
-        "options": {
-          "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
-          "showHeader": true
-        },
-        "pluginVersion": "12.2.0-16890666601.patch2",
-        "targets": [
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"}) by (image)",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Dockerhub",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true
-              },
-              "includeByName": {},
-              "indexByName": {
-                "Time": 1,
-                "Value": 2,
-                "image": 0
-              },
-              "renameByName": {
-                "Time": "",
-                "Value": "Containers",
-                "image": "Image"
-              }
-            }
-          }
-        ],
-        "type": "table"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true,
-              "inspect": false,
-              "wrapHeaderText": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 15,
-          "w": 12,
-          "x": 12,
-          "y": 21
-        },
-        "id": 17,
-        "options": {
-          "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
-          "showHeader": true
-        },
-        "pluginVersion": "12.2.0-16890666601.patch2",
-        "targets": [
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}) by (image)",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Quay",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true
-              },
-              "includeByName": {},
-              "indexByName": {
-                "Time": 1,
-                "Value": 2,
-                "image": 0
-              },
-              "renameByName": {
-                "Time": "",
-                "Value": "Containers",
-                "image": "Image"
-              }
-            }
-          }
-        ],
-        "type": "table"
-      },
-      {
         "collapsed": false,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 36
+          "y": 27
         },
         "id": 12,
         "panels": [],
@@ -929,7 +1364,13 @@
                 "type": "auto"
               },
               "filterable": true,
+              "footer": {
+                "reducers": []
+              },
               "inspect": false,
+              "tooltip": {
+                "placement": "auto"
+              },
               "wrapHeaderText": false
             },
             "mappings": [],
@@ -1033,6 +1474,24 @@
                   ]
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Installation"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Open dashboard",
+                      "url": "https://grafana-${__value.raw}.teleport.giantswarm.io/d/deprecated-registries/deprecated-container-registries-in-use?orgId=1"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -1040,19 +1499,11 @@
           "h": 17,
           "w": 24,
           "x": 0,
-          "y": 37
+          "y": 28
         },
         "id": 13,
         "options": {
           "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": [
             {
@@ -1061,7 +1512,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.0-16890666601.patch2",
+        "pluginVersion": "12.2.0-17556714384",
         "targets": [
           {
             "datasource": {
@@ -1070,7 +1521,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"} or aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}",
+            "expr": "aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"} or aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -1121,348 +1572,351 @@
         "type": "table"
       },
       {
-        "collapsed": false,
+        "collapsed": true,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 54
+          "y": 45
         },
         "id": 9,
-        "panels": [],
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Number of containers using images from docker.io/giantswarm",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 92
+            },
+            "id": 1,
+            "interval": "1h",
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "sortBy": "Last *",
+                "sortDesc": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.2.0-17245430286",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (installation)",
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Dockerhub",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Number of containers using images from quay.io/giantswarm",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 102
+            },
+            "id": 2,
+            "interval": "1h",
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "sortBy": "Last *",
+                "sortDesc": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.2.0-17245430286",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"}) by (installation)",
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Quay",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "000000006"
+            },
+            "description": "Number of containers using images from giantswarm.azurecr.io and giantswarmpublic.azurecr.io",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 112
+            },
+            "id": 3,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "sortBy": "Last *",
+                "sortDesc": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.2.0-17245430286",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(aggregation:docker:containers_from_deprecated_registries:giantswarmacr{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"})",
+                "legendFormat": "giantswarm.azurecr.io",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "000000006"
+                },
+                "editorMode": "code",
+                "expr": "sum(aggregation:docker:containers_from_deprecated_registries:giantswarmpublicacr{customer=~\"$customer\",image=~\".*$image_filter.*\",pod=~\".*$pod_filter.*\"})",
+                "hide": false,
+                "legendFormat": "giantswarmpublic.azurecr.io",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "giantswarm(public).azurecr.io",
+            "type": "timeseries"
+          }
+        ],
         "title": "Progress over time",
         "type": "row"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
-        "description": "Number of containers using images from docker.io/giantswarm",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 10,
-          "w": 24,
-          "x": 0,
-          "y": 55
-        },
-        "id": 1,
-        "interval": "1h",
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true,
-            "sortBy": "Last *",
-            "sortDesc": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.2.0-16890666601.patch2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:dockerhub{customer=~\"$customer\"}) by (installation)",
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Dockerhub",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
-        "description": "Number of containers using images from quay.io/giantswarm",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 10,
-          "w": 24,
-          "x": 0,
-          "y": 65
-        },
-        "id": 2,
-        "interval": "1h",
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true,
-            "sortBy": "Last *",
-            "sortDesc": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.2.0-16890666601.patch2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:quay{customer=~\"$customer\"}) by (installation)",
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Quay",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
-        "description": "Number of containers using images from giantswarm.azurecr.io and giantswarmpublic.azurecr.io",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 10,
-          "w": 24,
-          "x": 0,
-          "y": 75
-        },
-        "id": 3,
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true,
-            "sortBy": "Last *",
-            "sortDesc": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.2.0-16890666601.patch2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:giantswarmacr{customer=~\"$customer\"})",
-            "legendFormat": "giantswarm.azurecr.io",
-            "range": true,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "expr": "sum(aggregation:docker:containers_from_deprecated_registries:giantswarmpublicacr{customer=~\"$customer\"})",
-            "hide": false,
-            "legendFormat": "giantswarmpublic.azurecr.io",
-            "range": true,
-            "refId": "B"
-          }
-        ],
-        "title": "giantswarm(public).azurecr.io",
-        "type": "timeseries"
       }
     ],
     "preload": false,
-    "schemaVersion": 41,
+    "schemaVersion": 42,
     "tags": [
       "owner:team-honeybadger"
     ],
     "templating": {
       "list": [
         {
-          "allValue": "",
           "current": {
             "text": "All",
             "value": "$__all"
@@ -1481,6 +1935,42 @@
           "refresh": 1,
           "regex": "",
           "type": "query"
+        },
+        {
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "description": "Enter an image name (or a part of it) to only show data on matching entries",
+          "label": "Image name",
+          "name": "image_filter",
+          "options": [
+            {
+              "selected": true,
+              "text": "",
+              "value": ""
+            }
+          ],
+          "query": "",
+          "type": "textbox"
+        },
+        {
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "description": "Enter a pod name (or a part of it) to only show data on matching entries",
+          "label": "Pod name",
+          "name": "pod_filter",
+          "options": [
+            {
+              "selected": true,
+              "text": "",
+              "value": ""
+            }
+          ],
+          "query": "",
+          "type": "textbox"
         }
       ]
     },
@@ -1492,6 +1982,6 @@
     "timezone": "utc",
     "title": "Images from deprecated registries",
     "uid": "madffwn",
-    "version": 13
+    "version": 26
   }
 }
