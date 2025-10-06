@@ -10,7 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Add Tempo mixin dashboards.
-- Loki and Mimir ressource efficiency dashboards
+- Loki and Mimir ressource efficiency dashboards.
+- Unschedulable pods dashboard.
 
 ## [4.8.2] - 2025-09-17
 
