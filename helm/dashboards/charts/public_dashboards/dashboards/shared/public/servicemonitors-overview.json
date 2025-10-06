@@ -19,6 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
+  "id": 14,
   "links": [
     {
       "asDropdown": true,
@@ -50,11 +51,11 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
       "description": "",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 4,
         "w": 24,
@@ -71,7 +72,7 @@
         "content": "This dashboard helps you understanding your `servicemonitors` and `podmonitors`.\n\n* Jobs named `xxxxx-prometheus-0/[target]` are scraped by prometheus on the Management Cluster via static targets.\n* The other jobs are scraped by `prometheus-agent` on the Workload Cluster via `servicemonitors` or `podmonitors`.",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "12.1.1",
       "title": "Help",
       "type": "text"
     },
@@ -106,6 +107,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -138,7 +140,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -171,10 +173,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -182,11 +186,25 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "prometheus_agent_active_series{cluster_id=~\"$cluster\"}",
+          "expr": "sum(prometheus_remote_write_wal_storage_active_series{cluster_id=~\"$cluster\"}) by (cluster_id, pod)",
+          "hide": false,
           "instant": false,
           "legendFormat": "{{cluster_id}} / {{pod}}",
           "range": true,
-          "refId": "A"
+          "refId": "Alloy"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "prometheus_agent_active_series{cluster_id=~\"$cluster\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{cluster_id}} / {{pod}} (prometheus-agent)",
+          "range": true,
+          "refId": "prometheus-agent"
         }
       ],
       "title": "Agent metrics per pod",
@@ -210,6 +228,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -242,7 +261,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -275,10 +294,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -286,12 +307,24 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (cluster_id,pod) (container_memory_usage_bytes{cluster_id=\"$cluster\", pod=~\".*prometheus-agent.*\"})",
-          "expr": "sum by (cluster_id,pod) (container_memory_rss{cluster_id=\"$cluster\", pod=~\".*prometheus-agent.*\", container=~\".+\"})",
+          "expr": "sum by (cluster_id,pod) (container_memory_rss{cluster_id=\"$cluster\", pod=~\".*alloy-metrics.*\", container=~\".+\"})",
           "instant": false,
           "legendFormat": "{{cluster_id}} / {{pod}}",
           "range": true,
-          "refId": "A"
+          "refId": "Alloy"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (cluster_id,pod) (container_memory_rss{cluster_id=\"$cluster\", pod=~\".*prometheus-agent.*\", container=~\".+\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{cluster_id}} / {{pod}} (prometheus-agent)",
+          "range": true,
+          "refId": "prometheus-agent"
         }
       ],
       "title": "Agent RAM per pod",
@@ -315,6 +348,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -347,7 +381,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -380,10 +414,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -391,11 +427,24 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "count(prometheus_agent_active_series{cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "expr": "count(prometheus_remote_write_wal_storage_active_series{cluster_id=~\"$cluster\"}) by (cluster_id)",
           "instant": false,
           "legendFormat": "{{cluster_id}}",
           "range": true,
-          "refId": "A"
+          "refId": "Alloy"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "count(prometheus_remote_write_wal_storage_active_series{cluster_id=~\"$cluster\"}) by (cluster_id)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{cluster_id}} (prometheus-agent)",
+          "range": true,
+          "refId": "Prometheus-agent"
         }
       ],
       "title": "Number of agent pods",
@@ -432,6 +481,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -464,7 +514,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -497,10 +547,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -536,6 +588,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -568,7 +621,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -601,10 +654,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -640,6 +695,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -672,7 +728,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -705,10 +761,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -744,6 +802,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -776,7 +835,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -809,10 +868,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -848,6 +909,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -880,7 +942,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -913,10 +975,12 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -935,7 +999,9 @@
       "type": "timeseries"
     }
   ],
-  "schemaVersion": 39,
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 41,
   "tags": [
     "topic:observability",
     "owner:team-atlas",
@@ -948,29 +1014,21 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
+          "text": "Mimir",
+          "value": "gs-mimir"
         },
-        "hide": 0,
         "includeAll": false,
         "label": "Data source",
-        "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
-        "queryValue": "",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -980,7 +1038,6 @@
           "uid": "${datasource}"
         },
         "definition": "label_values(container_cpu_usage_seconds_total{container=\"prometheus\"},cluster_id)",
-        "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "cluster",
@@ -992,17 +1049,13 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       },
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -1013,7 +1066,6 @@
         },
         "definition": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\"},team)",
         "description": "Job (usually a ServiceMonitor or a PodMonitor)",
-        "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "team",
@@ -1025,16 +1077,12 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -1045,7 +1093,6 @@
         },
         "definition": "label_values(scrape_samples_scraped{cluster_id=~\"$cluster\", team=~\"$team\"},job)",
         "description": "Job (usually a ServiceMonitor or a PodMonitor)",
-        "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "job",
@@ -1057,7 +1104,6 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       }
@@ -1071,6 +1117,5 @@
   "timezone": "browser",
   "title": "ServiceMonitors Overview",
   "uid": "servicemonitors-overview",
-  "version": 4,
-  "weekStart": ""
+  "version": 482
 }
