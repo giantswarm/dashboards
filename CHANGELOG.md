@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Loki and Mimir ressource efficiency dashboards.
 - Unschedulable pods dashboard.
 
+### Fixed
+
+- Updates in `servicemonitor overview` to comply with alloy.
+
 ## [4.8.2] - 2025-09-17
 
 ### Fixed
