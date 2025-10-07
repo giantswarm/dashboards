@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.9.1] - 2025-10-07
+
 ### Changed
 
 - Improve Unschedulable pods dashboard: better count
@@ -1409,7 +1411,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.9.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.9.1...HEAD
+[4.9.1]: https://github.com/giantswarm/dashboards/compare/v4.9.0...v4.9.1
 [4.9.0]: https://github.com/giantswarm/dashboards/compare/v4.8.2...v4.9.0
 [4.8.2]: https://github.com/giantswarm/dashboards/compare/v4.8.1...v4.8.2
 [4.8.1]: https://github.com/giantswarm/dashboards/compare/v4.8.0...v4.8.1
