@@ -37,7 +37,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 198,
+  "id": 207,
   "links": [],
   "panels": [
     {
@@ -82,7 +82,7 @@
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
-            "max"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -95,9 +95,11 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "count(\n  kube_pod_status_unschedulable{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}\n) by (cluster_id)",
+          "exemplar": false,
+          "expr": "sum(\n  sum_over_time(\n    kube_pod_status_unschedulable{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__range]\n  )\n) by (cluster_id)",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -146,7 +148,7 @@
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
-            "max"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -159,9 +161,11 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "count(\n  kube_pod_status_unschedulable{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}\n) by (namespace)",
+          "exemplar": false,
+          "expr": "sum(\n  sum_over_time(\n    kube_pod_status_unschedulable{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}[$__range]\n  )\n) by (namespace)",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
