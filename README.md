@@ -73,11 +73,6 @@ To upload a dashboard while editing, run:
 
 ### Update
 
-* Alertmanager dashboard
-
-  * The Github Action `update-monitoring-mixins` runs automatically every month and it creates a PR to update the dashboard.
-  * Run `make update-alertmanager-mixin` manually.
-
 * Alloy dashboards
 
   * Run `make update-alloy-mixin` manually.

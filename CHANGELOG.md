@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Removed
 
 - Remove the `alertmanager-overview` dashboard in favor of the better `Mimir / Alertmanager` dashboard
+- Clean up alertmanager-mixin auto-update scripts
 
 ## [4.9.1] - 2025-10-07
 
