@@ -71,7 +71,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This dashboard is a tool to estimate the cost of Loki.\n\n`loki` is deployed on the management cluster and `promtail` is deployed on each workload cluster and on the management cluster as well.\n\n`promtail` sends the logs to `loki` and `loki` sends the data on `S3`.\n\nTo evaluate the real cost of `loki`, we need to take in account:\n- CPU and memory used by all loki pods\n- data sent by all promtail on workload clusters to loki\n- data sent on S3\n\n\nOnly the traffic between EC2 instances and Internet has a cost. <br/>\nTo estimate the global cost of the traffic for `loki`, we have to mesure the traffic between `promtail` pods on workload clusters and `loki` on the management cluster.<br/>\nThe traffic between `promtail` pods on the management cluster and `loki` is free.\n\nTotal of bytes stored on S3 is estimated from data sent to S3. Hence, we are not aware of data cleaning.\n\n`cluster` selection allows you to know:\n- how much traffic is transmitted between selected clusters and Loki\n- how many targets are scraped on the selected clusters",
+            "content": "This dashboard is a tool to estimate the cost of Loki.\n\n`loki` is deployed on the management cluster and `alloy` is deployed on each workload cluster and on the management cluster as well.\n\n`alloy` sends the logs to `loki` and `loki` sends the data on `S3`.\n\nTo evaluate the real cost of `loki`, we need to take in account:\n- CPU and memory used by all loki pods\n- data sent by all alloy on workload clusters to loki\n- data sent on S3\n\n\nOnly the traffic between EC2 instances and Internet has a cost. <br/>\nTo estimate the global cost of the traffic for `loki`, we have to mesure the traffic between `alloy` pods on workload clusters and `loki` on the management cluster.<br/>\nThe traffic between `alloy` pods on the management cluster and `loki` is free.\n\nTotal of bytes stored on S3 is estimated from data sent to S3. Hence, we are not aware of data cleaning.\n\n`cluster` selection allows you to know:\n- how much traffic is transmitted between selected clusters and Loki\n- how many targets are scraped on the selected clusters",
             "mode": "markdown"
           },
           "pluginVersion": "10.0.3",
@@ -731,7 +731,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval])))",
+          "expr": "sum(sum by (cluster_id) (increase(loki_write_sent_bytes_total{namespace=\"kube-system\", cluster_id=~\"$cluster\"}[$__interval])))",
           "instant": false,
           "interval": "",
           "legendFormat": "Selected cluster(s) traffic",
@@ -744,7 +744,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\"}[$__interval])))",
+          "expr": "sum(sum by (cluster_id) (increase(loki_write_sent_bytes_total{namespace=\"kube-system\", cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\"}[$__interval])))",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost traffic",
@@ -760,7 +760,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "All the traffic sent by Promtail to Loki in bytes.\n\nThe first series displays the total bytes sent by the selected cluster(s) to Loki.\n\nThe second series displays the total bytes sent by workload clusters to Loki that need to be paid.",
+      "description": "All the traffic sent by Alloy to Loki in bytes.\n\nThe first series displays the total bytes sent by the selected cluster(s) to Loki.\n\nThe second series displays the total bytes sent by workload clusters to Loki that need to be paid.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -854,7 +854,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\"}[$__interval])))",
+          "expr": "sum(sum by (cluster_id) (increase(loki_write_sent_bytes_total{namespace=\"kube-system\", cluster_id=~\"$cluster\"}[$__interval])))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -870,7 +870,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(sum by (cluster_id) (increase(promtail_sent_bytes_total{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\"}[$__interval])))",
+          "expr": "sum(sum by (cluster_id) (increase(loki_write_sent_bytes_total{namespace=\"kube-system\", cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\"}[$__interval])))",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost traffic",
@@ -893,76 +893,6 @@
       "panels": [],
       "title": "Misc",
       "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "purple",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 0,
-        "y": 26
-      },
-      "id": 34,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "10.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(sum by (cluster_id) (promtail_targets_active_total{cluster_id=~\"$cluster\"}))",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Number of targets scraped on the selected cluster(s)",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -1000,7 +930,7 @@
       "gridPos": {
         "h": 7,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 26
       },
       "id": 36,
@@ -1087,7 +1017,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(promtail_build_info,cluster_id)",
+        "definition": "label_values(alloy_build_info,cluster_id)",
         "hide": 0,
         "includeAll": true,
         "label": "cluster",
@@ -1095,7 +1025,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(promtail_build_info,cluster_id)",
+          "query": "label_values(alloy_build_info,cluster_id)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

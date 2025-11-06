@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Remove the `alertmanager-overview` dashboard in favor of the better `Mimir / Alertmanager` dashboard
 - Clean up alertmanager-mixin auto-update scripts
+- Remove dashboards about deprecated components (Prometheus, Promxy, Prometheus-agent, Promtail)
 
 ## [4.9.1] - 2025-10-07
 
