@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add Alloy Metrics Targets dashboard
 
+### Changed
+
+- Update Envoy Gateway dashboards and make them public.
+
 ### Removed
 
 - Remove the `alertmanager-overview` dashboard in favor of the better `Mimir / Alertmanager` dashboard
