@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Update Envoy Gateway dashboards and make them public.
+- Add cluster_id to Envoy Gateway dashboards
 
 ### Removed
 
