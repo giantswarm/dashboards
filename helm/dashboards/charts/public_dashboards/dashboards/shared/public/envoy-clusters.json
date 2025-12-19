@@ -110,7 +110,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(envoy_server_live{})",
+          "expr": "sum(envoy_server_live{cluster_id=\"$workload_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -277,7 +277,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(envoy_server_memory_allocated{})",
+          "expr": "sum(envoy_server_memory_allocated{cluster_id=\"$workload_cluster\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -291,7 +291,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\",container=\"envoy\"})",
+          "expr": "sum(kube_pod_container_resource_limits{cluster_id=\"$workload_cluster\", resource=\"memory\",container=\"envoy\"})",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
@@ -416,7 +416,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\",container=\"envoy\"})",
+          "expr": "sum(kube_pod_container_resource_limits{cluster_id=\"$workload_cluster\", resource=\"memory\",container=\"envoy\"})",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
@@ -511,7 +511,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(sum(envoy_cluster_membership_total{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}) - sum(envoy_cluster_membership_healthy{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}))",
+          "expr": "(sum(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}) - sum(envoy_cluster_membership_healthy{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -607,7 +607,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(sum(envoy_cluster_membership_total{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})-sum(envoy_cluster_membership_healthy{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})) == bool 0",
+          "expr": "(sum(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})-sum(envoy_cluster_membership_healthy{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})) == bool 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -708,7 +708,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(envoy_cluster_upstream_cx_active{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}) by (envoy_cluster_name)",
+          "expr": "sum(envoy_cluster_upstream_cx_active{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}) by (envoy_cluster_name)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{envoy_cluster_name}}",
@@ -810,7 +810,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_rq_total{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_rq_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{envoy_cluster_name}}",
@@ -911,7 +911,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_cx_rx_bytes_total{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_cx_rx_bytes_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{envoy_cluster_name}} - in",
@@ -923,7 +923,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_cx_tx_bytes_total{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_cx_tx_bytes_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{envoy_cluster_name}} - out",
@@ -1041,7 +1041,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_http_downstream_cx_rx_bytes_total{envoy_http_conn_manager_prefix=~\"http-.*\"}[$__rate_interval]))",
+          "expr": "sum(irate(envoy_http_downstream_cx_rx_bytes_total{cluster_id=\"$workload_cluster\", envoy_http_conn_manager_prefix=~\"http-.*\"}[$__rate_interval]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{service}} - in",
@@ -1053,7 +1053,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_http_downstream_cx_tx_bytes_total{envoy_http_conn_manager_prefix=~\"http-.*\"}[$__rate_interval]))",
+          "expr": "sum(irate(envoy_http_downstream_cx_tx_bytes_total{cluster_id=\"$workload_cluster\", envoy_http_conn_manager_prefix=~\"http-.*\"}[$__rate_interval]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{service}} - out",
@@ -1154,7 +1154,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (le, envoy_cluster_name))",
+          "expr": "histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (le, envoy_cluster_name))",
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}} 99%",
           "range": true,
@@ -1166,7 +1166,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.9, sum(rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (le, envoy_cluster_name))",
+          "expr": "histogram_quantile(0.9, sum(rate(envoy_cluster_upstream_rq_time_bucket{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (le, envoy_cluster_name))",
           "hide": false,
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}} 90%",
@@ -1179,7 +1179,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.5, sum(rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (le, envoy_cluster_name))",
+          "expr": "histogram_quantile(0.5, sum(rate(envoy_cluster_upstream_rq_time_bucket{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (le, envoy_cluster_name))",
           "hide": false,
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}} 50%",
@@ -1280,7 +1280,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{envoy_response_code_class=~\"2\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{cluster_id=\"$workload_cluster\", envoy_response_code_class=~\"2\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"}[$__rate_interval])) by (envoy_cluster_name)",
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}}",
           "range": true,
@@ -1380,7 +1380,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\",envoy_response_code_class=~\"4\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\",envoy_response_code_class=~\"4\"}[$__rate_interval])) by (envoy_cluster_name)",
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}}",
           "range": true,
@@ -1482,7 +1482,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(envoy_cluster_membership_healthy{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})",
+          "expr": "sum(envoy_cluster_membership_healthy{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "healthy",
@@ -1495,7 +1495,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg by (envoy_cluster_name) (envoy_cluster_membership_healthy{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})",
+          "expr": "avg by (envoy_cluster_name) (envoy_cluster_membership_healthy{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
@@ -1596,7 +1596,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\",envoy_response_code_class=~\"5\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\",envoy_response_code_class=~\"5\"}[$__rate_interval])) by (envoy_cluster_name)",
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}}",
           "range": true,
@@ -1696,7 +1696,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\",envoy_response_code_class=~\"3\"}[$__rate_interval])) by (envoy_cluster_name)",
+          "expr": "sum(irate(envoy_cluster_upstream_rq_xx{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\"$cluster\",envoy_cluster_name=~\".+?route/${namespace}/${resource}/rule/${rule}\",envoy_response_code_class=~\"3\"}[$__rate_interval])) by (envoy_cluster_name)",
           "instant": false,
           "legendFormat": "{{envoy_cluster_name}}",
           "range": true,
@@ -2174,13 +2174,13 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(envoy_cluster_name)",
+        "definition": "label_values(envoy_cluster_name{cluster_id=\"$workload_cluster\"})",
         "includeAll": true,
         "label": "Cluster",
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(envoy_cluster_name)",
+          "query": "label_values(envoy_cluster_name{cluster_id=\"$workload_cluster\"})",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -2195,7 +2195,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(envoy_cluster_membership_total,envoy_cluster_name)",
+        "definition": "label_values(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\"},envoy_cluster_name)",
         "includeAll": true,
         "label": "Namespace",
         "multi": true,
@@ -2203,7 +2203,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(envoy_cluster_membership_total,envoy_cluster_name)",
+          "query": "label_values(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\"},envoy_cluster_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -2218,7 +2218,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(envoy_cluster_membership_total{envoy_cluster_name=~\".*?route/$namespace/.*\"},envoy_cluster_name)",
+        "definition": "label_values(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\".*?route/$namespace/.*\"},envoy_cluster_name)",
         "includeAll": true,
         "label": "Resource",
         "multi": true,
@@ -2226,7 +2226,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(envoy_cluster_membership_total{envoy_cluster_name=~\".*?route/$namespace/.*\"},envoy_cluster_name)",
+          "query": "label_values(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\".*?route/$namespace/.*\"},envoy_cluster_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -2241,7 +2241,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(envoy_cluster_membership_total{envoy_cluster_name=~\".*?route/$namespace/$resource/rule/.*\"},envoy_cluster_name)",
+        "definition": "label_values(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\".*?route/$namespace/$resource/rule/.*\"},envoy_cluster_name)",
         "includeAll": true,
         "label": "Rule",
         "multi": true,
@@ -2249,12 +2249,38 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(envoy_cluster_membership_total{envoy_cluster_name=~\".*?route/$namespace/$resource/rule/.*\"},envoy_cluster_name)",
+          "query": "label_values(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\", envoy_cluster_name=~\".*?route/$namespace/$resource/rule/.*\"},envoy_cluster_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
         "regex": "/\\w+?route\\/.*?\\/.*?\\/rule\\/(.*)/",
         "sort": 2,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(kubernetes_build_info, cluster_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "workload_cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(kubernetes_build_info, cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
         "type": "query"
       }
     ]
@@ -2265,7 +2291,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Envoy Clusters",
+  "title": "Envoy Gateway | Clusters",
   "uid": "8WkEOMnANKE6PW5hhpVv",
   "version": 40
 }
