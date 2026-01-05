@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.11.0] - 2026-01-05
+
 ### Changed
 
 - Add cluster_id to Envoy Gateway dashboards
@@ -1432,7 +1434,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.10.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.11.0...HEAD
+[4.11.0]: https://github.com/giantswarm/dashboards/compare/v4.10.0...v4.11.0
 [4.10.0]: https://github.com/giantswarm/dashboards/compare/v4.9.1...v4.10.0
 [4.9.1]: https://github.com/giantswarm/dashboards/compare/v4.9.0...v4.9.1
 [4.9.0]: https://github.com/giantswarm/dashboards/compare/v4.8.2...v4.9.0
