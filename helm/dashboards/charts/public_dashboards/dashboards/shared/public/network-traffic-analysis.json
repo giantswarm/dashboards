@@ -22,7 +22,7 @@
   "links": [],
   "panels": [
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -189,7 +189,7 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 3,
+        "w": 7,
         "x": 3,
         "y": 5
       },
@@ -299,8 +299,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 3,
-        "x": 6,
+        "w": 7,
+        "x": 10,
         "y": 5
       },
       "id": 24,
@@ -411,8 +411,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 3,
-        "x": 9,
+        "w": 7,
+        "x": 17,
         "y": 5
       },
       "id": 23,
@@ -507,10 +507,88 @@
         "overrides": []
       },
       "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 10
+      },
+      "id": 4,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
+          "legendFormat": "Private (cross-az)",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Private (in-az)",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Cross-AZ vs. In-AZ",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
         "h": 10,
-        "w": 6,
-        "x": 12,
-        "y": 5
+        "w": 12,
+        "x": 0,
+        "y": 15
       },
       "id": 15,
       "options": {
@@ -573,9 +651,9 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 6,
-        "x": 18,
-        "y": 5
+        "w": 12,
+        "x": 12,
+        "y": 15
       },
       "id": 19,
       "options": {
@@ -611,84 +689,6 @@
         }
       ],
       "title": "Public known destination",
-      "type": "piechart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 10
-      },
-      "id": 4,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
-          "legendFormat": "Private (cross-az)",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "Private (in-az)",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Cross-AZ vs. In-AZ",
       "type": "piechart"
     },
     {
@@ -758,7 +758,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 25
       },
       "id": 3,
       "options": {
@@ -854,7 +854,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 25
       },
       "id": 16,
       "options": {
@@ -950,7 +950,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 32
       },
       "id": 14,
       "options": {
@@ -1050,7 +1050,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 22
+        "y": 32
       },
       "id": 1,
       "options": {
@@ -1089,7 +1089,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 39
       },
       "id": 5,
       "panels": [],
@@ -1123,7 +1123,7 @@
         "h": 8,
         "w": 6,
         "x": 0,
-        "y": 30
+        "y": 40
       },
       "id": 17,
       "options": {
@@ -1205,7 +1205,7 @@
         "h": 8,
         "w": 6,
         "x": 6,
-        "y": 30
+        "y": 40
       },
       "id": 18,
       "options": {
@@ -1287,7 +1287,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 30
+        "y": 40
       },
       "id": 21,
       "options": {
@@ -1356,7 +1356,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 30
+        "y": 40
       },
       "id": 20,
       "options": {
@@ -1452,7 +1452,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 38
+        "y": 48
       },
       "id": 7,
       "options": {
@@ -1544,7 +1544,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 38
+        "y": 48
       },
       "id": 12,
       "options": {
@@ -1636,7 +1636,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 47
+        "y": 57
       },
       "id": 6,
       "options": {
@@ -1728,7 +1728,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 47
+        "y": 57
       },
       "id": 13,
       "options": {
@@ -1847,5 +1847,5 @@
   "timezone": "browser",
   "title": "Network Traffic Analysis",
   "uid": "network-traffic-analysis",
-  "version": 1
+  "version": 2
 }
