@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Removed
+
+- Remove `logging-operator` related data as it is now deprecated.
+
 ## [4.11.0] - 2026-01-05
 
 ### Changed
