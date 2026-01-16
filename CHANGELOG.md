@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Made node utilization dashboard work again with all nodes
+
 ## [4.11.0] - 2026-01-05
 
 ### Changed
