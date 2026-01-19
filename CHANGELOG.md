@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Made node utilization dashboard work again with all nodes
+- Network Traffic Analysis dashboard: consider 100.64.0.0/16 private
 
 ## [4.11.0] - 2026-01-05
 
