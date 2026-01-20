@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.12.0] - 2026-01-20
+
 ### Added
 
 - Add "Envoy Gateway | Configuration" dashboard.
@@ -1445,7 +1447,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.11.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.12.0...HEAD
+[4.12.0]: https://github.com/giantswarm/dashboards/compare/v4.11.1...v4.12.0
 [4.11.1]: https://github.com/giantswarm/dashboards/compare/v4.11.0...v4.11.1
 [4.11.0]: https://github.com/giantswarm/dashboards/compare/v4.10.0...v4.11.0
 [4.10.0]: https://github.com/giantswarm/dashboards/compare/v4.9.1...v4.10.0
