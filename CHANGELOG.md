@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add "Envoy Gateway | Configuration" dashboard.
+
 ## [4.11.1] - 2026-01-19
 
 ### Fixed
