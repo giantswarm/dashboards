@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 248,
   "links": [],
   "panels": [
     {
@@ -128,9 +128,11 @@
       "targets": [
         {
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        dst_zone=\"\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
+          "instant": true,
           "legendFormat": "Private",
-          "range": true,
+          "range": false,
           "refId": "A"
         },
         {
@@ -139,11 +141,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "legendFormat": "Public",
-          "range": true,
+          "range": false,
           "refId": "B"
         }
       ],
@@ -539,9 +542,11 @@
       "targets": [
         {
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
+          "instant": true,
           "legendFormat": "Private (cross-az)",
-          "range": true,
+          "range": false,
           "refId": "A"
         },
         {
@@ -550,11 +555,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "legendFormat": "Private (in-az)",
-          "range": true,
+          "range": false,
           "refId": "B"
         }
       ],
@@ -618,8 +624,10 @@
         {
           "editorMode": "code",
           "expr": "sum by (dst_name, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_zone=\"\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\"\n    }[$__rate_interval]\n  )\n)",
+          "exemplar": false,
+          "instant": true,
           "legendFormat": "{{ dst_name }}",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -683,8 +691,10 @@
         {
           "editorMode": "code",
           "expr": "sum by (dst_name, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\"\n    }[$__rate_interval]\n  )\n)",
+          "exemplar": false,
+          "instant": true,
           "legendFormat": "{{ dst_name }}",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -1156,9 +1166,11 @@
             "uid": "000004542"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        dst_zone=\"\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
+          "instant": true,
           "legendFormat": "Private",
-          "range": true,
+          "range": false,
           "refId": "A"
         },
         {
@@ -1167,11 +1179,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "legendFormat": "Public",
-          "range": true,
+          "range": false,
           "refId": "B"
         }
       ],
@@ -1238,9 +1251,11 @@
             "uid": "000004542"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
+          "instant": true,
           "legendFormat": "Private (cross-az)",
-          "range": true,
+          "range": false,
           "refId": "A"
         },
         {
@@ -1249,11 +1264,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "legendFormat": "Private (in-az)",
-          "range": true,
+          "range": false,
           "refId": "B"
         }
       ],
@@ -1321,8 +1337,10 @@
           },
           "editorMode": "code",
           "expr": "sum by (dst_name, k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_zone=\"\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"${namespace}\"\n    }[$__rate_interval]\n  )\n)",
+          "exemplar": false,
+          "instant": true,
           "legendFormat": "{{ dst_name }}",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -1390,8 +1408,10 @@
           },
           "editorMode": "code",
           "expr": "sum by (dst_name, k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"${namespace}\"\n    }[$__rate_interval]\n  )\n)",
+          "exemplar": false,
+          "instant": true,
           "legendFormat": "{{ dst_name }}",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -1847,5 +1867,5 @@
   "timezone": "browser",
   "title": "Network Traffic Analysis",
   "uid": "network-traffic-analysis",
-  "version": 3
+  "version": 71
 }
