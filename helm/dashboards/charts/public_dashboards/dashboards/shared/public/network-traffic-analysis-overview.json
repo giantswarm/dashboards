@@ -137,7 +137,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^$private_subnets\",\n        direction=\"request\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  network_traffic_analysis:beyla_network_flow_bytes_public:rate5m{\n    k8s_src_namespace=~\"$namespace\",\n    cluster_id=\"${cluster_id}\"\n  }\n)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -218,7 +218,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^$private_subnets\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  network_traffic_analysis:beyla_network_flow_bytes_cross_az:rate5m{\n    k8s_src_namespace=~\"$namespace\",\n    cluster_id=\"${cluster_id}\"\n  }\n)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -590,17 +590,6 @@
         "refresh": 1,
         "regex": "",
         "type": "query"
-      },
-      {
-        "current": {
-          "text": "(10\\..*|100\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*)",
-          "value": "(10\\..*|100\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*)"
-        },
-        "hide": 2,
-        "name": "private_subnets",
-        "query": "(10\\..*|100\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*)",
-        "skipUrlSync": true,
-        "type": "constant"
       }
     ]
   },
