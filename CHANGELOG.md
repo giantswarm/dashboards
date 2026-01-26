@@ -11,7 +11,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Improve Network Analysis Dashboard Performance
   - Change Pie Charts query types from range to instant
-  - Add topk(10, ...) to limit results and enhance load times
+  - Improve performance by re-using panel queries, which gladly reduces the number of queries made to the backend, and ease maintenance, but unfortunately does not bring significant performances improvements.
+  - Change the top list panels to use pagination rather than only showing top 10 elements
+  - Change bottom graphs to use stacked lines and added list of values + total count
+  - Change destination pie charts to only show top 10 destinations
+  - Remove the per-namespace section which was merely a duplicate of the top one with additional namespace filter. All panels now have a namespace filter which default to all namespace, therefore keeping the old behavior of the top panels and also allowing behavior of the bottom ones at the same time.
+  - Set maximum datapoints to 500 and minimal interval to 2mn
+  - Move subnets regex to a constant
 
 ## [4.12.0] - 2026-01-20
 
