@@ -55,7 +55,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 1
@@ -67,7 +67,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "# Data availability\n\nThis dashboard relies on optional metrics.\nWe need to enable network monitoring at the installation level and on each cluster for the metrics to be available.\nPlease contact team Atlas for more information.",
+        "content": "# Data availability\n\nThis dashboard relies on optional metrics.\nWe need to enable network monitoring at the installation level and on each cluster for the metrics to be available.\nPlease contact team Atlas for more information.\n\n# Edge cases\n\nThe underlying metric used here is `beyla_network_flow_bytes_total`, there are some edge cases worth mentioning about `k8s` labels attached to it:\n\n- `k8s` labels are not set when traffic flows from/to non Kubernetes entities like Internet IPs, internal AWS VPC entities (e.g. AWS resolver, load balancer, Cilium endpoints)\n- `k8s_src_type` and `k8s_dst_type` represent the Kubernetes entities (receiving or transmitting traffic) which can either be `Node` or `Pod`\n- `k8s_*_namespace` is only set when traffic flows from/to a Kubernetes Pod (`k8s_*_type=Pod`)\n- Cilium health endpoints have their IP addresses range within `100.64.0.0/10` but are not labeled with `k8s`",
         "mode": "markdown"
       },
       "pluginVersion": "12.3.0",
@@ -80,11 +80,11 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 9
       },
       "id": 2,
       "panels": [],
-      "title": "${cluster_id} cluster traffic",
+      "title": "${cluster_id} network traffic for ${namespace} namespace(s)",
       "type": "row"
     },
     {
@@ -114,7 +114,7 @@
         "h": 5,
         "w": 3,
         "x": 0,
-        "y": 5
+        "y": 10
       },
       "id": 11,
       "options": {
@@ -229,7 +229,7 @@
         "h": 10,
         "w": 7,
         "x": 3,
-        "y": 5
+        "y": 10
       },
       "id": 22,
       "interval": "2m",
@@ -363,7 +363,7 @@
         "h": 10,
         "w": 7,
         "x": 10,
-        "y": 5
+        "y": 10
       },
       "id": 24,
       "interval": "2m",
@@ -502,7 +502,7 @@
         "h": 10,
         "w": 7,
         "x": 17,
-        "y": 5
+        "y": 10
       },
       "id": 23,
       "options": {
@@ -608,7 +608,7 @@
         "h": 5,
         "w": 3,
         "x": 0,
-        "y": 10
+        "y": 15
       },
       "id": 4,
       "options": {
@@ -706,7 +706,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 20
       },
       "id": 15,
       "options": {
@@ -773,7 +773,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 20
       },
       "id": 19,
       "options": {
@@ -897,7 +897,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 30
       },
       "id": 3,
       "options": {
@@ -1045,7 +1045,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 30
       },
       "id": 16,
       "options": {
@@ -1186,7 +1186,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 37
       },
       "id": 14,
       "options": {
@@ -1325,7 +1325,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 37
       },
       "id": 1,
       "options": {
@@ -1433,7 +1433,8 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": "$include_non_namespaced",
+        "allowCustomValue": true,
         "current": {
           "text": "All",
           "value": "$__all"
@@ -1454,7 +1455,28 @@
         },
         "refresh": 1,
         "regex": "",
+        "staticOptions": [],
         "type": "query"
+      },
+      {
+        "current": {
+          "text": ".*",
+          "value": ".*"
+        },
+        "description": "Include network traffic not bound to a namespace.",
+        "label": "Include non-namespaced",
+        "name": "include_non_namespaced",
+        "options": [
+          {
+            "text": ".*",
+            "value": ".*"
+          },
+          {
+            "text": ".+",
+            "value": ".+"
+          }
+        ],
+        "type": "switch"
       },
       {
         "current": {
