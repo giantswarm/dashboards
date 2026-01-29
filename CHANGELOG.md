@@ -21,6 +21,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Add Network Traffic Analysis Overview dashboard
   - Add links between both Network Traffic Analysis dashboards
 
+### Removed
+
+- Remove `logging-operator` related data as it is now deprecated.
+
 ## [4.12.0] - 2026-01-20
 
 ### Added
