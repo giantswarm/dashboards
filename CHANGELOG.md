@@ -7,9 +7,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Improve Network Traffic Analysis Dashboard Performance
+  - Change Pie Charts query types from range to instant
+  - Improve performance by re-using panel queries, which gladly reduces the number of queries made to the backend, and ease maintenance, but unfortunately does not bring significant performances improvements.
+  - Change the top list panels to use pagination rather than only showing top 10 elements
+  - Change bottom graphs to use stacked lines and added list of values + total count
+  - Change destination pie charts to only show top 10 destinations
+  - Remove the per-namespace section which was merely a duplicate of the top one with additional namespace filter. All panels now have a namespace filter which default to all namespace, therefore keeping the old behavior of the top panels and also allowing behavior of the bottom ones at the same time.
+  - Set maximum datapoints to 500 and minimal interval to 2mn
+  - Move subnets regex to a constant
+  - Add Network Traffic Analysis Overview dashboard
+  - Add links between both Network Traffic Analysis dashboards
+
 ### Removed
 
 - Remove `logging-operator` related data as it is now deprecated.
+
+## [4.12.0] - 2026-01-20
+
+### Added
+
+- Add "Envoy Gateway | Configuration" dashboard.
+
+## [4.11.1] - 2026-01-19
+
+### Fixed
+
+- Made node utilization dashboard work again with all nodes
+- Network Traffic Analysis dashboard: consider 100.64.0.0/16 private
 
 ## [4.11.0] - 2026-01-05
 
@@ -1438,7 +1465,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.11.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.12.0...HEAD
+[4.12.0]: https://github.com/giantswarm/dashboards/compare/v4.11.1...v4.12.0
+[4.11.1]: https://github.com/giantswarm/dashboards/compare/v4.11.0...v4.11.1
 [4.11.0]: https://github.com/giantswarm/dashboards/compare/v4.10.0...v4.11.0
 [4.10.0]: https://github.com/giantswarm/dashboards/compare/v4.9.1...v4.10.0
 [4.9.1]: https://github.com/giantswarm/dashboards/compare/v4.9.0...v4.9.1
