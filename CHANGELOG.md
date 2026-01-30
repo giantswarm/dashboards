@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Add links between both Network Traffic Analysis dashboards
   - Add `Include non-namespaced` toggle to filter/include non-namespaced network traffic
   - Add explanation note on namespace filtering, and k8s label edge cases in metrics
+  - Add annotations for CiliumNetworkPolicies events
 - NGINX Ingress controller dashboard: reworked variables
   - removed `app` selector
   - removed `namespace` selector
