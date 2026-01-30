@@ -61,8 +61,8 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": 192,
+  "graphTooltip": 1,
+  "id": 0,
   "links": [
     {
       "asDropdown": false,
@@ -111,7 +111,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "# Data availability\n\nThis dashboard relies on optional metrics.\nWe need to enable network monitoring at the installation level and on each cluster for the metrics to be available.\nPlease contact team Atlas for more information.\n\n# Edge cases\n\nThe underlying metric used here is `beyla_network_flow_bytes_total`, there are some edge cases worth mentioning about `k8s` labels attached to it:\n\n- `k8s` labels are not set when traffic flows from/to non Kubernetes entities like Internet IPs, internal AWS VPC entities (e.g. AWS resolver, load balancer, Cilium endpoints)\n- `k8s_src_type` and `k8s_dst_type` represent the Kubernetes entities (receiving or transmitting traffic) which can either be `Node` or `Pod`\n- `k8s_*_namespace` is only set when traffic flows from/to a Kubernetes Pod (`k8s_*_type=Pod`)\n- Cilium health endpoints have their IP addresses range within `100.64.0.0/10` but are not labeled with `k8s`",
+        "content": "# Data availability\n\nThis dashboard relies on optional metrics.\nWe need to enable network monitoring at the installation level and on each cluster for the metrics to be available.\nPlease contact team Atlas for more information.\n\n# Information\n\nThis dashboard visualizes network traffic for Kubernetes **Pods**, aggregated by **Namespace**. Traffic is classified as \"Private\" based on [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918#section-3) standards and the AWS-specific range (`100.64.0.0/16`).\n\nTraffic not explicitly bound to a Kubernetes namespace is labeled as `unknown`. This typically includes Node and other non Pod entities (e.g. Cilium endpoints) traffic.\n\n<details>\n\n<summary>Technical reference: Exploring the <b>beyla_network_flow_bytes_total</b> metric</summary>\n\nUse these guidelines to interpret metric labels when querying manually via Grafana Explore:\n\n- Node traffic is identified by `k8s_src_type` or `k8s_dst_type` label set to `Node`. Those do not have `k8s_src_namespace` or `k8s_dst_namespace` label set.\n- Non Kubernetes entities have no `k8s` labels set.\n- Cilium health endpoints reside within the `100.64.0.0/10` IP range within and have no `k8s` labels set.\n\n</details>",
         "mode": "markdown"
       },
       "pluginVersion": "12.3.0",
@@ -252,6 +252,7 @@
             "inspect": false
           },
           "mappings": [],
+          "noValue": "unknown",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -297,7 +298,7 @@
           "expr": "sort(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^$private_subnets\",\n        dst_zone=\"\",\n        direction=\"request\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
           "format": "time_series",
           "instant": false,
-          "legendFormat": "{{k8s_src_namespace}}",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "private"
         },
@@ -386,6 +387,7 @@
             "inspect": false
           },
           "mappings": [],
+          "noValue": "unknown",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -432,7 +434,7 @@
           "format": "time_series",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{k8s_src_namespace}}",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "cross-az"
         },
@@ -525,6 +527,7 @@
             "inspect": false
           },
           "mappings": [],
+          "noValue": "unknown",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -758,7 +761,10 @@
         "legend": {
           "displayMode": "list",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
         },
         "pieType": "pie",
         "reduceOptions": {
@@ -771,7 +777,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -825,7 +831,10 @@
         "legend": {
           "displayMode": "list",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
         },
         "pieType": "pie",
         "reduceOptions": {
@@ -838,7 +847,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -926,12 +935,15 @@
             },
             "properties": [
               {
-                "id": "custom.hideFrom",
+                "id": "custom.stacking",
                 "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
+                  "group": "A",
+                  "mode": "none"
                 }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
               }
             ]
           }
@@ -996,6 +1008,13 @@
           "options": {
             "mode": "columns",
             "valueLabel": "k8s_src_namespace"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
           }
         }
       ],
@@ -1074,12 +1093,15 @@
             },
             "properties": [
               {
-                "id": "custom.hideFrom",
+                "id": "custom.stacking",
                 "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
+                  "group": "A",
+                  "mode": "none"
                 }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
               }
             ]
           }
@@ -1146,6 +1168,13 @@
           "options": {
             "valueLabel": "k8s_src_namespace"
           }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
+          }
         }
       ],
       "type": "timeseries"
@@ -1215,12 +1244,15 @@
             },
             "properties": [
               {
-                "id": "custom.hideFrom",
+                "id": "custom.stacking",
                 "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
+                  "group": "A",
+                  "mode": "none"
                 }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
               }
             ]
           }
@@ -1285,6 +1317,13 @@
           "options": {
             "valueLabel": "k8s_src_namespace"
           }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
+          }
         }
       ],
       "type": "timeseries"
@@ -1354,12 +1393,15 @@
             },
             "properties": [
               {
-                "id": "custom.hideFrom",
+                "id": "custom.stacking",
                 "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
+                  "group": "A",
+                  "mode": "none"
                 }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
               }
             ]
           }
@@ -1423,6 +1465,13 @@
           "id": "labelsToFields",
           "options": {
             "valueLabel": "k8s_src_namespace"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
           }
         }
       ],
