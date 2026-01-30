@@ -11,15 +11,74 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "gs-loki"
+        },
+        "enable": true,
+        "expr": "{cluster_id=\"$cluster_id\", scrape_job=~\"kubernetes-pods\", service_name=\"cilium-agent\"} | logfmt | msg=`Upserted policy to repository`",
+        "hide": false,
+        "iconColor": "green",
+        "name": "CiliumNetworkPolicies upserts (green)",
+        "queryType": "range",
+        "target": {
+          "expr": "",
+          "interval": "",
+          "refId": "Anno"
+        },
+        "textFormat": "{{msg}}",
+        "titleFormat": "resource: {{resource}"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "gs-loki"
+        },
+        "enable": true,
+        "expr": "{cluster_id=\"graveler\", scrape_job=~\"kubernetes-pods\", service_name=\"cilium-agent\"} | logfmt | msg=`Deleted CiliumNetworkPolicy`",
+        "hide": false,
+        "iconColor": "red",
+        "name": "CiliumNetworkPolicies deletes (red)",
+        "queryType": "range",
+        "target": {
+          "expr": "",
+          "interval": "",
+          "refId": "Anno"
+        },
+        "textFormat": "{{msg}}",
+        "titleFormat": "resource: {{resource}}"
       }
     ]
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 248,
-  "links": [],
+  "id": 192,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "topic:networking-traffic-analysis"
+      ],
+      "targetBlank": false,
+      "title": "Network Traffic Analysis",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "panels": [
     {
       "collapsed": false,
@@ -40,7 +99,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 1
@@ -52,7 +111,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "# Data availability\n\nThis dashboard relies on optional metrics.\nWe need to enable network monitoring at the installation level and on each cluster for the metrics to be available.\nPlease contact team Atlas for more information.",
+        "content": "# Data availability\n\nThis dashboard relies on optional metrics.\nWe need to enable network monitoring at the installation level and on each cluster for the metrics to be available.\nPlease contact team Atlas for more information.\n\n# Information\n\nThis dashboard visualizes network traffic for Kubernetes **Pods**, aggregated by **Namespace**. Traffic is classified as \"Private\" based on [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918#section-3) standards and the AWS-specific range (`100.64.0.0/16`).\n\nTraffic not explicitly bound to a Kubernetes namespace is labeled as `unknown`. This typically includes Node and other non Pod entities (e.g. Cilium endpoints) traffic.\n\n<details>\n\n<summary>Technical reference: Exploring the <b>beyla_network_flow_bytes_total</b> metric</summary>\n\nUse these guidelines to interpret metric labels when querying manually via [Grafana Explore](/explore?schemaVersion=1&panes=%7B%22e6k%22:%7B%22datasource%22:%22gs-mimir%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22sort%28%5Cn%20%20sum%20by%20%28k8s_src_namespace,%20cluster_id%29%20%28%5Cn%20%20%20%20rate%28%5Cn%20%20%20%20%20%20beyla_network_flow_bytes_total%7B%5Cn%20%20%20%20%20%20%20%20dst_address%3D~%5C%22%5E$private_subnets%5C%22,%5Cn%20%20%20%20%20%20%20%20dst_zone%3D%5C%22%5C%22,%5Cn%20%20%20%20%20%20%20%20direction%3D%5C%22request%5C%22,%5Cn%20%20%20%20%20%20%20%20k8s_src_namespace%3D~%5C%22$namespace%5C%22,%5Cn%20%20%20%20%20%20%20%20cluster_id%3D%5C%22$cluster_id%5C%22%5Cn%20%20%20%20%20%20%7D%5B$__rate_interval%5D%5Cn%20%20%20%20%29%5Cn%20%20%29%5Cn%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22gs-mimir%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D,%22compact%22:false%7D%7D&orgId=2)\n\n- Node traffic is identified by `k8s_src_type` or `k8s_dst_type` label set to `Node`. Those do not have `k8s_src_namespace` or `k8s_dst_namespace` label set.\n- Non Kubernetes entities have no `k8s` labels set.\n- Cilium health endpoints reside within the `100.64.0.0/10` IP range within and have no `k8s` labels set.\n\n</details>",
         "mode": "markdown"
       },
       "pluginVersion": "12.3.0",
@@ -65,17 +124,17 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 9
       },
       "id": 2,
       "panels": [],
-      "title": "${cluster_id} cluster traffic",
+      "title": "${cluster_id} network traffic for ${namespace} namespace(s)",
       "type": "row"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "description": "",
       "fieldConfig": {
@@ -99,7 +158,7 @@
         "h": 5,
         "w": 3,
         "x": 0,
-        "y": 5
+        "y": 10
       },
       "id": 11,
       "options": {
@@ -127,30 +186,47 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        dst_zone=\"\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
-          "instant": true,
-          "legendFormat": "Private",
-          "range": false,
-          "refId": "A"
-        },
-        {
           "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "Public",
-          "range": false,
-          "refId": "B"
+          "panelId": 22,
+          "refId": "A"
         }
       ],
       "title": "Private Traffic vs. Public Traffic",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "/^(?:private)$/"
+          },
+          "id": "calculateField",
+          "options": {
+            "alias": "Private",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "/^(?:public)$/"
+          },
+          "id": "calculateField",
+          "options": {
+            "alias": "Public",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
       "type": "piechart"
     },
     {
@@ -170,20 +246,13 @@
             "footer": {
               "reducers": []
             },
+            "hideFrom": {
+              "viz": false
+            },
             "inspect": false
           },
-          "mappings": [
-            {
-              "options": {
-                "pattern": "$",
-                "result": {
-                  "index": 0,
-                  "text": "unknown"
-                }
-              },
-              "type": "regex"
-            }
-          ],
+          "mappings": [],
+          "noValue": "unknown",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -205,11 +274,14 @@
         "h": 10,
         "w": 7,
         "x": 3,
-        "y": 5
+        "y": 10
       },
       "id": 22,
+      "interval": "2m",
+      "maxDataPoints": 500,
       "options": {
         "cellHeight": "sm",
+        "enablePagination": true,
         "showHeader": true,
         "sortBy": [
           {
@@ -223,20 +295,42 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(\n  10,\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        dst_zone=\"\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
+          "expr": "sort(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^$private_subnets\",\n        dst_zone=\"\",\n        direction=\"request\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{k8s_src_namespace}}",
           "range": true,
-          "refId": "A"
+          "refId": "private"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sort(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^$private_subnets\",\n        direction=\"request\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "public"
         }
       ],
-      "title": "Top 10 Private Network Users",
+      "title": "Top Private Network Users",
       "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:private)$/"
+          }
+        },
         {
           "id": "timeSeriesTable",
           "options": {
             "A": {
+              "timeField": "Time"
+            },
+            "private": {
               "timeField": "Time"
             }
           }
@@ -245,18 +339,17 @@
           "id": "organize",
           "options": {
             "excludeByName": {
-              "__name__": true,
-              "app": true,
+              "Trend #private": false,
               "cluster_id": true,
-              "cluster_name": true,
-              "environment": true,
-              "leanix": true
+              "k8s_src_namespace": false,
+              "src_name": true
             },
             "includeByName": {},
             "indexByName": {},
             "renameByName": {
-              "Trend #A": "Network",
-              "k8s_src_namespace": "Source Namespace"
+              "Trend #private": "Network",
+              "k8s_src_namespace": "Source Namespace",
+              "src_name": ""
             }
           }
         },
@@ -293,18 +386,8 @@
             },
             "inspect": false
           },
-          "mappings": [
-            {
-              "options": {
-                "pattern": "$",
-                "result": {
-                  "index": 1,
-                  "text": "unknown"
-                }
-              },
-              "type": "regex"
-            }
-          ],
+          "mappings": [],
+          "noValue": "unknown",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -326,11 +409,14 @@
         "h": 10,
         "w": 7,
         "x": 10,
-        "y": 5
+        "y": 10
       },
       "id": 24,
+      "interval": "2m",
+      "maxDataPoints": 500,
       "options": {
         "cellHeight": "sm",
+        "enablePagination": true,
         "showHeader": true,
         "sortBy": [
           {
@@ -344,21 +430,43 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(\n  10,\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)",
+          "expr": "sort(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^$private_subnets\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "{{k8s_src_namespace}}",
           "range": true,
-          "refId": "A"
+          "refId": "cross-az"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sort(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^$private_subnets\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        k8s_src_namespace=~\"$namespace\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "in-az"
         }
       ],
-      "title": "Top 10 Cross-AZ Network Users",
+      "title": "Top Cross-AZ Network Users",
       "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:cross-az)$/"
+          }
+        },
         {
           "id": "timeSeriesTable",
           "options": {
             "A": {
+              "timeField": "Time"
+            },
+            "cross-az": {
               "timeField": "Time"
             }
           }
@@ -378,6 +486,7 @@
             "indexByName": {},
             "renameByName": {
               "Trend #A": "Network",
+              "Trend #cross-az": "Network",
               "k8s_src_namespace": "Source Namespace"
             }
           }
@@ -399,7 +508,8 @@
     },
     {
       "datasource": {
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "fieldConfig": {
         "defaults": {
@@ -416,18 +526,8 @@
             },
             "inspect": false
           },
-          "mappings": [
-            {
-              "options": {
-                "pattern": "$",
-                "result": {
-                  "index": 0,
-                  "text": "unknown"
-                }
-              },
-              "type": "regex"
-            }
-          ],
+          "mappings": [],
+          "noValue": "unknown",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -449,11 +549,12 @@
         "h": 10,
         "w": 7,
         "x": 17,
-        "y": 5
+        "y": 10
       },
       "id": 23,
       "options": {
         "cellHeight": "sm",
+        "enablePagination": true,
         "showHeader": true,
         "sortBy": [
           {
@@ -465,22 +566,29 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "topk(\n  10,\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
-          "format": "time_series",
-          "instant": false,
-          "legendFormat": "{{k8s_src_namespace}}",
-          "range": true,
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 22,
           "refId": "A"
         }
       ],
-      "title": "Top 10 Public Network Users",
+      "title": "Top Public Network Users",
       "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:public)$/"
+          }
+        },
         {
           "id": "timeSeriesTable",
           "options": {
             "A": {
+              "timeField": "Time"
+            },
+            "public": {
               "timeField": "Time"
             }
           }
@@ -500,6 +608,7 @@
             "indexByName": {},
             "renameByName": {
               "Trend #A": "Network",
+              "Trend #public": "Network",
               "k8s_src_namespace": "Source Namespace"
             }
           }
@@ -521,8 +630,8 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "description": "",
       "fieldConfig": {
@@ -546,7 +655,7 @@
         "h": 5,
         "w": 3,
         "x": 0,
-        "y": 10
+        "y": 15
       },
       "id": 4,
       "options": {
@@ -574,30 +683,47 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
-          "instant": true,
-          "legendFormat": "Private (cross-az)",
-          "range": false,
-          "refId": "A"
-        },
-        {
           "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "Private (in-az)",
-          "range": false,
-          "refId": "B"
+          "panelId": 24,
+          "refId": "A"
         }
       ],
       "title": "Cross-AZ vs. In-AZ",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "/^(?:cross-az)$/"
+          },
+          "id": "calculateField",
+          "options": {
+            "alias": "Private (cross-az)",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "/^(?:in-az)$/"
+          },
+          "id": "calculateField",
+          "options": {
+            "alias": "Private (in-az)",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
       "type": "piechart"
     },
     {
@@ -627,7 +753,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 20
       },
       "id": 15,
       "options": {
@@ -635,7 +761,10 @@
         "legend": {
           "displayMode": "list",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
         },
         "pieType": "pie",
         "reduceOptions": {
@@ -648,7 +777,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -657,7 +786,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(10, sum by (dst_name, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_zone=\"\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\"\n    }[$__rate_interval]\n  )\n))",
+          "expr": "topk(10, sum by (dst_name, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^$private_subnets\",\n      dst_zone=\"\",\n      dst_name!=\"\",\n      direction=\"request\",\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"${cluster_id}\"\n    }[$__rate_interval]\n  )\n))",
           "instant": true,
           "legendFormat": "{{ dst_name }}",
           "range": false,
@@ -694,7 +823,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 20
       },
       "id": 19,
       "options": {
@@ -702,7 +831,10 @@
         "legend": {
           "displayMode": "list",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
         },
         "pieType": "pie",
         "reduceOptions": {
@@ -715,7 +847,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -724,7 +856,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(10, sum by (dst_name, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\"\n    }[$__rate_interval]\n  )\n))",
+          "expr": "topk(10, sum by (dst_name, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address!~\"^$private_subnets\",\n      dst_name!=\"\",\n      direction=\"request\",\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"${cluster_id}\"\n    }[$__rate_interval]\n  )\n))",
           "instant": true,
           "legendFormat": "{{ dst_name }}",
           "range": false,
@@ -736,8 +868,8 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "description": "Displays the total bytes sent for public traffic.",
       "fieldConfig": {
@@ -746,7 +878,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
+            "axisBorderShow": true,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -754,7 +886,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 100,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -762,18 +894,18 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -795,21 +927,45 @@
           },
           "unit": "binBps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 30
       },
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -820,20 +976,54 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "editorMode": "code",
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
-          "legendFormat": "Public",
-          "range": true,
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 22,
           "refId": "A"
         }
       ],
       "title": "Total Public Traffic",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:public)$/"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Total",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "k8s_src_namespace"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "description": "Displays the total bytes sent for public traffic.",
       "fieldConfig": {
@@ -842,7 +1032,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
+            "axisBorderShow": true,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -850,7 +1040,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 100,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -858,23 +1048,27 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
             }
           },
+          "fieldMinMax": false,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -891,21 +1085,45 @@
           },
           "unit": "binBps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 30
       },
       "id": 16,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -916,20 +1134,55 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "editorMode": "code",
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        dst_zone=\"\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n  )\n)",
-          "legendFormat": "Public",
-          "range": true,
-          "refId": "A"
+          "adHocFiltersEnabled": false,
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 22,
+          "refId": "A",
+          "withTransforms": false
         }
       ],
       "title": "Total Private Traffic",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:private)$/"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Total",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "labelsToFields",
+          "options": {
+            "valueLabel": "k8s_src_namespace"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "description": "",
       "fieldConfig": {
@@ -938,7 +1191,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
+            "axisBorderShow": true,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -946,7 +1199,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 100,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -954,18 +1207,18 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -978,30 +1231,50 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
           "unit": "binBps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 37
       },
       "id": 14,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -1013,23 +1286,52 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "editorMode": "code",
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)",
-          "legendFormat": "Private (in-az)",
-          "range": true,
+          "panelId": 24,
           "refId": "A"
         }
       ],
       "title": "Total In-AZ Private Traffic",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:in-az)$/"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Total",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "labelsToFields",
+          "options": {
+            "valueLabel": "k8s_src_namespace"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "description": "",
       "fieldConfig": {
@@ -1038,7 +1340,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
+            "axisBorderShow": true,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1046,7 +1348,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 100,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1054,18 +1356,18 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -1078,30 +1380,50 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
           "unit": "binBps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 37
       },
       "id": 1,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -1113,747 +1435,47 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "editorMode": "code",
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)",
-          "legendFormat": "Private (cross-az)",
-          "range": true,
+          "panelId": 24,
           "refId": "A"
         }
       ],
       "title": "Total Cross-AZ Private Traffic",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "/^(?:cross-az)$/"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Total",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "labelsToFields",
+          "options": {
+            "valueLabel": "k8s_src_namespace"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "Value",
+            "renamePattern": "unknown"
+          }
+        }
+      ],
       "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 39
-      },
-      "id": 5,
-      "panels": [],
-      "title": "Traffic from ${namespace} namespace",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 0,
-        "y": 40
-      },
-      "id": 17,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "000004542"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        dst_zone=\"\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
-          "instant": true,
-          "legendFormat": "Private",
-          "range": false,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n  )\n)\nor vector(0)",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "Public",
-          "range": false,
-          "refId": "B"
-        }
-      ],
-      "title": "Private Traffic vs. Public Traffic per namespace",
-      "type": "piechart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 40
-      },
-      "id": 18,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "000004542"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n    unless on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
-          "instant": true,
-          "legendFormat": "Private (cross-az)",
-          "range": false,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(\n  sum by (k8s_src_namespace, cluster_id) (\n    rate(\n      beyla_network_flow_bytes_total{\n        dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n        direction=\"request\",\n        src_zone!=\"\",\n        dst_zone!=\"\",\n        cluster_id=\"${cluster_id}\",\n        k8s_src_namespace=~\"${namespace}\"\n      }[$__rate_interval]\n    )\n    and on (dst_zone, src_zone)\n      label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n        \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n  )\n)\nor vector(0)",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "Private (in-az)",
-          "range": false,
-          "refId": "B"
-        }
-      ],
-      "title": "Cross-AZ vs. In-AZ per namespace",
-      "type": "piechart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 12,
-        "y": 40
-      },
-      "id": 21,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "000004542"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "topk(10, sum by (dst_name, k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_zone=\"\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"${namespace}\"\n    }[$__rate_interval]\n  )\n))",
-          "instant": true,
-          "legendFormat": "{{ dst_name }}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Top 10 Private known destination per namespace",
-      "type": "piechart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 40
-      },
-      "id": 20,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "000004542"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "topk(10, sum by (dst_name, k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_name!=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"${namespace}\"\n    }[$__rate_interval]\n  )\n))",
-          "instant": true,
-          "legendFormat": "{{ dst_name }}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Top 10 Public known destination",
-      "type": "piechart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "Displays public traffic for each namespace",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 48
-      },
-      "id": 7,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 100
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "topk(10, sum by (k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address!~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"$namespace\"\n    }[$__rate_interval]\n  )\n))",
-          "legendFormat": "{{k8s_src_namespace}} ",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Top 10 Public Traffic per Namespace",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": " $",
-            "renamePattern": "unknown"
-          }
-        }
-      ],
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "Displays private traffic for each namespace",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 48
-      },
-      "id": 12,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 100
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "topk(10, sum by (k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      dst_zone=\"\",\n      direction=\"request\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"$namespace\"\n    }[$__rate_interval]\n  )\n))",
-          "legendFormat": "{{k8s_src_namespace}} ",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Top 10 Private Traffic per Namespace",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": " $",
-            "renamePattern": "unknown"
-          }
-        }
-      ],
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "Displays cross-AZ private traffic for each namespace",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 57
-      },
-      "id": 6,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 100
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "topk(10, sum by (k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      direction=\"request\",\n      src_zone!=\"\",\n      dst_zone!=\"\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"$namespace\"\n    }[$__rate_interval]\n  )\n  unless on (dst_zone, src_zone)\n    label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n      \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n))",
-          "legendFormat": "{{k8s_src_namespace}} ",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Top 10 Cross-AZ Private Traffic per Namespace",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": " $",
-            "renamePattern": "unknown"
-          }
-        }
-      ],
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "Displays in-AZ private traffic for each namespace",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "binBps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 57
-      },
-      "id": 13,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 100
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "topk(10, sum by (k8s_src_namespace, cluster_id) (\n  rate(\n    beyla_network_flow_bytes_total{\n      dst_address=~\"^(10\\\\..*|100\\\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\\\..*|172\\\\.(1[6-9]|2[0-9]|3[01])\\\\..*|192\\\\.168\\\\..*)\",\n      direction=\"request\",\n      src_zone!=\"\",\n      dst_zone!=\"\",\n      cluster_id=\"${cluster_id}\",\n      k8s_src_namespace=~\"$namespace\"\n    }[$__rate_interval]\n  )\n  and on (dst_zone, src_zone)\n    label_replace(beyla_network_flow_bytes_total{src_zone!=\"\", dst_zone!=\"\"},\n      \"dst_zone\", \"$1\", \"src_zone\", \"(.*)\")\n))",
-          "legendFormat": "{{k8s_src_namespace}} ",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Top 10 In-AZ Private Traffic per Namespace",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": " $",
-            "renamePattern": "unknown"
-          }
-        }
-      ],
-      "type": "barchart"
     }
   ],
   "preload": false,
@@ -1861,7 +1483,8 @@
   "schemaVersion": 42,
   "tags": [
     "owner:team-atlas",
-    "topic:networking"
+    "topic:networking",
+    "topic:networking-traffic-analysis"
   ],
   "templating": {
     "list": [
@@ -1903,7 +1526,8 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": "$include_non_namespaced",
+        "allowCustomValue": true,
         "current": {
           "text": "All",
           "value": "$__all"
@@ -1924,12 +1548,44 @@
         },
         "refresh": 1,
         "regex": "",
+        "staticOptions": [],
         "type": "query"
+      },
+      {
+        "current": {
+          "text": ".*",
+          "value": ".*"
+        },
+        "description": "Include network traffic not bound to a namespace.",
+        "label": "Include non-namespaced",
+        "name": "include_non_namespaced",
+        "options": [
+          {
+            "text": ".*",
+            "value": ".*"
+          },
+          {
+            "text": ".+",
+            "value": ".+"
+          }
+        ],
+        "type": "switch"
+      },
+      {
+        "current": {
+          "text": "(10\\..*|100\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*)",
+          "value": "(10\\..*|100\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*)"
+        },
+        "hide": 2,
+        "name": "private_subnets",
+        "query": "(10\\..*|100\\.(1[0-9][0-9]|[6-9][0-9]|[1-9])\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*)",
+        "skipUrlSync": true,
+        "type": "constant"
       }
     ]
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
