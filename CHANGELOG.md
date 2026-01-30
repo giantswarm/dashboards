@@ -20,6 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Move subnets regex to a constant
   - Add Network Traffic Analysis Overview dashboard
   - Add links between both Network Traffic Analysis dashboards
+- NGINX Ingress controller dashboard: reworked variables
+  - removed `app` selector
+  - removed `namespace` selector
+  - added `ingress namespace` selector
 
 ### Removed
 
