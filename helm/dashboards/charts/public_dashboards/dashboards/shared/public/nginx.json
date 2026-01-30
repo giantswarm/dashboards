@@ -22,15 +22,18 @@
       {
         "datasource": "$datasource",
         "enable": true,
-        "expr": "sum(changes(nginx_ingress_controller_config_last_reload_successful_timestamp_seconds{instance!=\"unknown\",cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\"}[30s])) by (controller_class)",
         "hide": false,
         "iconColor": "rgba(255, 96, 96, 1)",
         "limit": 100,
         "name": "Config Reloads",
         "showIn": 0,
-        "step": "30s",
         "tagKeys": "controller_class",
         "tags": [],
+        "target": {
+          "expr": "sum(changes(nginx_ingress_controller_config_last_reload_successful_timestamp_seconds{instance!=\"unknown\",cluster_id=~\"$cluster\",controller_class=~\"$controller_class\"}[30s])) by (controller_class)",
+          "interval": "30s",
+          "refId": "Anno"
+        },
         "titleFormat": "Config Reloaded",
         "type": "tags"
       }
@@ -39,8 +42,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 73,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "datasource": "$datasource",
@@ -66,7 +69,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -78,6 +81,12 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
       "id": 20,
       "maxDataPoints": 100,
       "options": {
@@ -85,6 +94,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -96,13 +106,15 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "round(sum(irate(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m])), 0.001)",
+          "editorMode": "code",
+          "expr": "round(sum(irate(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m])), 0.001)",
           "format": "time_series",
           "intervalFactor": 1,
+          "range": true,
           "refId": "A",
           "step": 4
         }
@@ -112,6 +124,7 @@
     },
     {
       "datasource": "$datasource",
+      "description": "Note: global to all ingresses for a controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -134,7 +147,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -159,6 +172,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -170,11 +184,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "sum(avg_over_time(nginx_ingress_controller_nginx_process_connections{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m]))",
+          "editorMode": "code",
+          "expr": "sum(avg_over_time(nginx_ingress_controller_nginx_process_connections{cluster_id=~\"$cluster\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m]))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -209,7 +224,7 @@
             "steps": [
               {
                 "color": "rgba(245, 54, 54, 0.9)",
-                "value": null
+                "value": 0
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -238,6 +253,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -249,12 +265,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
           "editorMode": "code",
-          "expr": "sum(rate(nginx_ingress_controller_requests{\n    cluster_id=~\"$cluster\",\n    namespace=~\"$namespace\",\n    app=~\"$app\",\n    controller_class=~\"$controller_class\",\n    controller_pod=~\"$controller\",\n    status!~\"[4-5].*\"}[2m]\n)) / \nsum(rate(nginx_ingress_controller_requests{\n    cluster_id=~\"$cluster\",\n    namespace=~\"$namespace\",\n    app=~\"$app\",\n    controller_class=~\"$controller_class\",\n    controller_pod=~\"$controller\"}[2m]\n))",
+          "expr": "sum(rate(nginx_ingress_controller_requests{\n    cluster_id=~\"$cluster\",\n    exported_namespace=~\"$ingress_namespace\",\n    controller_class=~\"$controller_class\",\n    controller_pod=~\"$controller\",\n    status!~\"[4-5].*\"}[2m]\n)) / \nsum(rate(nginx_ingress_controller_requests{\n    cluster_id=~\"$cluster\",\n    exported_namespace=~\"$ingress_namespace\",\n    controller_class=~\"$controller_class\",\n    controller_pod=~\"$controller\"}[2m]\n))",
           "format": "time_series",
           "intervalFactor": 1,
           "range": true,
@@ -267,6 +283,7 @@
     },
     {
       "datasource": "$datasource",
+      "description": "Note: global to all ingresses for a controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -290,7 +307,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -315,6 +332,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "sum"
@@ -326,11 +344,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "avg(irate(nginx_ingress_controller_success{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[1m])) * 60",
+          "editorMode": "code",
+          "expr": "avg(irate(nginx_ingress_controller_success{cluster_id=~\"$cluster\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[1m])) * 60",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -343,6 +362,7 @@
     },
     {
       "datasource": "$datasource",
+      "description": "Note: global to all ingresses for a controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -366,7 +386,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -391,6 +411,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -402,11 +423,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "count(nginx_ingress_controller_config_last_reload_successful{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"} == 0)",
+          "editorMode": "code",
+          "expr": "count(nginx_ingress_controller_config_last_reload_successful{cluster_id=~\"$cluster\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"} == 0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -431,6 +453,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -447,6 +470,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -462,7 +486,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -488,17 +512,18 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "maxHeight": 600,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.0.1",
-      "repeatDirection": "h",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "round(sum(irate(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress=~\"$ingress\"}[2m])) by (ingress), 0.001)",
+          "editorMode": "code",
+          "expr": "round(sum(irate(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress=~\"$ingress\"}[2m])) by (ingress), 0.001)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -527,6 +552,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -543,6 +569,7 @@
               "type": "linear"
             },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -558,7 +585,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -654,16 +681,18 @@
           "width": 300
         },
         "tooltip": {
+          "hideZeros": false,
           "maxHeight": 600,
           "mode": "multi",
           "sort": "asc"
         }
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "sum(rate(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress=~\"$ingress\",status!~\"[4-5].*\"}[2m])) by (ingress) / sum(rate(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress=~\"$ingress\"}[2m])) by (ingress)",
+          "editorMode": "code",
+          "expr": "sum(rate(nginx_ingress_controller_requests{\n    cluster_id=~\"$cluster\",\n    exported_namespace=~\"$ingress_namespace\",\n    controller_class=~\"$controller_class\",\n    controller_pod=~\"$controller\",\n    ingress=~\"$ingress\",\n    status!~\"[4-5].*\"\n    }[2m])) by (ingress)\n/\nsum(rate(nginx_ingress_controller_requests{\n    cluster_id=~\"$cluster\",\n    exported_namespace=~\"$ingress_namespace\",\n    controller_class=~\"$controller_class\",\n    controller_pod=~\"$controller\",\n    ingress=~\"$ingress\"\n    }[2m])) by (ingress)",
           "format": "time_series",
           "instant": false,
           "interval": "10s",
@@ -691,6 +720,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -707,6 +737,7 @@
               "type": "linear"
             },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -722,7 +753,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -753,16 +784,18 @@
           "width": 200
         },
         "tooltip": {
+          "hideZeros": false,
           "maxHeight": 600,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "sum (irate (nginx_ingress_controller_request_size_sum{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m]))",
+          "editorMode": "code",
+          "expr": "sum (irate (nginx_ingress_controller_request_size_sum{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m]))",
           "format": "time_series",
           "instant": false,
           "interval": "10s",
@@ -774,13 +807,15 @@
         },
         {
           "datasource": "$datasource",
-          "expr": "- sum (irate (nginx_ingress_controller_response_size_sum{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m]))",
+          "editorMode": "code",
+          "expr": "- sum (irate (nginx_ingress_controller_response_size_sum{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m]))",
           "format": "time_series",
           "hide": false,
           "interval": "10s",
           "intervalFactor": 1,
           "legendFormat": "Sent",
           "metric": "network",
+          "range": true,
           "refId": "B",
           "step": 10
         }
@@ -790,6 +825,7 @@
     },
     {
       "datasource": "$datasource",
+      "description": "Note: global to all ingresses for a controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -802,6 +838,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -818,6 +855,7 @@
               "type": "linear"
             },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -833,7 +871,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -910,16 +948,18 @@
           "width": 200
         },
         "tooltip": {
+          "hideZeros": false,
           "maxHeight": 600,
           "mode": "multi",
           "sort": "desc"
         }
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "avg(nginx_ingress_controller_nginx_process_resident_memory_bytes{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}) ",
+          "editorMode": "code",
+          "expr": "avg(nginx_ingress_controller_nginx_process_resident_memory_bytes{cluster_id=~\"$cluster\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}) ",
           "format": "time_series",
           "instant": false,
           "interval": "10s",
@@ -935,6 +975,7 @@
     },
     {
       "datasource": "$datasource",
+      "description": "Note: global to all ingresses for a controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -947,6 +988,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -963,6 +1005,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -978,7 +1021,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -1004,21 +1047,24 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "maxHeight": 600,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "sum (rate (nginx_ingress_controller_nginx_process_cpu_seconds_total{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m])) ",
+          "editorMode": "code",
+          "expr": "sum (rate (nginx_ingress_controller_nginx_process_cpu_seconds_total{cluster_id=~\"$cluster\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\"}[2m])) ",
           "format": "time_series",
           "interval": "10s",
           "intervalFactor": 1,
           "legendFormat": "nginx",
           "metric": "container_cpu",
+          "range": true,
           "refId": "A",
           "step": 10
         }
@@ -1038,6 +1084,9 @@
             "cellOptions": {
               "type": "auto"
             },
+            "footer": {
+              "reducers": []
+            },
             "inspect": false
           },
           "mappings": [],
@@ -1046,7 +1095,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -1107,7 +1156,7 @@
                   "steps": [
                     {
                       "color": "rgba(245, 54, 54, 0.9)",
-                      "value": null
+                      "value": 0
                     },
                     {
                       "color": "rgba(237, 129, 40, 0.89)"
@@ -1225,7 +1274,7 @@
                   "steps": [
                     {
                       "color": "rgba(245, 54, 54, 0.9)",
-                      "value": null
+                      "value": 0
                     },
                     {
                       "color": "rgba(237, 129, 40, 0.89)"
@@ -1285,18 +1334,9 @@
         "x": 0,
         "y": 16
       },
-      "hideTimeOverride": false,
       "id": 75,
       "options": {
         "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
         "showHeader": true,
         "sortBy": [
           {
@@ -1305,12 +1345,12 @@
           }
         ]
       },
-      "pluginVersion": "11.0.0",
-      "repeatDirection": "h",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
-          "expr": "histogram_quantile(0.50, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{cluster_id=~\"$cluster\",controller_namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.50, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1320,7 +1360,8 @@
         },
         {
           "datasource": "$datasource",
-          "expr": "histogram_quantile(0.90, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{cluster_id=~\"$cluster\",controller_namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.90, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1330,7 +1371,8 @@
         },
         {
           "datasource": "$datasource",
-          "expr": "histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{cluster_id=~\"$cluster\",controller_namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\", controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1340,7 +1382,8 @@
         },
         {
           "datasource": "$datasource",
-          "expr": "sum(irate(nginx_ingress_controller_request_size_sum{cluster_id=~\"$cluster\",controller_namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (ingress)",
+          "editorMode": "code",
+          "expr": "sum(irate(nginx_ingress_controller_request_size_sum{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (ingress)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1351,7 +1394,8 @@
         },
         {
           "datasource": "$datasource",
-          "expr": "sum(irate(nginx_ingress_controller_response_size_sum{cluster_id=~\"$cluster\",controller_namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (ingress)",
+          "editorMode": "code",
+          "expr": "sum(irate(nginx_ingress_controller_response_size_sum{cluster_id=~\"$cluster\",exported_namespace=~\"$ingress_namespace\",controller_class=~\"$controller_class\",controller_pod=~\"$controller\",ingress!=\"\",ingress=~\"$ingress\"}[2m])) by (ingress)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1375,6 +1419,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "Note: global to all ingresses for a controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1389,7 +1434,7 @@
             "steps": [
               {
                 "color": "red",
-                "value": null
+                "value": 0
               },
               {
                 "color": "green",
@@ -1410,6 +1455,12 @@
       "id": 85,
       "options": {
         "displayMode": "basic",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
         "maxVizHeight": 300,
         "minVizHeight": 10,
         "minVizWidth": 0,
@@ -1424,12 +1475,12 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "12.3.0",
       "targets": [
         {
           "datasource": "$datasource",
           "editorMode": "code",
-          "expr": "avg by(host) (nginx_ingress_controller_ssl_expire_time_seconds{cluster_id=~\"$cluster\", namespace=~\"$namespace\", app=~\"$app\", controller_class=~\"$controller_class\", controller_pod=~\"$controller\"}) - time()",
+          "expr": "avg by(host) (nginx_ingress_controller_ssl_expire_time_seconds{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\", controller_pod=~\"$controller\"}) - time()",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1455,8 +1506,9 @@
       "type": "bargauge"
     }
   ],
-  "refresh": "30s",
-  "schemaVersion": 39,
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
   "tags": [
     "nginx",
     "topic:management-cluster",
@@ -1467,37 +1519,30 @@
     "list": [
       {
         "current": {
-          "selected": false,
           "text": "default",
           "value": "default"
         },
-        "hide": 0,
         "includeAll": false,
         "label": "Data source",
-        "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
-          "selected": false,
-          "text": "grizzly",
-          "value": "grizzly"
+          "text": "graveler",
+          "value": "graveler"
         },
         "datasource": {
           "type": "prometheus",
           "uid": "$datasource"
         },
         "definition": "",
-        "hide": 0,
         "includeAll": false,
         "label": "Cluster",
-        "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
@@ -1506,17 +1551,12 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 5,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1524,92 +1564,23 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Namespace",
-        "multi": false,
-        "name": "namespace",
-        "options": [],
-        "query": {
-          "query": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\"}, controller_namespace)",
-          "refId": "Prometheus-namespace-Variable-Query"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": ".*",
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "$datasource"
-        },
-        "definition": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\",namespace=~\"$namespace\"}, app) ",
-        "hide": 0,
-        "includeAll": true,
-        "label": "App",
-        "multi": false,
-        "name": "app",
-        "options": [],
-        "query": {
-          "query": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\",namespace=~\"$namespace\"}, app) ",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": ".*",
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "$datasource"
-        },
-        "definition": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\",namespace=~\"$namespace\"}, controller_class)",
-        "hide": 0,
+        "definition": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\"},controller_class)",
         "includeAll": true,
         "label": "Controller Class",
-        "multi": false,
         "name": "controller_class",
         "options": [],
         "query": {
-          "query": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\",namespace=~\"$namespace\"}, controller_class)",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\"},controller_class)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1617,30 +1588,23 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\"}, controller_pod) ",
-        "hide": 0,
+        "definition": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\"},controller_pod)",
         "includeAll": true,
         "label": "Controller",
-        "multi": false,
         "name": "controller",
         "options": [],
         "query": {
-          "query": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\"}, controller_pod) ",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(nginx_ingress_controller_config_hash{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\"},controller_pod)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1648,25 +1612,44 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller=~\"$controller\"}, ingress) ",
-        "hide": 0,
+        "definition": "label_values(nginx_ingress_controller_requests{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\", controller_pod=~\"$controller\"},exported_namespace)",
         "includeAll": true,
-        "label": "Ingress",
-        "multi": false,
-        "name": "ingress",
+        "label": "Ingress namespace",
+        "name": "ingress_namespace",
         "options": [],
         "query": {
-          "query": "label_values(nginx_ingress_controller_requests{cluster_id=~\"$cluster\",namespace=~\"$namespace\",app=~\"$app\",controller_class=~\"$controller_class\",controller=~\"$controller\"}, ingress) ",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(nginx_ingress_controller_requests{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\", controller_pod=~\"$controller\"},exported_namespace)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(nginx_ingress_controller_requests{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\", controller=~\"$controller\", exported_namespace=~\"$ingress_namespace\"},ingress)",
+        "includeAll": true,
+        "label": "Ingress",
+        "name": "ingress",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(nginx_ingress_controller_requests{cluster_id=~\"$cluster\", controller_class=~\"$controller_class\", controller=~\"$controller\", exported_namespace=~\"$ingress_namespace\"},ingress)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "sort": 2,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       }
     ]
   },
@@ -1674,7 +1657,6 @@
     "from": "now-30m",
     "to": "now"
   },
-  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {
     "refresh_intervals": [
       "5s",
@@ -1687,22 +1669,10 @@
       "1h",
       "2h",
       "1d"
-    ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
     ]
   },
   "timezone": "UTC",
   "title": "NGINX Ingress controller",
   "uid": "VkZSFr6nk",
-  "version": 1,
-  "weekStart": ""
+  "version": 2
 }

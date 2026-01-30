@@ -9,10 +9,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Improve Network Analysis Dashboard Performance
+- Improve Network Traffic Analysis Dashboard Performance
   - Change Pie Charts query types from range to instant
-  - Add topk(10, ...) to limit results and enhance load times
-  - Legend set to "Unknown" when no value is found
+  - Improve performance by re-using panel queries, which gladly reduces the number of queries made to the backend, and ease maintenance, but unfortunately does not bring significant performances improvements.
+  - Change the top list panels to use pagination rather than only showing top 10 elements
+  - Change bottom graphs to use stacked lines and added list of values + total count
+  - Change destination pie charts to only show top 10 destinations
+  - Remove the per-namespace section which was merely a duplicate of the top one with additional namespace filter. All panels now have a namespace filter which default to all namespace, therefore keeping the old behavior of the top panels and also allowing behavior of the bottom ones at the same time.
+  - Set maximum datapoints to 500 and minimal interval to 2mn
+  - Move subnets regex to a constant
+  - Add Network Traffic Analysis Overview dashboard
+  - Add links between both Network Traffic Analysis dashboards
+  - Add `Include non-namespaced` toggle to filter/include non-namespaced network traffic
+  - Add explanation note on namespace filtering, and k8s label edge cases in metrics
+  - Add annotations for CiliumNetworkPolicies events
+  - Change Legend set to "unknown" when no value is found
+  - Show percentage and all values in tooltip on destination panels
+- NGINX Ingress controller dashboard: reworked variables
+  - removed `app` selector
+  - removed `namespace` selector
+  - added `ingress namespace` selector
+
+### Removed
+
+- Remove `logging-operator` related data as it is now deprecated.
 
 ## [4.12.0] - 2026-01-20
 
