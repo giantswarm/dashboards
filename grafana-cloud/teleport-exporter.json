@@ -10,10 +10,10 @@
     "url": "/d/teleport-exporter/teleport-exporter",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2025-12-17T13:43:49Z",
-    "updated": "2025-12-17T14:25:06Z",
-    "updatedBy": "spyros@giantswarm.io",
+    "updated": "2026-01-24T00:11:39Z",
+    "updatedBy": "zach@giantswarm.io",
     "createdBy": "spyros@giantswarm.io",
-    "version": 5,
+    "version": 82,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -51,13 +51,26 @@
           "iconColor": "rgba(0, 211, 255, 1)",
           "name": "Annotations & Alerts",
           "type": "dashboard"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "enable": true,
+          "expr": "changes(teleport_exporter_up[5m]) > 0",
+          "hide": false,
+          "iconColor": "red",
+          "name": "Connection State Changes",
+          "tagKeys": "status",
+          "titleFormat": "Connection state changed"
         }
       ]
     },
-    "description": "Comprehensive monitoring dashboard for Teleport Exporter - track SSH nodes, Kubernetes clusters, databases, and applications managed by Teleport",
+    "description": "Monitoring dashboard for Teleport Exporter - track SSH nodes, Kubernetes clusters, databases, and applications managed by Teleport",
     "editable": true,
     "fiscalYearStartMonth": 0,
-    "graphTooltip": 1,
+    "graphTooltip": 2,
     "id": 1688984633106432,
     "links": [
       {
@@ -67,8 +80,8 @@
         "keepTime": false,
         "tags": [],
         "targetBlank": true,
-        "title": "Teleport Documentation",
-        "tooltip": "",
+        "title": "Teleport Docs",
+        "tooltip": "Open Teleport documentation",
         "type": "link",
         "url": "https://goteleport.com/docs/"
       }
@@ -82,9 +95,9 @@
           "x": 0,
           "y": 0
         },
-        "id": 200,
+        "id": 1,
         "panels": [],
-        "title": "Environment Overview",
+        "title": "Overview",
         "type": "row"
       },
       {
@@ -92,391 +105,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "description": "Quick overview of all environments - click on a job to filter",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "center",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": false,
-              "footer": {
-                "reducers": []
-              },
-              "inspect": false
-            },
-            "mappings": [
-              {
-                "options": {
-                  "0": {
-                    "color": "dark-red",
-                    "index": 1,
-                    "text": "DOWN"
-                  },
-                  "1": {
-                    "color": "dark-green",
-                    "index": 0,
-                    "text": "UP"
-                  }
-                },
-                "type": "value"
-              }
-            ],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-red",
-                  "value": 0
-                },
-                {
-                  "color": "dark-green",
-                  "value": 1
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Status"
-              },
-              "properties": [
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "mode": "basic",
-                    "type": "color-background"
-                  }
-                },
-                {
-                  "id": "custom.width",
-                  "value": 100
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Environment"
-              },
-              "properties": [
-                {
-                  "id": "links",
-                  "value": [
-                    {
-                      "title": "Filter to ${__data.fields.Environment}",
-                      "url": "/d/teleport-exporter?var-cluster_id=${__data.fields.Environment}&${__url_time_range}"
-                    }
-                  ]
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "color-text"
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "light-blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Time"
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 5,
-          "w": 8,
-          "x": 0,
-          "y": 1
-        },
-        "id": 201,
-        "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "Environment"
-            }
-          ]
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "teleport_exporter_up",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "All Environments Status",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "__name__": true,
-                "cluster_name": true,
-                "instance": true,
-                "job": true
-              },
-              "includeByName": {},
-              "indexByName": {
-                "Time": 0,
-                "Value": 4,
-                "__name__": 1,
-                "cluster_id": 5,
-                "cluster_name": 3,
-                "instance": 2
-              },
-              "renameByName": {
-                "Value": "Status",
-                "cluster_id": "Environment"
-              }
-            }
-          }
-        ],
-        "type": "table"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Resource counts per environment/job",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "min": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "SSH Nodes"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Kubernetes"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "purple",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Databases"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Applications"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "green",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 5,
-          "w": 16,
-          "x": 8,
-          "y": 1
-        },
-        "id": 202,
-        "options": {
-          "barRadius": 0.1,
-          "barWidth": 0.8,
-          "fullHighlight": false,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "orientation": "horizontal",
-          "showValue": "auto",
-          "stacking": "normal",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_nodes_total) by (cluster_id)",
-            "instant": true,
-            "legendFormat": "SSH Nodes",
-            "range": false,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_kubernetes_clusters_total) by (cluster_id)",
-            "instant": true,
-            "legendFormat": "Kubernetes",
-            "range": false,
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_databases_total) by (cluster_id)",
-            "instant": true,
-            "legendFormat": "Databases",
-            "range": false,
-            "refId": "C"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_apps_total) by (cluster_id)",
-            "instant": true,
-            "legendFormat": "Applications",
-            "range": false,
-            "refId": "D"
-          }
-        ],
-        "title": "Resources by Environment",
-        "type": "barchart"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 6
-        },
-        "id": 100,
-        "panels": [],
-        "title": "Health & Status",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Whether the exporter can successfully connect to Teleport",
+        "description": "Connection status to Teleport cluster",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -488,12 +117,12 @@
                   "0": {
                     "color": "dark-red",
                     "index": 1,
-                    "text": "DOWN"
+                    "text": "DISCONNECTED"
                   },
                   "1": {
                     "color": "dark-green",
                     "index": 0,
-                    "text": "UP"
+                    "text": "CONNECTED"
                   }
                 },
                 "type": "value"
@@ -517,11 +146,11 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 3,
+          "w": 4,
           "x": 0,
-          "y": 7
+          "y": 1
         },
-        "id": 1,
+        "id": 2,
         "options": {
           "colorMode": "background",
           "graphMode": "none",
@@ -539,7 +168,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-21024277089.patch2",
         "targets": [
           {
             "datasource": {
@@ -547,14 +176,13 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "teleport_exporter_up{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}",
-            "instant": true,
+            "expr": "teleport_exporter_up",
             "legendFormat": "__auto",
-            "range": false,
+            "range": true,
             "refId": "A"
           }
         ],
-        "title": "Teleport Connection",
+        "title": "Teleport Status",
         "type": "stat"
       },
       {
@@ -562,7 +190,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "description": "Time since last successful metrics collection",
+        "description": "Duration of last metrics collection",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -573,95 +201,16 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "dark-green",
+                  "color": "green",
                   "value": 0
                 },
                 {
-                  "color": "dark-yellow",
-                  "value": 120
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 300
-                },
-                {
-                  "color": "dark-red",
-                  "value": 600
-                }
-              ]
-            },
-            "unit": "s"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 3,
-          "x": 3,
-          "y": 7
-        },
-        "id": 2,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "time() - teleport_exporter_last_successful_collect_timestamp_seconds",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Time Since Last Collect",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "P50, P90, P99 collection duration from histogram",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-yellow",
+                  "color": "yellow",
                   "value": 5
                 },
                 {
-                  "color": "dark-red",
-                  "value": 10
+                  "color": "red",
+                  "value": 30
                 }
               ]
             },
@@ -671,9 +220,9 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 3,
-          "x": 6,
-          "y": 7
+          "w": 4,
+          "x": 4,
+          "y": 1
         },
         "id": 3,
         "options": {
@@ -693,7 +242,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-21024277089.patch2",
         "targets": [
           {
             "datasource": {
@@ -701,339 +250,13 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "histogram_quantile(0.95, sum(rate(teleport_exporter_collect_duration_seconds_bucket[$__rate_interval])) by (le))",
-            "instant": true,
-            "legendFormat": "p95",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Collection Duration (p95)",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Total collection errors across all resource types",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-yellow",
-                  "value": 1
-                },
-                {
-                  "color": "dark-red",
-                  "value": 10
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 3,
-          "x": 9,
-          "y": 7
-        },
-        "id": 4,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(increase(teleport_exporter_collect_errors_total[$__range])) or vector(0)",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Errors (in range)",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Exporter version and build information",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "text",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 6,
-          "x": 12,
-          "y": 7
-        },
-        "id": 5,
-        "options": {
-          "colorMode": "none",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "/^version$/",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "value",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "teleport_exporter_build_info",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Exporter Version",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Value": true,
-                "__name__": true,
-                "build_date": true,
-                "commit": true,
-                "go_version": true,
-                "instance": true,
-                "job": true
-              },
-              "includeByName": {},
-              "indexByName": {},
-              "renameByName": {}
-            }
-          }
-        ],
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Teleport cluster name",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "text",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 6,
-          "x": 18,
-          "y": 7
-        },
-        "id": 6,
-        "options": {
-          "colorMode": "none",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "/^cluster_name$/",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "value",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "teleport_exporter_cluster_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Teleport Cluster",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Value": true,
-                "__name__": true,
-                "instance": true,
-                "job": true
-              },
-              "includeByName": {},
-              "indexByName": {},
-              "renameByName": {}
-            }
-          }
-        ],
-        "type": "stat"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 11
-        },
-        "id": 101,
-        "panels": [],
-        "title": "Resource Overview",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Total SSH nodes registered in Teleport",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 5,
-          "w": 6,
-          "x": 0,
-          "y": 12
-        },
-        "id": 10,
-        "options": {
-          "colorMode": "background_solid",
-          "graphMode": "area",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": true,
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_nodes_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "teleport_exporter_collect_duration_seconds{cluster_name=~\"$cluster\"}",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "SSH Nodes",
+        "title": "Collection Duration",
         "type": "stat"
       },
       {
@@ -1041,139 +264,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "description": "Total Kubernetes clusters registered in Teleport",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "purple",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 5,
-          "w": 6,
-          "x": 6,
-          "y": 12
-        },
-        "id": 11,
-        "options": {
-          "colorMode": "background_solid",
-          "graphMode": "area",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": true,
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_kubernetes_clusters_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Kubernetes Clusters",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Total databases registered in Teleport",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "orange",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 5,
-          "w": 6,
-          "x": 12,
-          "y": 12
-        },
-        "id": 12,
-        "options": {
-          "colorMode": "background_solid",
-          "graphMode": "area",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": true,
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_databases_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Databases",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Total applications registered in Teleport",
+        "description": "Time since last successful collection",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1186,23 +277,31 @@
                 {
                   "color": "green",
                   "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 300
+                },
+                {
+                  "color": "red",
+                  "value": 600
                 }
               ]
             },
-            "unit": "none"
+            "unit": "s"
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
-          "w": 6,
-          "x": 18,
-          "y": 12
+          "h": 4,
+          "w": 4,
+          "x": 8,
+          "y": 1
         },
-        "id": 13,
+        "id": 5,
         "options": {
-          "colorMode": "background_solid",
-          "graphMode": "area",
+          "colorMode": "value",
+          "graphMode": "none",
           "justifyMode": "center",
           "orientation": "auto",
           "percentChangeColorMode": "standard",
@@ -1213,11 +312,11 @@
             "fields": "",
             "values": false
           },
-          "showPercentChange": true,
+          "showPercentChange": false,
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-21024277089.patch2",
         "targets": [
           {
             "datasource": {
@@ -1225,34 +324,21 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_apps_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "time() - teleport_exporter_last_successful_collect_timestamp_seconds{cluster_name=~\"$cluster\"}",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Applications",
+        "title": "Time Since Collection",
         "type": "stat"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 17
-        },
-        "id": 102,
-        "panels": [],
-        "title": "Resource Trends",
-        "type": "row"
       },
       {
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "description": "All resource counts over time in a single view",
+        "description": "Connection uptime over time",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1267,7 +353,834 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 15,
+              "fillOpacity": 30,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "stepAfter",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "dark-red",
+                    "index": 1,
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "color": "dark-green",
+                    "index": 0,
+                    "text": "UP"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 12,
+          "x": 12,
+          "y": 1
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "teleport_exporter_up",
+            "legendFormat": "Connection Status",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Connection History",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "id": 50,
+        "panels": [],
+        "title": "Cluster Changes",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Clusters that exist now but were not present during the lookback window (newly registered)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "footer": {
+                "reducers": [
+                  "countAll"
+                ]
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "kube_cluster_name"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Cluster Added"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 400
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Environment"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 349
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        },
+        "id": 51,
+        "options": {
+          "cellHeight": "sm",
+          "enablePagination": false,
+          "showHeader": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(last_over_time(teleport_exporter_kubernetes_cluster_info{}[$lookback_period] offset 1m)) unless  teleport_exporter_kubernetes_cluster_info{}",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Clusters Added (Last $lookback_period)",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true,
+                "__name__": true,
+                "cluster_name": true,
+                "cluster_type": true,
+                "endpoint": true,
+                "instance": true,
+                "job": true,
+                "namespace": true,
+                "prometheus": true,
+                "prometheus_replica": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "cluster_id": "Environment",
+                "kube_cluster_name": "Cluster Added"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Clusters that were present during the lookback window but no longer exist (recently deregistered)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "footer": {
+                "reducers": [
+                  "countAll"
+                ]
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "kube_cluster_name"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Cluster Removed"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 400
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Environment"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 291
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 6
+        },
+        "id": 52,
+        "options": {
+          "cellHeight": "sm",
+          "enablePagination": false,
+          "showHeader": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(last_over_time(teleport_exporter_kubernetes_cluster_info{}[$lookback_period] offset 1m))\n  unless\n  teleport_exporter_kubernetes_cluster_info{}",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Clusters Removed (Last $lookback_period)",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true,
+                "__name__": true,
+                "cluster_name": true,
+                "cluster_type": true,
+                "endpoint": true,
+                "instance": true,
+                "job": true,
+                "namespace": true,
+                "prometheus": true,
+                "prometheus_replica": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "cluster_id": "Environment",
+                "kube_cluster_name": "Cluster Removed"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 12
+        },
+        "id": 10,
+        "panels": [],
+        "title": "Resource Totals",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Total SSH nodes",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "min": 2500,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#3274D9",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 13
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": true,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_nodes_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "SSH Nodes",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Total Kubernetes clusters",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "min": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#A352CC",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 4,
+          "y": 13
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": true,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_kubernetes_clusters_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "K8s Clusters",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Management clusters (no hyphen in name)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#3871DC",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 8,
+          "y": 13
+        },
+        "id": 121,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_kubernetes_management_clusters_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "MC",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Workload clusters (has hyphen in name)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#8F3BB8",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 12,
+          "y": 13
+        },
+        "id": 122,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_kubernetes_workload_clusters_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "WC",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Total databases",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#FF9830",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 16,
+          "y": 13
+        },
+        "id": 13,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": true,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_databases_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Databases",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Total applications",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#73BF69",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 20,
+          "y": 13
+        },
+        "id": 14,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": true,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_apps_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Applications",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 18
+        },
+        "id": 20,
+        "panels": [],
+        "title": "Trends Over Time",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "All resource totals over time",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 20,
               "gradientMode": "opacity",
               "hideFrom": {
                 "legend": false,
@@ -1293,7 +1206,6 @@
               }
             },
             "mappings": [],
-            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1315,7 +1227,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "blue",
+                    "fixedColor": "#3274D9",
                     "mode": "fixed"
                   }
                 }
@@ -1324,13 +1236,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Kubernetes Clusters"
+                "options": "K8s Clusters"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "purple",
+                    "fixedColor": "#A352CC",
                     "mode": "fixed"
                   }
                 }
@@ -1345,7 +1257,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "orange",
+                    "fixedColor": "#FF9830",
                     "mode": "fixed"
                   }
                 }
@@ -1360,7 +1272,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "green",
+                    "fixedColor": "#73BF69",
                     "mode": "fixed"
                   }
                 }
@@ -1370,21 +1282,20 @@
         },
         "gridPos": {
           "h": 8,
-          "w": 16,
+          "w": 12,
           "x": 0,
-          "y": 18
+          "y": 19
         },
-        "id": 20,
+        "id": 21,
         "options": {
           "legend": {
             "calcs": [
               "lastNotNull",
-              "min",
-              "max",
-              "mean"
+              "mean",
+              "max"
             ],
             "displayMode": "table",
-            "placement": "right",
+            "placement": "bottom",
             "showLegend": true
           },
           "tooltip": {
@@ -1393,7 +1304,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-21024277089.patch2",
         "targets": [
           {
             "datasource": {
@@ -1401,7 +1312,7 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_nodes_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "sum(teleport_exporter_nodes_total{cluster_name=~\"$cluster\"})",
             "legendFormat": "SSH Nodes",
             "range": true,
             "refId": "A"
@@ -1412,8 +1323,8 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_kubernetes_clusters_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "legendFormat": "Kubernetes Clusters",
+            "expr": "sum(teleport_exporter_kubernetes_clusters_total{cluster_name=~\"$cluster\"})",
+            "legendFormat": "K8s Clusters",
             "range": true,
             "refId": "B"
           },
@@ -1423,7 +1334,7 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_databases_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "sum(teleport_exporter_databases_total{cluster_name=~\"$cluster\"})",
             "legendFormat": "Databases",
             "range": true,
             "refId": "C"
@@ -1434,13 +1345,13 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_apps_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "sum(teleport_exporter_apps_total{cluster_name=~\"$cluster\"})",
             "legendFormat": "Applications",
             "range": true,
             "refId": "D"
           }
         ],
-        "title": "All Resources Over Time",
+        "title": "Resource Totals Over Time",
         "type": "timeseries"
       },
       {
@@ -1448,7 +1359,162 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "description": "Current distribution of all Teleport resources",
+        "description": "MC vs WC Kubernetes cluster trends",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 30,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Management"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#3871DC",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Workload"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 19
+        },
+        "id": 22,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_kubernetes_management_clusters_total{cluster_name=~\"$cluster\"})",
+            "legendFormat": "Management",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_kubernetes_workload_clusters_total{cluster_name=~\"$cluster\"})",
+            "legendFormat": "Workload",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Kubernetes Clusters (MC vs WC)",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 27
+        },
+        "id": 30,
+        "panels": [],
+        "title": "Breakdowns",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "MC vs WC cluster distribution",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1467,13 +1533,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "SSH Nodes"
+                "options": "Management"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "blue",
+                    "fixedColor": "#3871DC",
                     "mode": "fixed"
                   }
                 }
@@ -1482,43 +1548,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Kubernetes Clusters"
+                "options": "Workload"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "purple",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Databases"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Applications"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "green",
+                    "fixedColor": "#8F3BB8",
                     "mode": "fixed"
                   }
                 }
@@ -1528,19 +1564,20 @@
         },
         "gridPos": {
           "h": 8,
-          "w": 8,
-          "x": 16,
-          "y": 18
+          "w": 6,
+          "x": 0,
+          "y": 28
         },
-        "id": 21,
+        "id": 33,
         "options": {
           "displayLabels": [
             "name",
-            "value"
+            "value",
+            "percent"
           ],
           "legend": {
             "displayMode": "table",
-            "placement": "bottom",
+            "placement": "right",
             "showLegend": true,
             "values": [
               "value",
@@ -1558,11 +1595,11 @@
           "sort": "desc",
           "tooltip": {
             "hideZeros": false,
-            "mode": "multi",
+            "mode": "single",
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-21024277089.patch2",
         "targets": [
           {
             "datasource": {
@@ -1570,9 +1607,9 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_nodes_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "sum(teleport_exporter_kubernetes_management_clusters_total{cluster_name=~\"$cluster\"}) or vector(0)",
             "instant": true,
-            "legendFormat": "SSH Nodes",
+            "legendFormat": "Management",
             "range": false,
             "refId": "A"
           },
@@ -1582,738 +1619,41 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "sum(teleport_exporter_kubernetes_clusters_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
+            "expr": "sum(teleport_exporter_kubernetes_workload_clusters_total{cluster_name=~\"$cluster\"}) or vector(0)",
             "instant": true,
-            "legendFormat": "Kubernetes Clusters",
+            "legendFormat": "Workload",
             "range": false,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_databases_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "instant": true,
-            "legendFormat": "Databases",
-            "range": false,
-            "refId": "C"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_apps_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "instant": true,
-            "legendFormat": "Applications",
-            "range": false,
-            "refId": "D"
           }
         ],
-        "title": "Resource Distribution",
+        "title": "MC vs WC Clusters",
         "type": "piechart"
       },
       {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 26
-        },
-        "id": 103,
-        "panels": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "description": "Collection duration percentiles over time",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 10,
-                  "gradientMode": "opacity",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "showValues": false,
-                  "spanNulls": false,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "line+area"
-                  }
-                },
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "transparent",
-                      "value": 0
-                    },
-                    {
-                      "color": "red",
-                      "value": 10
-                    }
-                  ]
-                },
-                "unit": "s"
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "p50"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "green",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "p90"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "yellow",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "p99"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "red",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 27
-            },
-            "id": 30,
-            "options": {
-              "legend": {
-                "calcs": [
-                  "lastNotNull",
-                  "mean",
-                  "max"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "desc"
-              }
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-                },
-                "editorMode": "code",
-                "expr": "histogram_quantile(0.50, sum(rate(teleport_exporter_collect_duration_seconds_bucket[$__rate_interval])) by (le))",
-                "legendFormat": "p50",
-                "range": true,
-                "refId": "A"
-              },
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-                },
-                "editorMode": "code",
-                "expr": "histogram_quantile(0.90, sum(rate(teleport_exporter_collect_duration_seconds_bucket[$__rate_interval])) by (le))",
-                "legendFormat": "p90",
-                "range": true,
-                "refId": "B"
-              },
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-                },
-                "editorMode": "code",
-                "expr": "histogram_quantile(0.99, sum(rate(teleport_exporter_collect_duration_seconds_bucket[$__rate_interval])) by (le))",
-                "legendFormat": "p99",
-                "range": true,
-                "refId": "C"
-              }
-            ],
-            "title": "Collection Duration (Histogram Quantiles)",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "description": "Collection errors by resource type over time",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "bars",
-                  "fillOpacity": 80,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "showValues": false,
-                  "spanNulls": false,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "normal"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    }
-                  ]
-                },
-                "unit": "none"
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "cluster"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "dark-red",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "nodes"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "blue",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "kubernetes"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "purple",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "databases"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "orange",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "apps"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "green",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 12,
-              "y": 27
-            },
-            "id": 31,
-            "options": {
-              "legend": {
-                "calcs": [
-                  "sum"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "desc"
-              }
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-                },
-                "editorMode": "code",
-                "expr": "increase(teleport_exporter_collect_errors_total[$__rate_interval])",
-                "legendFormat": "{{resource_type}}",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "Collection Errors by Resource Type",
-            "type": "timeseries"
-          }
-        ],
-        "title": "Performance & Errors",
-        "type": "row"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 27
-        },
-        "id": 104,
-        "panels": [],
-        "title": "Kubernetes Clusters",
-        "type": "row"
-      },
-      {
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "description": "Number of Kubernetes clusters over time",
+        "description": "Node identification status",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "palette-classic"
             },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 20,
-              "gradientMode": "opacity",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
               }
             },
-            "mappings": [],
-            "min": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "A"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "purple",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 0,
-          "y": 28
-        },
-        "id": 40,
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull",
-              "min",
-              "max"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          }
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_kubernetes_clusters_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "legendFormat": "Total Kubernetes Clusters",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Kubernetes Clusters Over Time",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "List of all Kubernetes clusters registered in Teleport",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true,
-              "footer": {
-                "reducers": [
-                  "countAll"
-                ]
-              },
-              "inspect": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            }
+            "mappings": []
           },
           "overrides": [
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value"
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Time"
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Kubernetes Cluster"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 300
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 12,
-          "y": 28
-        },
-        "id": 41,
-        "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "Kubernetes Cluster"
-            }
-          ]
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "teleport_exporter_kubernetes_cluster_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Kubernetes Clusters List",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Value": true,
-                "__name__": true,
-                "instance": true,
-                "job": true
-              },
-              "includeByName": {},
-              "indexByName": {},
-              "renameByName": {
-                "cluster_name": "Teleport Cluster",
-                "kube_cluster_name": "Kubernetes Cluster"
-              }
-            }
-          }
-        ],
-        "type": "table"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 36
-        },
-        "id": 105,
-        "panels": [],
-        "title": "Applications",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Number of applications over time",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 20,
-              "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "min": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "A"
+                "options": "Identified"
               },
               "properties": [
                 {
@@ -2324,136 +1664,17 @@
                   }
                 }
               ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 0,
-          "y": 37
-        },
-        "id": 50,
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull",
-              "min",
-              "max"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          }
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_apps_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "legendFormat": "Total Applications",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Applications Over Time",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "List of all applications registered in Teleport",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true,
-              "footer": {
-                "reducers": [
-                  "countAll"
-                ]
-              },
-              "inspect": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Value"
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
             },
             {
               "matcher": {
                 "id": "byName",
-                "options": "Time"
+                "options": "Unknown"
               },
               "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Public Address"
-              },
-              "properties": [
-                {
-                  "id": "links",
-                  "value": [
-                    {
-                      "targetBlank": true,
-                      "title": "Open Application",
-                      "url": "https://${__data.fields[\"Public Address\"]}"
-                    }
-                  ]
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "color-text"
-                  }
-                },
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "light-blue",
+                    "fixedColor": "orange",
                     "mode": "fixed"
                   }
                 }
@@ -2463,22 +1684,42 @@
         },
         "gridPos": {
           "h": 8,
-          "w": 12,
-          "x": 12,
-          "y": 37
+          "w": 6,
+          "x": 6,
+          "y": 28
         },
-        "id": 51,
+        "id": 34,
         "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "Application Name"
-            }
-          ]
+          "displayLabels": [
+            "name",
+            "value",
+            "percent"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value",
+              "percent"
+            ]
+          },
+          "pieType": "donut",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-21024277089.patch2",
         "targets": [
           {
             "datasource": {
@@ -2486,37 +1727,179 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "teleport_exporter_app_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}",
-            "format": "table",
+            "expr": "sum(teleport_exporter_nodes_identified_total{cluster_name=~\"$cluster\"}) or vector(0)",
             "instant": true,
-            "legendFormat": "__auto",
+            "legendFormat": "Identified",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(teleport_exporter_nodes_unidentified_total{cluster_name=~\"$cluster\"}) or vector(0)",
+            "instant": true,
+            "legendFormat": "Unknown",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "Node Identification",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Databases by protocol",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 12,
+          "y": 28
+        },
+        "id": 31,
+        "options": {
+          "displayLabels": [
+            "name",
+            "value"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value",
+              "percent"
+            ]
+          },
+          "pieType": "donut",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum by (protocol) (teleport_exporter_databases_by_protocol_total{cluster_name=~\"$cluster\"})",
+            "instant": true,
+            "legendFormat": "{{protocol}}",
             "range": false,
             "refId": "A"
           }
         ],
-        "title": "Applications List",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Value": true,
-                "__name__": true,
-                "instance": true,
-                "job": true
-              },
-              "includeByName": {},
-              "indexByName": {},
-              "renameByName": {
-                "app_name": "Application Name",
-                "cluster_name": "Teleport Cluster",
-                "public_addr": "Public Address"
+        "title": "Databases by Protocol",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "Databases by type",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
               }
-            }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 18,
+          "y": 28
+        },
+        "id": 32,
+        "options": {
+          "displayLabels": [
+            "name",
+            "value"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value",
+              "percent"
+            ]
+          },
+          "pieType": "donut",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-21024277089.patch2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum by (type) (teleport_exporter_databases_by_type_total{cluster_name=~\"$cluster\"})",
+            "instant": true,
+            "legendFormat": "{{type}}",
+            "range": false,
+            "refId": "A"
           }
         ],
-        "type": "table"
+        "title": "Databases by Type",
+        "type": "piechart"
       },
       {
         "collapsed": true,
@@ -2524,16 +1907,16 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 45
+          "y": 36
         },
-        "id": 106,
+        "id": 40,
         "panels": [
           {
             "datasource": {
               "type": "prometheus",
               "uid": "${datasource}"
             },
-            "description": "Number of databases over time",
+            "description": "Number of SSH nodes per Kubernetes cluster",
             "fieldConfig": {
               "defaults": {
                 "color": {
@@ -2545,36 +1928,23 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 20,
-                  "gradientMode": "opacity",
+                  "fillOpacity": 80,
+                  "gradientMode": "none",
                   "hideFrom": {
                     "legend": false,
                     "tooltip": false,
                     "viz": false
                   },
-                  "insertNulls": false,
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "pointSize": 5,
+                  "lineWidth": 0,
                   "scaleDistribution": {
                     "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "showValues": false,
-                  "spanNulls": false,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
                   },
                   "thresholdsStyle": {
                     "mode": "off"
                   }
                 },
+                "fieldMinMax": false,
                 "mappings": [],
-                "min": 0,
                 "thresholds": {
                   "mode": "absolute",
                   "steps": [
@@ -2586,124 +1956,38 @@
                 },
                 "unit": "none"
               },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byFrameRefID",
-                    "options": "A"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "orange",
-                        "mode": "fixed"
-                      }
-                    }
-                  ]
-                }
-              ]
+              "overrides": []
             },
             "gridPos": {
               "h": 8,
-              "w": 8,
+              "w": 12,
               "x": 0,
-              "y": 46
+              "y": 37
             },
-            "id": 60,
+            "id": 41,
             "options": {
+              "barRadius": 0.15,
+              "barWidth": 0.9,
+              "fullHighlight": false,
+              "groupWidth": 0.9,
               "legend": {
-                "calcs": [
-                  "lastNotNull",
-                  "min",
-                  "max"
-                ],
-                "displayMode": "table",
+                "calcs": [],
+                "displayMode": "list",
                 "placement": "bottom",
-                "showLegend": true
+                "showLegend": false
               },
+              "orientation": "horizontal",
+              "showValue": "always",
+              "stacking": "none",
               "tooltip": {
                 "hideZeros": false,
-                "mode": "multi",
-                "sort": "desc"
-              }
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-                },
-                "editorMode": "code",
-                "expr": "sum(teleport_exporter_databases_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-                "legendFormat": "Total Databases",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "Databases Over Time",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "description": "Distribution of databases by protocol (e.g., postgres, mysql, mongodb)",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  }
-                },
-                "mappings": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 8,
-              "y": 46
-            },
-            "id": 61,
-            "options": {
-              "displayLabels": [
-                "name",
-                "value"
-              ],
-              "legend": {
-                "displayMode": "table",
-                "placement": "right",
-                "showLegend": true,
-                "values": [
-                  "value",
-                  "percent"
-                ]
-              },
-              "pieType": "donut",
-              "reduceOptions": {
-                "calcs": [
-                  "lastNotNull"
-                ],
-                "fields": "",
-                "values": false
-              },
-              "sort": "desc",
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
+                "mode": "single",
                 "sort": "none"
-              }
+              },
+              "xTickLabelRotation": 0,
+              "xTickLabelSpacing": 0
             },
-            "pluginVersion": "12.4.0-20160616057",
+            "pluginVersion": "12.4.0-21024277089.patch2",
             "targets": [
               {
                 "datasource": {
@@ -2711,98 +1995,22 @@
                   "uid": "${datasource}"
                 },
                 "editorMode": "code",
-                "expr": "count(teleport_exporter_database_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}) by (protocol)",
+                "expr": "topk(20, teleport_exporter_nodes_by_kubernetes_cluster{cluster_name=~\"$cluster\"})",
                 "instant": true,
-                "legendFormat": "{{protocol}}",
+                "legendFormat": "{{kube_cluster}}",
                 "range": false,
                 "refId": "A"
               }
             ],
-            "title": "Databases by Protocol",
-            "type": "piechart"
+            "title": "Nodes per Kubernetes Cluster",
+            "type": "barchart"
           },
           {
             "datasource": {
               "type": "prometheus",
               "uid": "${datasource}"
             },
-            "description": "Distribution of databases by type (e.g., self-hosted, RDS, Cloud SQL)",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  }
-                },
-                "mappings": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 16,
-              "y": 46
-            },
-            "id": 62,
-            "options": {
-              "displayLabels": [
-                "name",
-                "value"
-              ],
-              "legend": {
-                "displayMode": "table",
-                "placement": "right",
-                "showLegend": true,
-                "values": [
-                  "value",
-                  "percent"
-                ]
-              },
-              "pieType": "donut",
-              "reduceOptions": {
-                "calcs": [
-                  "lastNotNull"
-                ],
-                "fields": "",
-                "values": false
-              },
-              "sort": "desc",
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-                },
-                "editorMode": "code",
-                "expr": "count(teleport_exporter_database_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}) by (type)",
-                "instant": true,
-                "legendFormat": "{{type}}",
-                "range": false,
-                "refId": "A"
-              }
-            ],
-            "title": "Databases by Type",
-            "type": "piechart"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "description": "List of all databases registered in Teleport",
+            "description": "List of all Kubernetes clusters registered in Teleport",
             "fieldConfig": {
               "defaults": {
                 "color": {
@@ -2813,7 +2021,6 @@
                   "cellOptions": {
                     "type": "auto"
                   },
-                  "filterable": true,
                   "footer": {
                     "reducers": [
                       "countAll"
@@ -2833,6 +2040,18 @@
                 }
               },
               "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "kube_cluster_name"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Kubernetes Cluster"
+                    }
+                  ]
+                },
                 {
                   "matcher": {
                     "id": "byName",
@@ -2856,83 +2075,22 @@
                       "value": true
                     }
                   ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "Protocol"
-                  },
-                  "properties": [
-                    {
-                      "id": "custom.cellOptions",
-                      "value": {
-                        "mode": "basic",
-                        "type": "color-background"
-                      }
-                    },
-                    {
-                      "id": "mappings",
-                      "value": [
-                        {
-                          "options": {
-                            "postgres": {
-                              "color": "blue",
-                              "index": 0
-                            }
-                          },
-                          "type": "value"
-                        },
-                        {
-                          "options": {
-                            "mysql": {
-                              "color": "orange",
-                              "index": 1
-                            }
-                          },
-                          "type": "value"
-                        },
-                        {
-                          "options": {
-                            "mongodb": {
-                              "color": "green",
-                              "index": 2
-                            }
-                          },
-                          "type": "value"
-                        },
-                        {
-                          "options": {
-                            "redis": {
-                              "color": "red",
-                              "index": 3
-                            }
-                          },
-                          "type": "value"
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
             },
             "gridPos": {
-              "h": 10,
-              "w": 24,
-              "x": 0,
-              "y": 77
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 37
             },
-            "id": 63,
+            "id": 42,
             "options": {
               "cellHeight": "sm",
-              "showHeader": true,
-              "sortBy": [
-                {
-                  "desc": false,
-                  "displayName": "Database Name"
-                }
-              ]
+              "enablePagination": true,
+              "showHeader": true
             },
-            "pluginVersion": "12.4.0-20160616057",
+            "pluginVersion": "12.4.0-21024277089.patch2",
             "targets": [
               {
                 "datasource": {
@@ -2940,7 +2098,7 @@
                   "uid": "${datasource}"
                 },
                 "editorMode": "code",
-                "expr": "teleport_exporter_database_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}",
+                "expr": "teleport_exporter_kubernetes_cluster_info{cluster_name=~\"$cluster\"}",
                 "format": "table",
                 "instant": true,
                 "legendFormat": "__auto",
@@ -2948,7 +2106,7 @@
                 "refId": "A"
               }
             ],
-            "title": "Databases List",
+            "title": "Kubernetes Clusters",
             "transformations": [
               {
                 "id": "organize",
@@ -2957,26 +2115,12 @@
                     "Time": true,
                     "Value": true,
                     "__name__": true,
-                    "instance": true,
-                    "job": true
+                    "cluster_name": true
                   },
                   "includeByName": {},
-                  "indexByName": {
-                    "Time": 0,
-                    "Value": 6,
-                    "__name__": 1,
-                    "cluster_name": 3,
-                    "database_name": 2,
-                    "instance": 7,
-                    "job": 8,
-                    "protocol": 4,
-                    "type": 5
-                  },
+                  "indexByName": {},
                   "renameByName": {
-                    "cluster_name": "Teleport Cluster",
-                    "database_name": "Database Name",
-                    "protocol": "Protocol",
-                    "type": "Type"
+                    "kube_cluster_name": "Kubernetes Cluster"
                   }
                 }
               }
@@ -2984,472 +2128,17 @@
             "type": "table"
           }
         ],
-        "title": "Databases",
+        "title": "Detailed Views",
         "type": "row"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 46
-        },
-        "id": 107,
-        "panels": [],
-        "title": "SSH Nodes",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Number of SSH nodes over time",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 20,
-              "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "min": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "A"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 0,
-          "y": 47
-        },
-        "id": 70,
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull",
-              "min",
-              "max"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          }
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "sum(teleport_exporter_nodes_total{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"})",
-            "legendFormat": "Total SSH Nodes",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "SSH Nodes Over Time",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Distribution of nodes by subkind (e.g., openssh, teleport)",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": []
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 8,
-          "y": 47
-        },
-        "id": 71,
-        "options": {
-          "displayLabels": [
-            "name",
-            "value"
-          ],
-          "legend": {
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true,
-            "values": [
-              "value",
-              "percent"
-            ]
-          },
-          "pieType": "donut",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "count(teleport_exporter_node_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}) by (subkind)",
-            "instant": true,
-            "legendFormat": "{{subkind}}",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Nodes by Subkind",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "Distribution of nodes by namespace",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": []
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 16,
-          "y": 47
-        },
-        "id": 72,
-        "options": {
-          "displayLabels": [
-            "name",
-            "value"
-          ],
-          "legend": {
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true,
-            "values": [
-              "value",
-              "percent"
-            ]
-          },
-          "pieType": "donut",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "count(teleport_exporter_node_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}) by (namespace)",
-            "instant": true,
-            "legendFormat": "{{namespace}}",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Nodes by Namespace",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "List of all SSH nodes registered in Teleport",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true,
-              "footer": {
-                "reducers": [
-                  "countAll"
-                ]
-              },
-              "inspect": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Value"
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Time"
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom.viz",
-                  "value": true
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Subkind"
-              },
-              "properties": [
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "mode": "basic",
-                    "type": "color-background"
-                  }
-                },
-                {
-                  "id": "mappings",
-                  "value": [
-                    {
-                      "options": {
-                        "openssh": {
-                          "color": "light-blue",
-                          "index": 0
-                        }
-                      },
-                      "type": "value"
-                    },
-                    {
-                      "options": {
-                        "teleport": {
-                          "color": "light-purple",
-                          "index": 1
-                        }
-                      },
-                      "type": "value"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 15,
-          "w": 24,
-          "x": 0,
-          "y": 55
-        },
-        "id": 73,
-        "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "Hostname"
-            }
-          ]
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${datasource}"
-            },
-            "editorMode": "code",
-            "expr": "teleport_exporter_node_info{cluster_id=~\"$cluster_id\", cluster_name=~\"$cluster\"}",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "SSH Nodes List",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Value": true,
-                "__name__": true,
-                "instance": true,
-                "job": true
-              },
-              "includeByName": {},
-              "indexByName": {
-                "Time": 0,
-                "Value": 8,
-                "__name__": 1,
-                "address": 5,
-                "cluster_name": 2,
-                "hostname": 4,
-                "instance": 9,
-                "job": 10,
-                "namespace": 6,
-                "node_name": 3,
-                "subkind": 7
-              },
-              "renameByName": {
-                "address": "Address",
-                "cluster_name": "Teleport Cluster",
-                "hostname": "Hostname",
-                "namespace": "Namespace",
-                "node_name": "Node Name",
-                "subkind": "Subkind"
-              }
-            }
-          }
-        ],
-        "type": "table"
       }
     ],
     "preload": false,
-    "refresh": "30s",
+    "refresh": "1m",
     "schemaVersion": 42,
     "tags": [
       "teleport",
-      "exporter",
-      "infrastructure",
-      "giantswarm"
+      "giantswarm",
+      "monitoring"
     ],
     "templating": {
       "list": [
@@ -3477,17 +2166,14 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "definition": "label_values(teleport_exporter_up, cluster_id)",
-          "description": "Filter by environment (prod, test) - from Prometheus external labels",
+          "definition": "label_values(teleport_exporter_up, cluster_name)",
           "includeAll": true,
-          "label": "Environment",
-          "multi": true,
-          "name": "cluster_id",
+          "label": "Cluster",
+          "name": "cluster",
           "options": [],
           "query": {
-            "qryType": 1,
-            "query": "label_values(teleport_exporter_up, cluster_id)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            "query": "label_values(teleport_exporter_up, cluster_name)",
+            "refId": "StandardVariableQuery"
           },
           "refresh": 2,
           "regex": "",
@@ -3496,44 +2182,30 @@
           "type": "query"
         },
         {
-          "allValue": ".*",
           "current": {
-            "text": "All",
-            "value": "$__all"
+            "text": "24h",
+            "value": "24h"
           },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "definition": "label_values(teleport_exporter_cluster_info{cluster_id=~\"$cluster_id\"}, cluster_name)",
-          "description": "Filter by Teleport cluster name",
-          "includeAll": true,
-          "label": "Teleport Cluster",
-          "multi": true,
-          "name": "cluster",
+          "description": "Lookback period for detecting cluster changes",
+          "includeAll": false,
+          "label": "Change Detection Window",
+          "name": "lookback_period",
           "options": [],
-          "query": {
-            "qryType": 1,
-            "query": "label_values(teleport_exporter_cluster_info{cluster_id=~\"$cluster_id\"}, cluster_name)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
-          },
-          "refresh": 2,
-          "regex": "",
-          "regexApplyTo": "value",
-          "sort": 1,
-          "type": "query"
+          "query": "1h,3h,6h,12h,24h,7d",
+          "type": "custom",
+          "valuesFormat": "csv"
         }
       ]
     },
     "time": {
-      "from": "now-6h",
+      "from": "now-24h",
       "to": "now"
     },
     "timepicker": {},
     "timezone": "utc",
     "title": "Teleport Exporter",
     "uid": "teleport-exporter",
-    "version": 5,
+    "version": 82,
     "weekStart": ""
   }
 }
