@@ -10,10 +10,10 @@
     "url": "/d/observability-platform-product-signals/observability-platform-product-signals",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2025-09-30T07:53:41Z",
-    "updated": "2025-12-17T13:36:21Z",
-    "updatedBy": "quentin@giantswarm.io",
+    "updated": "2026-01-15T16:02:02Z",
+    "updatedBy": "dominik@giantswarm.io",
     "createdBy": "Anonymous",
-    "version": 62,
+    "version": 72,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -98,7 +98,7 @@
         },
         "gridPos": {
           "h": 8,
-          "w": 12,
+          "w": 7,
           "x": 0,
           "y": 1
         },
@@ -120,17 +120,17 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
             "editorMode": "code",
-            "expr": "count(\n    count by (installation, uname) (\n       count_over_time(aggregation:giantswarm:observability:signals:user_logins{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n    )\n)",
+            "expr": "count(\n    count by (installation, uname) (\n       count_over_time(aggregation:giantswarm:observability:signals:user_logins{customer=~\"$customer\", installation=~\"$installation\"}[$__range])\n    )\n)",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Number of non-GS logins - last 30 days",
+        "title": "Number of non-GS logins",
         "type": "stat"
       },
       {
@@ -181,8 +181,8 @@
         },
         "gridPos": {
           "h": 8,
-          "w": 12,
-          "x": 12,
+          "w": 9,
+          "x": 7,
           "y": 1
         },
         "id": 1,
@@ -192,12 +192,12 @@
           "showHeader": true,
           "sortBy": [
             {
-              "desc": false,
-              "displayName": "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}"
+              "desc": true,
+              "displayName": "Count"
             }
           ]
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
             "datasource": {
@@ -207,7 +207,7 @@
             "direction": "backward",
             "editorMode": "code",
             "exemplar": false,
-            "expr": "count by (installation, uname) (\n    count_over_time(aggregation:giantswarm:observability:signals:user_logins{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n)",
+            "expr": "count by (domain) (\n  count by (domain, uname) (\n    count_over_time(\n      (label_replace(aggregation:giantswarm:observability:signals:user_logins{customer=~\"$customer\", installation=~\"$installation\"}, \"domain\", \"$1\", \"uname\", \".*@(.+)\"))[$__range:1h]\n    )\n  )\n)",
             "format": "table",
             "instant": true,
             "queryType": "instant",
@@ -222,7 +222,7 @@
             "options": {
               "excludeByName": {
                 "Time": true,
-                "Value": true,
+                "Value": false,
                 "Value #A": true,
                 "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}": false
               },
@@ -237,6 +237,7 @@
               "orderByMode": "auto",
               "renameByName": {
                 "Time": "",
+                "Value": "Count",
                 "Value #A": "",
                 "uname": "",
                 "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}": ""
@@ -247,237 +248,10 @@
         "type": "table"
       },
       {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 9
-        },
-        "id": 4,
-        "panels": [
-          {
-            "datasource": {
-              "uid": "000000006"
-            },
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "fixedColor": "green",
-                  "mode": "shades"
-                },
-                "mappings": [],
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                }
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 0,
-              "y": 28
-            },
-            "id": 5,
-            "options": {
-              "colorMode": "value",
-              "graphMode": "area",
-              "justifyMode": "center",
-              "orientation": "vertical",
-              "percentChangeColorMode": "standard",
-              "reduceOptions": {
-                "calcs": [
-                  "lastNotNull"
-                ],
-                "fields": "",
-                "values": false
-              },
-              "showPercentChange": false,
-              "textMode": "value_and_name",
-              "wideLayout": true
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sort_desc(sum(aggregation:giantswarm:observability:signals:rules{customer=~\"$customer\", installation=~\"$installation\"}) by (cluster_type))",
-                "format": "time_series",
-                "instant": true,
-                "legendFormat": "__auto",
-                "range": false,
-                "refId": "A"
-              }
-            ],
-            "title": "Rules by cluster type",
-            "type": "stat"
-          },
-          {
-            "datasource": {
-              "uid": "000000006"
-            },
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "fixedColor": "green",
-                  "mode": "shades"
-                },
-                "mappings": [],
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                }
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 8,
-              "y": 28
-            },
-            "id": 8,
-            "options": {
-              "colorMode": "value",
-              "graphMode": "area",
-              "justifyMode": "center",
-              "orientation": "vertical",
-              "percentChangeColorMode": "standard",
-              "reduceOptions": {
-                "calcs": [
-                  "lastNotNull"
-                ],
-                "fields": "",
-                "values": false
-              },
-              "showPercentChange": false,
-              "textMode": "value_and_name",
-              "wideLayout": true
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sort_desc(sum(aggregation:giantswarm:observability:signals:rules{customer=~\"$customer\", installation=~\"$installation\"}) by (creation_mode))",
-                "format": "time_series",
-                "instant": true,
-                "legendFormat": "__auto",
-                "range": false,
-                "refId": "A"
-              }
-            ],
-            "title": "Rules by creation mode",
-            "type": "stat"
-          },
-          {
-            "datasource": {
-              "uid": "000000006"
-            },
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "fixedColor": "green",
-                  "mode": "shades"
-                },
-                "mappings": [],
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                }
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 16,
-              "y": 28
-            },
-            "id": 10,
-            "options": {
-              "colorMode": "value",
-              "graphMode": "area",
-              "justifyMode": "center",
-              "orientation": "vertical",
-              "percentChangeColorMode": "standard",
-              "reduceOptions": {
-                "calcs": [
-                  "lastNotNull"
-                ],
-                "fields": "",
-                "values": false
-              },
-              "showPercentChange": false,
-              "textMode": "value_and_name",
-              "wideLayout": true
-            },
-            "pluginVersion": "12.4.0-20160616057",
-            "targets": [
-              {
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sort_desc(sum(aggregation:giantswarm:observability:signals:rules{customer=~\"$customer\", installation=~\"$installation\"}) by (source_system))",
-                "format": "time_series",
-                "instant": true,
-                "legendFormat": "__auto",
-                "range": false,
-                "refId": "A"
-              }
-            ],
-            "title": "Rules by source",
-            "type": "stat"
-          }
-        ],
-        "title": "Rules",
-        "type": "row"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 10
-        },
-        "id": 11,
-        "panels": [],
-        "title": "Alerting",
-        "type": "row"
-      },
-      {
         "datasource": {
           "uid": "000000006"
         },
+        "description": "List of tenants currently in place",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -488,13 +262,14 @@
               "cellOptions": {
                 "type": "auto"
               },
-              "filterable": true,
+              "filterable": false,
               "footer": {
                 "reducers": []
               },
-              "inspect": false,
-              "wrapHeaderText": false,
-              "wrapText": false
+              "hideFrom": {
+                "viz": false
+              },
+              "inspect": false
             },
             "mappings": [],
             "thresholds": {
@@ -509,124 +284,43 @@
                   "value": 80
                 }
               ]
-            },
-            "unit": "short"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 0,
-          "y": 11
-        },
-        "id": 12,
-        "options": {
-          "cellHeight": "sm",
-          "enablePagination": true,
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "installation"
-            }
-          ]
-        },
-        "pluginVersion": "12.4.0-20160616057",
-        "targets": [
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "sort(\n  sum(\n    max_over_time(aggregation:giantswarm:observability:signals:fired_alerts{customer=~\"$customer\", installation=~\"$installation\"}[24h])\n  ) by (tenant, org)\n  > 0\n)",
-            "format": "table",
-            "instant": true,
-            "interval": "",
-            "legendFormat": "",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "Fired alerts per tenant over 24h",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true
-              },
-              "includeByName": {},
-              "indexByName": {},
-              "renameByName": {}
-            }
-          }
-        ],
-        "type": "table"
-      },
-      {
-        "datasource": {
-          "uid": "000000006"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true,
-              "footer": {
-                "reducers": []
-              },
-              "inspect": false,
-              "wrapText": false
-            },
-            "fieldMinMax": false,
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
             }
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 12,
-          "y": 11
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 1
         },
-        "id": 13,
+        "id": 28,
         "options": {
           "cellHeight": "sm",
-          "enablePagination": true,
+          "frameIndex": 0,
           "showHeader": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sort(\n  max(\n    aggregation:giantswarm:observability:signals:alerting:routes{customer=~\"$customer\", installation=~\"$installation\"}\n  ) by (tenant)\n)",
+            "expr": "group by (tenant) (\n  aggregation:giantswarm:observability:signals:ingested_metrics{customer=~\"$customer\", installation=~\"$installation\"}\n)",
             "format": "table",
             "instant": true,
-            "interval": "",
-            "legendFormat": "",
+            "legendFormat": "__auto",
             "range": false,
             "refId": "A"
           }
         ],
-        "title": "Routes per tenant",
+        "title": "Tenant List",
         "transformations": [
           {
             "id": "organize",
             "options": {
               "excludeByName": {
-                "Time": true
+                "Time": true,
+                "Value": true
               },
               "includeByName": {},
               "indexByName": {},
@@ -642,7 +336,7 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 20
+          "y": 9
         },
         "id": 15,
         "panels": [],
@@ -724,7 +418,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 186
+                  "value": 291
                 }
               ]
             },
@@ -743,10 +437,10 @@
           ]
         },
         "gridPos": {
-          "h": 8,
-          "w": 12,
+          "h": 14,
+          "w": 7,
           "x": 0,
-          "y": 21
+          "y": 10
         },
         "id": 14,
         "options": {
@@ -755,12 +449,12 @@
           "showHeader": true,
           "sortBy": [
             {
-              "desc": false,
-              "displayName": "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}"
+              "desc": true,
+              "displayName": "Value"
             }
           ]
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
             "datasource": {
@@ -770,7 +464,7 @@
             "direction": "backward",
             "editorMode": "code",
             "exemplar": false,
-            "expr": "count by (customer, installation, dashboard_id, dashboard_name) (\n    count_over_time(aggregation:giantswarm:observability:signals:dashboard_views{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n)",
+            "expr": "sum by (dashboard_name) (\n  count_over_time(aggregation:giantswarm:observability:signals:dashboard_views{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n)",
             "format": "table",
             "instant": true,
             "queryType": "instant",
@@ -816,19 +510,73 @@
           "type": "prometheus",
           "uid": "000000006"
         },
+        "description": "Number of successful (200) visits of Explore Page",
         "fieldConfig": {
           "defaults": {
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "footer": {
-                "reducers": []
-              },
-              "inspect": true,
-              "wrapHeaderText": false,
-              "wrapText": true
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 5,
+          "x": 7,
+          "y": 10
+        },
+        "id": 26,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(\n  count_over_time(aggregation:giantswarm:observability:signals:explore_visits{customer=~\"$customer\", installation=~\"$installation\", status_code=\"200\"}[$__range])\n) or vector(0)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Explore Visits - 200",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
             },
             "mappings": [],
             "noValue": "No executed queries",
@@ -848,46 +596,42 @@
                 "id": "byName",
                 "options": "installation"
               },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 194
-                }
-              ]
+              "properties": []
             },
             {
               "matcher": {
                 "id": "byName",
                 "options": "customer"
               },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 202
-                }
-              ]
+              "properties": []
             }
           ]
         },
         "gridPos": {
-          "h": 8,
-          "w": 12,
+          "h": 7,
+          "w": 5,
           "x": 12,
-          "y": 21
+          "y": 10
         },
         "id": 17,
         "options": {
-          "cellHeight": "sm",
-          "enablePagination": true,
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}"
-            }
-          ]
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
             "datasource": {
@@ -897,7 +641,7 @@
             "direction": "backward",
             "editorMode": "code",
             "exemplar": false,
-            "expr": "count by (customer, installation, status_code) (\n    count_over_time(aggregation:giantswarm:observability:grafana:executed_queries:total{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n)",
+            "expr": "sum(\n  count_over_time(aggregation:giantswarm:observability:grafana:executed_queries:total{customer=~\"$customer\", installation=~\"$installation\"}[$__range])\n) or vector(0)",
             "format": "table",
             "instant": true,
             "legendFormat": "{{ explorations }}",
@@ -906,7 +650,7 @@
             "refId": "A"
           }
         ],
-        "title": "Executed queries in the last 30 days",
+        "title": "Executed queries in given time",
         "transformations": [
           {
             "id": "organize",
@@ -935,169 +679,72 @@
             }
           }
         ],
-        "type": "table"
+        "type": "stat"
       },
       {
         "datasource": {
           "type": "prometheus",
           "uid": "000000006"
         },
+        "description": "Every Page Visit to Explore that was not a Status Code 200",
         "fieldConfig": {
           "defaults": {
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "footer": {
-                "reducers": []
-              },
-              "inspect": true,
-              "wrapHeaderText": false,
-              "wrapText": true
+            "color": {
+              "mode": "thresholds"
             },
             "mappings": [],
-            "noValue": "No explore visits",
             "thresholds": {
               "mode": "absolute",
               "steps": [
                 {
                   "color": "green",
                   "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 1
                 }
               ]
             }
           },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "installation"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 146
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "customer"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 140
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "status_code"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 286
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Value"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 330
-                }
-              ]
-            }
-          ]
+          "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 0,
-          "y": 29
+          "h": 7,
+          "w": 5,
+          "x": 7,
+          "y": 17
         },
-        "id": 16,
+        "id": 27,
         "options": {
-          "cellHeight": "sm",
-          "enablePagination": true,
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}"
-            }
-          ]
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
-            "datasource": {
-              "type": "loki",
-              "uid": "gs-loki"
-            },
-            "direction": "backward",
             "editorMode": "code",
-            "exemplar": false,
-            "expr": "count by (customer, installation, status_code) (\n    count_over_time(aggregation:giantswarm:observability:signals:explore_visits{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n)",
-            "format": "table",
-            "instant": true,
-            "legendFormat": "{{ explorations }}",
-            "queryType": "instant",
-            "range": false,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "editorMode": "code",
-            "expr": "",
-            "instant": false,
+            "expr": "sum(\n  count_over_time(aggregation:giantswarm:observability:signals:explore_visits{customer=~\"$customer\", installation=~\"$installation\", status_code!=\"200\"}[$__range])\n) or vector(0)",
             "legendFormat": "__auto",
             "range": true,
-            "refId": "B"
+            "refId": "A"
           }
         ],
-        "title": "Explore visits in the last 30 days",
-        "transformations": [
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Value": false,
-                "Value #A": true,
-                "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}": false
-              },
-              "includeByName": {},
-              "indexByName": {
-                "Time": 2,
-                "Value": 3,
-                "installation": 0,
-                "uname": 1
-              },
-              "orderBy": [],
-              "orderByMode": "auto",
-              "renameByName": {
-                "Time": "",
-                "Value #A": "",
-                "uname": "",
-                "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}": ""
-              }
-            }
-          }
-        ],
-        "type": "table"
+        "title": "Explore Visits - Not 200!",
+        "type": "stat"
       },
       {
         "datasource": {
@@ -1106,17 +753,8 @@
         },
         "fieldConfig": {
           "defaults": {
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "footer": {
-                "reducers": []
-              },
-              "inspect": true,
-              "wrapHeaderText": false,
-              "wrapText": true
+            "color": {
+              "mode": "thresholds"
             },
             "mappings": [],
             "noValue": "No drilldown visits",
@@ -1136,46 +774,42 @@
                 "id": "byName",
                 "options": "installation"
               },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 194
-                }
-              ]
+              "properties": []
             },
             {
               "matcher": {
                 "id": "byName",
                 "options": "customer"
               },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 197
-                }
-              ]
+              "properties": []
             }
           ]
         },
         "gridPos": {
-          "h": 8,
-          "w": 12,
+          "h": 7,
+          "w": 5,
           "x": 12,
-          "y": 29
+          "y": 17
         },
         "id": 18,
         "options": {
-          "cellHeight": "sm",
-          "enablePagination": true,
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}"
-            }
-          ]
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
         },
-        "pluginVersion": "12.4.0-20160616057",
+        "pluginVersion": "12.4.0-20781422371.patch2",
         "targets": [
           {
             "datasource": {
@@ -1185,7 +819,7 @@
             "direction": "backward",
             "editorMode": "code",
             "exemplar": false,
-            "expr": "count by (customer, installation, status_code) (\n    count_over_time(aggregation:giantswarm:observability:signals:drilldown_visits{customer=~\"$customer\", installation=~\"$installation\"}[30d])\n)",
+            "expr": "sum(\n  count_over_time(aggregation:giantswarm:observability:signals:drilldown_visits{customer=~\"$customer\", installation=~\"$installation\", status_code=\"200\"}[$__range])\n) or vector(0)",
             "format": "table",
             "instant": true,
             "legendFormat": "{{ explorations }}",
@@ -1194,7 +828,7 @@
             "refId": "A"
           }
         ],
-        "title": "Drilldown visits in the last 30 days",
+        "title": "Drilldown visits",
         "transformations": [
           {
             "id": "organize",
@@ -1220,6 +854,972 @@
                 "uname": "",
                 "{installation=\"grizzly\", uname=\"ljakimczuk@gmail.com\"}": ""
               }
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 24
+        },
+        "id": 19,
+        "panels": [],
+        "title": "Data ingestion",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 25
+        },
+        "id": 20,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:giantswarm:observability:signals:ingested_metrics{customer=~\"$customer\", installation=~\"$installation\"}) by (customer, installation, tenant)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Ingested metrics per tenant",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 25
+        },
+        "id": 21,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:giantswarm:observability:signals:ingested_logs{customer=~\"$customer\", installation=~\"$installation\"}) by (customer, installation, tenant)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Ingested logs per tenant",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 25
+        },
+        "id": 22,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:giantswarm:observability:signals:ingested_traces{customer=~\"$customer\", installation=~\"$installation\"}) by (customer, installation, tenant)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Ingested traces per tenant",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 33
+        },
+        "id": 23,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:giantswarm:observability:signals:metrics_datasource_count{customer=~\"$customer\", installation=~\"$installation\"}) by (customer, installation, tenant)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Metrics datasources",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 33
+        },
+        "id": 24,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:giantswarm:observability:signals:logs_datasource_count{customer=~\"$customer\", installation=~\"$installation\"}) by (customer, installation, tenant)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Log datasources",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 33
+        },
+        "id": 25,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(aggregation:giantswarm:observability:signals:traces_datasource_count{customer=~\"$customer\", installation=~\"$installation\"}) by (customer, installation, tenant)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Trace datasources",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 41
+        },
+        "id": 4,
+        "panels": [],
+        "title": "Rules",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "shades"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 42
+        },
+        "id": 5,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "vertical",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort_desc(sum(aggregation:giantswarm:observability:signals:rules{customer=~\"$customer\", installation=~\"$installation\"}) by (cluster_type))",
+            "format": "time_series",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Rules by cluster type",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "shades"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 42
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "vertical",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort_desc(sum(aggregation:giantswarm:observability:signals:rules{customer=~\"$customer\", installation=~\"$installation\"}) by (creation_mode))",
+            "format": "time_series",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Rules by creation mode",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "shades"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 42
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "vertical",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort_desc(sum(aggregation:giantswarm:observability:signals:rules{customer=~\"$customer\", installation=~\"$installation\"}) by (source_system))",
+            "format": "time_series",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Rules by source",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 50
+        },
+        "id": 11,
+        "panels": [],
+        "title": "Alerting",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false,
+              "wrapHeaderText": false,
+              "wrapText": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 51
+        },
+        "id": 12,
+        "options": {
+          "cellHeight": "sm",
+          "enablePagination": true,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "installation"
+            }
+          ]
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort(\n  sum(\n    max_over_time(aggregation:giantswarm:observability:signals:fired_alerts{customer=~\"$customer\", installation=~\"$installation\"}[24h])\n  ) by (tenant, org)\n  > 0\n)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Fired alerts per tenant over 24h",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "uid": "000000006"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false,
+              "wrapText": false
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 51
+        },
+        "id": 13,
+        "options": {
+          "cellHeight": "sm",
+          "enablePagination": true,
+          "showHeader": true
+        },
+        "pluginVersion": "12.4.0-20781422371.patch2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort(\n  max(\n    aggregation:giantswarm:observability:signals:alerting:routes{customer=~\"$customer\", installation=~\"$installation\"}\n  ) by (tenant)\n)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Routes per tenant",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {}
             }
           }
         ],
@@ -1262,9 +1862,7 @@
         {
           "allowCustomValue": false,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
@@ -1296,7 +1894,7 @@
     "timezone": "browser",
     "title": "Observability Platform Product Signals",
     "uid": "observability-platform-product-signals",
-    "version": 62,
+    "version": 72,
     "weekStart": ""
   }
 }
