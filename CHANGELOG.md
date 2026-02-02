@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.13.0] - 2026-02-02
+
 ### Added
 
 - Add Network Traffic Analysis Overview dashboard
@@ -1477,7 +1479,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.12.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.13.0...HEAD
+[4.13.0]: https://github.com/giantswarm/dashboards/compare/v4.12.0...v4.13.0
 [4.12.0]: https://github.com/giantswarm/dashboards/compare/v4.11.1...v4.12.0
 [4.11.1]: https://github.com/giantswarm/dashboards/compare/v4.11.0...v4.11.1
 [4.11.0]: https://github.com/giantswarm/dashboards/compare/v4.10.0...v4.11.0
