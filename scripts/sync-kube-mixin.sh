@@ -31,7 +31,6 @@ function tune_dashboard {
 
     # Latest mixins use SLO instead of classic metrics in several places
     # but we dropped these SLO metrics
-    sed -i 's/apiserver_request_slo_duration_seconds/apiserver_request_duration_seconds/g' "$dashboardFile"
     sed -i 's/apiserver_request_sli_duration_seconds/apiserver_request_duration_seconds/g' "$dashboardFile"
 
     # Dashboard ownership.
