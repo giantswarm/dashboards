@@ -148,7 +148,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  network_traffic_analysis:beyla_network_flow_bytes_public:rate5m{\n    k8s_src_namespace=~\"$namespace\",\n    cluster_id=\"${cluster_id}\"\n  }\n)",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  avg_over_time(\n    network_traffic_analysis:beyla_network_flow_bytes_public:rate5m{\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"$cluster_id\"\n    }[$__interval * 20]\n  )\n)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -255,7 +255,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  network_traffic_analysis:beyla_network_flow_bytes_cross_az:rate5m{\n    k8s_src_namespace=~\"$namespace\",\n    cluster_id=\"${cluster_id}\"\n  }\n)",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  avg_over_time(\n    network_traffic_analysis:beyla_network_flow_bytes_cross_az:rate5m{\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"${cluster_id}\"\n    }[$__interval * 20]\n  )\n)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -401,7 +401,7 @@
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
-          "sortBy": "Last *",
+          "sortBy": "Mean",
           "sortDesc": true
         },
         "tooltip": {
@@ -549,7 +549,7 @@
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
-          "sortBy": "Last *",
+          "sortBy": "Mean",
           "sortDesc": true
         },
         "tooltip": {
@@ -632,6 +632,7 @@
           "uid": "${datasource}"
         },
         "definition": "label_values(kubernetes_build_info,cluster_id)",
+        "description": "Select the cluster to observe network traffic for. In case the cluster you are looking for is not listed here, try to change the selected time range.",
         "includeAll": false,
         "label": "cluster_id",
         "name": "cluster_id",
@@ -641,7 +642,7 @@
           "query": "label_values(kubernetes_build_info,cluster_id)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "type": "query"
       },
@@ -665,19 +666,19 @@
           "query": "label_values(kube_namespace_created{cluster_id=\"$cluster_id\"},namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Network Traffic Analysis - Overview",
   "uid": "network-traffic-analysis-overview",
-  "version": 1
+  "version": 19
 }
