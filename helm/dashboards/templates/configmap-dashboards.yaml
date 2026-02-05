@@ -1,19 +1,6 @@
 apiVersion: v1
 kind: ConfigMapList
 items:
-## Home
-- apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    annotations:
-      k8s-sidecar-target-directory: "/var/lib/grafana/dashboards/public/home"
-      observability.giantswarm.io/organization: "Shared Org"
-    labels:
-      {{- include "labels.common" $ | nindent 6 }}
-    name: grafana-home-dashboard
-    namespace: {{ $.Values.global.namespace  }}
-  data:
-    home.json: {{ (tpl ($.Files.Get "dashboards/home.json") .) | quote }}
 ## Mixins dashboards
 {{- range $path, $fileContents := $.Files.Glob "dashboards/mixin/*.json" }}
 {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
