@@ -11,10 +11,9 @@ set -euo pipefail
 DASHBOARDS_DIRECTORY=./helm/dashboards
 
 listDashboards () {
-    # find all dashboards ".json" files and remove the home.json and values.schema.json files
+    # find all dashboards ".json" files and values.schema.json files
     find "$DASHBOARDS_DIRECTORY" -type f -name \*.json \
-        | grep -v 'values.schema.json' \
-        | grep -v 'home.json'
+        | grep -v 'values.schema.json'
 }
 
 main() {
