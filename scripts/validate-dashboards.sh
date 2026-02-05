@@ -8,7 +8,7 @@
 set -eu
 
 # List of files to exclude
-excludes=( "values.schema.json" "home.json" )
+excludes=( "values.schema.json" )
 excludes_string="$(IFS="|"; echo "${excludes[*]}")"
 
 # Find valid team names
@@ -19,7 +19,7 @@ git clone --depth 1 "$github_repo" "$github_repo_directory"
 cd "$github_repo_directory"
 mapfile teams < <(find repositories -name '*.yaml' -printf '%f\n' | cut -d. -f1)
 cd -
-echo "Found ${#teams[@]} teams:" ${teams[*]}
+echo "Found ${#teams[@]} teams:" "${teams[*]}"
 
 # Check all dashboards
 failures=0

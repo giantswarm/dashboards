@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Bump kube-mixins to 1.4.1
 
+### Removed
+
+- Remove the unused home dashboard
+
 ## [4.13.0] - 2026-02-02
 
 ### Added
