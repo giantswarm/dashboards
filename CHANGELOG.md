@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.15.0] - 2026-02-05
+
+### Changed
+
+- Update Network Traffic Analysis dashboards
+  - Set variables to refresh on time window change
+  - Change queries to user avg_over_time to have a smoothened graph over longer time ranges
+  - Sort by Mean rather than Last in graps to match what's shown on the tables
+  - Use 7 days as default time window on overview dashboard
+  - Add Mean column next to Last on graphs
+  - Add cluster variable description
+
 ## [4.14.0] - 2026-02-05
 
 ### Changed
@@ -1489,7 +1501,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.14.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.15.0...HEAD
+[4.15.0]: https://github.com/giantswarm/dashboards/compare/v4.14.0...v4.15.0
 [4.14.0]: https://github.com/giantswarm/dashboards/compare/v4.13.0...v4.14.0
 [4.13.0]: https://github.com/giantswarm/dashboards/compare/v4.12.0...v4.13.0
 [4.12.0]: https://github.com/giantswarm/dashboards/compare/v4.11.1...v4.12.0
