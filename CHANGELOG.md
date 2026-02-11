@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Use `Chart.AppVersion` instead of `Chart.Version` for Kubernetes labels to support Flux OCI automatic upgrades.
+- Update team annotation to OpenContainers format (`io.giantswarm.application.team`).
+
 ## [4.15.0] - 2026-02-05
 
 ### Changed
