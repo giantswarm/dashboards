@@ -4,7 +4,7 @@
     tags: [
       'owner:team-atlas',
       'topic:observability',
-      'component:loki',
+      'mixin',
     ],
     clusterLabel: 'cluster_id',
   },
