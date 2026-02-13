@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- fix configmap names overlap between public and private dashboards
+
 ## [4.16.0] - 2026-02-13
 
 ### Added
