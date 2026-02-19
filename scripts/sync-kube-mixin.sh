@@ -75,13 +75,13 @@ while read -r file; do
     tune_dashboard "$file"
 done < <(find "$TMPDIR" -type f -name \*.json)
 
-# Move public dashboards to the publec dashboards folder
+# Move public dashboards to the public dashboards folder
 for dashboard in "${public_dashboards[@]}"; do
     mv "${TMPDIR}"/mixins/files/dashboards/"${dashboard}" helm/dashboards/charts/public_dashboards/dashboards/shared/public/
 done
 
-# Move remaining (private) dashboards to the helm chart
-mv "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/dashboards/mixin/
+# Move remaining (private) dashboards to the team_tenet chart
+mv "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/charts/team_tenet/dashboards/Giant\ Swarm/Kubernetes/Mixin/
 
 echo -e "\nSynced mixin repo at commit: ${MIXIN_VER}\n"
 
