@@ -11,11 +11,56 @@ The "public" ones are accessible by the customer, and the "private" ones are onl
 
 ### Sub-charts
 
-This chart is divided in 4 different charts, to get around helm charts size limitations:
-- [`helm/dashboards/charts/public_dashboards`](helm/dashboards/charts/public_dashboards) for public dashboards.
-- [`helm/dashboards/charts/private_dashboards_al`](helm/dashboards/charts/private_dashboards_al) for private dashboards starting with letters A to L.
-- [`helm/dashboards/charts/private_dashboards_mz`](helm/dashboards/charts/private_dashboards_mz) for private dashboards starting with letters M to Z.
-- [`helm/dashboards`](helm/dashboards) for other dashboards.
+Dashboards are organized into **team-based sub-charts**, each containing dashboards owned by that team:
+
+- [`helm/dashboards/charts/team_atlas`](helm/dashboards/charts/team_atlas) - Team Atlas (Observability)
+- [`helm/dashboards/charts/team_tenet`](helm/dashboards/charts/team_tenet) - Team Tenet (Kubernetes)
+- [`helm/dashboards/charts/team_phoenix`](helm/dashboards/charts/team_phoenix) - Team Phoenix (Cloud)
+- [`helm/dashboards/charts/team_shield`](helm/dashboards/charts/team_shield) - Team Shield (Security)
+- [`helm/dashboards/charts/team_cabbage`](helm/dashboards/charts/team_cabbage) - Team Cabbage (Networking)
+- [`helm/dashboards/charts/team_honeybadger`](helm/dashboards/charts/team_honeybadger) - Team Honeybadger
+
+#### Dashboard directory structure
+
+Within each team sub-chart, dashboards are placed in a directory hierarchy that determines their Grafana **organization** and **folder**:
+
+```
+charts/<team>/dashboards/<Organization>/<Folder>/<Subfolder>/dashboard.json
+```
+
+- `<Organization>` is the Grafana organization name (e.g., `Giant Swarm`, `Shared Org`), used as the `observability.giantswarm.io/organization` annotation.
+- `<Folder>/<Subfolder>` is the Grafana folder path (e.g., `Observability/Mimir`), used as the `observability.giantswarm.io/folder` annotation.
+
+Both annotations are **derived automatically** from the filesystem path by the Helm template.
+
+Example:
+```
+charts/team_atlas/dashboards/
+├── Giant Swarm/
+│   ├── Observability/Mimir/mimir-overview.json
+│   ├── Observability/Loki/loki-overview.json
+│   └── Observability/General/datasource-overview.json
+└── Shared Org/
+    ├── Observability/Mimir/mimir-reads.json
+    └── Observability/General/cluster-overview.json
+```
+
+#### Provider-specific dashboards
+
+Dashboards that should only be deployed for a specific infrastructure provider go under a `provider/<kind>/` prefix:
+
+```
+charts/<team>/dashboards/provider/<kind>/<Organization>/<Folder>/dashboard.json
+```
+
+These are only included when `provider.kind` matches in the Helm values.
+
+#### Legacy sub-charts (pending migration)
+
+The following sub-charts are still active until dashboards are migrated to the new team-based structure:
+- `helm/dashboards/charts/public_dashboards` - Public dashboards (legacy)
+- `helm/dashboards/charts/private_dashboards_al` - Private dashboards A-L (legacy)
+- `helm/dashboards/charts/private_dashboards_mz` - Private dashboards M-Z (legacy)
 
 ### Dashboard format
 
@@ -70,6 +115,8 @@ To upload a dashboard while editing, run:
 ```
 
 ## Mixins Dashboards
+
+Mixin dashboards are auto-generated from upstream and placed in the appropriate team sub-chart. For example, kubernetes-mixin dashboards live in `charts/team_tenet/dashboards/Giant Swarm/Kubernetes/Mixin/`.
 
 ### Update
 

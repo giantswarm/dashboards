@@ -7,6 +7,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.17.0] - 2026-02-23
+
+### Added
+
+- Add missing `team-atlas` labels
+
+### Changed
+
+- Rename `team-turtles` to `team-tenet`
+
+## [4.16.1] - 2026-02-13
+
+### Fixed
+
+- fix configmap names overlap between public and private dashboards
+
+## [4.16.0] - 2026-02-13
+
+### Added
+
+- memcached dashboard (private)
+
+## [4.15.1] - 2026-02-12
+
+### Changed
+
+- Use `Chart.AppVersion` instead of `Chart.Version` for Kubernetes labels to support Flux OCI automatic upgrades.
+- Update team annotation to OpenContainers format (`io.giantswarm.application.team`).
+
 ## [4.15.0] - 2026-02-05
 
 ### Changed
@@ -1501,7 +1530,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.15.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.17.0...HEAD
+[4.17.0]: https://github.com/giantswarm/dashboards/compare/v4.16.1...v4.17.0
+[4.16.1]: https://github.com/giantswarm/dashboards/compare/v4.16.0...v4.16.1
+[4.16.0]: https://github.com/giantswarm/dashboards/compare/v4.15.1...v4.16.0
+[4.15.1]: https://github.com/giantswarm/dashboards/compare/v4.15.0...v4.15.1
 [4.15.0]: https://github.com/giantswarm/dashboards/compare/v4.14.0...v4.15.0
 [4.14.0]: https://github.com/giantswarm/dashboards/compare/v4.13.0...v4.14.0
 [4.13.0]: https://github.com/giantswarm/dashboards/compare/v4.12.0...v4.13.0
