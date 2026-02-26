@@ -2208,7 +2208,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 110
+        "y": 102
       },
       "id": 44,
       "panels": [],
@@ -2228,18 +2228,23 @@
         "h": 7,
         "w": 20,
         "x": 0,
-        "y": 111
+        "y": 103
       },
       "id": 45,
       "options": {
         "dedupStrategy": "none",
+        "detailsMode": "sidebar",
         "enableInfiniteScrolling": false,
         "enableLogDetails": true,
+        "fontSize": "default",
         "prettifyLogMessage": false,
         "showCommonLabels": false,
+        "showControls": true,
         "showLabels": false,
-        "showTime": false,
+        "showTime": true,
         "sortOrder": "Descending",
+        "syntaxHighlighting": false,
+        "timestampResolution": "ms",
         "wrapLogMessage": false
       },
       "pluginVersion": "12.3.1",
@@ -2251,7 +2256,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{service_name=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`",
+          "expr": "{scrape_job=\"kubernetes-pods\", service_name=\"coredns-workers\", organization=\"$organization\", cluster_id=\"$cluster\", pod=~\"$pod\"} | pattern `[<log_level>] <ip>:<port> - <id> \"<type> <class> <name> <proto> <size> <do> <bufsize>\" <rcode> <rflags> <rsize> <duration>` | name =~ `.*$zone` |= `$filter`",
           "queryType": "range",
           "refId": "A"
         }
@@ -2297,7 +2302,7 @@
         "h": 7,
         "w": 4,
         "x": 20,
-        "y": 111
+        "y": 103
       },
       "id": 46,
       "options": {
@@ -2321,13 +2326,13 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (type) (count_over_time({service_name=\"coredns\", cluster_id=\"$cluster\"} | pattern \"[INFO] <ip> - <size> \\\"<query>\\\" <type> <rs> <dunno> <duration>s\" |= `$filter`[$__auto]))",
+          "expr": "sum by (rcode) (count_over_time({scrape_job=\"kubernetes-pods\", service_name=\"coredns-workers\", organization=\"$organization\", cluster_id=\"$cluster\", pod=~\"$pod\"} | pattern `[<log_level>] <ip>:<port> - <id> \"<type> <class> <name> <proto> <size> <do> <bufsize>\" <rcode> <rflags> <rsize> <duration>` | name =~ `.*$zone` |= `$filter` [$__auto]))",
           "hide": false,
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "title": "Filter by Response type",
+      "title": "Filter logs by Response type",
       "transformations": [
         {
           "id": "organize",
@@ -2503,7 +2508,8 @@
           "text": "",
           "value": ""
         },
-        "label": "Logs Filter",
+        "description": "Filter log lines that contain the given string",
+        "label": "Logs lines filter",
         "name": "filter",
         "options": [
           {
@@ -2521,7 +2527,9 @@
           "type": "loki",
           "uid": "$loki_datasource"
         },
+        "description": "Filter log lines by label",
         "filters": [],
+        "label": "Log label filters",
         "name": "Filters",
         "type": "adhoc"
       }
