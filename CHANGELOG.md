@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Update DNS dashboard
+  - Add new node and pod filters
+  - Update variables description and query to use coredns_build_info as label source
+  - Remove cache prefetch panel since the metric is gone
+  - Fix DNS dashboard log panels
+
 ## [4.17.0] - 2026-02-23
 
 ### Added
