@@ -10,10 +10,10 @@
     "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-10-22T22:07:09Z",
-    "updated": "2025-09-23T14:50:54Z",
+    "updated": "2026-02-23T12:03:22Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 29,
+    "version": 30,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -95,7 +95,7 @@
             "links": [
               {
                 "title": "Data source details",
-                "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources?var-datasource_id=${__data.fields.ID}&${__url_time_range}"
+                "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources?var-datasource_uid=${__data.fields.ID}&${__url_time_range}"
               }
             ]
           },
@@ -162,7 +162,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (datasourceId, datasourceName) (sum_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | unwrap totalQueries [$__range]))",
+            "expr": "sum by (datasourceUid, datasourceName) (sum_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | unwrap totalQueries [$__range]))",
             "queryType": "instant",
             "refId": "requests"
           }
@@ -177,8 +177,8 @@
               },
               "renameByName": {
                 "Value #requests": "Queries",
-                "datasourceId": "ID",
-                "datasourceName": "Name"
+                "datasourceName": "Name",
+                "datasourceUid": "ID"
               }
             }
           }
@@ -201,7 +201,7 @@
             "links": [
               {
                 "title": "Data source details",
-                "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources?var-datasource_id=${__data.fields.ID}&${__url_time_range}"
+                "url": "/d/AEbrOO2Mz/usage-insights-2-data-sources?var-datasource_uid=${__data.fields.ID}&${__url_time_range}"
               }
             ],
             "unit": "none"
@@ -273,7 +273,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (datasourceId, datasourceName) (count_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | error!=\"\" [$__range]))/sum by (datasourceId, datasourceName) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | eventName=\"data-request\" [$__range])) * 100",
+            "expr": "sum by (datasourceUid, datasourceName) (count_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | error!=\"\" [$__range]))/sum by (datasourceUid, datasourceName) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | eventName=\"data-request\" [$__range])) * 100",
             "queryType": "instant",
             "refId": "errors"
           }
@@ -288,13 +288,13 @@
               },
               "indexByName": {
                 "Value #errors": 2,
-                "datasourceId": 0,
-                "datasourceName": 1
+                "datasourceName": 1,
+                "datasourceUid": 0
               },
               "renameByName": {
                 "Value #errors": "Error Rate",
-                "datasourceId": "ID",
-                "datasourceName": "Name"
+                "datasourceName": "Name",
+                "datasourceUid": "ID"
               }
             }
           }
@@ -303,8 +303,8 @@
       },
       {
         "datasource": {
-          "type": "datasource",
-          "uid": "-- Mixed --"
+          "type": "loki",
+          "uid": "grafanacloud-giantswarm-usage-insights"
         },
         "description": "",
         "fieldConfig": {
@@ -340,11 +340,7 @@
         },
         "targets": [
           {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-giantswarm-usage-insights"
-            },
-            "expr": "sum by (datasourceName) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" [$__range]))",
+            "expr": "sum by (datasourceName) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" [$__range]))",
             "queryType": "instant",
             "refId": "host"
           }
@@ -390,7 +386,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (datasourceId) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" [$__range]))",
+            "expr": "sum by (datasourceUid) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" [$__range]))",
             "queryType": "instant",
             "refId": "host"
           }
@@ -484,17 +480,17 @@
         "targets": [
           {
             "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-giantswarm-usage-insights"
+              "name": "grafanacloud-giantswarm-usage-insights",
+              "type": "loki"
             },
-            "expr": "sum by (instance_id) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" [$__range]))",
+            "expr": "sum by (instance_id) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" [$__range]))",
             "queryType": "instant",
             "refId": "host"
           },
           {
             "datasource": {
-              "type": "prometheus",
-              "uid": "grafanacloud-usage"
+              "name": "grafanacloud-usage",
+              "type": "prometheus"
             },
             "exemplar": false,
             "expr": "label_replace(sum(grafanacloud_grafana_instance_info{}) by (id, slug), \"instance_id\", \"$1\", \"id\", \"(.*)\")",
@@ -674,30 +670,30 @@
         },
         "targets": [
           {
-            "expr": "count(sum by (dashboardId) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" [$__range])))",
+            "expr": "count(sum by (dashboardId) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" [$__range])))",
             "queryType": "instant",
             "refId": "Dashboards"
           },
           {
-            "expr": "count(sum by (username) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" [$__range])))",
+            "expr": "count(sum by (username) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" [$__range])))",
             "hide": false,
             "queryType": "instant",
             "refId": "Users"
           },
           {
-            "expr": "sum(sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | unwrap totalQueries [$__range]))",
+            "expr": "sum(sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | unwrap totalQueries [$__range]))",
             "hide": false,
             "queryType": "instant",
             "refId": "Queries"
           },
           {
-            "expr": "100 * sum(sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | unwrap cachedQueries [$__range])) / sum(sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | unwrap totalQueries [$__range]))",
+            "expr": "100 * sum(sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | unwrap cachedQueries [$__range])) / sum(sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | unwrap totalQueries [$__range]))",
             "hide": false,
             "queryType": "instant",
             "refId": "Cache Rate"
           },
           {
-            "expr": "100 * sum(count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | error!=\"\" [$__range])) / sum(count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" [$__range]))",
+            "expr": "100 * sum(count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | error!=\"\" [$__range])) / sum(count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" [$__range]))",
             "hide": false,
             "queryType": "instant",
             "refId": "Errors"
@@ -716,7 +712,7 @@
             "options": {
               "excludeByName": {
                 "Time": true,
-                "datasourceId": true
+                "datasourceUid": true
               },
               "indexByName": {
                 "Value #Cache Rate": 3,
@@ -731,7 +727,7 @@
                 "Value #Errors": "Error Rate",
                 "Value #Queries": "Total Queries",
                 "Value #Users": "Users Seen",
-                "datasourceId": ""
+                "datasourceUid": ""
               }
             }
           }
@@ -838,13 +834,13 @@
         },
         "targets": [
           {
-            "expr": "sum by(host) (sum_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceId=\"${datasource_id}\" | error = \"\" | unwrap totalQueries [$__interval]))",
+            "expr": "sum by(host) (sum_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceUid=\"${datasource_uid}\" | error = \"\" | unwrap totalQueries [$__interval]))",
             "legendFormat": "Data Requests",
             "queryType": "range",
             "refId": "queries"
           },
           {
-            "expr": "sum by(host) (count_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceId=\"${datasource_id}\" | error != \"\" [$__interval]))",
+            "expr": "sum by(host) (count_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | datasourceUid=\"${datasource_uid}\" | error != \"\" [$__interval]))",
             "legendFormat": "Errors",
             "queryType": "range",
             "refId": "errors"
@@ -975,12 +971,12 @@
         },
         "targets": [
           {
-            "expr": "quantile_over_time(0.95,{instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | error=\"\" | datasourceId=\"${datasource_id}\" | unwrap duration | __error__=\"\" [$__interval]) by (host)",
+            "expr": "quantile_over_time(0.95,{instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | error=\"\" | datasourceUid=\"${datasource_uid}\" | unwrap duration | __error__=\"\" [$__interval]) by (host)",
             "legendFormat": "95th percentile",
             "refId": "C"
           },
           {
-            "expr": "max(max_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | error=\"\" | datasourceId=\"${datasource_id}\" | unwrap duration | __error__=\"\" [$__interval])) by (host)",
+            "expr": "max(max_over_time({instance_type=\"grafana\"} | logfmt | eventName=\"data-request\" | error=\"\" | datasourceUid=\"${datasource_uid}\" | unwrap duration | __error__=\"\" [$__interval])) by (host)",
             "legendFormat": "max latency",
             "refId": "D"
           }
@@ -1046,7 +1042,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (error) (count_over_time({instance_type=\"grafana\"} | logfmt | error!=\"\" | datasourceId=\"${datasource_id}\" [$__range]))",
+            "expr": "sum by (error) (count_over_time({instance_type=\"grafana\"} | logfmt | error!=\"\" | datasourceUid=\"${datasource_uid}\" [$__range]))",
             "hide": false,
             "queryType": "instant",
             "refId": "errors"
@@ -1126,7 +1122,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (username) (sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | unwrap totalQueries [$__range]))",
+            "expr": "sum by (username) (sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | datasourceName != \"-- Grafana --\" | datasourceName != \"-- Mixed --\" | unwrap totalQueries [$__range]))",
             "queryType": "instant",
             "refId": "queries"
           }
@@ -1212,7 +1208,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (folderName, dashboardName,dashboardId) (sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | dashboardName != \"\" | unwrap totalQueries [$__range]))",
+            "expr": "sum by (folderName, dashboardName,dashboardId) (sum_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | dashboardName != \"\" | unwrap totalQueries [$__range]))",
             "queryType": "instant",
             "refId": "queries"
           }
@@ -1297,7 +1293,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (username) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | error!=\"\" [$__range]))",
+            "expr": "sum by (username) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | error!=\"\" [$__range]))",
             "queryType": "instant",
             "refId": "errors"
           }
@@ -1383,7 +1379,7 @@
         },
         "targets": [
           {
-            "expr": "sum by (folderName, dashboardName,dashboardId) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceId=\"${datasource_id}\" | eventName=\"data-request\" | dashboardName != \"\" | error != \"\" [$__range]))",
+            "expr": "sum by (folderName, dashboardName,dashboardId) (count_over_time({instance_type=\"grafana\"} | logfmt | datasourceUid=\"${datasource_uid}\" | eventName=\"data-request\" | dashboardName != \"\" | error != \"\" [$__range]))",
             "queryType": "instant",
             "refId": "errors"
           }
@@ -1424,10 +1420,10 @@
     "templating": {
       "list": [
         {
-          "description": "If you know your datasource ID, enter it here.",
+          "description": "If you know your datasource UID, enter it here.",
           "hide": 0,
-          "label": "Data source ID",
-          "name": "datasource_id",
+          "label": "Data source UID",
+          "name": "datasource_uid",
           "query": "None",
           "skipUrlSync": false,
           "type": "textbox"
@@ -1441,7 +1437,7 @@
     "timezone": "",
     "title": "Usage Insights - 2 - Data sources",
     "uid": "AEbrOO2Mz",
-    "version": 29,
+    "version": 30,
     "weekStart": ""
   }
 }
