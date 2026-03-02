@@ -10,10 +10,10 @@
     "url": "/d/5nhuY5vMk/billing-usage",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2020-09-03T12:03:22Z",
-    "updated": "2026-01-14T20:15:31Z",
+    "updated": "2026-02-23T20:30:45Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 217,
+    "version": 218,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -3691,6 +3691,14 @@
                 },
                 "expr": "\nmax(grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "max(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"}) * on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "legendFormat": "Query Additional Usage Amount - {{ name }}"
               },
               {
                 "datasource": {
@@ -11003,6 +11011,6 @@
     "timezone": "utc",
     "title": "Billing/Usage",
     "uid": "5nhuY5vMk",
-    "version": 217
+    "version": 218
   }
 }
