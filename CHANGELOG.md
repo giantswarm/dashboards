@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.18.0] - 2026-03-03
+
 ### Fixed
 
 - Fix memory usage calculation in `nodes-overview` and `cluster-overview` dashboards by using `node_memory_MemAvailable_bytes` instead of `node_memory_MemFree_bytes`, which incorrectly excluded cached/buffered memory from free memory
@@ -1543,7 +1545,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.17.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.18.0...HEAD
+[4.18.0]: https://github.com/giantswarm/dashboards/compare/v4.17.0...v4.18.0
 [4.17.0]: https://github.com/giantswarm/dashboards/compare/v4.16.1...v4.17.0
 [4.16.1]: https://github.com/giantswarm/dashboards/compare/v4.16.0...v4.16.1
 [4.16.0]: https://github.com/giantswarm/dashboards/compare/v4.15.1...v4.16.0
