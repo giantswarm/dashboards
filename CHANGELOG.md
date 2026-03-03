@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix memory usage calculation in `nodes-overview` and `cluster-overview` dashboards by using `node_memory_MemAvailable_bytes` instead of `node_memory_MemFree_bytes`, which incorrectly excluded cached/buffered memory from free memory
+
 ### Changed
 
 - Update DNS dashboard
