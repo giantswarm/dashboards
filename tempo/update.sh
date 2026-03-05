@@ -9,6 +9,8 @@
 
 set -eu
 
+#BRANCHREF="main" # breaking changes are coming with v3. Switch back to main once we update to v3.
+BRANCHREF="release-v2.10"
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
 TOOLS_DIR="$SCRIPT_DIR/../tools"
 TMPDIR="$(mktemp -d -t giantswarm-dashboards-XXXXXX)"
@@ -21,20 +23,20 @@ cd tempo
 rm -rf vendor jsonnetfile.* dashboards_out
 
 "$TOOLS_DIR/jb" init
-"$TOOLS_DIR/jb" install https://github.com/grafana/tempo/operations/tempo-mixin@main
+"$TOOLS_DIR/jb" install https://github.com/grafana/tempo/operations/tempo-mixin@"$BRANCHREF"
 mixtool generate dashboards mixin.libsonnet -d "$TMPDIR/dashboards"
 { set +x; } 2>/dev/null
 
 tags="$(cat "$SCRIPT_DIR/tags.json")"
 for file in "$TMPDIR/dashboards"/*.json; do
 	filename=$(basename "$file")
-	
+
 	# Skip the backendwork dashboard
 	if [[ "$filename" == "tempo-backendwork.json" ]]; then
 		echo "Skipping $file (backendwork dashboard not needed)"
 		continue
 	fi
-	
+
   # Skip the block-builder dashboard as this component is used it our chart (this is the replacement for the compactor)
 	if [[ "$filename" == "tempo-block-builder.json" ]]; then
 		echo "Skipping $file (block-builder dashboard not needed)"
@@ -47,11 +49,23 @@ for file in "$TMPDIR/dashboards"/*.json; do
 	if [[ "$filename" == "tempo-rollout-progress.json" ]]; then
 		jq '.title = "Tempo / Rollout progress"' "$file" > "$file.out" && mv "$file.out" "$file"
 	fi
-	
+
 	# Fix operational title
 	if [[ "$filename" == "tempo-operational.json" ]]; then
 		jq '.title = "Tempo / Operational"' "$file" > "$file.out" && mv "$file.out" "$file"
 	fi
+
+    # Fix operational cluster selector
+    if [[ "$filename" == "tempo-operational.json" ]]; then
+        sed -i 's/cluster=/cluster_id=/g' "$file"
+        sed -i 's/tempo_build_info, cluster/tempo_build_info, cluster_id/g' "$file"
+    fi
+
+    # Fix operational component filtering
+    if [[ "$filename" == "tempo-operational.json" ]]; then
+        sed -i 's/pod=~\\"$component/pod=~\\".*$component/g' "$file"
+        sed -i 's/persistentvolumeclaim=~\\"$component/persistentvolumeclaim=~\\".*$component/g' "$file"
+    fi
 
 	# Remove Gateway row from tempo-reads dashboard
 	if [[ "$filename" == "tempo-reads.json" ]]; then
