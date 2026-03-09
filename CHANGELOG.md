@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated Tempo dashboards to mixins v2.10
 - bugfixes in Tempo operational dashboard
 
+### Removed
+
+- Remove the `object-storage-operator`
+
 ## [4.18.0] - 2026-03-03
 
 ### Fixed
