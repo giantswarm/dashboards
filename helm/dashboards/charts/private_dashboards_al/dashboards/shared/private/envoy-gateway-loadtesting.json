@@ -105,7 +105,7 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -127,6 +127,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n    max by (cluster_id, namespace, pod, container)(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate5m{cluster_id=\"$workload_cluster\", namespace=\"envoy-gateway-system\"})\n  * on(cluster_id, namespace, pod)\n    group_left(workload, workload_type) namespace_workload_pod:kube_pod_owner:relabel{cluster_id=\"$workload_cluster\", namespace=\"envoy-gateway-system\", workload=~\"(envoy-gateway|envoy-giantswarm-default-d195d0cf)\", workload_type=~\"deployment\"}\n) by (cluster_id)",
+          "instant": false,
+          "legendFormat": "Total",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Envoy Gateway CPU usage",
@@ -203,7 +215,7 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -301,8 +313,11 @@
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -321,9 +336,21 @@
           },
           "editorMode": "code",
           "expr": "sum(\n    max by (cluster_id, namespace, pod, container)(container_memory_working_set_bytes{cluster_id=\"$workload_cluster\", namespace=\"envoy-gateway-system\", container!=\"\", image!=\"\"})\n  * on(cluster_id, namespace, pod)\n    group_left(workload, workload_type) namespace_workload_pod:kube_pod_owner:relabel{cluster_id=\"$workload_cluster\", namespace=\"envoy-gateway-system\", workload=~\"(envoy-gateway|envoy-giantswarm-default-d195d0cf)\", workload_type=~\"deployment\"}\n) by (workload)",
-          "legendFormat": "__auto",
+          "legendFormat": "{{label_name}}",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n    max by (cluster_id, namespace, pod, container)(container_memory_working_set_bytes{cluster_id=\"$workload_cluster\", namespace=\"envoy-gateway-system\", container!=\"\", image!=\"\"})\n  * on(cluster_id, namespace, pod)\n    group_left(workload, workload_type) namespace_workload_pod:kube_pod_owner:relabel{cluster_id=\"$workload_cluster\", namespace=\"envoy-gateway-system\", workload=~\"(envoy-gateway|envoy-giantswarm-default-d195d0cf)\", workload_type=~\"deployment\"}\n) by (cluster_id)",
+          "instant": false,
+          "legendFormat": "Total",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Envoy Gateway Memory usage",
@@ -400,8 +427,11 @@
       "id": 4,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -517,7 +547,7 @@
             "lastNotNull",
             "max"
           ],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1649,13 +1679,13 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Envoy Gateway vs Nginx Ingress loadtesting",
   "uid": "quhssv7",
-  "version": 11,
+  "version": 17,
   "weekStart": ""
 }
