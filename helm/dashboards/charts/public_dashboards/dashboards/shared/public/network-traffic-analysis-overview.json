@@ -51,9 +51,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "gs-mimir"
+        "uid": "${datasource}"
       },
-      "description": "Total bytes transferred each day, broken down by source namespace",
+      "description": "Average data transfer rate, broken down by source namespace",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -91,7 +91,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "binBps"
         },
         "overrides": []
       },
@@ -131,15 +131,19 @@
       "pluginVersion": "12.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
           "editorMode": "code",
-          "expr": "sum(increase(beyla_network_flow_bytes_total{cluster_id=~\"$cluster_id\", direction=\"request\", k8s_src_namespace=~\"$namespace\"}[$time_period]))by(k8s_src_namespace)",
-          "interval": "$time_period",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  avg_over_time(\n    network_traffic_analysis:beyla_network_flow_bytes_total:rate5m{\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"$cluster_id\"\n    }[$__interval * 20]\n  )\n)",
+          "instant": false,
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Total Data Transferred Per Day",
+      "title": "Average Data Transfer Rate",
       "type": "barchart"
     },
     {
