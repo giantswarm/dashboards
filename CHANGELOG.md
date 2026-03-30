@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Add a time period selector for data transfer periods
   - Make total visible in all panels
   - Remove datasource variable
+  - Simplify traffic rate queries
 
 ### Removed
 
