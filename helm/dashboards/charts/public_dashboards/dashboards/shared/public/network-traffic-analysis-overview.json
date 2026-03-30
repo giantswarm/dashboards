@@ -43,9 +43,47 @@
         "x": 0,
         "y": 0
       },
-      "id": 31,
+      "id": 25,
       "panels": [],
-      "title": "Row title",
+      "title": "Info",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 26,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Data availability\n\nThis dashboard relies on optional network metrics.\nNetwork metrics can be enable on a per cluster basis, see our tutorial at https://docs.giantswarm.io/tutorials/observability/network-monitoring/. Please contact team Atlas for more information.\n\n# Information\n\nThis dashboard only visualizes data for network traffic coming from a identified namespace(s) (usually Pods) over a long period of time. Traffic outside namespace is ignored (e.g. Node, AWS resolver, load balancer). For a detailed view use the **Network Traffic Analysis** dashboard. ",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.4.2",
+      "title": "",
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 29,
+      "panels": [],
+      "title": "${cluster_id} network traffic for ${namespace} namespace(s)",
       "type": "row"
     },
     {
@@ -53,7 +91,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Average data transfer rate, broken down by source namespace",
+      "description": "Total bytes transferred each day, broken down by source namespace",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -91,7 +129,7 @@
               }
             ]
           },
-          "unit": "binBps"
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -99,7 +137,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 8
       },
       "id": 30,
       "options": {
@@ -128,74 +166,113 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
           "editorMode": "code",
-          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  avg_over_time(\n    network_traffic_analysis:beyla_network_flow_bytes_total:rate5m{\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"$cluster_id\"\n    }[$__interval * 20]\n  )\n)",
-          "instant": false,
+          "expr": "sum by (k8s_src_namespace) (network_traffic_analysis:beyla_network_flow_bytes_public:rate5m{cluster_id=~\"$cluster_id\", k8s_src_namespace=~\"$namespace\"}) * $__interval_ms / 1000",
+          "interval": "$time_period",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Average Data Transfer Rate",
+      "title": "Total Data Transferred Per Day",
       "type": "barchart"
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 13
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gs-mimir"
       },
-      "id": 25,
-      "panels": [],
-      "title": "Info",
-      "type": "row"
-    },
-    {
+      "description": "Total bytes transferred each day, broken down by source namespace",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 14
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 8
       },
-      "id": 26,
+      "id": 32,
       "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
+        "barRadius": 0,
+        "barWidth": 0.7,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": true
         },
-        "content": "# Data availability\n\nThis dashboard relies on optional network metrics.\nNetwork metrics can be enable on a per cluster basis, see our tutorial at https://docs.giantswarm.io/tutorials/observability/network-monitoring/. Please contact team Atlas for more information.\n\n# Information\n\nThis dashboard only visualizes data for network traffic coming from a identified namespace(s) (usually Pods) over a long period of time. Traffic outside namespace is ignored (e.g. Node, AWS resolver, load balancer). For a detailed view use the **Network Traffic Analysis** dashboard. ",
-        "mode": "markdown"
+        "orientation": "vertical",
+        "showValue": "never",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
       },
-      "pluginVersion": "12.4.1",
-      "title": "",
-      "type": "text"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 20
-      },
-      "id": 29,
-      "panels": [],
-      "title": "${cluster_id} network traffic for ${namespace} namespace(s)",
-      "type": "row"
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by (k8s_src_namespace) (network_traffic_analysis:beyla_network_flow_bytes_cross_az:rate5m{cluster_id=~\"$cluster_id\", k8s_src_namespace=~\"$namespace\"}) * $__interval_ms / 1000",
+          "interval": "$time_period",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total Data Transferred Per Day",
+      "type": "barchart"
     },
     {
       "datasource": {
@@ -225,7 +302,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 21
+        "y": 20
       },
       "id": 27,
       "options": {
@@ -250,7 +327,7 @@
         "sizing": "manual",
         "valueMode": "color"
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "datasource": {
@@ -332,7 +409,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 21
+        "y": 20
       },
       "id": 28,
       "options": {
@@ -357,7 +434,7 @@
         "sizing": "manual",
         "valueMode": "color"
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "datasource": {
@@ -410,8 +487,8 @@
     },
     {
       "datasource": {
-        "type": "datasource",
-        "uid": "-- Dashboard --"
+        "type": "prometheus",
+        "uid": "gs-mimir"
       },
       "description": "Displays the total bytes sent for public traffic.",
       "fieldConfig": {
@@ -499,7 +576,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 31
+        "y": 30
       },
       "id": 3,
       "options": {
@@ -520,14 +597,18 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
+            "type": "prometheus",
+            "uid": "gs-mimir"
           },
-          "panelId": 27,
+          "editorMode": "code",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  avg_over_time(\n    network_traffic_analysis:beyla_network_flow_bytes_public:rate5m{\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"$cluster_id\"\n    }[$__interval * 20]\n  )\n)",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -536,7 +617,7 @@
         {
           "id": "filterByRefId",
           "options": {
-            "include": "/^(?:public)$/"
+            "include": "/^(?:public|A)$/"
           }
         },
         {
@@ -553,6 +634,9 @@
         {
           "id": "labelsToFields",
           "options": {
+            "keepLabels": [
+              "k8s_src_namespace"
+            ],
             "mode": "columns",
             "valueLabel": "k8s_src_namespace"
           }
@@ -562,8 +646,8 @@
     },
     {
       "datasource": {
-        "type": "datasource",
-        "uid": "-- Dashboard --"
+        "type": "prometheus",
+        "uid": "gs-mimir"
       },
       "fieldConfig": {
         "defaults": {
@@ -646,7 +730,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 30
       },
       "id": 1,
       "options": {
@@ -667,14 +751,18 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
+            "type": "prometheus",
+            "uid": "gs-mimir"
           },
-          "panelId": 28,
+          "editorMode": "code",
+          "expr": "sum by (k8s_src_namespace, cluster_id) (\n  avg_over_time(\n    network_traffic_analysis:beyla_network_flow_bytes_cross_az:rate5m{\n      k8s_src_namespace=~\"$namespace\",\n      cluster_id=\"${cluster_id}\"\n    }[$__interval * 20]\n  )\n)",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -683,7 +771,7 @@
         {
           "id": "filterByRefId",
           "options": {
-            "include": "/^(?:cross-az)$/"
+            "include": "/^(?:cross-az|A)$/"
           }
         },
         {
@@ -787,8 +875,8 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "text": "1d",
-          "value": "1d"
+          "text": "6h",
+          "value": "6h"
         },
         "description": "Select which time period to use for data transfer grouping",
         "label": "Time Period (data transfer only)",
@@ -810,7 +898,7 @@
             "value": "1h"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "6h",
             "value": "6h"
           },
@@ -820,7 +908,7 @@
             "value": "12h"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "1d",
             "value": "1d"
           },
