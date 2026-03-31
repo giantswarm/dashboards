@@ -11,6 +11,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Updated Tempo dashboards to mixins v2.10
 - bugfixes in Tempo operational dashboard
+- Update Network Traffic Analysis Overview dashboard
+  - Replace average network traffic gauges with total data transfer bar chart
+  - Add a time period selector for data transfer periods
+  - Make total visible in all panels
+  - Remove datasource variable
+  - Simplify traffic rate queries
 
 ### Removed
 
