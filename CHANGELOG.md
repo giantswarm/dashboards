@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.19.0] - 2026-03-31
+
 ### Changed
 
 - Updated Tempo dashboards to mixins v2.10
@@ -1560,7 +1562,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.18.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.19.0...HEAD
+[4.19.0]: https://github.com/giantswarm/dashboards/compare/v4.18.0...v4.19.0
 [4.18.0]: https://github.com/giantswarm/dashboards/compare/v4.17.0...v4.18.0
 [4.17.0]: https://github.com/giantswarm/dashboards/compare/v4.16.1...v4.17.0
 [4.16.1]: https://github.com/giantswarm/dashboards/compare/v4.16.0...v4.16.1
