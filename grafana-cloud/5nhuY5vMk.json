@@ -10,10 +10,10 @@
     "url": "/d/5nhuY5vMk/billing-usage",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2020-09-03T12:03:22Z",
-    "updated": "2026-02-23T20:30:45Z",
+    "updated": "2026-03-24T16:34:06Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 218,
+    "version": 220,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -287,6 +287,21 @@
               "matcher": {
                 "id": "byFrameRefID",
                 "options": "contract_data"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "db_observability"
               },
               "properties": [
                 {
@@ -587,6 +602,21 @@
               "matcher": {
                 "id": "byFrameRefID",
                 "options": "contract_data_fraction"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "db_observability_fraction"
               },
               "properties": [
                 {
@@ -1235,6 +1265,26 @@
             "instant": true,
             "legendFormat": "Kubernetes Monitoring fraction",
             "refId": "kubernetes_observability_fraction"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_db_o11y_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n > 0",
+            "instant": true,
+            "legendFormat": "Database Observability",
+            "refId": "db_observability"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_db_o11y_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n > 0",
+            "instant": true,
+            "legendFormat": "Database Observability fraction",
+            "refId": "db_observability_fraction"
           }
         ],
         "title": "Current Billable Usage Cost by Product",
@@ -2639,7 +2689,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
             "instant": true,
             "legendFormat": "Current Logs Write Usage Cost"
           },
@@ -2648,9 +2698,27 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
             "instant": true,
-            "legendFormat": "Current fraction of cost due to Logs Write Usage"
+            "legendFormat": "Current fraction of cost due to Logs Write/Query Usage"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "instant": true,
+            "legendFormat": "Current Logs Query Usage Cost"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "instant": true,
+            "legendFormat": "Current fraction of cost due to Logs Query Usage"
           }
         ],
         "title": "",
@@ -2702,9 +2770,18 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "grafanacloud_org_logs_usage{org_id=\"$org_id\"}",
+            "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
             "instant": true,
             "legendFormat": "Current Billable Logs Write Usage"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"})",
+            "instant": true,
+            "legendFormat": "Current Billable Logs Query Usage"
           }
         ],
         "title": "",
@@ -3430,7 +3507,7 @@
                   "uid": "grafanacloud-usage"
                 },
                 "expr": "\nmax(grafanacloud_logs_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
-                "legendFormat": "Additional Usage Amount - {{ name }}"
+                "legendFormat": "Additional Usage Amount process - {{ name }}"
               },
               {
                 "datasource": {
@@ -3438,7 +3515,7 @@
                   "uid": "grafanacloud-usage"
                 },
                 "expr": "\nmax(grafanacloud_logs_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
-                "legendFormat": "Cost fraction - {{ name }}"
+                "legendFormat": "Cost fraction process - {{ name }}"
               }
             ],
             "title": "Total Billable Logs Process Usage",
@@ -3503,7 +3580,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "instant": true,
                 "legendFormat": "Current Logs Write Usage Cost"
               },
@@ -3512,7 +3589,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "instant": true,
                 "legendFormat": "Current fraction of cost due to Logs Write Usage"
               }
@@ -3557,7 +3634,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "grafanacloud_org_logs_usage{org_id=\"$org_id\"}",
+                "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
                 "instant": true,
                 "legendFormat": "Current Billable Logs Write Usage"
               }
@@ -3654,7 +3731,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "grafanacloud_org_logs_usage{org_id=\"$org_id\"}",
+                "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
                 "instant": false,
                 "legendFormat": "Billable Usage"
               },
@@ -3663,7 +3740,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "instant": false,
                 "legendFormat": "Additional Usage Amount"
               },
@@ -3672,7 +3749,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "instant": false,
                 "legendFormat": "Cost fraction"
               },
@@ -3689,8 +3766,252 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
-                "legendFormat": "Additional Usage Amount - {{ name }}"
+                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "legendFormat": "Additional Usage Amount write - {{ name }}"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "legendFormat": "Cost fraction write - {{ name }}"
+              }
+            ],
+            "title": "Total Billable Logs Write Usage",
+            "transparent": true,
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                },
+                "unit": "currencyUSD"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*[Ff]raction.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    },
+                    {
+                      "id": "min",
+                      "value": 0
+                    },
+                    {
+                      "id": "max",
+                      "value": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 6,
+              "x": 0,
+              "y": 58
+            },
+            "id": 47,
+            "options": {
+              "colorMode": "background",
+              "orientation": "horizontal",
+              "text": {
+                "titleSize": 23,
+                "valueSize": 70
+              }
+            },
+            "pluginVersion": "v11.1.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "instant": true,
+                "legendFormat": "Current Logs Query Usage Cost"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "instant": true,
+                "legendFormat": "Current fraction of cost due to Logs Query Usage"
+              }
+            ],
+            "title": "",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                },
+                "unit": "gbytes"
+              }
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 6,
+              "x": 0,
+              "y": 63
+            },
+            "id": 48,
+            "options": {
+              "colorMode": "background",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "text": {
+                "titleSize": 20,
+                "valueSize": 60
+              }
+            },
+            "pluginVersion": "v11.1.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"})",
+                "instant": true,
+                "legendFormat": "Current Billable Logs Query Usage"
+              }
+            ],
+            "title": "",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "fillOpacity": 10,
+                  "gradientMode": "hue",
+                  "showPoints": "never"
+                },
+                "unit": "gbytes"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/Additional Us(age|(ers?)) Amount/"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "currencyUSD"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/^Included/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 2
+                    },
+                    {
+                      "id": "custom.lineStyle",
+                      "value": {
+                        "dash": [
+                          10,
+                          10
+                        ],
+                        "fill": "dash"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*[Ff]raction.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    },
+                    {
+                      "id": "min",
+                      "value": 0
+                    },
+                    {
+                      "id": "max",
+                      "value": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 18,
+              "x": 6,
+              "y": 58
+            },
+            "id": 49,
+            "pluginVersion": "v11.1.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"})",
+                "instant": false,
+                "legendFormat": "Billable Usage"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "instant": false,
+                "legendFormat": "Additional Usage Amount"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "instant": false,
+                "legendFormat": "Cost fraction"
               },
               {
                 "datasource": {
@@ -3699,17 +4020,9 @@
                 },
                 "expr": "max(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"}) * on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Query Additional Usage Amount - {{ name }}"
-              },
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "grafanacloud-usage"
-                },
-                "expr": "\nmax(grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
-                "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
-            "title": "Total Billable Logs Write Usage",
+            "title": "Total Billable Logs Query Usage",
             "transparent": true,
             "type": "timeseries"
           }
@@ -3725,7 +4038,7 @@
           "x": 0,
           "y": 44
         },
-        "id": 47,
+        "id": 50,
         "panels": [
           {
             "datasource": {
@@ -3769,7 +4082,7 @@
               "x": 0,
               "y": 44
             },
-            "id": 48,
+            "id": 51,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -3822,7 +4135,7 @@
               "x": 0,
               "y": 49
             },
-            "id": 49,
+            "id": 52,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -3928,7 +4241,7 @@
               "x": 6,
               "y": 44
             },
-            "id": 50,
+            "id": 53,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -3972,7 +4285,7 @@
                   "uid": "grafanacloud-usage"
                 },
                 "expr": "max(grafanacloud_logs_instance_retention_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_retention_overage{org_id=\"$org_id\"}) * on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
-                "legendFormat": "Additional Usage Amount - {{ name }}"
+                "legendFormat": "Additional Usage Amount retention - {{ name }}"
               },
               {
                 "datasource": {
@@ -3980,7 +4293,7 @@
                   "uid": "grafanacloud-usage"
                 },
                 "expr": "max(grafanacloud_logs_instance_retention_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_retention_bill_fraction{org_id=\"$org_id\"}) * on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
-                "legendFormat": "Cost fraction - {{ name }}"
+                "legendFormat": "Cost fraction retention - {{ name }}"
               }
             ],
             "title": "Total Billable Logs Retention Usage",
@@ -3999,7 +4312,7 @@
           "x": 0,
           "y": 45
         },
-        "id": 51,
+        "id": 54,
         "panels": [],
         "title": "Traces",
         "type": "row"
@@ -4046,7 +4359,7 @@
           "x": 0,
           "y": 55
         },
-        "id": 52,
+        "id": 55,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -4121,7 +4434,7 @@
           "x": 6,
           "y": 55
         },
-        "id": 53,
+        "id": 56,
         "options": {
           "colorMode": "background",
           "orientation": "vertical",
@@ -4210,7 +4523,7 @@
           "x": 6,
           "y": 55
         },
-        "id": 54,
+        "id": 57,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -4264,7 +4577,7 @@
           "x": 18,
           "y": 55
         },
-        "id": 55,
+        "id": 58,
         "options": {
           "content": "## About Billable Traces\n\nYour **total billable traces usage** is calculated using the total number of ingested bytes generated by your traces this month.\n\nYou can dig deeper into your daily ingestion rates, totals, and more by expanding the **Traces Ingestion Details** row directly below this panel.\n\nFor a guide on traces usage management: <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/reduce-costs/traces-costs/\" target=\"_blank\">Reduce Grafana Cloud Traces cost</a>.\n"
         },
@@ -4281,7 +4594,7 @@
           "x": 0,
           "y": 60
         },
-        "id": 56,
+        "id": 59,
         "panels": [
           {
             "datasource": {
@@ -4325,7 +4638,7 @@
               "x": 0,
               "y": 60
             },
-            "id": 57,
+            "id": 60,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -4378,7 +4691,7 @@
               "x": 0,
               "y": 65
             },
-            "id": 58,
+            "id": 61,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -4484,7 +4797,7 @@
               "x": 6,
               "y": 60
             },
-            "id": 59,
+            "id": 62,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -4585,7 +4898,7 @@
               "x": 0,
               "y": 65
             },
-            "id": 60,
+            "id": 63,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -4638,7 +4951,7 @@
               "x": 0,
               "y": 70
             },
-            "id": 61,
+            "id": 64,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -4744,7 +5057,7 @@
               "x": 6,
               "y": 65
             },
-            "id": 62,
+            "id": 65,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -4845,7 +5158,7 @@
               "x": 0,
               "y": 70
             },
-            "id": 63,
+            "id": 66,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -4898,7 +5211,7 @@
               "x": 0,
               "y": 75
             },
-            "id": 64,
+            "id": 67,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -5004,7 +5317,7 @@
               "x": 6,
               "y": 70
             },
-            "id": 65,
+            "id": 68,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -5075,7 +5388,7 @@
           "x": 0,
           "y": 60
         },
-        "id": 66,
+        "id": 69,
         "panels": [
           {
             "datasource": {
@@ -5097,7 +5410,7 @@
               "x": 0,
               "y": 60
             },
-            "id": 67,
+            "id": 70,
             "options": {
               "legend": {
                 "calcs": [
@@ -5171,7 +5484,7 @@
               "x": 0,
               "y": 68
             },
-            "id": 68,
+            "id": 71,
             "options": {
               "legend": {
                 "calcs": [
@@ -5220,7 +5533,7 @@
               "x": 0,
               "y": 76
             },
-            "id": 69,
+            "id": 72,
             "options": {
               "legend": {
                 "displayMode": "table",
@@ -5263,7 +5576,7 @@
           "x": 0,
           "y": 76
         },
-        "id": 70,
+        "id": 73,
         "panels": [],
         "title": "Grafana Users",
         "type": "row"
@@ -5310,7 +5623,7 @@
           "x": 0,
           "y": 88
         },
-        "id": 71,
+        "id": 74,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -5363,7 +5676,7 @@
           "x": 0,
           "y": 93
         },
-        "id": 72,
+        "id": 75,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -5487,7 +5800,7 @@
           "x": 6,
           "y": 88
         },
-        "id": 73,
+        "id": 76,
         "links": [
           {
             "targetBlank": true,
@@ -5548,7 +5861,7 @@
           "x": 18,
           "y": 88
         },
-        "id": 74,
+        "id": 77,
         "options": {
           "content": "## About Billable Users\n\nYour **total billable grafana users** is determined by all <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/manage-invoices/understand-your-invoice/active-users-invoice/\" target=\"_blank\">monthly active Grafana users</a> and their associated costs. Active users are only billed once per month across all your stacks.\n\nYou can dig deeper in the **Grafana Users Usage Details** row directly below this panel.\nFor additional per user costs generated from an Enterprise plugin add-on, expand the **Enterprise Plugin Add-On** row.\n"
         },
@@ -5565,7 +5878,7 @@
           "x": 0,
           "y": 93
         },
-        "id": 75,
+        "id": 78,
         "panels": [
           {
             "datasource": {
@@ -5587,7 +5900,7 @@
               "x": 0,
               "y": 93
             },
-            "id": 76,
+            "id": 79,
             "options": {
               "legend": {
                 "calcs": [
@@ -5628,7 +5941,7 @@
           "x": 0,
           "y": 101
         },
-        "id": 77,
+        "id": 80,
         "panels": [
           {
             "datasource": {
@@ -5672,7 +5985,7 @@
               "x": 0,
               "y": 113
             },
-            "id": 78,
+            "id": 81,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -5725,7 +6038,7 @@
               "x": 0,
               "y": 118
             },
-            "id": 79,
+            "id": 82,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -5831,7 +6144,7 @@
               "x": 6,
               "y": 113
             },
-            "id": 80,
+            "id": 83,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -5877,7 +6190,7 @@
               "x": 18,
               "y": 113
             },
-            "id": 81,
+            "id": 84,
             "options": {
               "content": "## About Enterprise Plugins\n\nUnder the Pro monthly subscription plan it is possible to add a single (1) Grafana Enterprise Plugin for use across your account. Once added, this comes at an additional cost of <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/manage-invoices/understand-your-invoice/active-users-invoice/\" target=\"_blank\">$25 per Grafana active user</a>.\n\nIf you've added an Enterprise plugin, your Billable Enterprise Plugin Users panels displays your total number of Grafana active users and the additional aggregated cost at $25/user, this month so far.\n"
             },
@@ -5898,7 +6211,7 @@
           "x": 0,
           "y": 114
         },
-        "id": 82,
+        "id": 85,
         "panels": [],
         "title": "Incident Response & Management (IRM) Users",
         "type": "row"
@@ -5945,7 +6258,7 @@
           "x": 0,
           "y": 126
         },
-        "id": 83,
+        "id": 86,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -5998,7 +6311,7 @@
           "x": 0,
           "y": 131
         },
-        "id": 84,
+        "id": 87,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -6104,7 +6417,7 @@
           "x": 6,
           "y": 126
         },
-        "id": 85,
+        "id": 88,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -6158,7 +6471,7 @@
           "x": 18,
           "y": 126
         },
-        "id": 86,
+        "id": 89,
         "options": {
           "content": "## About IRM Users\n\nYour Total Billable IRM Users panel reflects all active users of IRM services this month. A user is <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/manage-invoices/understand-your-invoice/irm-invoice/\" target=\"_blank\">considered active</a> if they are included in OnCall schedules or escalation chains, or if they perform any of the actions below:\n- Changed status of alert group or OnCall configuration\n- Got paged or paged someone\n- Created, declared, edited, updated, or deleted an Incident\n"
         },
@@ -6175,7 +6488,7 @@
           "x": 0,
           "y": 131
         },
-        "id": 87,
+        "id": 90,
         "panels": [
           {
             "datasource": {
@@ -6197,7 +6510,7 @@
               "x": 0,
               "y": 131
             },
-            "id": 88,
+            "id": 91,
             "options": {
               "legend": {
                 "calcs": [
@@ -6237,7 +6550,7 @@
               "x": 16,
               "y": 131
             },
-            "id": 89,
+            "id": 92,
             "options": {
               "content": "## About Active IRM Users per Stack\n\nThis panel displays the total number of <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/manage-invoices/understand-your-invoice/irm-invoice/\" target=\"_blank\">active</a>\nusers of IRM services per stack over the last 30 days.\nNote that an active IRM user in two or more stacks is counted only once for billing purposes.\n\n"
             },
@@ -6258,7 +6571,7 @@
           "x": 0,
           "y": 139
         },
-        "id": 90,
+        "id": 93,
         "panels": [],
         "title": "Kubernetes Monitoring Host Hours Usage",
         "type": "row"
@@ -6305,7 +6618,7 @@
           "x": 0,
           "y": 148
         },
-        "id": 91,
+        "id": 94,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -6358,7 +6671,7 @@
           "x": 0,
           "y": 153
         },
-        "id": 92,
+        "id": 95,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -6464,7 +6777,7 @@
           "x": 6,
           "y": 148
         },
-        "id": 93,
+        "id": 96,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -6518,7 +6831,7 @@
           "x": 18,
           "y": 148
         },
-        "id": 94,
+        "id": 97,
         "options": {
           "content": "## About Kubernetes Monitoring Host Hours\nYour Kubernetes Monitoring Host Usage is calculated from the total number of host hours this month.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/kubernetes-monitoring-invoice/\" target=\"_blank\">Understand your Grafana Cloud Kubernetes Monitoring invoice</a>\n"
         },
@@ -6535,7 +6848,7 @@
           "x": 0,
           "y": 156
         },
-        "id": 95,
+        "id": 98,
         "panels": [],
         "title": "Kubernetes Monitoring Container Hours Usage",
         "type": "row"
@@ -6582,7 +6895,7 @@
           "x": 0,
           "y": 168
         },
-        "id": 96,
+        "id": 99,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -6635,7 +6948,7 @@
           "x": 0,
           "y": 173
         },
-        "id": 97,
+        "id": 100,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -6741,7 +7054,7 @@
           "x": 6,
           "y": 168
         },
-        "id": 98,
+        "id": 101,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -6795,7 +7108,7 @@
           "x": 18,
           "y": 168
         },
-        "id": 99,
+        "id": 102,
         "options": {
           "content": "## About Kubernetes Monitoring Container Hours Usage\nYour Kubernetes Monitoring Container Usage is calculated from the total number of container hours this month.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/kubernetes-monitoring-invoice/\" target=\"_blank\">Understand your Grafana Cloud Kubernetes Monitoring invoice</a>\n"
         },
@@ -6812,7 +7125,7 @@
           "x": 0,
           "y": 176
         },
-        "id": 100,
+        "id": 103,
         "panels": [
           {
             "datasource": {
@@ -6859,7 +7172,7 @@
               "x": 0,
               "y": 176
             },
-            "id": 101,
+            "id": 104,
             "options": {
               "legend": {
                 "calcs": [
@@ -6933,7 +7246,7 @@
               "x": 0,
               "y": 184
             },
-            "id": 102,
+            "id": 105,
             "options": {
               "legend": {
                 "calcs": [
@@ -6974,7 +7287,7 @@
           "x": 0,
           "y": 184
         },
-        "id": 103,
+        "id": 106,
         "panels": [],
         "title": "k6 Virtual User Hours (VUh)",
         "type": "row"
@@ -7021,7 +7334,7 @@
           "x": 0,
           "y": 184
         },
-        "id": 104,
+        "id": 107,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -7074,7 +7387,7 @@
           "x": 0,
           "y": 189
         },
-        "id": 105,
+        "id": 108,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -7180,7 +7493,7 @@
           "x": 6,
           "y": 184
         },
-        "id": 106,
+        "id": 109,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -7234,7 +7547,7 @@
           "x": 18,
           "y": 184
         },
-        "id": 107,
+        "id": 110,
         "options": {
           "content": "## About k6 Virtual User Hours\n\nYour Total k6 Billable Usage is based on Virtual User hours (VUh) used during your load tests. \n\nYou can dig deeper into the kind of k6 usage generating billable VUh in the k6 Virtual User Hours (VUh) Details row directly below this panel.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/testing/k6/author-run/vu-hours/\" target=\"_blank\">About k6 Virtual User Hours</a>\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/performance-testing-invoice/\" target=\"_blank\">Understand your k6 invoice</a>            \n"
         },
@@ -7251,7 +7564,7 @@
           "x": 0,
           "y": 202
         },
-        "id": 108,
+        "id": 111,
         "panels": [
           {
             "datasource": {
@@ -7273,7 +7586,7 @@
               "x": 0,
               "y": 202
             },
-            "id": 109,
+            "id": 112,
             "options": {
               "legend": {
                 "calcs": [
@@ -7314,7 +7627,7 @@
           "x": 0,
           "y": 209
         },
-        "id": 110,
+        "id": 113,
         "panels": [],
         "title": "k6 Static IPs",
         "type": "row"
@@ -7361,7 +7674,7 @@
           "x": 0,
           "y": 209
         },
-        "id": 111,
+        "id": 114,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -7414,7 +7727,7 @@
           "x": 0,
           "y": 214
         },
-        "id": 112,
+        "id": 115,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -7520,7 +7833,7 @@
           "x": 6,
           "y": 209
         },
-        "id": 113,
+        "id": 116,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -7574,7 +7887,7 @@
           "x": 18,
           "y": 209
         },
-        "id": 114,
+        "id": 117,
         "options": {
           "content": "## About k6 Static IPs\n\nYour Total number of provisioned k6 Static IPs. \n\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/performance-testing-invoice/\" target=\"_blank\">Understand your k6 invoice</a>            \n"
         },
@@ -7591,7 +7904,7 @@
           "x": 0,
           "y": 219
         },
-        "id": 115,
+        "id": 118,
         "panels": [],
         "title": "Profiles",
         "type": "row"
@@ -7638,7 +7951,7 @@
           "x": 0,
           "y": 219
         },
-        "id": 116,
+        "id": 119,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -7713,7 +8026,7 @@
           "x": 6,
           "y": 219
         },
-        "id": 117,
+        "id": 120,
         "options": {
           "colorMode": "background",
           "orientation": "vertical",
@@ -7802,7 +8115,7 @@
           "x": 6,
           "y": 219
         },
-        "id": 118,
+        "id": 121,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -7856,7 +8169,7 @@
           "x": 18,
           "y": 219
         },
-        "id": 119,
+        "id": 122,
         "options": {
           "content": "## About Billable Profiles\n\nYour Total Billable Profiles Usage is calculated on the total number\nof ingested bytes generated by your profiles this month. Usage of\nGrafana Cloud Profiles is subject to <a\nhref=\"https://www.grafana.com/pricing\" target=\"_blank\">Grafana Cloud\nPricing</a> for Profiles.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/monitor-applications/profiles/\" target=\"_blank\">About Grafana Cloud Continuous Profiling</a>\n* <a href=\"https://grafana.com/blog/2023/08/09/grafana-cloud-profiles-for-continuous-profiling/\" target=\"_blank\">Blog: Unify your Observability signals with Grafana Cloud Profiles</a>\n\nYou can dig deeper into your daily ingestion rates, totals, and more in the **Profiles Ingestion Details** row directly below this panel.\n"
         },
@@ -7873,7 +8186,7 @@
           "x": 0,
           "y": 225
         },
-        "id": 120,
+        "id": 123,
         "panels": [
           {
             "datasource": {
@@ -7917,7 +8230,7 @@
               "x": 0,
               "y": 225
             },
-            "id": 121,
+            "id": 124,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -7970,7 +8283,7 @@
               "x": 0,
               "y": 230
             },
-            "id": 122,
+            "id": 125,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -8076,7 +8389,7 @@
               "x": 6,
               "y": 225
             },
-            "id": 123,
+            "id": 126,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -8177,7 +8490,7 @@
               "x": 0,
               "y": 230
             },
-            "id": 124,
+            "id": 127,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -8230,7 +8543,7 @@
               "x": 0,
               "y": 235
             },
-            "id": 125,
+            "id": 128,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -8336,7 +8649,7 @@
               "x": 6,
               "y": 230
             },
-            "id": 126,
+            "id": 129,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -8437,7 +8750,7 @@
               "x": 0,
               "y": 235
             },
-            "id": 127,
+            "id": 130,
             "options": {
               "colorMode": "background",
               "orientation": "horizontal",
@@ -8490,7 +8803,7 @@
               "x": 0,
               "y": 240
             },
-            "id": 128,
+            "id": 131,
             "options": {
               "colorMode": "background",
               "justifyMode": "auto",
@@ -8596,7 +8909,7 @@
               "x": 6,
               "y": 235
             },
-            "id": 129,
+            "id": 132,
             "pluginVersion": "v11.1.0",
             "targets": [
               {
@@ -8667,7 +8980,7 @@
           "x": 0,
           "y": 227
         },
-        "id": 130,
+        "id": 133,
         "panels": [
           {
             "datasource": {
@@ -8689,7 +9002,7 @@
               "x": 0,
               "y": 227
             },
-            "id": 131,
+            "id": 134,
             "options": {
               "legend": {
                 "calcs": [
@@ -8763,7 +9076,7 @@
               "x": 0,
               "y": 235
             },
-            "id": 132,
+            "id": 135,
             "options": {
               "legend": {
                 "calcs": [
@@ -8812,7 +9125,7 @@
               "x": 0,
               "y": 243
             },
-            "id": 133,
+            "id": 136,
             "options": {
               "legend": {
                 "displayMode": "table",
@@ -8858,7 +9171,7 @@
               "x": 0,
               "y": 251
             },
-            "id": 134,
+            "id": 137,
             "options": {
               "legend": {
                 "calcs": [
@@ -8898,7 +9211,7 @@
               "x": 18,
               "y": 251
             },
-            "id": 135,
+            "id": 138,
             "options": {
               "content": "## About Usage Groups\n\nUsage groups provide a mechanism to break down billable usage by\ndifferent attributes (for example, by application). The values provided\nby this panel are not exact down to the byte, nor are billable bytes\ncalculated from this data, rather these values are best-effort\nestimates.\n\nUsage groups are not self serve. To configure your usage groups,\nplease contact Grafana Labs Support.\n"
             },
@@ -8919,7 +9232,7 @@
           "x": 0,
           "y": 239
         },
-        "id": 136,
+        "id": 139,
         "panels": [],
         "title": "Frontend Observability",
         "type": "row"
@@ -8966,7 +9279,7 @@
           "x": 0,
           "y": 239
         },
-        "id": 137,
+        "id": 140,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -9019,7 +9332,7 @@
           "x": 0,
           "y": 244
         },
-        "id": 138,
+        "id": 141,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -9125,7 +9438,7 @@
           "x": 6,
           "y": 239
         },
-        "id": 139,
+        "id": 142,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -9179,7 +9492,7 @@
           "x": 18,
           "y": 239
         },
-        "id": 140,
+        "id": 143,
         "options": {
           "content": "## About Frontend Observability\n\nYour Frontend Observability Usage is calculated from the total number of ingested sessions this month.\n\nYou can dig deeper into your daily ingestion rates, totals, and more in the **Frontend Observability Details** tab in the **Usage Drilldown** section at the bottom of this view.\n"
         },
@@ -9196,7 +9509,7 @@
           "x": 0,
           "y": 257
         },
-        "id": 141,
+        "id": 144,
         "panels": [
           {
             "datasource": {
@@ -9218,7 +9531,7 @@
               "x": 0,
               "y": 257
             },
-            "id": 142,
+            "id": 145,
             "options": {
               "legend": {
                 "calcs": [
@@ -9292,7 +9605,7 @@
               "x": 0,
               "y": 265
             },
-            "id": 143,
+            "id": 146,
             "options": {
               "legend": {
                 "calcs": [
@@ -9333,7 +9646,7 @@
           "x": 0,
           "y": 267
         },
-        "id": 144,
+        "id": 147,
         "panels": [],
         "title": "Application Observability",
         "type": "row"
@@ -9380,7 +9693,7 @@
           "x": 0,
           "y": 267
         },
-        "id": 145,
+        "id": 148,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -9433,7 +9746,7 @@
           "x": 0,
           "y": 272
         },
-        "id": 146,
+        "id": 149,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -9539,7 +9852,7 @@
           "x": 6,
           "y": 267
         },
-        "id": 147,
+        "id": 150,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -9593,7 +9906,7 @@
           "x": 18,
           "y": 267
         },
-        "id": 148,
+        "id": 151,
         "options": {
           "content": "## About Application Observability\n\nYour Application Observability Usage is calculated from the total number of host hours this month.\n\n"
         },
@@ -9610,7 +9923,7 @@
           "x": 0,
           "y": 279
         },
-        "id": 149,
+        "id": 152,
         "panels": [
           {
             "datasource": {
@@ -9632,7 +9945,7 @@
               "x": 0,
               "y": 279
             },
-            "id": 150,
+            "id": 153,
             "options": {
               "legend": {
                 "calcs": [
@@ -9707,7 +10020,7 @@
               "x": 0,
               "y": 287
             },
-            "id": 151,
+            "id": 154,
             "options": {
               "legend": {
                 "calcs": [
@@ -9781,7 +10094,7 @@
               "x": 0,
               "y": 295
             },
-            "id": 152,
+            "id": 155,
             "options": {
               "legend": {
                 "calcs": [
@@ -9822,7 +10135,7 @@
           "x": 0,
           "y": 315
         },
-        "id": 153,
+        "id": 156,
         "panels": [],
         "title": "Synthetics Protocol Usage",
         "type": "row"
@@ -9869,7 +10182,7 @@
           "x": 0,
           "y": 315
         },
-        "id": 154,
+        "id": 157,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -9922,7 +10235,7 @@
           "x": 0,
           "y": 320
         },
-        "id": 155,
+        "id": 158,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -10028,7 +10341,7 @@
           "x": 6,
           "y": 315
         },
-        "id": 156,
+        "id": 159,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -10082,7 +10395,7 @@
           "x": 18,
           "y": 315
         },
-        "id": 157,
+        "id": 160,
         "options": {
           "content": "## About Synthetics Protocol Usage\nSynthetics Protocol Usage is calculated from the total number of protocol-based test executions this month from HTTP, DNS, MultiHTTP, Ping, TCP, Traceroute, and k6 scripted <a href=\"https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/\" target=\"_blank\">check types</a>. Refer to the <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/synthetic-monitoring-invoice/#billing-calculations\" target=\"_blank\">billing calculations</a> for more information on how test excutions are counted.\n\nYou can dig deeper into your test execution rates and totals in the Synthetic Monitoring Usage Details row below.            \n"
         },
@@ -10099,7 +10412,7 @@
           "x": 0,
           "y": 320
         },
-        "id": 158,
+        "id": 161,
         "panels": [],
         "title": "Synthetics Browser Usage",
         "type": "row"
@@ -10146,7 +10459,7 @@
           "x": 0,
           "y": 320
         },
-        "id": 159,
+        "id": 162,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -10199,7 +10512,7 @@
           "x": 0,
           "y": 325
         },
-        "id": 160,
+        "id": 163,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -10305,7 +10618,7 @@
           "x": 6,
           "y": 320
         },
-        "id": 161,
+        "id": 164,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -10359,7 +10672,7 @@
           "x": 18,
           "y": 320
         },
-        "id": 162,
+        "id": 165,
         "options": {
           "content": "## About Synthetics Browser Usage\nYour Synthetics Browser Usage is calculated from the total number of <a href=\"https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/k6-browser/\" target=\"_blank\">k6 browser</a> test executions this month. Refer to the <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/synthetic-monitoring-invoice/#billing-calculations\" target=\"_blank\">billing calculations</a> for more information on how test excutions are counted.\n\nYou can dig deeper into your test execution rates and totals in the Synthetic Monitoring Usage Details row below.\n"
         },
@@ -10376,7 +10689,7 @@
           "x": 0,
           "y": 333
         },
-        "id": 163,
+        "id": 166,
         "panels": [
           {
             "datasource": {
@@ -10398,7 +10711,7 @@
               "x": 0,
               "y": 333
             },
-            "id": 164,
+            "id": 167,
             "options": {
               "legend": {
                 "calcs": [
@@ -10472,7 +10785,7 @@
               "x": 0,
               "y": 341
             },
-            "id": 165,
+            "id": 168,
             "options": {
               "legend": {
                 "calcs": [
@@ -10546,7 +10859,7 @@
               "x": 0,
               "y": 349
             },
-            "id": 166,
+            "id": 169,
             "options": {
               "legend": {
                 "calcs": [
@@ -10587,7 +10900,7 @@
           "x": 0,
           "y": 357
         },
-        "id": 167,
+        "id": 170,
         "panels": [],
         "title": "Grafana Assistant",
         "type": "row"
@@ -10634,7 +10947,7 @@
           "x": 0,
           "y": 357
         },
-        "id": 168,
+        "id": 171,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -10687,7 +11000,7 @@
           "x": 0,
           "y": 362
         },
-        "id": 169,
+        "id": 172,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -10793,7 +11106,7 @@
           "x": 6,
           "y": 357
         },
-        "id": 170,
+        "id": 173,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -10847,7 +11160,7 @@
           "x": 18,
           "y": 357
         },
-        "id": 171,
+        "id": 174,
         "options": {
           "content": "## About Grafana Assistant\n\nYour Grafana Assistant Usage is calculated from the users using the assistant this month.\nA user is considered active if they have exchanged at least one message with the assistant this month.\n"
         },
@@ -10855,6 +11168,420 @@
         "title": "",
         "transparent": true,
         "type": "text"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 367
+        },
+        "id": 175,
+        "panels": [],
+        "title": "Database Observability Host Hours",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "dark-green",
+              "mode": "fixed"
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*[Ff]raction.*"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 367
+        },
+        "id": 176,
+        "options": {
+          "colorMode": "background",
+          "orientation": "horizontal",
+          "text": {
+            "titleSize": 23,
+            "valueSize": 70
+          }
+        },
+        "pluginVersion": "v11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_db_o11y_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "instant": true,
+            "legendFormat": "Current Database Observability Cost"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_db_o11y_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "instant": true,
+            "legendFormat": "Current fraction of cost due to Database Observability"
+          }
+        ],
+        "title": "",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "fixed"
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 372
+        },
+        "id": 177,
+        "options": {
+          "colorMode": "background",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "text": {
+            "titleSize": 20,
+            "valueSize": 60
+          }
+        },
+        "pluginVersion": "v11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "grafanacloud_org_db_o11y_billable_host_hours{org_id=\"$org_id\"}",
+            "instant": true,
+            "legendFormat": "Current Billable Database Observability Host Hours"
+          }
+        ],
+        "title": "",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "fillOpacity": 10,
+              "gradientMode": "hue",
+              "showPoints": "never"
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/Additional Us(age|(ers?)) Amount/"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "currencyUSD"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/^Included/"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      10,
+                      10
+                    ],
+                    "fill": "dash"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*[Ff]raction.*"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 6,
+          "y": 367
+        },
+        "id": 178,
+        "pluginVersion": "v11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "grafanacloud_org_db_o11y_billable_host_hours{org_id=\"$org_id\"}",
+            "instant": false,
+            "legendFormat": "Billable Host Hours"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_db_o11y_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "instant": false,
+            "legendFormat": "Additional Usage Amount"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_db_o11y_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "instant": false,
+            "legendFormat": "Cost fraction"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "grafanacloud_org_db_o11y_included_host_hours{org_id=\"$org_id\"}",
+            "legendFormat": "Included Host Hours"
+          }
+        ],
+        "title": "Total Billable Database Observability Host Hours",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 6,
+          "x": 18,
+          "y": 367
+        },
+        "id": 179,
+        "options": {
+          "content": "## About Database Observability Host Hours\n\nYour Database Observability Usage is calculated from the total number of host hours monitored this month.\n"
+        },
+        "pluginVersion": "v11.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 379
+        },
+        "id": 180,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "drawStyle": "bars",
+                  "fillOpacity": 100,
+                  "stacking": {
+                    "mode": "normal"
+                  }
+                },
+                "unit": "short"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byValue",
+                    "options": {
+                      "op": "gte",
+                      "reducer": "allIsZero",
+                      "value": 0
+                    }
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.hideFrom",
+                      "value": {
+                        "legend": true,
+                        "tooltip": true,
+                        "viz": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 379
+            },
+            "id": 181,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "width": 450
+              }
+            },
+            "pluginVersion": "v11.1.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "(grafanacloud_org_db_o11y_billable_host_hours{org_id=\"$org_id\"} - grafanacloud_org_db_o11y_billable_host_hours{org_id=\"$org_id\"} offset 24h) > 0 or (grafanacloud_org_db_o11y_billable_host_hours{org_id=\"$org_id\"}-0)",
+                "interval": "1d",
+                "legendFormat": "Billable Host Hours"
+              }
+            ],
+            "title": "Total Billable Database Observability Host Hours by day",
+            "transparent": true,
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "description": null,
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "fillOpacity": 10
+                },
+                "unit": "short"
+              }
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 387
+            },
+            "id": 182,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "lastNotNull",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "width": 450
+              }
+            },
+            "pluginVersion": "v11.1.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-usage"
+                },
+                "expr": "grafanacloud_db_observability_billable_usage{org_id=\"$org_id\"}",
+                "legendFormat": "{{ id }}"
+              }
+            ],
+            "title": "Database Observability Billable Usage by Instance",
+            "transparent": true,
+            "type": "timeseries"
+          }
+        ],
+        "title": "Database Observability Usage Details",
+        "type": "row"
       },
       {
         "datasource": {
@@ -10865,9 +11592,9 @@
           "h": 2,
           "w": 24,
           "x": 0,
-          "y": 377
+          "y": 389
         },
-        "id": 172,
+        "id": 183,
         "options": {
           "content": "<div style=\"vertical-align: top; border: 0px;\"\"><p style=\"text-align: center; font-size: 115%; padding: 0px; margin: 0px;\"><b>Looking for the drilldown of your Usage Details? We moved these further up. You can find them directly below their corresponding Product Usage panels. They are collapsed by default and available to expand, just as before.</b></p></div>"
         },
@@ -11011,6 +11738,6 @@
     "timezone": "utc",
     "title": "Billing/Usage",
     "uid": "5nhuY5vMk",
-    "version": 218
+    "version": 220
   }
 }
