@@ -1,0 +1,614 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "",
+      "gridPos": {"h": 3, "w": 24, "x": 0, "y": 0},
+      "options": {
+        "content": "Audits monitoring and observability tools deployed across clusters, showing CPU and memory resource consumption. Enables comparison between the current monitoring landscape and the GiantSwarm observability platform to support consolidation conversations.\n\n**GiantSwarm components:** management cluster (all namespaces) · workload cluster `kube-system`  \n**Customer components:** workload cluster namespaces outside `kube-system`",
+        "mode": "markdown"
+      }
+    },
+    {
+      "id": 2,
+      "type": "row",
+      "title": "Overview",
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 3},
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "GiantSwarm Platform — CPU Requests",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 4},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]},
+          "color": {"mode": "fixed", "fixedColor": "blue"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "graphMode": "none",
+        "colorMode": "background",
+        "textMode": "auto",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(\n  kube_pod_container_resource_requests{cluster_id=~\"$cluster\", resource=\"cpu\", cluster_type=\"management_cluster\"}\n  or\n  kube_pod_container_resource_requests{cluster_id=~\"$cluster\", resource=\"cpu\", cluster_type=\"workload_cluster\", namespace=\"kube-system\"}\n)",
+          "instant": true,
+          "legendFormat": "GiantSwarm CPU",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "GiantSwarm Platform — Memory Requests",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 4},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]},
+          "color": {"mode": "fixed", "fixedColor": "blue"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "graphMode": "none",
+        "colorMode": "background",
+        "textMode": "auto",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(\n  kube_pod_container_resource_requests{cluster_id=~\"$cluster\", resource=\"memory\", cluster_type=\"management_cluster\"}\n  or\n  kube_pod_container_resource_requests{cluster_id=~\"$cluster\", resource=\"memory\", cluster_type=\"workload_cluster\", namespace=\"kube-system\"}\n)",
+          "instant": true,
+          "legendFormat": "GiantSwarm Memory",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Customer — CPU Requests",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 4},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {"mode": "absolute", "steps": [{"color": "orange", "value": null}]},
+          "color": {"mode": "fixed", "fixedColor": "orange"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "graphMode": "none",
+        "colorMode": "background",
+        "textMode": "auto",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"cpu\"})",
+          "instant": true,
+          "legendFormat": "Customer CPU",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Customer — Memory Requests",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 4},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {"mode": "absolute", "steps": [{"color": "orange", "value": null}]},
+          "color": {"mode": "fixed", "fixedColor": "orange"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "graphMode": "none",
+        "colorMode": "background",
+        "textMode": "auto",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"memory\"})",
+          "instant": true,
+          "legendFormat": "Customer Memory",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "piechart",
+      "title": "CPU Requests Split",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {"unit": "short"},
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "pieType": "pie",
+        "displayLabels": ["name", "percent"],
+        "legend": {"displayMode": "table", "placement": "right", "values": ["value", "percent"]}
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"management_cluster\", resource=\"cpu\"})",
+          "instant": true,
+          "legendFormat": "GiantSwarm (MC)",
+          "refId": "A"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace=\"kube-system\", resource=\"cpu\"})",
+          "instant": true,
+          "legendFormat": "GiantSwarm (WC kube-system)",
+          "refId": "B"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"cpu\"})",
+          "instant": true,
+          "legendFormat": "Customer",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "piechart",
+      "title": "Memory Requests Split",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {"unit": "bytes"},
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "pieType": "pie",
+        "displayLabels": ["name", "percent"],
+        "legend": {"displayMode": "table", "placement": "right", "values": ["value", "percent"]}
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"management_cluster\", resource=\"memory\"})",
+          "instant": true,
+          "legendFormat": "GiantSwarm (MC)",
+          "refId": "A"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace=\"kube-system\", resource=\"memory\"})",
+          "instant": true,
+          "legendFormat": "GiantSwarm (WC kube-system)",
+          "refId": "B"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"memory\"})",
+          "instant": true,
+          "legendFormat": "Customer",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "row",
+      "title": "Customer Workload Clusters — Namespace Breakdown",
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 16},
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 10,
+      "type": "bargauge",
+      "title": "Customer — CPU Requests by Namespace",
+      "gridPos": {"h": 10, "w": 12, "x": 0, "y": 17},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "orange", "value": null}]
+          },
+          "color": {"mode": "thresholds"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sort_desc(sum by (namespace) (kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"cpu\"}))",
+          "instant": true,
+          "legendFormat": "{{namespace}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "bargauge",
+      "title": "Customer — Memory Requests by Namespace",
+      "gridPos": {"h": 10, "w": 12, "x": 12, "y": 17},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "orange", "value": null}]
+          },
+          "color": {"mode": "thresholds"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sort_desc(sum by (namespace) (kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"memory\"}))",
+          "instant": true,
+          "legendFormat": "{{namespace}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "row",
+      "title": "GiantSwarm Platform — Management Cluster Breakdown",
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 27},
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 13,
+      "type": "bargauge",
+      "title": "GiantSwarm (MC) — CPU Requests by Namespace",
+      "gridPos": {"h": 10, "w": 12, "x": 0, "y": 28},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "blue", "value": null}]
+          },
+          "color": {"mode": "thresholds"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sort_desc(sum by (namespace) (kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"management_cluster\", resource=\"cpu\"}))",
+          "instant": true,
+          "legendFormat": "{{namespace}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "bargauge",
+      "title": "GiantSwarm (MC) — Memory Requests by Namespace",
+      "gridPos": {"h": 10, "w": 12, "x": 12, "y": 28},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "blue", "value": null}]
+          },
+          "color": {"mode": "thresholds"}
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sort_desc(sum by (namespace) (kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"management_cluster\", resource=\"memory\"}))",
+          "instant": true,
+          "legendFormat": "{{namespace}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "row",
+      "title": "Customer Monitoring Inventory",
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 38},
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 16,
+      "type": "table",
+      "title": "Customer Workload Clusters — All Pods Outside kube-system",
+      "description": "Complete inventory of pods in customer-controlled namespaces. Use this to identify monitoring tools not captured by automated detection. Sorted by CPU requests descending.",
+      "gridPos": {"h": 15, "w": 24, "x": 0, "y": 39},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "Value #A"},
+            "properties": [
+              {"id": "displayName", "value": "CPU requests (cores)"},
+              {"id": "unit", "value": "short"},
+              {"id": "custom.width", "value": 160}
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Value #B"},
+            "properties": [
+              {"id": "displayName", "value": "Memory requests"},
+              {"id": "unit", "value": "bytes"},
+              {"id": "custom.width", "value": 160}
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Time"},
+            "properties": [{"id": "custom.hidden", "value": true}]
+          }
+        ]
+      },
+      "options": {
+        "sortBy": [{"displayName": "CPU requests (cores)", "desc": true}],
+        "footer": {"show": false}
+      },
+      "transformations": [
+        {"id": "merge", "options": {}},
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {"Time": true},
+            "indexByName": {
+              "cluster_id": 0,
+              "namespace": 1,
+              "pod": 2,
+              "container": 3,
+              "Value #A": 4,
+              "Value #B": 5
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum by (cluster_id, namespace, pod, container) (\n  kube_pod_container_resource_requests{\n    cluster_id=~\"$cluster\",\n    cluster_type=\"workload_cluster\",\n    namespace!=\"kube-system\",\n    resource=\"cpu\"\n  }\n)",
+          "instant": true,
+          "format": "table",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum by (cluster_id, namespace, pod, container) (\n  kube_pod_container_resource_requests{\n    cluster_id=~\"$cluster\",\n    cluster_type=\"workload_cluster\",\n    namespace!=\"kube-system\",\n    resource=\"memory\"\n  }\n)",
+          "instant": true,
+          "format": "table",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "type": "row",
+      "title": "Efficiency — Actual vs Requested (Customer Workload Clusters)",
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 54},
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 18,
+      "type": "timeseries",
+      "title": "Customer WC — Actual CPU vs Requested",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 55},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "Requested"},
+            "properties": [
+              {"id": "color", "value": {"fixedColor": "#FFC000", "mode": "fixed"}},
+              {"id": "custom.fillOpacity", "value": 0}
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {"showLegend": true},
+        "tooltip": {"mode": "multi", "sort": "none"}
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", container!=\"\", container!=\"POD\"}[$__rate_interval]))",
+          "instant": false,
+          "range": true,
+          "legendFormat": "Actual",
+          "refId": "A"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"cpu\"})",
+          "instant": false,
+          "range": true,
+          "legendFormat": "Requested",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "type": "timeseries",
+      "title": "Customer WC — Actual Memory vs Requested",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 55},
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "Requested"},
+            "properties": [
+              {"id": "color", "value": {"fixedColor": "#FFC000", "mode": "fixed"}},
+              {"id": "custom.fillOpacity", "value": 0}
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {"showLegend": true},
+        "tooltip": {"mode": "multi", "sort": "none"}
+      },
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(container_memory_working_set_bytes{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", container!=\"\", container!=\"POD\"})",
+          "instant": false,
+          "range": true,
+          "legendFormat": "Actual",
+          "refId": "A"
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "sum(kube_pod_container_resource_requests{cluster_id=~\"$cluster\", cluster_type=\"workload_cluster\", namespace!=\"kube-system\", resource=\"memory\"})",
+          "instant": false,
+          "range": true,
+          "legendFormat": "Requested",
+          "refId": "B"
+        }
+      ]
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 36,
+  "tags": [
+    "owner:team-atlas",
+    "topic:observability",
+    "component:monitoring-landscape"
+  ],
+  "templating": {
+    "list": [
+      {
+        "label": "Data source",
+        "name": "datasource",
+        "query": "prometheus",
+        "refresh": 1,
+        "sort": 2,
+        "type": "datasource"
+      },
+      {
+        "datasource": "${datasource}",
+        "label": "Cluster",
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "name": "cluster",
+        "query": {
+          "query": "label_values(kube_pod_info{}, cluster_id)",
+          "refId": "cluster"
+        },
+        "refresh": 2,
+        "sort": 2,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
+    "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d", "90d"]
+  },
+  "timezone": "utc",
+  "title": "Monitoring Landscape / Customer Audit",
+  "uid": "monitoring-landscape-audit"
+}
