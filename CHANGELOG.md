@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
+- Move Alloy dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Alloy`
+- Refresh Alloy mixin dashboards from upstream `v1.15.0`
+  - Adds `alloy-loki` and `alloy-otel-engine-overview` dashboards
 
 ## [4.19.0] - 2026-03-31
 
