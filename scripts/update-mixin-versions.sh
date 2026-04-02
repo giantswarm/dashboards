@@ -33,7 +33,7 @@ update_tempo() {
 
 update_mimir() {
   local version
-  version=$(get_app_version "mimir-app" "mimir")
+  version="$(get_app_version "mimir-app" "mimir")"
   # Use full tag: "2.17.6" → "mimir-2.17.6"
   local ref="mimir-${version}"
   echo "Mimir: appVersion=${version} → ${ref}"
