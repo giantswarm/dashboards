@@ -52,7 +52,7 @@ update_loki() {
 
 update_alloy() {
   local version
-  version=$(get_app_version "alloy-app" "alloy")
+  version="$(get_app_version "alloy-app" "alloy")"
   # Use full tag as-is: "v1.15.0"
   local ref="${version}"
   echo "Alloy: appVersion=${version} → ${ref}"
