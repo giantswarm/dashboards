@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Move Mimir dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Mimir`
+- Update `mimir/update.sh` output path and pin mixin to `mimir-2.17.6` (matching giantswarm/mimir-app appVersion)
+- Refresh Mimir mixin dashboards from upstream `mimir-2.17.6`
+
 ## [4.19.0] - 2026-03-31
 
 ### Changed
