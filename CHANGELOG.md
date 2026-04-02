@@ -7,11 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add Monitoring Landscape / Customer Audit dashboard to audit monitoring tools across workload clusters and compare resource consumption with the GiantSwarm observability platform
+
 ### Changed
 
+- Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
 - Move Alloy dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Alloy`
-- Update `alloy/update.sh` output path and pin to `v1.15.0` (matching giantswarm/alloy-app appVersion)
-- Refresh Alloy mixin dashboards from upstream `v1.15.0` — adds `alloy-loki` and `alloy-otel-engine-overview`
+- Refresh Alloy mixin dashboards from upstream `v1.15.0`
+  - Adds `alloy-loki` and `alloy-otel-engine-overview` dashboards
 
 ## [4.19.0] - 2026-03-31
 
