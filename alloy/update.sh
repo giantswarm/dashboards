@@ -15,10 +15,11 @@ TMPDIR="$(mktemp -d -t giantswarm-dashboards-XXXXXX)"
 trap "rm -rf $TMPDIR" EXIT
 
 alloy_mixin_dir="$TMPDIR/alloy/operations/alloy-mixin"
-helm_dir="$SCRIPT_DIR/../helm/dashboards/charts/private_dashboards_al/dashboards/shared/private"
+ALLOY_VERSION="v1.15.0"
+helm_dir="$SCRIPT_DIR/../helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Alloy"
 
 set -x
-git clone https://github.com/grafana/alloy.git --depth 1 "$TMPDIR/alloy"
+git clone https://github.com/grafana/alloy.git --depth 1 --branch "$ALLOY_VERSION" "$TMPDIR/alloy"
 cd "$alloy_mixin_dir"
 "$TOOLS_DIR/jb" install
 mixtool generate dashboards mixin.libsonnet -d "$TMPDIR/dashboards"
