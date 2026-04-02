@@ -1,6 +1,6 @@
 ##@ Dashboards
 
-.PHONY: install-tools lint-dashboards update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-tempo-mixin
+.PHONY: install-tools lint-dashboards update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
 
 SHELL:=/bin/bash -O globstar
 
@@ -30,8 +30,12 @@ update-loki-mixin: install-tools
 update-tempo-mixin: install-tools
 	./tempo/update.sh
 
-# Update all mixins dashboards
-update-mixin: update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
+# Fetch app versions from giantswarm/*-app repos and update version pins in update scripts
+update-mixin-versions:
+	./scripts/update-mixin-versions.sh
+
+# Update all mixins dashboards (fetches latest app versions first)
+update-mixin: update-mixin-versions update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
 
 # Run dashboard-linter for all dashboards in the helm/dashboards directory
 lint-dashboards: install-tools

@@ -1,0 +1,44 @@
+name: Update mixin dashboards
+
+on:
+  schedule:
+    # At 09:00 on the 1st of each month
+    - cron: '0 9 1 * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version: stable
+
+    - name: Install tools
+      run: make install-tools
+
+    - name: Add tools to PATH
+      run: echo "$(pwd)/tools" >> $GITHUB_PATH
+
+    - name: Update mixin version pins from app repos
+      run: make update-mixin-versions
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update mixin dashboards
+      run: make update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v8.1.0
+      with:
+        title: "[AUTO] Update mixin dashboards"
+        branch: automated/update-mixin-dashboards
+        base: main
+        commit-message: "Update mixin dashboards"
+        body: |
+          Automated monthly update of Tempo, Mimir, Loki and Alloy mixin dashboards.
+
+          Version pins are derived from the appVersion in the corresponding
+          giantswarm/*-app repositories.
