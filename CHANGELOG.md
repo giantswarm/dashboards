@@ -10,8 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Add monthly GitHub Actions workflow to auto-update Tempo, Mimir, Loki, and Alloy mixin dashboards
-- Add `scripts/update-mixin-versions.sh` to fetch app versions from giantswarm/*-app repos and update version pins in mixin scripts
-- Add `update-mixin-versions` Makefile target
+- Add Monitoring Landscape / Customer Audit dashboard to audit monitoring tools across workload clusters and compare resource consumption with the GiantSwarm observability platform
+
+### Changed
+
+- Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
 
 ## [4.19.0] - 2026-03-31
 
