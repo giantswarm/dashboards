@@ -9,9 +9,9 @@
 
 set -e
 
-BRANCH="main"
+BRANCH="release-3.6.x"
 MIXIN_URL=https://github.com/grafana/loki/production/loki-mixin@$BRANCH
-helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_al/dashboards/shared/private"
+helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Loki"
 
 set -x
 cd loki
