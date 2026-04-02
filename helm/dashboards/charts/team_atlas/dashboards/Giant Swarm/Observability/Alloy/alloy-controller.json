@@ -4,7 +4,7 @@
       {
         "datasource": "$loki_datasource",
         "enable": true,
-        "expr": "{cluster_id=\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
+        "expr": "{cluster_id=~\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
         "iconColor": "rgba(0, 211, 255, 1)",
         "instant": false,
         "name": "Deployments",
@@ -293,7 +293,7 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "sum by (instance) (rate(alloy_component_evaluation_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}[$__rate_interval]))\n",
+          "expr": "sum by (${groupby}) (rate(alloy_component_evaluation_seconds_count{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}[$__rate_interval]))\n",
           "instant": false,
           "legendFormat": "__auto",
           "range": true
@@ -344,10 +344,10 @@
     },
     {
       "datasource": "${datasource}",
-      "description": "The percentage of time spent evaluating 'slow' components - components that took longer than 1 minute to evaluate.\n\nIdeally, no component should take more than 1 minute to evaluate. The components displayed in this chart\nmay be a sign of a problem with the pipeline.\n",
+      "description": "The maximum duration of slow component evaluations over time.\n\nThis shows components that took longer than 1 minute to evaluate. Ideally, no component \nshould take more than 1 minute to evaluate. The components displayed in this chart\nmay be a sign of a problem with the pipeline or performance issues.\n",
       "fieldConfig": {
         "defaults": {
-          "unit": "percentunit"
+          "unit": "s"
         }
       },
       "gridPos": {
@@ -359,9 +359,9 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "sum by (component_path, component_id) (rate(alloy_component_evaluation_slow_seconds{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}[$__rate_interval]))\n/ scalar(sum(rate(alloy_component_evaluation_seconds_sum{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}[$__rate_interval])))\n",
+          "expr": "increase(alloy_component_evaluation_slow_seconds{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"}[$__rate_interval])\n",
           "instant": false,
-          "legendFormat": "{{component path}} {{component_id}}",
+          "legendFormat": "{{instance}} {{controller_path}} {{component_id}}",
           "range": true
         }
       ],
@@ -457,7 +457,7 @@
       "type": "heatmap"
     }
   ],
-  "refresh": "10s",
+  "refresh": "30s",
   "schemaVersion": 36,
   "tags": [
     "alloy-mixin",
@@ -484,40 +484,67 @@
         "type": "datasource"
       },
       {
+        "allowCustomValue": true,
         "datasource": "${datasource}",
         "label": "cluster",
+        "multi": true,
         "name": "cluster",
         "query": {
           "query": "label_values(alloy_component_controller_running_components, cluster_id)\n",
           "refId": "cluster"
         },
         "refresh": 2,
-        "sort": 2,
+        "sort": 1,
         "type": "query"
       },
       {
+        "allowCustomValue": true,
         "datasource": "${datasource}",
         "label": "namespace",
+        "multi": true,
         "name": "namespace",
         "query": {
           "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\"}, namespace)\n",
           "refId": "namespace"
         },
         "refresh": 2,
-        "sort": 2,
+        "sort": 1,
         "type": "query"
       },
       {
+        "allValue": ".*",
         "datasource": "${datasource}",
+        "includeAll": true,
         "label": "job",
+        "multi": true,
         "name": "job",
         "query": {
           "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
           "refId": "job"
         },
         "refresh": 2,
-        "sort": 2,
+        "sort": 1,
         "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "name": "filters",
+        "type": "adhoc"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "selected": true,
+          "text": "instance",
+          "value": "instance"
+        },
+        "label": "Group by",
+        "name": "groupby",
+        "query": "instance,component_path,component_id,controller_path,health_type,job,namespace,cluster,pod",
+        "type": "custom"
       }
     ]
   },
