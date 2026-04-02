@@ -7,11 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add Monitoring Landscape / Customer Audit dashboard to audit monitoring tools across workload clusters and compare resource consumption with the GiantSwarm observability platform
+
 ### Changed
 
+- Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
 - Move Loki dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Loki`
 - Refresh Loki dashboards from latest upstream mixin
-- Update `loki/update.sh` output path to new location
 
 ## [4.19.0] - 2026-03-31
 
