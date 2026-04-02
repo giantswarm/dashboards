@@ -42,7 +42,7 @@ update_mimir() {
 
 update_loki() {
   local version
-  version=$(get_app_version "loki-app" "loki")
+  version="$(get_app_version "loki-app" "loki")"
   # Strip patch: "3.6.5" → "release-3.6.x"
   local minor="${version%.*}"
   local ref="release-${minor}.x"
