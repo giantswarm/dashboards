@@ -7,13 +7,13 @@
     "canStar": true,
     "canDelete": false,
     "slug": "helmrelease-status",
-    "url": "/d/lu7vlzv/helmrelease-status",
+    "url": "/d//helmrelease-status",
     "expires": "0001-01-01T00:00:00Z",
-    "created": "2026-03-31T11:55:10Z",
-    "updated": "2026-04-01T11:04:08Z",
-    "updatedBy": "lukasz.j@giantswarm.io",
-    "createdBy": "lukasz.j@giantswarm.io",
-    "version": 4,
+    "created": "0001-01-01T00:00:00Z",
+    "updated": "0001-01-01T00:00:00Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 0,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -25,11 +25,6 @@
     "provisionedExternalId": "",
     "annotationsPermissions": {
       "dashboard": {
-        "canAdd": false,
-        "canEdit": false,
-        "canDelete": false
-      },
-      "organization": {
         "canAdd": false,
         "canEdit": false,
         "canDelete": false
@@ -56,7 +51,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 3321183559221248,
+    "id": 0,
     "liveNow": false,
     "panels": [
       {
@@ -209,6 +204,18 @@
                   }
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Chart name"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 217
+                }
+              ]
             }
           ]
         },
@@ -233,7 +240,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "aggregation:giantswarm:helm_release_info{customer=~\"$customer\",provider=~\"$provider\",cluster_id=~\"$cluster_id\",name=~\"$helmrelease_name\",namespace=~\"$namespace\",team=~\"$team\"}",
+            "expr": "label_replace(aggregation:giantswarm:helm_release_info{customer=~\"$customer\",provider=~\"$provider\",cluster_id=~\"$cluster_id\",name=~\"$helmrelease_name\",chart_name=~\"$chart\",exported_namespace=~\"$namespace\",team=~\"$team\"},\"team\",\"noteam\",\"team\",\"^$\")",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -248,16 +255,17 @@
             "options": {
               "include": {
                 "names": [
+                  "chart_app_version",
+                  "chart_version",
                   "cluster_id",
                   "customer",
                   "exported_namespace",
                   "name",
                   "provider",
                   "ready",
+                  "release_status",
                   "team",
-                  "chart_version",
-                  "chart_app_version",
-                  "release_status"
+                  "chart_name"
                 ]
               }
             }
@@ -268,19 +276,21 @@
               "excludeByName": {},
               "includeByName": {},
               "indexByName": {
-                "chart_app_version": 6,
-                "chart_version": 5,
+                "chart_app_version": 7,
+                "chart_name": 3,
+                "chart_version": 6,
                 "cluster_id": 0,
-                "customer": 8,
+                "customer": 9,
                 "exported_namespace": 1,
                 "name": 2,
-                "provider": 9,
-                "ready": 3,
-                "release_status": 4,
-                "team": 7
+                "provider": 10,
+                "ready": 4,
+                "release_status": 5,
+                "team": 8
               },
               "renameByName": {
                 "chart_app_version": "App version",
+                "chart_name": "Chart name",
                 "chart_version": "Chart version",
                 "cluster_id": "Cluster",
                 "customer": "Customer",
@@ -306,13 +316,14 @@
     "templating": {
       "list": [
         {
-          "allowCustomValue": false,
+          "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
             "text": [
-              "giantswarm"
+              "All"
             ],
             "value": [
-              "giantswarm"
+              "$__all"
             ]
           },
           "datasource": {
@@ -339,13 +350,14 @@
           "type": "query"
         },
         {
+          "allValue": ".*",
           "allowCustomValue": true,
           "current": {
             "text": [
-              "capa"
+              "All"
             ],
             "value": [
-              "capa"
+              "$__all"
             ]
           },
           "datasource": {
@@ -372,11 +384,10 @@
           "type": "query"
         },
         {
+          "allValue": ".*",
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
@@ -405,6 +416,7 @@
           "type": "query"
         },
         {
+          "allValue": ".*",
           "allowCustomValue": true,
           "current": {
             "text": [
@@ -438,11 +450,10 @@
           "type": "query"
         },
         {
+          "allValue": ".*",
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
@@ -471,11 +482,10 @@
           "type": "query"
         },
         {
+          "allValue": ".*",
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
@@ -494,6 +504,38 @@
           "query": {
             "qryType": 1,
             "query": "label_values(aggregation:giantswarm:helm_release_info,team)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "allowCustomValue": true,
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "000000006"
+          },
+          "definition": "label_values(aggregation:giantswarm:helm_release_info,chart_name)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Chart Name",
+          "multi": true,
+          "name": "chart",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(aggregation:giantswarm:helm_release_info,chart_name)",
             "refId": "PrometheusVariableQueryEditor-VariableQuery"
           },
           "refresh": 1,
@@ -525,7 +567,7 @@
     },
     "timezone": "utc",
     "title": "HelmRelease status",
-    "uid": "lu7vlzv",
-    "version": 4
+    "uid": "",
+    "version": 0
   }
 }
