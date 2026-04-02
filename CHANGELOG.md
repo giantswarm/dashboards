@@ -10,7 +10,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
-- Refresh Tempo dashboards from latest `release-v2.10` mixin
 
 ## [4.19.0] - 2026-03-31
 
