@@ -4,7 +4,7 @@
       {
         "datasource": "$loki_datasource",
         "enable": true,
-        "expr": "{cluster_id=\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
+        "expr": "{cluster_id=~\"$cluster\", container=\"kube-diff-logger\"} | json | namespace_extracted=\"alloy\" | name_extracted=~\"alloy.*\"",
         "iconColor": "rgba(0, 211, 255, 1)",
         "instant": false,
         "name": "Deployments",
@@ -196,7 +196,7 @@
           "range": false
         }
       ],
-      "title": "Convergance state",
+      "title": "Convergence state",
       "type": "stat"
     },
     {
@@ -249,16 +249,54 @@
           "range": true
         }
       ],
-      "title": "Convergance state timeline",
+      "title": "Convergence state timeline",
       "type": "state-timeline"
     },
     {
       "datasource": "${datasource}",
-      "description": "The number of cluster peers seen by each instance.\n\nWhen cluster is converged, every peer should see all the other instances. When we have a split brain or one\npeer not joining the cluster, we will see two or more groups of instances that report different peer numbers\nfor an extended period of time and not converging.\n\nThis graph helps to identify which instances may be in a split brain state.\n",
+      "description": "The number of cluster peers seen by each instance.\n\nWhen cluster is converged, every peer should see all the other instances. When we have a split brain or one\npeer not joining the cluster, we will see two or more groups of instances that report different peer numbers\nfor an extended period of time and not converging.\n\nThis graph helps to identify which instances may be in a split brain state.\n\nThe minimum cluster size shows the value of the --cluster.wait-for-size flag, which specifies the minimum \nnumber of instances required before cluster-enabled components begin processing traffic.\n",
       "fieldConfig": {
         "defaults": {
           "unit": "peers"
-        }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Minimum cluster size"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.dashPattern",
+                "value": [
+                  10,
+                  10
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -269,9 +307,16 @@
       "targets": [
         {
           "datasource": "${datasource}",
-          "expr": "sum by(instance) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
+          "expr": "sum by(${groupby}) (cluster_node_peers{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
           "instant": false,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "__auto",
+          "range": true
+        },
+        {
+          "datasource": "${datasource}",
+          "expr": "avg(cluster_minimum_size{cluster_id=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\"})\n",
+          "instant": false,
+          "legendFormat": "Minimum cluster size",
           "range": true
         }
       ],
@@ -279,7 +324,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "10s",
+  "refresh": "30s",
   "schemaVersion": 36,
   "tags": [
     "alloy-mixin",
@@ -306,40 +351,67 @@
         "type": "datasource"
       },
       {
+        "allowCustomValue": true,
         "datasource": "${datasource}",
         "label": "cluster",
+        "multi": true,
         "name": "cluster",
         "query": {
           "query": "label_values(alloy_component_controller_running_components, cluster_id)\n",
           "refId": "cluster"
         },
         "refresh": 2,
-        "sort": 2,
+        "sort": 1,
         "type": "query"
       },
       {
+        "allowCustomValue": true,
         "datasource": "${datasource}",
         "label": "namespace",
+        "multi": true,
         "name": "namespace",
         "query": {
           "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\"}, namespace)\n",
           "refId": "namespace"
         },
         "refresh": 2,
-        "sort": 2,
+        "sort": 1,
         "type": "query"
       },
       {
+        "allValue": ".*",
         "datasource": "${datasource}",
+        "includeAll": true,
         "label": "job",
+        "multi": true,
         "name": "job",
         "query": {
           "query": "label_values(alloy_component_controller_running_components{cluster_id=~\"$cluster\", namespace=~\"$namespace\"}, job)\n",
           "refId": "job"
         },
         "refresh": 2,
-        "sort": 2,
+        "sort": 1,
         "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "name": "filters",
+        "type": "adhoc"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "selected": true,
+          "text": "instance",
+          "value": "instance"
+        },
+        "label": "Group by",
+        "name": "groupby",
+        "query": "instance,state,job,namespace,cluster,pod",
+        "type": "custom"
       }
     ]
   },
