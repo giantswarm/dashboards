@@ -23,7 +23,7 @@ get_app_version() {
 
 update_tempo() {
   local version
-  version=$(get_app_version "tempo-app" "tempo")
+  version="$(get_app_version "tempo-app" "tempo")"
   # Strip patch: "2.10.2" → "release-v2.10"
   local minor="${version%.*}"
   local ref="release-v${minor}"
