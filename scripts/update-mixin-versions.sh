@@ -11,7 +11,7 @@
 
 set -eu
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
+SCRIPT_DIR="$(readlink -f "$(dirname "$0")")"
 ROOT_DIR="$SCRIPT_DIR/.."
 
 get_app_version() {
