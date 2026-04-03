@@ -14,6 +14,15 @@ set -eu
 SCRIPT_DIR="$(readlink -f "$(dirname "$0")")"
 ROOT_DIR="$SCRIPT_DIR/.."
 
+if ! command -v gh >/dev/null 2>&1; then
+  echo "Error: gh CLI not installed."
+  exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+  echo "Error: gh not authenticated. Run: gh auth login"
+  exit 1
+fi
 get_app_version() {
   local app="$1"
   local chart_name="$2"
