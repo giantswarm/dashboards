@@ -37,6 +37,6 @@ update-mixin: update-alloy-mixin update-kubernetes-mixin update-mimir-mixin upda
 lint-dashboards: install-tools
 		@for file in $(dashboards); do \
 			echo "------ Linting $$file"; \
-			dashboard-linter lint -c linter/config.yaml $$file; \
+			dashboard-linter lint -c scripts/lint-config.yaml $$file; \
 		done
 		@echo "------ Linted $(shell echo $(dashboards) | wc -w) dashboards"
