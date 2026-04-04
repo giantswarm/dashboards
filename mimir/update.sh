@@ -9,9 +9,9 @@
 
 set -e
 
-BRANCH="main"
+BRANCH="mimir-2.17.6"
 MIXIN_URL=https://github.com/grafana/mimir/operations/mimir-mixin@$BRANCH
-helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_mz/dashboards/shared/private"
+helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Mimir"
 
 set -x
 cd mimir
