@@ -120,7 +120,10 @@ To upload a dashboard while editing, run:
 
 ## Mixins Dashboards
 
-Mixin dashboards are auto-generated from upstream and placed in the appropriate team sub-chart under `helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/`. For example, kubernetes-mixin dashboards live in `charts/team_tenet/dashboards/Giant Swarm/Kubernetes/Mixin/`.
+Mixin dashboards are auto-generated from upstream and placed in the team sub-chart that owns the component:
+
+- **Observability components** (Alloy, Loki, Memcached, Mimir, Tempo) → `helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/<Component>/`
+- **Kubernetes** → `helm/dashboards/charts/team_tenet/dashboards/Giant Swarm/Kubernetes/Mixin/`
 
 ### Automatic updates
 
