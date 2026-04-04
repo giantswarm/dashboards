@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Reorganize Grafana Cloud directories: `dashboards/` → `grafana-cloud/sources/`, `grafana-cloud/` → `grafana-cloud/backup/`, GC API scripts → `grafana-cloud/scripts/`
+- Update backup workflow and README to reflect new paths
+
 ### Added
 
 - Add Monitoring Landscape / Customer Audit dashboard to audit monitoring tools across workload clusters and compare resource consumption with the GiantSwarm observability platform
