@@ -4,7 +4,7 @@ set -eu
 
 GRAFANA_URL="https://giantswarm.grafana.net"
 FOLDER_ID="40"  # Official folder
-OUTPUT_DIRECTORY="./output"
+OUTPUT_DIRECTORY="./grafana-cloud/output"
 
 if [ -z $GRAFANA_API_KEY ]; then
     echo "Grafana API key not set"

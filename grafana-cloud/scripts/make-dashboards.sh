@@ -2,8 +2,8 @@
 
 set -eu
 
-DASHBOARD_DIRECTORY="./dashboards"
-OUTPUT_DIRECTORY="./output"
+DASHBOARD_DIRECTORY="./grafana-cloud/sources"
+OUTPUT_DIRECTORY="./grafana-cloud/output"
 
 echo "Cleaning output directory"
 rm -rf ./$OUTPUT_DIRECTORY && mkdir ./$OUTPUT_DIRECTORY
