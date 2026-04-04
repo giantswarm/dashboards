@@ -10,13 +10,13 @@
 set -eu
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE}") && pwd -P)
-TOOLS_DIR="$SCRIPT_DIR/../tools"
+TOOLS_DIR="$SCRIPT_DIR/../../tools"
 TMPDIR="$(mktemp -d -t giantswarm-dashboards-XXXXXX)"
 trap "rm -rf $TMPDIR" EXIT
 
 alloy_mixin_dir="$TMPDIR/alloy/operations/alloy-mixin"
 ALLOY_VERSION="v1.15.0"
-helm_dir="$SCRIPT_DIR/../helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Alloy"
+helm_dir="$SCRIPT_DIR/../../helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Alloy"
 
 set -x
 git clone https://github.com/grafana/alloy.git --depth 1 --branch "$ALLOY_VERSION" "$TMPDIR/alloy"
