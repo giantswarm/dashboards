@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
+- Move Loki dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Loki`
+- Refresh Loki dashboards from latest upstream mixin
 - Move Mimir dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Mimir`
 - Refresh Mimir mixin dashboards from upstream `mimir-2.17.6`
 - Move Alloy dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Alloy`
