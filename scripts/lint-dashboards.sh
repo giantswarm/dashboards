@@ -3,7 +3,7 @@
 # Lint dashboards using the config.yaml
 #
 # Usage:
-#  ./linter/lint-dashboards.sh
+#  ./scripts/lint-dashboards.sh
 
 set -euo pipefail
 
@@ -28,7 +28,7 @@ main() {
     for dashboard in "${dashboards[@]}"; do
         echo "-------"
         echo "Linting \"$dashboard\""
-        dashboard-linter lint -c linter/config.yaml "$dashboard"
+        dashboard-linter lint -c scripts/lint-config.yaml "$dashboard"
     done
 
     return "$returncode"
