@@ -14,7 +14,7 @@ MIXIN_URL=https://github.com/grafana/loki/production/loki-mixin@$BRANCH
 helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Loki"
 
 set -x
-cd loki
+cd mixins/loki
 rm -rf vendor jsonnetfile.* dashboards_out
 
 jb init

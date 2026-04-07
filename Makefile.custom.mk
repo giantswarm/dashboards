@@ -12,27 +12,27 @@ install-tools:
 
 # Update Alloy mixin dashboards
 update-alloy-mixin: install-tools
-	./alloy/update.sh
+	./mixins/alloy/update.sh
 
 # Update Kubernetes mixin dashboards
 update-kubernetes-mixin:
 	./scripts/sync-kube-mixin.sh
 
-# Update Memcached mixin dashboards
-update-memcached-mixin: install-tools
-	./memcached/update.sh
-
 # Update Mimir mixin dashboards
 update-mimir-mixin: install-tools
-	./mimir/update.sh
+	./mixins/mimir/update.sh
 
 # Update Loki mixin dashboards
 update-loki-mixin: install-tools
-	./loki/update.sh
+	./mixins/loki/update.sh
 
 # Update Tempo mixin dashboards
 update-tempo-mixin: install-tools
-	./tempo/update.sh
+	./mixins/tempo/update.sh
+
+# Update Memcached mixin dashboards
+update-memcached-mixin: install-tools
+	./mixins/memcached/update.sh
 
 # Fetch app versions from giantswarm/*-app repos and update version pins in update scripts
 update-mixin-versions:

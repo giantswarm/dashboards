@@ -44,7 +44,7 @@ update_tempo() {
   local minor="${version%.*}"
   local ref="release-v${minor}"
   echo "Tempo: appVersion=${version} → ${ref}"
-  sed -i "s|^BRANCHREF=.*|BRANCHREF=\"${ref}\"|" "$ROOT_DIR/tempo/update.sh"
+  sed -i "s|^BRANCHREF=.*|BRANCHREF=\"${ref}\"|" "$ROOT_DIR/mixins/tempo/update.sh"
 }
 
 update_mimir() {
@@ -53,7 +53,7 @@ update_mimir() {
   # Use full tag: "2.17.6" → "mimir-2.17.6"
   local ref="mimir-${version}"
   echo "Mimir: appVersion=${version} → ${ref}"
-  sed -i "s|^BRANCH=.*|BRANCH=\"${ref}\"|" "$ROOT_DIR/mimir/update.sh"
+  sed -i "s|^BRANCH=.*|BRANCH=\"${ref}\"|" "$ROOT_DIR/mixins/mimir/update.sh"
 }
 
 update_loki() {
@@ -63,7 +63,7 @@ update_loki() {
   local minor="${version%.*}"
   local ref="release-${minor}.x"
   echo "Loki: appVersion=${version} → ${ref}"
-  sed -i "s|^BRANCH=.*|BRANCH=\"${ref}\"|" "$ROOT_DIR/loki/update.sh"
+  sed -i "s|^BRANCH=.*|BRANCH=\"${ref}\"|" "$ROOT_DIR/mixins/loki/update.sh"
 }
 
 update_alloy() {
@@ -72,7 +72,7 @@ update_alloy() {
   # Use full tag as-is: "v1.15.0"
   local ref="${version}"
   echo "Alloy: appVersion=${version} → ${ref}"
-  sed -i "s|^ALLOY_VERSION=.*|ALLOY_VERSION=\"${ref}\"|" "$ROOT_DIR/alloy/update.sh"
+  sed -i "s|^ALLOY_VERSION=.*|ALLOY_VERSION=\"${ref}\"|" "$ROOT_DIR/mixins/alloy/update.sh"
 }
 
 update_tempo

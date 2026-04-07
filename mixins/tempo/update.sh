@@ -12,14 +12,14 @@ set -eu
 #BRANCHREF="main" # breaking changes are coming with v3. Switch back to main once we update to v3.
 BRANCHREF="release-v2.10"
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
-TOOLS_DIR="$SCRIPT_DIR/../tools"
+TOOLS_DIR="$SCRIPT_DIR/../../tools"
 TMPDIR="$(mktemp -d -t giantswarm-dashboards-XXXXXX)"
 trap 'rm -rf $TMPDIR' EXIT
 
-helm_dir="$SCRIPT_DIR/../helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Tempo"
+helm_dir="$SCRIPT_DIR/../../helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Tempo"
 
 set -x
-cd tempo
+cd "$SCRIPT_DIR"
 rm -rf vendor jsonnetfile.* dashboards_out
 
 "$TOOLS_DIR/jb" init

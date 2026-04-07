@@ -14,8 +14,8 @@ MIXIN_URL=https://github.com/grafana/jsonnet-libs/memcached-mixin@$BRANCH
 helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Memcached"
 
 set -x
-mkdir -p memcached
-cd memcached
+mkdir -p mixins/memcached
+cd mixins/memcached
 rm -rf vendor jsonnetfile.* dashboards_out
 
 jb init
