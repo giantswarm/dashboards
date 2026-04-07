@@ -13,6 +13,7 @@ set -eu
 
 SCRIPT_DIR="$(readlink -f "$(dirname "$0")")"
 ROOT_DIR="$SCRIPT_DIR/.."
+TOOLS_DIR="$ROOT_DIR/tools"
 
 if ! command -v gh >/dev/null 2>&1; then
   echo "Error: gh CLI not installed."
@@ -24,11 +25,16 @@ if ! gh auth status >/dev/null 2>&1; then
   exit 1
 fi
 
+if [[ ! -x "$TOOLS_DIR/yq" ]]; then
+  echo "Error: yq not found in $TOOLS_DIR. Run: make install-tools"
+  exit 1
+fi
+
 get_app_version() {
   local app="$1"
   local chart_name="$2"
   gh api "repos/giantswarm/${app}/contents/helm/${chart_name}/Chart.yaml" \
-    --jq '.content' | base64 --decode | yq '.appVersion'
+    --jq '.content' | base64 --decode | "$TOOLS_DIR/yq" '.appVersion'
 }
 
 update_tempo() {
