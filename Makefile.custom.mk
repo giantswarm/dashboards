@@ -18,10 +18,6 @@ update-alloy-mixin: install-tools
 update-kubernetes-mixin:
 	./scripts/sync-kube-mixin.sh
 
-# Update Memcached mixin dashboards
-update-memcached-mixin: install-tools
-	./memcached/update.sh
-
 # Update Mimir mixin dashboards
 update-mimir-mixin: install-tools
 	./mixins/mimir/update.sh
