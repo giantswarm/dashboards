@@ -16,7 +16,7 @@ TOOLS_DIR="$SCRIPT_DIR/../tools"
 TMPDIR="$(mktemp -d -t giantswarm-dashboards-XXXXXX)"
 trap 'rm -rf $TMPDIR' EXIT
 
-helm_dir="$SCRIPT_DIR/../helm/dashboards/charts/private_dashboards_mz/dashboards/shared/private"
+helm_dir="$SCRIPT_DIR/../helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Tempo"
 
 set -x
 cd tempo
@@ -63,7 +63,9 @@ for file in "$TMPDIR/dashboards"/*.json; do
 
     # Fix operational component filtering
     if [[ "$filename" == "tempo-operational.json" ]]; then
+        # shellcheck disable=SC2016
         sed -i 's/pod=~\\"$component/pod=~\\".*$component/g' "$file"
+        # shellcheck disable=SC2016
         sed -i 's/persistentvolumeclaim=~\\"$component/persistentvolumeclaim=~\\".*$component/g' "$file"
     fi
 

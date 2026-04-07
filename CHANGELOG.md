@@ -13,8 +13,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
+- Reorganize Grafana Cloud directories: `dashboards/` → `grafana-cloud/sources/`, `grafana-cloud/` → `grafana-cloud/backup/`, GC API scripts → `grafana-cloud/scripts/`
+- Update backup workflow and README to reflect new paths
+
+## [4.20.0] - 2026-04-07
+
+### Added
+
+- Add Monitoring Landscape / Customer Audit dashboard to audit monitoring tools across workload clusters and compare resource consumption with the GiantSwarm observability platform
+
+### Changed
+
+- Move Tempo dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Tempo`
+- Move Loki dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Loki`
+- Refresh Loki dashboards from latest upstream mixin
+- Move Mimir dashboards from `private_dashboards_mz` to `team_atlas` under `Giant Swarm/Observability/Mimir`
+- Refresh Mimir mixin dashboards from upstream `mimir-2.17.6`
+- Move Alloy dashboards from `private_dashboards_al` to `team_atlas` under `Giant Swarm/Observability/Alloy`
+- Refresh Alloy mixin dashboards from upstream `v1.15.0`
+  - Adds `alloy-loki` and `alloy-otel-engine-overview` dashboards
+
+## [4.19.0] - 2026-03-31
+
+### Changed
+
 - Updated Tempo dashboards to mixins v2.10
 - bugfixes in Tempo operational dashboard
+- Update Network Traffic Analysis Overview dashboard
+  - Replace average network traffic gauges with total data transfer bar chart
+  - Add a time period selector for data transfer periods
+  - Make total visible in all panels
+  - Remove datasource variable
+  - Simplify traffic rate queries
 
 ### Removed
 
@@ -1558,7 +1588,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.18.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.20.0...HEAD
+[4.20.0]: https://github.com/giantswarm/dashboards/compare/v4.19.0...v4.20.0
+[4.19.0]: https://github.com/giantswarm/dashboards/compare/v4.18.0...v4.19.0
 [4.18.0]: https://github.com/giantswarm/dashboards/compare/v4.17.0...v4.18.0
 [4.17.0]: https://github.com/giantswarm/dashboards/compare/v4.16.1...v4.17.0
 [4.16.1]: https://github.com/giantswarm/dashboards/compare/v4.16.0...v4.16.1

@@ -1,6 +1,6 @@
 ##@ Dashboards
 
-.PHONY: install-tools lint-dashboards update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-tempo-mixin
+.PHONY: install-tools lint-dashboards update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-tempo-mixin
 
 SHELL:=/bin/bash -O globstar
 
@@ -18,6 +18,10 @@ update-alloy-mixin: install-tools
 update-kubernetes-mixin:
 	./scripts/sync-kube-mixin.sh
 
+# Update Memcached mixin dashboards
+update-memcached-mixin: install-tools
+	./memcached/update.sh
+
 # Update Mimir mixin dashboards
 update-mimir-mixin: install-tools
 	./mimir/update.sh
@@ -31,12 +35,12 @@ update-tempo-mixin: install-tools
 	./tempo/update.sh
 
 # Update all mixins dashboards
-update-mixin: update-alloy-mixin update-kubernetes-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
+update-mixin: update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
 
 # Run dashboard-linter for all dashboards in the helm/dashboards directory
 lint-dashboards: install-tools
 		@for file in $(dashboards); do \
 			echo "------ Linting $$file"; \
-			dashboard-linter lint -c linter/config.yaml $$file; \
+			dashboard-linter lint -c scripts/lint-config.yaml $$file; \
 		done
 		@echo "------ Linted $(shell echo $(dashboards) | wc -w) dashboards"
