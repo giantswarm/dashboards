@@ -11,7 +11,7 @@ set -e
 
 BRANCH="master"
 MIXIN_URL=https://github.com/grafana/jsonnet-libs/memcached-mixin@$BRANCH
-helmDir="$(pwd)/helm/dashboards/charts/private_dashboards_mz/dashboards/shared/private"
+helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Memcached"
 
 set -x
 mkdir -p memcached
