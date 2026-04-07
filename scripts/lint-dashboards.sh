@@ -3,7 +3,7 @@
 # Lint dashboards using the config.yaml
 #
 # Usage:
-#  ./linter/lint-dashboards.sh
+#  ./scripts/lint-dashboards.sh
 
 set -euo pipefail
 
