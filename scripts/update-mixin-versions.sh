@@ -28,7 +28,7 @@ get_app_version() {
   local app="$1"
   local chart_name="$2"
   gh api "repos/giantswarm/${app}/contents/helm/${chart_name}/Chart.yaml" \
-    --jq '.content' | base64 --decode | grep '^appVersion:' | awk '{print $2}'
+    --jq '.content' | base64 --decode | yq '.appVersion'
 }
 
 update_tempo() {
