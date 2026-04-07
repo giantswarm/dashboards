@@ -83,6 +83,12 @@ If you need help with the tool or its output, please contact @team-atlas.
 
 ## Grafana Cloud dashboards
 
+The `grafana-cloud/` directory contains everything related to Giant Swarm's Grafana Cloud instance:
+
+- **`grafana-cloud/sources/`** — Jsonnet sources for dashboards pushed to Grafana Cloud
+- **`grafana-cloud/backup/`** — Automated backup of the live Grafana Cloud dashboards (updated monthly by the backup workflow)
+- **`grafana-cloud/scripts/`** — Scripts for managing Grafana Cloud dashboards via the Grafana API
+
 ### Requirements
 
 * jsonnet: https://github.com/google/jsonnet
@@ -95,51 +101,57 @@ If you need help with the tool or its output, please contact @team-atlas.
 
 ### Building and uploading
 
-The dashboards located under `dashboards` are the dashboards hosted on Giant Swarm's Grafana Cloud.
-
-To build and upload the Grafana Cloud dashboards, here is what you need to do:
+To build and upload the Grafana Cloud dashboards:
 
 To make the dashboards, run:
 ```
-./scripts/make-dashboards.sh
+./grafana-cloud/scripts/make-dashboards.sh
 ```
 
 To upload the dashboards, run:
 ```
-./scripts/upload-dashboards.sh
+./grafana-cloud/scripts/upload-dashboards.sh
 ```
 
 To upload a dashboard while editing, run:
 ```
-./scripts/upload-dashboard.sh metrics.json
+./grafana-cloud/scripts/upload-dashboard.sh metrics.json
 ```
 
 ## Mixins Dashboards
 
-Mixin dashboards are auto-generated from upstream and placed in the appropriate team sub-chart. For example, kubernetes-mixin dashboards live in `charts/team_tenet/dashboards/Giant Swarm/Kubernetes/Mixin/`.
+Mixin dashboards are auto-generated from upstream and placed in the team sub-chart that owns the component:
 
-### Update
+- **Observability components** (Alloy, Loki, Memcached, Mimir, Tempo) → `helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/<Component>/`
+- **Kubernetes** → `helm/dashboards/charts/team_tenet/dashboards/Giant Swarm/Kubernetes/Mixin/`
 
-* Alloy dashboards
+### Automatic updates
 
-  * Run `make update-alloy-mixin` manually.
+A [monthly GitHub Actions workflow](.github/workflows/update-mixins.yaml) runs on the 1st of each month. It:
+1. Fetches the latest `appVersion` from each `giantswarm/*-app` repository
+2. Updates the version pin in the corresponding update script
+3. Regenerates all mixin dashboards
+4. Opens a PR with any changes
 
-* Kubernetes dashboards
+### Manual update
 
-  * Follow the instructions in [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin).
-  * Run `make update-kubernetes-mixin` manually.
+To update all mixin dashboards at once:
+```sh
+make update-mixin
+```
 
-* Mimir dashboards
+Or to update a single component:
 
-  * Run `make update-mimir-mixin` manually.
+| Component | Command |
+|-----------|---------|
+| Alloy | `make update-alloy-mixin` |
+| Kubernetes | `make update-kubernetes-mixin` |
+| Loki | `make update-loki-mixin` |
+| Memcached | `make update-memcached-mixin` |
+| Mimir | `make update-mimir-mixin` |
+| Tempo | `make update-tempo-mixin` |
 
-* Loki dashboards
-
-  * Run `make update-loki-mixin` manually.
-
-* Tempo dashboards
-
-  * Run `make update-tempo-mixin` manually.
+The Kubernetes mixin is sourced from [giantswarm-kubernetes-mixin](https://github.com/giantswarm/giantswarm-kubernetes-mixin). All other mixins are sourced directly from their upstream repositories, pinned to the version matching the deployed app.
 
 ## Origins of the dashboards
 
