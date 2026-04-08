@@ -14,7 +14,7 @@ MIXIN_URL=https://github.com/grafana/mimir/operations/mimir-mixin@$BRANCH
 helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Mimir"
 
 set -x
-cd mimir
+cd mixins/mimir
 rm -rf vendor jsonnetfile.*
 
 jb init
