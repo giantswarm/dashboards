@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add `envoy-gateway-loadtesting` dashboard
+
 ### Changed
 
 - Reorganize Grafana Cloud directories: `dashboards/` → `grafana-cloud/sources/`, `grafana-cloud/` → `grafana-cloud/backup/`, GC API scripts → `grafana-cloud/scripts/`
