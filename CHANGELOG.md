@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.21.1] - 2026-04-20
+
 ### Changed
 
 - Update `envoy-gateway-loadtesting` dashboard with added kong graphs
@@ -1595,7 +1597,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.1...HEAD
+[4.21.1]: https://github.com/giantswarm/dashboards/compare/v4.21.0...v4.21.1
 [4.21.0]: https://github.com/giantswarm/dashboards/compare/v4.20.0...v4.21.0
 [4.20.0]: https://github.com/giantswarm/dashboards/compare/v4.19.0...v4.20.0
 [4.19.0]: https://github.com/giantswarm/dashboards/compare/v4.18.0...v4.19.0
