@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.21.2] - 2026-04-22
+
 ### Fixed
 
 - Removed hardcoded label in one of `envoy-gateway-loadtesting` dashboard's graph.
@@ -1601,7 +1603,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.2...HEAD
+[4.21.2]: https://github.com/giantswarm/dashboards/compare/v4.21.1...v4.21.2
 [4.21.1]: https://github.com/giantswarm/dashboards/compare/v4.21.0...v4.21.1
 [4.21.0]: https://github.com/giantswarm/dashboards/compare/v4.20.0...v4.21.0
 [4.20.0]: https://github.com/giantswarm/dashboards/compare/v4.19.0...v4.20.0
