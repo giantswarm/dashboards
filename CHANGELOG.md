@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Removed hardcoded label in one of `envoy-gateway-loadtesting` dashboard's graph.
+
 ## [4.21.1] - 2026-04-20
 
 ### Changed
