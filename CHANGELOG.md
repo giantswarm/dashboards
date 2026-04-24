@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add `envoy-vs-nginx-loadtesting` and `envoy-vs-kong-loadtesting` dashboards to public org, split from the former `envoy-gateway-loadtesting` private dashboard
+
+### Fixed
+
+- Fix metric comparability in `envoy-vs-nginx-loadtesting`: align downstream RPS (rate/aggregation), success rate window ([2m]→[5m]), and replace wrong Nginx upstream RPS metric; fix Nginx downstream latency unit (seconds→ms)
+- Fix metric comparability in `envoy-vs-kong-loadtesting`: align downstream RPS (rate/aggregation), fix success rate regex to correctly exclude 4xx/5xx codes
+
 ## [4.21.2] - 2026-04-22
 
 ### Fixed
