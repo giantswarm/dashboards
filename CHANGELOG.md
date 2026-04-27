@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.21.3] - 2026-04-27
+
 ### Added
 
 - Add `envoy-vs-nginx-loadtesting` and `envoy-vs-kong-loadtesting` dashboards to public org, split from the former `envoy-gateway-loadtesting` private dashboard
@@ -1612,7 +1614,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.2...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.3...HEAD
+[4.21.3]: https://github.com/giantswarm/dashboards/compare/v4.21.2...v4.21.3
 [4.21.2]: https://github.com/giantswarm/dashboards/compare/v4.21.1...v4.21.2
 [4.21.1]: https://github.com/giantswarm/dashboards/compare/v4.21.0...v4.21.1
 [4.21.0]: https://github.com/giantswarm/dashboards/compare/v4.20.0...v4.21.0
