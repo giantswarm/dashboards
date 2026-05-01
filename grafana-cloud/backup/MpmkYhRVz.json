@@ -10,10 +10,10 @@
     "url": "/d/MpmkYhRVz/usage-insights-3-query-errors",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2022-09-05T09:19:16Z",
-    "updated": "2025-09-23T14:50:56Z",
+    "updated": "2026-04-14T21:47:42Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 6,
+    "version": 7,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -25,11 +25,6 @@
     "provisionedExternalId": "dashboard.json",
     "annotationsPermissions": {
       "dashboard": {
-        "canAdd": false,
-        "canEdit": false,
-        "canDelete": false
-      },
-      "organization": {
         "canAdd": false,
         "canEdit": false,
         "canDelete": false
@@ -736,7 +731,7 @@
         },
         "targets": [
           {
-            "expr": "topk(20, sum by (dashboardName, folderName) (\n    count_over_time({instance_type=\"grafana\"} \n        |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" != \"dashboardId=0\"\n        | regexp `folderName=(?P<folderName>.+) dashboardName=(?P<dashboardName>.+) dashboardId=`\n        | label_format dashboardName=`{{replace \"\\\"\" \"\" .dashboardName}}`\n        | label_format folderName=`{{replace \"\\\"\" \"\" .folderName}}`\n[$__range])))",
+            "expr": "topk(20, sum by (dashboardName, folderName) (\n    count_over_time({instance_type=\"grafana\"} \n        |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" != \"dashboardUid= \"\n        | regexp `folderName=(?P<folderName>.+) dashboardName=(?P<dashboardName>.+) dashboardUid=`\n        | label_format dashboardName=`{{replace \"\\\"\" \"\" .dashboardName}}`\n        | label_format folderName=`{{replace \"\\\"\" \"\" .folderName}}`\n[$__range]))",
             "legendFormat": "{{error}}",
             "queryType": "instant",
             "refId": "A"
@@ -749,7 +744,6 @@
             "options": {
               "excludeByName": {
                 "Time": true,
-                "dashboardId": true,
                 "panelId": true
               },
               "indexByName": {
@@ -853,7 +847,7 @@
         },
         "targets": [
           {
-            "expr": "topk(10, sum by (name, id) (\n    count_over_time({instance_type=\"grafana\"} \n        |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" !=\"-- Mixed --\" != \"-- Grafana --\"\n        | regexp `datasourceName=(?P<name>.+) datasourceId=(?P<id>.+) datasourceType=(?P<type>.+)`\n        | label_format name=`{{replace \"\\\"\" \"\" .name}}`\n[$__range])))",
+            "expr": "topk(10, sum by (name, uid) (\n    count_over_time({instance_type=\"grafana\"} \n        |= \"data-request\" |~ `error=\".+\"` |~ \"$search\" !=\"-- Mixed --\" != \"-- Grafana --\"\n        | regexp `datasourceName=(?P<name>.+) datasourceUid=(?P<uid>.+) datasourceType=(?P<type>.+)`\n        | label_format name=`{{replace \"\\\"\" \"\" .name}}`\n[$__range]))",
             "legendFormat": "{{username}}",
             "queryType": "instant",
             "refId": "A"
@@ -869,10 +863,9 @@
               },
               "renameByName": {
                 "Value #A": "Error Count",
-                "datasourceId": "ID",
                 "datasourceName": "Name",
-                "id": "ID",
                 "name": "Name",
+                "uid": "UID",
                 "username": "Username"
               }
             }
@@ -994,7 +987,7 @@
     "timezone": "",
     "title": "Usage Insights - 3 - Query Errors",
     "uid": "MpmkYhRVz",
-    "version": 6,
+    "version": 7,
     "weekStart": ""
   }
 }

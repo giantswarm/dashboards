@@ -10,10 +10,10 @@
     "url": "/d/5nhuY5vMk/billing-usage",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2020-09-03T12:03:22Z",
-    "updated": "2026-03-24T16:34:06Z",
+    "updated": "2026-04-14T19:18:12Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 220,
+    "version": 221,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -25,11 +25,6 @@
     "provisionedExternalId": "dashboard.json",
     "annotationsPermissions": {
       "dashboard": {
-        "canAdd": false,
-        "canEdit": false,
-        "canDelete": false
-      },
-      "organization": {
         "canAdd": false,
         "canEdit": false,
         "canDelete": false
@@ -1285,6 +1280,26 @@
             "instant": true,
             "legendFormat": "Database Observability fraction",
             "refId": "db_observability_fraction"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_assistant_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n > 0",
+            "instant": true,
+            "legendFormat": "Grafana Assistant",
+            "refId": "grafana_assistant"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_assistant_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n > 0",
+            "instant": true,
+            "legendFormat": "Grafana Assistant fraction",
+            "refId": "grafana_assistant_fraction"
           }
         ],
         "title": "Current Billable Usage Cost by Product",
@@ -11738,6 +11753,6 @@
     "timezone": "utc",
     "title": "Billing/Usage",
     "uid": "5nhuY5vMk",
-    "version": 220
+    "version": 221
   }
 }
