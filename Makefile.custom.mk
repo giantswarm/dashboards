@@ -1,6 +1,6 @@
 ##@ Dashboards
 
-.PHONY: install-tools lint-dashboards update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
+.PHONY: install-tools lint-dashboards sync-kafka-dashboards update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
 
 SHELL:=/bin/bash -O globstar
 
@@ -33,6 +33,10 @@ update-tempo-mixin: install-tools
 # Update Memcached mixin dashboards
 update-memcached-mixin: install-tools
 	./mixins/memcached/update.sh
+
+# Sync Strimzi/Kafka dashboards from the giantswarm strimzi-kafka-operator fork
+sync-kafka-dashboards:
+	./scripts/sync-kafka-dashboards.sh
 
 # Fetch app versions from giantswarm/*-app repos and update version pins in update scripts
 update-mixin-versions:
