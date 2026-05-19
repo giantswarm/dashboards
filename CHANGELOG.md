@@ -446,7 +446,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Added Alloy mixin dashboards
 - Added Makefile.custom.mk to group scripts usage
-
   - Added `make update-mixin` to update mixin dasbhboards
   - Added `make lint-dashboards` to dashboards linting
   - Added `make install-tools` to install required tools
