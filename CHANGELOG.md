@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.22.0] - 2026-05-19
+
 ### Added
 
 - Add Strimzi Kafka operator dashboards to the `Shared Org` Grafana organization under the `Kafka` folder
@@ -1618,7 +1620,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.21.3...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.22.0...HEAD
+[4.22.0]: https://github.com/giantswarm/dashboards/compare/v4.21.3...v4.22.0
 [4.21.3]: https://github.com/giantswarm/dashboards/compare/v4.21.2...v4.21.3
 [4.21.2]: https://github.com/giantswarm/dashboards/compare/v4.21.1...v4.21.2
 [4.21.1]: https://github.com/giantswarm/dashboards/compare/v4.21.0...v4.21.1
