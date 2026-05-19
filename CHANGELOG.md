@@ -291,7 +291,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [4.4.2] - 2025-04-28
 
-### Chunged
+### Changed
 
 - Cluster Overview dashboard: improve alerts links
 
@@ -447,15 +447,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Added Alloy mixin dashboards
-
 - Added Makefile.custom.mk to group scripts usage
-
   - Added `make update-mixin` to update mixin dasbhboards
   - Added `make lint-dashboards` to dashboards linting
   - Added `make install-tools` to install required tools
-
 - Added `scripts/update-alloy-mixin.sh` to update the Alloy mixin dashboards
-
 - Added `update-alertmanager-mixin` and `update-kubernetes-mixin` Makefile targets
 
 ### Changed
@@ -579,7 +575,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [3.15.1] - 2024-05-29
 
-### Fix
+### Fixed
 
 - Fix missing ingress slo in slo reporting.
 
@@ -829,7 +825,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Kube-Builder operators dashboard
 - Add Linkerd Control Plane dashboard
 
-## Changed
+### Changed
 
 - Better description and small spacing fixes in etcd-backup dashboard
 
@@ -891,7 +887,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [3.2.1] - 2023-10-19
 
-### fixed
+### Fixed
 
 - Fixed nginx panel in remote-writes dashboard
 
@@ -1174,20 +1170,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [2.23.0] - 2023-02-28
 
-### Changed
-
-- Monitoring Dashboard Updated
-
-```
-?? helm/dashboards/dashboards/shared/public/alertmanager-overview.json
-```
-
 ### Added
 
 - Alertmanager / Overview Dashboard
 
 ### Changed
 
+- Monitoring Dashboard Updated
+
+  ```
+  ?? helm/dashboards/dashboards/shared/public/alertmanager-overview.json
+  ```
 - Prometheus dashboard improvements: available node resources, scraped metrics info and rules info.
 
 ## [2.22.0] - 2023-02-23
@@ -1282,16 +1275,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [2.15.0] - 2022-09-06
 
-### Changed
-
-- Use `app` label instead of `service` label to identify metrics in `dex` dashboard.
-
 ### Added
 
 - Add new dashboard for CertificateRequests
 
 ### Changed
 
+- Use `app` label instead of `service` label to identify metrics in `dex` dashboard.
 - Add variable `app` and upgrade panel types for the "NGINX Ingress controller" dashboard.
 - Metrics dashboard: replace Prometheus total memory with time series per cluster
 - Metrics dashboard: change Prometheus total time series to stat panel type
@@ -1399,7 +1389,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add new dashboard 'Webhook Health'.
 - Add dashboard for Fluentbit.
 
-## Changed
+### Changed
 
 - Fixes and updates to `grafana` dashboard.
 - Improve `K8s API performance` dashboard.
@@ -1520,7 +1510,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.8.0] - 2021-12-01
 
-### Deleted
+### Removed
 
 - Delete Azure Load Balancer Backend Nodes dashboard.
 
@@ -1578,11 +1568,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.0.5] - 2021-07-27
 
+### Changed
+
 - Several updates to the KVM Resource Usage dashboard:
   - Change graph (old) to Grafana 8 time series panels
   - Change graphs for CPUs and memory left from absolute numbers to percentage
 
 ## [1.0.4] - 2021-07-26
+
+### Changed
 
 - Moved KVM dashboard to a provider dedicated folder.
 
