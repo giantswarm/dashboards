@@ -682,7 +682,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "",
+      "description": "Unit of work each Virtual User (VU) performs in a loop",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -744,6 +744,18 @@
                 "value": "none"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total iterations"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
           }
         ]
       },
@@ -791,9 +803,21 @@
           "legendFormat": "dropped_iterations",
           "range": true,
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "avg(k6_iterations_total{testid=~\"$testid\"})",
+          "instant": false,
+          "legendFormat": "Total iterations",
+          "range": true,
+          "refId": "C"
         }
       ],
-      "title": "Iterations",
+      "title": "Iterations (complete test scenario executions)",
       "type": "timeseries"
     },
     {
@@ -1462,14 +1486,6 @@
       "id": 17,
       "options": {
         "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
         "showHeader": true
       },
       "targets": [
@@ -1680,7 +1696,7 @@
                 "id": "custom.hideFrom",
                 "value": {
                   "legend": false,
-                  "tooltip": false,
+                  "tooltip": true,
                   "viz": true
                 }
               }
@@ -1924,6 +1940,10 @@
         "type": "datasource"
       },
       {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": "$datasource",
         "definition": "label_values(testid)",
         "description": "Filter by \"testid\" tag. Define it by tagging: k6 run --tag testid=xyz",
