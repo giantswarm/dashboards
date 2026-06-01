@@ -10,10 +10,10 @@
     "url": "/d/teleport-exporter/teleport-exporter",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2025-12-17T13:43:49Z",
-    "updated": "2026-01-24T00:11:39Z",
+    "updated": "2026-05-12T23:05:24Z",
     "updatedBy": "zach@giantswarm.io",
     "createdBy": "spyros@giantswarm.io",
-    "version": 82,
+    "version": 86,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -81,6 +81,7 @@
         "url": "https://goteleport.com/docs/"
       }
     ],
+    "liveNow": false,
     "panels": [
       {
         "collapsed": false,
@@ -90,8 +91,7 @@
           "x": 0,
           "y": 0
         },
-        "id": 1,
-        "panels": [],
+        "id": 123,
         "title": "Overview",
         "type": "row"
       },
@@ -136,8 +136,7 @@
                 }
               ]
             }
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 4,
@@ -163,7 +162,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -191,7 +190,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -210,8 +208,7 @@
               ]
             },
             "unit": "s"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 4,
@@ -237,7 +234,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -265,7 +262,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -284,8 +280,7 @@
               ]
             },
             "unit": "s"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 4,
@@ -311,7 +306,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -404,8 +399,7 @@
               ]
             },
             "unit": "short"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 4,
@@ -415,6 +409,10 @@
         },
         "id": 6,
         "options": {
+          "annotations": {
+            "clustering": -1,
+            "multiLane": false
+          },
           "legend": {
             "calcs": [],
             "displayMode": "list",
@@ -427,7 +425,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -452,8 +450,7 @@
           "x": 0,
           "y": 5
         },
-        "id": 50,
-        "panels": [],
+        "id": 124,
         "title": "Cluster Changes",
         "type": "row"
       },
@@ -480,7 +477,6 @@
               },
               "inspect": false
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -537,7 +533,7 @@
           ]
         },
         "gridPos": {
-          "h": 6,
+          "h": 12,
           "w": 12,
           "x": 0,
           "y": 6
@@ -548,7 +544,7 @@
           "enablePagination": false,
           "showHeader": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -556,7 +552,7 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "(last_over_time(teleport_exporter_kubernetes_cluster_info{}[$lookback_period] offset 1m)) unless  teleport_exporter_kubernetes_cluster_info{}",
+            "expr": "teleport_exporter_kubernetes_cluster_info{}\nunless on(kube_cluster_name)\n(last_over_time(teleport_exporter_kubernetes_cluster_info{}[1m] offset $lookback_period))",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -616,7 +612,6 @@
               },
               "inspect": false
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -673,7 +668,7 @@
           ]
         },
         "gridPos": {
-          "h": 6,
+          "h": 12,
           "w": 12,
           "x": 12,
           "y": 6
@@ -684,7 +679,7 @@
           "enablePagination": false,
           "showHeader": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -692,7 +687,7 @@
               "uid": "${datasource}"
             },
             "editorMode": "code",
-            "expr": "(last_over_time(teleport_exporter_kubernetes_cluster_info{}[$lookback_period] offset 1m))\n  unless\n  teleport_exporter_kubernetes_cluster_info{}",
+            "expr": "(last_over_time(teleport_exporter_kubernetes_cluster_info{}[$lookback_period] offset 1m))\n    unless on(kube_cluster_name)\n    teleport_exporter_kubernetes_cluster_info{}",
             "format": "table",
             "instant": true,
             "legendFormat": "__auto",
@@ -735,10 +730,9 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 12
+          "y": 18
         },
-        "id": 10,
-        "panels": [],
+        "id": 125,
         "title": "Resource Totals",
         "type": "row"
       },
@@ -753,7 +747,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "min": 2500,
             "thresholds": {
               "mode": "absolute",
@@ -765,14 +758,13 @@
               ]
             },
             "unit": "none"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 5,
           "w": 4,
           "x": 0,
-          "y": 13
+          "y": 19
         },
         "id": 11,
         "options": {
@@ -792,7 +784,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -820,7 +812,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "min": 100,
             "thresholds": {
               "mode": "absolute",
@@ -832,14 +823,13 @@
               ]
             },
             "unit": "none"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 5,
           "w": 4,
           "x": 4,
-          "y": 13
+          "y": 19
         },
         "id": 12,
         "options": {
@@ -859,7 +849,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -887,7 +877,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -898,14 +887,13 @@
               ]
             },
             "unit": "none"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 5,
           "w": 4,
           "x": 8,
-          "y": 13
+          "y": 19
         },
         "id": 121,
         "options": {
@@ -925,7 +913,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -954,7 +942,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -965,14 +952,13 @@
               ]
             },
             "unit": "none"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 5,
           "w": 4,
           "x": 12,
-          "y": 13
+          "y": 19
         },
         "id": 122,
         "options": {
@@ -992,7 +978,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1021,7 +1007,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1032,14 +1017,13 @@
               ]
             },
             "unit": "none"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 5,
           "w": 4,
           "x": 16,
-          "y": 13
+          "y": 19
         },
         "id": 13,
         "options": {
@@ -1059,7 +1043,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1087,7 +1071,6 @@
             "color": {
               "mode": "thresholds"
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1098,14 +1081,13 @@
               ]
             },
             "unit": "none"
-          },
-          "overrides": []
+          }
         },
         "gridPos": {
           "h": 5,
           "w": 4,
           "x": 20,
-          "y": 13
+          "y": 19
         },
         "id": 14,
         "options": {
@@ -1125,7 +1107,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1148,10 +1130,9 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 18
+          "y": 24
         },
-        "id": 20,
-        "panels": [],
+        "id": 126,
         "title": "Trends Over Time",
         "type": "row"
       },
@@ -1200,7 +1181,6 @@
                 "mode": "off"
               }
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1279,10 +1259,14 @@
           "h": 8,
           "w": 12,
           "x": 0,
-          "y": 19
+          "y": 25
         },
         "id": 21,
         "options": {
+          "annotations": {
+            "clustering": -1,
+            "multiLane": false
+          },
           "legend": {
             "calcs": [
               "lastNotNull",
@@ -1299,7 +1283,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1394,7 +1378,6 @@
                 "mode": "off"
               }
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1443,10 +1426,14 @@
           "h": 8,
           "w": 12,
           "x": 12,
-          "y": 19
+          "y": 25
         },
         "id": 22,
         "options": {
+          "annotations": {
+            "clustering": -1,
+            "multiLane": false
+          },
           "legend": {
             "calcs": [
               "lastNotNull",
@@ -1463,7 +1450,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1497,10 +1484,9 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 27
+          "y": 33
         },
-        "id": 30,
-        "panels": [],
+        "id": 127,
         "title": "Breakdowns",
         "type": "row"
       },
@@ -1513,6 +1499,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
+              "fixedColor": "#73BF69",
               "mode": "palette-classic"
             },
             "custom": {
@@ -1521,8 +1508,7 @@
                 "tooltip": false,
                 "viz": false
               }
-            },
-            "mappings": []
+            }
           },
           "overrides": [
             {
@@ -1561,7 +1547,7 @@
           "h": 8,
           "w": 6,
           "x": 0,
-          "y": 28
+          "y": 34
         },
         "id": 33,
         "options": {
@@ -1594,7 +1580,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1633,6 +1619,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
+              "fixedColor": "#73BF69",
               "mode": "palette-classic"
             },
             "custom": {
@@ -1641,8 +1628,7 @@
                 "tooltip": false,
                 "viz": false
               }
-            },
-            "mappings": []
+            }
           },
           "overrides": [
             {
@@ -1681,7 +1667,7 @@
           "h": 8,
           "w": 6,
           "x": 6,
-          "y": 28
+          "y": 34
         },
         "id": 34,
         "options": {
@@ -1714,7 +1700,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1753,6 +1739,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
+              "fixedColor": "#73BF69",
               "mode": "palette-classic"
             },
             "custom": {
@@ -1761,16 +1748,14 @@
                 "tooltip": false,
                 "viz": false
               }
-            },
-            "mappings": []
-          },
-          "overrides": []
+            }
+          }
         },
         "gridPos": {
           "h": 8,
           "w": 6,
           "x": 12,
-          "y": 28
+          "y": 34
         },
         "id": 31,
         "options": {
@@ -1802,7 +1787,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1829,6 +1814,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
+              "fixedColor": "#73BF69",
               "mode": "palette-classic"
             },
             "custom": {
@@ -1837,16 +1823,14 @@
                 "tooltip": false,
                 "viz": false
               }
-            },
-            "mappings": []
-          },
-          "overrides": []
+            }
+          }
         },
         "gridPos": {
           "h": 8,
           "w": 6,
           "x": 18,
-          "y": 28
+          "y": 34
         },
         "id": 32,
         "options": {
@@ -1878,7 +1862,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.0-21024277089.patch2",
+        "pluginVersion": "13.1.0-25668120414",
         "targets": [
           {
             "datasource": {
@@ -1902,9 +1886,9 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 36
+          "y": 42
         },
-        "id": 40,
+        "id": 128,
         "panels": [
           {
             "datasource": {
@@ -1938,8 +1922,6 @@
                     "mode": "off"
                   }
                 },
-                "fieldMinMax": false,
-                "mappings": [],
                 "thresholds": {
                   "mode": "absolute",
                   "steps": [
@@ -1950,14 +1932,13 @@
                   ]
                 },
                 "unit": "none"
-              },
-              "overrides": []
+              }
             },
             "gridPos": {
               "h": 8,
               "w": 12,
               "x": 0,
-              "y": 37
+              "y": 43
             },
             "id": 41,
             "options": {
@@ -2023,7 +2004,6 @@
                   },
                   "inspect": false
                 },
-                "mappings": [],
                 "thresholds": {
                   "mode": "absolute",
                   "steps": [
@@ -2077,7 +2057,7 @@
               "h": 8,
               "w": 12,
               "x": 12,
-              "y": 37
+              "y": 43
             },
             "id": 42,
             "options": {
@@ -2138,21 +2118,26 @@
     "templating": {
       "list": [
         {
+          "allowCustomValue": true,
           "current": {
             "text": "default",
             "value": "default"
           },
+          "hide": 0,
           "includeAll": false,
           "label": "Data Source",
+          "multi": false,
           "name": "datasource",
           "options": [],
           "query": "prometheus",
           "refresh": 1,
           "regex": "",
+          "skipUrlSync": false,
           "type": "datasource"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
             "text": "All",
             "value": "$__all"
@@ -2162,8 +2147,10 @@
             "uid": "${datasource}"
           },
           "definition": "label_values(teleport_exporter_up, cluster_name)",
+          "hide": 0,
           "includeAll": true,
           "label": "Cluster",
+          "multi": false,
           "name": "cluster",
           "options": [],
           "query": {
@@ -2173,20 +2160,25 @@
           "refresh": 2,
           "regex": "",
           "regexApplyTo": "value",
+          "skipUrlSync": false,
           "sort": 1,
           "type": "query"
         },
         {
+          "allowCustomValue": true,
           "current": {
             "text": "24h",
             "value": "24h"
           },
           "description": "Lookback period for detecting cluster changes",
+          "hide": 0,
           "includeAll": false,
           "label": "Change Detection Window",
+          "multi": false,
           "name": "lookback_period",
           "options": [],
           "query": "1h,3h,6h,12h,24h,7d",
+          "skipUrlSync": false,
           "type": "custom",
           "valuesFormat": "csv"
         }
@@ -2196,11 +2188,23 @@
       "from": "now-24h",
       "to": "now"
     },
-    "timepicker": {},
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
     "timezone": "utc",
     "title": "Teleport Exporter",
     "uid": "teleport-exporter",
-    "version": 82,
-    "weekStart": ""
+    "version": 86
   }
 }
