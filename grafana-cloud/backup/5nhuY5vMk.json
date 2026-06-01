@@ -10,10 +10,10 @@
     "url": "/d/5nhuY5vMk/billing-usage",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2020-09-03T12:03:22Z",
-    "updated": "2026-04-14T19:18:12Z",
+    "updated": "2026-05-27T17:43:57Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 221,
+    "version": 222,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -263,6 +263,21 @@
             "unit": "currencyUSD"
           },
           "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "ai_tokens"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
             {
               "matcher": {
                 "id": "byFrameRefID",
@@ -567,6 +582,21 @@
               "matcher": {
                 "id": "byFrameRefID",
                 "options": "users"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "ai_tokens_fraction"
               },
               "properties": [
                 {
@@ -1300,6 +1330,26 @@
             "instant": true,
             "legendFormat": "Grafana Assistant fraction",
             "refId": "grafana_assistant_fraction"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_ai_tokens_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n > 0",
+            "instant": true,
+            "legendFormat": "AI Tokens",
+            "refId": "ai_tokens"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_ai_tokens_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n > 0",
+            "instant": true,
+            "legendFormat": "AI Tokens fraction",
+            "refId": "ai_tokens_fraction"
           }
         ],
         "title": "Current Billable Usage Cost by Product",
@@ -3521,7 +3571,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_logs_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_logs_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount process - {{ name }}"
               },
               {
@@ -3529,7 +3579,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_logs_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_logs_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction process - {{ name }}"
               }
             ],
@@ -3781,7 +3831,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount write - {{ name }}"
               },
               {
@@ -3789,7 +3839,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction write - {{ name }}"
               }
             ],
@@ -4855,7 +4905,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_traces_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_traces_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
               },
               {
@@ -4863,7 +4913,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_traces_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_traces_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
@@ -5115,7 +5165,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_traces_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_traces_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
               },
               {
@@ -5123,7 +5173,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_traces_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_traces_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
@@ -5375,7 +5425,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_traces_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_retention_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_traces_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_retention_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
               },
               {
@@ -5383,7 +5433,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_traces_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_retention_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_traces_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_traces_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_traces_retention_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_traces_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
@@ -7564,7 +7614,7 @@
         },
         "id": 110,
         "options": {
-          "content": "## About k6 Virtual User Hours\n\nYour Total k6 Billable Usage is based on Virtual User hours (VUh) used during your load tests. \n\nYou can dig deeper into the kind of k6 usage generating billable VUh in the k6 Virtual User Hours (VUh) Details row directly below this panel.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/testing/k6/author-run/vu-hours/\" target=\"_blank\">About k6 Virtual User Hours</a>\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/performance-testing-invoice/\" target=\"_blank\">Understand your k6 invoice</a>            \n"
+          "content": "## About k6 Virtual User Hours\n\nYour Total k6 Billable Usage is based on Virtual User hours (VUh) used during your load tests.\n\nYou can dig deeper into the kind of k6 usage generating billable VUh in the k6 Virtual User Hours (VUh) Details row directly below this panel.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/testing/k6/author-run/vu-hours/\" target=\"_blank\">About k6 Virtual User Hours</a>\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/performance-testing-invoice/\" target=\"_blank\">Understand your k6 invoice</a>\n"
         },
         "pluginVersion": "v11.1.0",
         "title": "",
@@ -7904,7 +7954,7 @@
         },
         "id": 117,
         "options": {
-          "content": "## About k6 Static IPs\n\nYour Total number of provisioned k6 Static IPs. \n\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/performance-testing-invoice/\" target=\"_blank\">Understand your k6 invoice</a>            \n"
+          "content": "## About k6 Static IPs\n\nYour Total number of provisioned k6 Static IPs.\n\n* <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/performance-testing-invoice/\" target=\"_blank\">Understand your k6 invoice</a>\n"
         },
         "pluginVersion": "v11.1.0",
         "title": "",
@@ -8447,7 +8497,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_profiles_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_profiles_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_process_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
               },
               {
@@ -8455,7 +8505,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_profiles_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_profiles_process_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_process_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_process_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
@@ -8707,7 +8757,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_profiles_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_profiles_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
               },
               {
@@ -8715,7 +8765,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_profiles_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_profiles_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
@@ -8967,7 +9017,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_profiles_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_retention_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\nmax(grafanacloud_profiles_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_retention_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount - {{ name }}"
               },
               {
@@ -8975,7 +9025,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\nmax(grafanacloud_profiles_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_retention_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query \n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\nmax(grafanacloud_profiles_retention_instance_usage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_profiles_retention_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_profiles_retention_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_profiles_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction - {{ name }}"
               }
             ],
@@ -10412,7 +10462,7 @@
         },
         "id": 160,
         "options": {
-          "content": "## About Synthetics Protocol Usage\nSynthetics Protocol Usage is calculated from the total number of protocol-based test executions this month from HTTP, DNS, MultiHTTP, Ping, TCP, Traceroute, and k6 scripted <a href=\"https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/\" target=\"_blank\">check types</a>. Refer to the <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/synthetic-monitoring-invoice/#billing-calculations\" target=\"_blank\">billing calculations</a> for more information on how test excutions are counted.\n\nYou can dig deeper into your test execution rates and totals in the Synthetic Monitoring Usage Details row below.            \n"
+          "content": "## About Synthetics Protocol Usage\nSynthetics Protocol Usage is calculated from the total number of protocol-based test executions this month from HTTP, DNS, MultiHTTP, Ping, TCP, Traceroute, and k6 scripted <a href=\"https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/\" target=\"_blank\">check types</a>. Refer to the <a href=\"https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/synthetic-monitoring-invoice/#billing-calculations\" target=\"_blank\">billing calculations</a> for more information on how test excutions are counted.\n\nYou can dig deeper into your test execution rates and totals in the Synthetic Monitoring Usage Details row below.\n"
         },
         "pluginVersion": "v11.1.0",
         "title": "",
@@ -11194,6 +11244,283 @@
         },
         "id": 175,
         "panels": [],
+        "title": "AI Tokens",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "dark-blue",
+              "mode": "fixed"
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*[Ff]raction.*"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 367
+        },
+        "id": 176,
+        "options": {
+          "colorMode": "background",
+          "orientation": "horizontal",
+          "text": {
+            "titleSize": 23,
+            "valueSize": 70
+          }
+        },
+        "pluginVersion": "v11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_ai_tokens_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "instant": true,
+            "legendFormat": "Current AI Tokens Usage Cost"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_ai_tokens_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "instant": true,
+            "legendFormat": "Current fraction of cost due to AI Tokens"
+          }
+        ],
+        "title": "",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 372
+        },
+        "id": 177,
+        "options": {
+          "colorMode": "background",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "text": {
+            "titleSize": 20,
+            "valueSize": 60
+          }
+        },
+        "pluginVersion": "v11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "grafanacloud_org_ai_tokens_additional_tokens{org_id=\"$org_id\"}",
+            "instant": true,
+            "legendFormat": "Current Additional AI Tokens"
+          }
+        ],
+        "title": "",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-usage"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "fillOpacity": 10,
+              "gradientMode": "hue",
+              "showPoints": "never"
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/Additional Us(age|(ers?)) Amount/"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "currencyUSD"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/^Included/"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      10,
+                      10
+                    ],
+                    "fill": "dash"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*[Ff]raction.*"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 6,
+          "y": 367
+        },
+        "id": 178,
+        "pluginVersion": "v11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "grafanacloud_org_ai_tokens_additional_tokens{org_id=\"$org_id\"}",
+            "instant": false,
+            "legendFormat": "Billable Tokens"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_ai_tokens_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "instant": false,
+            "legendFormat": "Additional Usage Amount"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "avg without(monetary) (grafanacloud_org_ai_tokens_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "instant": false,
+            "legendFormat": "Cost fraction"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "grafanacloud-usage"
+            },
+            "expr": "grafanacloud_org_ai_tokens_included_additional_tokens{org_id=\"$org_id\"}",
+            "legendFormat": "Included Additional Tokens"
+          }
+        ],
+        "title": "Total Billable AI Tokens",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 6,
+          "x": 18,
+          "y": 367
+        },
+        "id": 179,
+        "options": {
+          "content": "## About AI Tokens\n\nYour AI Tokens usage is calculated from the total number of additional AI tokens above the included tokens for each user.\n"
+        },
+        "pluginVersion": "v11.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 377
+        },
+        "id": 180,
+        "panels": [],
         "title": "Database Observability Host Hours",
         "type": "row"
       },
@@ -11237,9 +11564,9 @@
           "h": 5,
           "w": 6,
           "x": 0,
-          "y": 367
+          "y": 377
         },
-        "id": 176,
+        "id": 181,
         "options": {
           "colorMode": "background",
           "orientation": "horizontal",
@@ -11290,9 +11617,9 @@
           "h": 5,
           "w": 6,
           "x": 0,
-          "y": 372
+          "y": 382
         },
-        "id": 177,
+        "id": 182,
         "options": {
           "colorMode": "background",
           "justifyMode": "auto",
@@ -11396,9 +11723,9 @@
           "h": 10,
           "w": 12,
           "x": 6,
-          "y": 367
+          "y": 377
         },
-        "id": 178,
+        "id": 183,
         "pluginVersion": "v11.1.0",
         "targets": [
           {
@@ -11450,9 +11777,9 @@
           "h": 10,
           "w": 6,
           "x": 18,
-          "y": 367
+          "y": 377
         },
-        "id": 179,
+        "id": 184,
         "options": {
           "content": "## About Database Observability Host Hours\n\nYour Database Observability Usage is calculated from the total number of host hours monitored this month.\n"
         },
@@ -11467,9 +11794,9 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 379
+          "y": 389
         },
-        "id": 180,
+        "id": 185,
         "panels": [
           {
             "datasource": {
@@ -11514,9 +11841,9 @@
               "h": 8,
               "w": 24,
               "x": 0,
-              "y": 379
+              "y": 389
             },
-            "id": 181,
+            "id": 186,
             "options": {
               "legend": {
                 "calcs": [
@@ -11563,9 +11890,9 @@
               "h": 8,
               "w": 24,
               "x": 0,
-              "y": 387
+              "y": 397
             },
-            "id": 182,
+            "id": 187,
             "options": {
               "legend": {
                 "calcs": [
@@ -11607,9 +11934,9 @@
           "h": 2,
           "w": 24,
           "x": 0,
-          "y": 389
+          "y": 399
         },
-        "id": 183,
+        "id": 188,
         "options": {
           "content": "<div style=\"vertical-align: top; border: 0px;\"\"><p style=\"text-align: center; font-size: 115%; padding: 0px; margin: 0px;\"><b>Looking for the drilldown of your Usage Details? We moved these further up. You can find them directly below their corresponding Product Usage panels. They are collapsed by default and available to expand, just as before.</b></p></div>"
         },
@@ -11753,6 +12080,6 @@
     "timezone": "utc",
     "title": "Billing/Usage",
     "uid": "5nhuY5vMk",
-    "version": 221
+    "version": 222
   }
 }
