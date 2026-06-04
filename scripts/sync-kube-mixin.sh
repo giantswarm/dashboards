@@ -80,8 +80,13 @@ for dashboard in "${public_dashboards[@]}"; do
     mv "${TMPDIR}"/mixins/files/dashboards/"${dashboard}" helm/dashboards/charts/public_dashboards/dashboards/shared/public/
 done
 
-# Move remaining (private) dashboards to the team_tenet chart
-mv "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/charts/team_tenet/dashboards/Giant\ Swarm/Kubernetes/Mixin/
+# Add dashboards to private Giant Swarm organization
+mkdir --parents helm/dashboards/charts/team_tenet/dashboards/Giant\ Swarm/Kubernetes/Mixin/
+cp "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/charts/team_tenet/dashboards/Giant\ Swarm/Kubernetes/Mixin/
+
+# Add dashboards to public Shared Org organization
+mkdir --parents helm/dashboards/charts/team_tenet/dashboards/Shared\ Org/Kubernetes/Mixin/
+cp "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/charts/team_tenet/dashboards/Shared\ Org/Kubernetes/Mixin/
 
 echo -e "\nSynced mixin repo at commit: ${MIXIN_VER}\n"
 
