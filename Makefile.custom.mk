@@ -39,7 +39,15 @@ update-tempo-mixin: install-tools ## Update Tempo mixin dashboards
 update-mixin-versions: ## Fetch app versions from giantswarm/*-app repos and update version pins in update scripts
 	./scripts/update-mixin-versions.sh
 
+<<<<<<< HEAD
 lint-dashboards: install-tools ## Run dashboard-linter for all dashboards in the helm/dashboards directory
+=======
+# Update all mixins dashboards (fetches latest app versions first)
+update-mixin: update-mixin-versions update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
+
+# Run dashboard-linter for all dashboards in the helm/dashboards directory
+lint-dashboards: install-tools
+>>>>>>> 2f8085b (rework validation scripts to write errors as CI comments)
 		./scripts/lint-dashboards.sh
 
 check-dashboard-schema: ## Fail if any dashboard is neither v1 nor v2 (rejects the unwrapped "JSON model")

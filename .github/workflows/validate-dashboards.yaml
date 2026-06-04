@@ -16,10 +16,14 @@ permissions: {}
 
 jobs:
   # Validates dashboard JSON syntax and Grafana schema/best-practices.
+  # Non-blocking for now: the job stays green; failures are reported via the
+  # "report" job as a PR comment (and a warning annotation).
   lint-dashboards:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    outputs:
+      fragment: ${{ steps.lint.outputs.fragment }}
     steps:
     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
@@ -35,24 +39,95 @@ jobs:
         echo "$(pwd)/tools" >> "$GITHUB_PATH"
         echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-    # Non-blocking for now: failures surface as a PR warning annotation, not a red check.
     - name: Lint dashboards
+      id: lint
       run: |
-        ./scripts/lint-dashboards.sh \
-          || echo "::warning::Dashboard lint found issues (non-blocking). See logs above."
+        # || true keeps the job green (non-blocking); pipefail would otherwise
+        # fail the step because the script exits non-zero when issues are found.
+        ./scripts/lint-dashboards.sh | tee lint.log || true
+        problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' lint.log | sed '1d;$d')"
+        if [ -n "$problems" ]; then
+          echo "::warning::Dashboard lint found issues (non-blocking). See the PR comment."
+          {
+            echo "fragment<<DASHBOARD_FRAGMENT_EOF"
+            echo "### Lint — \`lint-dashboards\`"
+            echo
+            echo "$problems"
+            echo "DASHBOARD_FRAGMENT_EOF"
+          } >> "$GITHUB_OUTPUT"
+        fi
 
   # Checks every dashboard has a valid owner: tag and a uid.
+  # Non-blocking for now (see note above).
   validate-dashboards:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    outputs:
+      fragment: ${{ steps.validate.outputs.fragment }}
     steps:
     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
-    # Non-blocking for now: failures surface as a PR warning annotation, not a red check.
     - name: Validate owner tags and uids
-      run: |
-        ./scripts/validate-dashboards.sh \
-          || echo "::warning::Dashboard validation found issues (non-blocking). See logs above."
+      id: validate
       env:
         GH_TOKEN: ${{ secrets.ISSUE_AUTOMATION }}
+      run: |
+        ./scripts/validate-dashboards.sh | tee validate.log || true
+        problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' validate.log | sed '1d;$d')"
+        if [ -n "$problems" ]; then
+          echo "::warning::Dashboard validation found issues (non-blocking). See the PR comment."
+          {
+            echo "fragment<<DASHBOARD_FRAGMENT_EOF"
+            echo "### Owner / uid — \`validate-dashboards\`"
+            echo
+            echo "$problems"
+            echo "DASHBOARD_FRAGMENT_EOF"
+          } >> "$GITHUB_OUTPUT"
+        fi
+
+  # Aggregates the two check results into a single sticky PR comment so the
+  # warnings are visible in the PR timeline (a green check alone gives no signal).
+  report:
+    needs: [lint-dashboards, validate-dashboards]
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+      LINT_FRAGMENT: ${{ needs.lint-dashboards.outputs.fragment }}
+      VALIDATE_FRAGMENT: ${{ needs.validate-dashboards.outputs.fragment }}
+    steps:
+    - name: Upsert dashboard-checks comment
+      run: |
+        marker='<!-- dashboard-checks -->'
+        body=""
+        if [ -n "$LINT_FRAGMENT" ] || [ -n "$VALIDATE_FRAGMENT" ]; then
+          body+="$marker"$'\n'
+          body+='## ⚠️ Dashboard checks found issues (non-blocking)'$'\n\n'
+          [ -n "$LINT_FRAGMENT" ] && body+="$LINT_FRAGMENT"$'\n\n'
+          [ -n "$VALIDATE_FRAGMENT" ] && body+="$VALIDATE_FRAGMENT"$'\n\n'
+          body+='_These checks are warnings for now and do not block merge._'
+        fi
+
+        # Find a previous sticky comment by its hidden marker.
+        existing="$(gh api "repos/$REPO/issues/$PR/comments" \
+          --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n1)"
+
+        if [ -n "$body" ]; then
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$existing" -f body="$body" >/dev/null
+            echo "Updated dashboard-checks comment."
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -f body="$body" >/dev/null
+            echo "Created dashboard-checks comment."
+          fi
+        elif [ -n "$existing" ]; then
+          gh api -X DELETE "repos/$REPO/issues/comments/$existing" >/dev/null
+          echo "Checks clean — removed previous dashboard-checks comment."
+        else
+          echo "Checks clean — nothing to report."
+        fi
