@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- feat: Add Kubernetes mixins dashboard to the public Shared Org (#900)
+
 ## [4.23.0] - 2026-05-26
 
 ### Added
