@@ -1,0 +1,607 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 143,
+  "links": [],
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "This dashboard shows the log volume for each scrape job with different grouping for each panel.        Note that the queries used are intensive in terms of performance which might result in slow response time.",
+        "mode": "code"
+      },
+      "pluginVersion": "11.5.1",
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "gs-loki"
+      },
+      "description": "Log volume per Kubernetes pod",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 2
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true,
+          "width": 700
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "gs-loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk($k, sum by(cluster_id, namespace, pod) (count_over_time({scrape_job=\"kubernetes-pods\"} |~ `` [$custom_interval])))",
+          "legendFormat": "{{cluster_id}} - {{namespace}}/{{pod}}",
+          "queryType": "range",
+          "refId": "A",
+          "step": ""
+        }
+      ],
+      "title": "Kubernetes Pods",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "gs-loki"
+      },
+      "description": "Log volume per Kubernetes events namespace and selected group by label",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true,
+          "width": 700
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "gs-loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk($k, sum by(cluster_id, namespace, $event_group) (count_over_time({scrape_job=\"kubernetes-events\"} | logfmt |~ `` [$custom_interval])))",
+          "legendFormat": "{{cluster_id}} - {{namespace}} - {{$event_group}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Kubernetes Events",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "gs-loki"
+      },
+      "description": "Log volume per systemd unit",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true,
+          "width": 700
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "gs-loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk ($k, sum by (cluster_id, systemd_unit) (count_over_time({scrape_job=\"system-logs\"} |~ \"\" [$custom_interval])) > 10)",
+          "legendFormat": "{{cluster_id}} - {{systemd_unit}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "System logs",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "gs-loki"
+      },
+      "description": "Log volume per Audit log username",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true,
+          "width": 700
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "gs-loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk ($k, sum by(cluster_id, user_username) (count_over_time({scrape_job=\"audit-logs\"} | json |~ \"\" [$custom_interval])))",
+          "legendFormat": "{{cluster_id}} - {{user_username}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Audit logs",
+      "transparent": true,
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "auto": true,
+        "auto_count": 5,
+        "auto_min": "10s",
+        "current": {
+          "text": "1m",
+          "value": "1m"
+        },
+        "hide": 2,
+        "label": "Interval",
+        "name": "custom_interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "20m",
+            "value": "20m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          }
+        ],
+        "query": "1m,5m,10m,20m,30m,1h",
+        "refresh": 2,
+        "type": "interval"
+      },
+      {
+        "current": {
+          "text": "3",
+          "value": "3"
+        },
+        "description": "Number of top timeseries to show",
+        "label": "top",
+        "name": "k",
+        "options": [
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "selected": false,
+            "text": "2",
+            "value": "2"
+          },
+          {
+            "selected": true,
+            "text": "3",
+            "value": "3"
+          },
+          {
+            "selected": false,
+            "text": "5",
+            "value": "5"
+          },
+          {
+            "selected": false,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "20",
+            "value": "20"
+          }
+        ],
+        "query": "1,2,3,5,10,20",
+        "type": "custom"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "kind",
+          "value": "kind"
+        },
+        "description": "Label used to group Kubernetes events",
+        "label": "Kubernetes events group by",
+        "name": "event_group",
+        "options": [
+          {
+            "selected": true,
+            "text": "kind",
+            "value": "kind"
+          },
+          {
+            "selected": false,
+            "text": "name",
+            "value": "name"
+          }
+        ],
+        "query": "kind, name",
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Loki log volume",
+  "uid": "loki-log-volume",
+  "version": 2,
+  "weekStart": ""
+}

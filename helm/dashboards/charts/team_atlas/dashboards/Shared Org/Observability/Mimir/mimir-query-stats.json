@@ -1,0 +1,458 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Parse mimir query stats from logs",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 140,
+  "links": [
+         {
+            "asDropdown": true,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "owner:team-atlas",
+               "topic:observability",
+               "component:mimir"
+            ],
+            "targetBlank": false,
+            "title": "Mimir dashboards",
+            "type": "dashboards"
+         }
+      ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "title": "Numbers",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${Datasource}"
+          },
+          "editorMode": "code",
+          "expr": "{scrape_job=\"kubernetes-pods\", namespace=\"mimir\"} |= `query stats`\n| logfmt",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Fetches distribution",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "kvp",
+            "replace": true,
+            "source": "labels"
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "number",
+                "targetField": "fetched_chunk_bytes"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "fetched_chunks_count"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "fetched_index_bytes"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "fetched_series_count"
+              },
+              {}
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "histogram",
+          "options": {
+            "combine": false,
+            "fields": {}
+          }
+        }
+      ],
+      "type": "histogram"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 2,
+      "panels": [],
+      "title": "Full stats",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto",
+              "wrapText": false
+            },
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "estimated_series_count"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fetched_chunk_bytes"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fetched_chunks_count"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fetched_index_bytes"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "queue_time_seconds"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "response_size_bytes"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "query_wall_time_seconds"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "fetched_chunk_bytes"
+          }
+        ]
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${Datasource}"
+          },
+          "editorMode": "code",
+          "expr": "{scrape_job=\"kubernetes-pods\", namespace=\"mimir\"} |= `query stats`\n| logfmt",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Query stats",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "kvp",
+            "replace": true,
+            "source": "labels"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "__tenant_id__": true,
+              "app": true,
+              "caller": true,
+              "cluster_id": true,
+              "component_extracted": true,
+              "container": true,
+              "detected_level": true,
+              "filename": true,
+              "installation": true,
+              "instance": true,
+              "job": true,
+              "level": true,
+              "msg": true,
+              "namespace": true,
+              "node_name": true,
+              "scrape_job": true,
+              "service_name": true,
+              "stream": true,
+              "ts": true,
+              "user_agent": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "number",
+                "targetField": "fetched_chunk_bytes"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "fetched_chunks_count"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "estimated_series_count"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "fetched_index_bytes"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "fetched_series_count"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "query_wall_time_seconds"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "queue_time_seconds"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "response_size_bytes"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [
+    "owner:team-atlas",
+    "topic:observability",
+    "component:mimir"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Loki",
+          "value": "P8E80F9AEF21F6940"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "Datasource",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Mimir / Query stats",
+  "uid": "mimir-query-stats",
+  "version": 3,
+  "weekStart": ""
+}
