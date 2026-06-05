@@ -16,8 +16,6 @@ permissions: {}
 
 jobs:
   # Validates dashboard JSON syntax and Grafana schema/best-practices.
-  # Non-blocking for now: the job stays green; failures are reported via the
-  # "report" job as a PR comment (and a warning annotation).
   lint-dashboards:
     runs-on: ubuntu-latest
     permissions:
@@ -42,12 +40,15 @@ jobs:
     - name: Lint dashboards
       id: lint
       run: |
-        # || true keeps the job green (non-blocking); pipefail would otherwise
-        # fail the step because the script exits non-zero when issues are found.
-        ./scripts/lint-dashboards.sh | tee lint.log || true
+        # Capture the script's exit code without aborting (so we can still build
+        # the PR-comment fragment), then re-exit with it at the end to fail the job.
+        set +e
+        ./scripts/lint-dashboards.sh | tee lint.log
+        status=${PIPESTATUS[0]}
+        set -e
         problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' lint.log | sed '1d;$d')"
         if [ -n "$problems" ]; then
-          echo "::warning::Dashboard lint found issues (non-blocking). See the PR comment."
+          echo "::error::Dashboard lint found issues. See the PR comment or the job log."
           max=50
           total=$(printf '%s\n' "$problems" | wc -l)
           {
@@ -62,9 +63,9 @@ jobs:
             echo "DASHBOARD_FRAGMENT_EOF"
           } >> "$GITHUB_OUTPUT"
         fi
+        exit "$status"
 
   # Checks every dashboard has a valid owner: tag and a uid.
-  # Non-blocking for now (see note above).
   validate-dashboards:
     runs-on: ubuntu-latest
     permissions:
@@ -79,10 +80,15 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.ISSUE_AUTOMATION }}
       run: |
-        ./scripts/validate-dashboards.sh | tee validate.log || true
+        # Capture the script's exit code without aborting (so we can still build
+        # the PR-comment fragment), then re-exit with it at the end to fail the job.
+        set +e
+        ./scripts/validate-dashboards.sh | tee validate.log
+        status=${PIPESTATUS[0]}
+        set -e
         problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' validate.log | sed '1d;$d')"
         if [ -n "$problems" ]; then
-          echo "::warning::Dashboard validation found issues (non-blocking). See the PR comment."
+          echo "::error::Dashboard validation found issues. See the PR comment or the job log."
           max=50
           total=$(printf '%s\n' "$problems" | wc -l)
           {
@@ -97,9 +103,10 @@ jobs:
             echo "DASHBOARD_FRAGMENT_EOF"
           } >> "$GITHUB_OUTPUT"
         fi
+        exit "$status"
 
   # Aggregates the two check results into a single sticky PR comment so the
-  # warnings are visible in the PR timeline (a green check alone gives no signal).
+  # failures are visible in the PR timeline alongside the red check.
   report:
     needs: [lint-dashboards, validate-dashboards]
     if: ${{ always() && github.event_name == 'pull_request' }}
@@ -119,10 +126,10 @@ jobs:
         body=""
         if [ -n "$LINT_FRAGMENT" ] || [ -n "$VALIDATE_FRAGMENT" ]; then
           body+="$marker"$'\n'
-          body+='## ⚠️ Dashboard checks found issues (non-blocking)'$'\n\n'
+          body+='## ❌ Dashboard checks failed'$'\n\n'
           [ -n "$LINT_FRAGMENT" ] && body+="$LINT_FRAGMENT"$'\n\n'
           [ -n "$VALIDATE_FRAGMENT" ] && body+="$VALIDATE_FRAGMENT"$'\n\n'
-          body+='_These checks are warnings for now and do not block merge._'
+          body+='_These checks are failing. Fix the issues above and push again._'
         fi
 
         # Find a previous sticky comment by its hidden marker.
