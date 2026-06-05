@@ -48,11 +48,17 @@ jobs:
         problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' lint.log | sed '1d;$d')"
         if [ -n "$problems" ]; then
           echo "::warning::Dashboard lint found issues (non-blocking). See the PR comment."
+          max=50
+          total=$(printf '%s\n' "$problems" | wc -l)
           {
             echo "fragment<<DASHBOARD_FRAGMENT_EOF"
             echo "### Lint — \`lint-dashboards\`"
             echo
-            echo "$problems"
+            printf '%s\n' "$problems" | head -n "$max"
+            if [ "$total" -gt "$max" ]; then
+              echo
+              echo "_…and $((total - max)) more line(s) truncated. See the \`lint-dashboards\` job log for the full list._"
+            fi
             echo "DASHBOARD_FRAGMENT_EOF"
           } >> "$GITHUB_OUTPUT"
         fi
@@ -77,11 +83,17 @@ jobs:
         problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' validate.log | sed '1d;$d')"
         if [ -n "$problems" ]; then
           echo "::warning::Dashboard validation found issues (non-blocking). See the PR comment."
+          max=50
+          total=$(printf '%s\n' "$problems" | wc -l)
           {
             echo "fragment<<DASHBOARD_FRAGMENT_EOF"
             echo "### Owner / uid — \`validate-dashboards\`"
             echo
-            echo "$problems"
+            printf '%s\n' "$problems" | head -n "$max"
+            if [ "$total" -gt "$max" ]; then
+              echo
+              echo "_…and $((total - max)) more line(s) truncated. See the \`validate-dashboards\` job log for the full list._"
+            fi
             echo "DASHBOARD_FRAGMENT_EOF"
           } >> "$GITHUB_OUTPUT"
         fi
