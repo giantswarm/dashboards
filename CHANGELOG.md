@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - update cluster-overview with organization selector
+- Rename Cloud folder to Cloud Provider
 
 ## [4.24.0] - 2026-06-04
 
