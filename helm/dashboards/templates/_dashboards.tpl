@@ -9,15 +9,7 @@ Parameters:
   - .providerKind: (optional) The provider kind (e.g., "capa", "capz") for provider-specific dashboards
 */}}
 {{- define "dashboards.configMapName" -}}
-{{- if or (eq .teamName "phoenix") (eq .teamName "tenet") -}}
-  {{- if .providerKind -}}
-  {{- printf "grafana-%s-%s-dashboard" (printf "%s-%s-%s-%s" .teamName .providerKind .org .folder | sha256sum | trunc 8) .dashboardName | trunc 63 | trimSuffix "-" -}}
-  {{- else -}}
-  {{- printf "grafana-%s-%s-dashboard" (printf "%s-%s-%s" .teamName .org .folder | sha256sum | trunc 8) .dashboardName | trunc 63 | trimSuffix "-" -}}
-  {{- end -}}
-{{- else -}}
-  {{- printf "%s-dashboard" .dashboardName | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- printf "grafana-%s-%s-dashboard" (printf "%s-%s-%s-%s" .teamName .providerKind .org .folder | sha256sum | trunc 8) .dashboardName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
