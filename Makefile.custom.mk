@@ -6,45 +6,34 @@ SHELL:=/bin/bash -O globstar
 
 dashboards = helm/dashboards/dashboards/**/*.json helm/dashboards/charts/**/*.json
 
-# Install dependencies tools
-install-tools:
+install-tools: ## Install dependencies tools
 	./scripts/install-tools.sh
 
-# Update Alloy mixin dashboards
-update-alloy-mixin: install-tools
+update-alloy-mixin: install-tools ## Update Alloy mixin dashboards
 	./mixins/alloy/update.sh
 
-# Update Kubernetes mixin dashboards
-update-kubernetes-mixin:
+update-kubernetes-mixin: ## Update Kubernetes mixin dashboards
 	./scripts/sync-kube-mixin.sh
 
-# Update Mimir mixin dashboards
-update-mimir-mixin: install-tools
+update-mimir-mixin: install-tools ## Update Mimir mixin dashboards
 	./mixins/mimir/update.sh
 
-# Update Loki mixin dashboards
-update-loki-mixin: install-tools
+update-loki-mixin: install-tools ## Update Loki mixin dashboards
 	./mixins/loki/update.sh
 
-# Update Tempo mixin dashboards
-update-tempo-mixin: install-tools
+update-tempo-mixin: install-tools ## Update Tempo mixin dashboards
 	./mixins/tempo/update.sh
 
-# Update Memcached mixin dashboards
-update-memcached-mixin: install-tools
+update-memcached-mixin: install-tools ## Update Memcached mixin dashboards
 	./mixins/memcached/update.sh
 
-# Sync Strimzi/Kafka dashboards from the giantswarm strimzi-kafka-operator fork
-sync-kafka-dashboards:
+sync-kafka-dashboards: ## Sync Strimzi/Kafka dashboards from the giantswarm strimzi-kafka-operator fork
 	./scripts/sync-kafka-dashboards.sh
 
-# Fetch app versions from giantswarm/*-app repos and update version pins in update scripts
-update-mixin-versions:
+update-mixin-versions: ## Fetch app versions from giantswarm/*-app repos and update version pins in update scripts
 	./scripts/update-mixin-versions.sh
 
-# Update all mixins dashboards (fetches latest app versions first)
-update-mixin: update-mixin-versions update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin
+update-mixin: update-mixin-versions update-alloy-mixin update-kubernetes-mixin update-memcached-mixin update-mimir-mixin update-loki-mixin update-tempo-mixin ## Update all mixins dashboards (fetches latest app versions first)
 
-# Run dashboard-linter for all dashboards in the helm/dashboards directory
-lint-dashboards: install-tools
+lint-dashboards: install-tools ## Run dashboard-linter for all dashboards in the helm/dashboards directory
 		./scripts/lint-dashboards.sh
