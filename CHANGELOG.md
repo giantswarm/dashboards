@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Update cluster-overview with organization selector
 - Update generated configmap names to use the same pattern
+- Rename Cloud folder to Cloud Provider
 
 ## [4.24.0] - 2026-06-04
 
