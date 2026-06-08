@@ -21,10 +21,6 @@ unneeded_dashboards=(
     proxy.json
     )
 
-public_dashboards=(
-    apiserver.json
-    )
-
 function tune_dashboard {
     dashboardFile="$1"
     # Extra tuning
@@ -74,11 +70,6 @@ done
 while read -r file; do
     tune_dashboard "$file"
 done < <(find "$TMPDIR" -type f -name \*.json)
-
-# Move public dashboards to the public dashboards folder
-for dashboard in "${public_dashboards[@]}"; do
-    mv "${TMPDIR}"/mixins/files/dashboards/"${dashboard}" helm/dashboards/charts/public_dashboards/dashboards/shared/public/
-done
 
 # Add dashboards to private Shared Org organization
 mkdir --parents helm/dashboards/charts/team_tenet/dashboards/Shared\ Org/Kubernetes/Mixin
