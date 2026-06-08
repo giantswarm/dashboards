@@ -10,13 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Make Observability dashboards public
-- feat(observability): Make Observability dashboards public
 - Move observability related dashboards under Observability folder
 
 ### Changed
 
 - Update cluster-overview with organization selector
 - Update generated configmap names to use the same pattern
+- Rename Cloud folder to Cloud Provider
+- Improved dashboard validation scripts
+- Replace "Shared Org/Kubernetes" dashboards copy with a symlink
 
 ## [4.24.0] - 2026-06-04
 
