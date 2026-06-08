@@ -20,6 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved dashboard validation scripts
 - Replace "Shared Org/Kubernetes" dashboards copy with a symlink
 
+### Fixed
+
+- Fixed Alloy Metrics Targets datasource
+
 ## [4.24.0] - 2026-06-04
 
 ### Added
