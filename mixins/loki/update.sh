@@ -11,7 +11,7 @@ set -e
 
 BRANCH="release-3.6.x"
 MIXIN_URL=https://github.com/grafana/loki/production/loki-mixin@$BRANCH
-helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/Loki"
+helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Shared Org/Observability/Loki"
 
 set -x
 cd mixins/loki
