@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved dashboard validation scripts
 - Replace "Shared Org/Kubernetes" dashboards copy with a symlink
 - Move dashboards from public_dashboards to their respective team
+- Move private dashboards to their respective team under the "Giant Swarm" organization folder
 
 ### Fixed
 
