@@ -1,4 +1,4 @@
-.PHONY: install-tools lint-dashboards update-all-dashboards update-alloy-mixin update-kafka-dashboardsn update-kubernetes-mixin update-loki-mixi update-memcached-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
+.PHONY: install-tools lint-dashboards check-dashboard-schema update-all-dashboards update-alloy-mixin update-kafka-dashboardsn update-kubernetes-mixin update-loki-mixi update-memcached-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
 
 SHELL:=/bin/bash -O globstar
 
@@ -41,3 +41,6 @@ update-mixin-versions: ## Fetch app versions from giantswarm/*-app repos and upd
 
 lint-dashboards: install-tools ## Run dashboard-linter for all dashboards in the helm/dashboards directory
 		./scripts/lint-dashboards.sh
+
+check-dashboard-schema: ## Fail if any dashboard is neither v1 nor v2 (rejects the unwrapped "JSON model")
+		./scripts/check-dashboard-schema.sh
