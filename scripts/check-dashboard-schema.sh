@@ -70,5 +70,8 @@ if [ "$failures" -gt 0 ]; then
     echo "BEGIN_DASHBOARD_PROBLEMS"
     printf '%s\n' "${problems[@]}"
     echo "END_DASHBOARD_PROBLEMS"
+    # Doc link on stderr so it shows for local runs without polluting the
+    # PROBLEMS block that CI parses from stdout.
+    echo "See how to export dashboards correctly: https://github.com/giantswarm/dashboards/blob/main/README.md#exporting-dashboards-from-grafana" >&2
     exit 1
 fi

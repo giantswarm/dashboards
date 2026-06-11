@@ -63,6 +63,36 @@ To that end, we advise the following tags:
 - `component:component_name`: Name of the component this dashboard is about
 - `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
 
+### Exporting dashboards from Grafana
+
+When you add a new dashboard or update an existing one, the JSON committed here must be a **complete** Grafana dashboard. Two schemas are supported:
+
+- **v1** – the classic Grafana dashboard model (top-level `schemaVersion`, `panels`, `templating`, …).
+- **v2** – the newer model, identified by `"apiVersion": "dashboard.grafana.app/v2"` together with `kind: Dashboard`, `metadata` and `spec`. **Prefer v2 for new dashboards**; v1 is still accepted for existing ones.
+
+#### The right way: "Export as JSON"
+
+1. Open the dashboard in Grafana.
+2. Use **Export → Export as JSON**.
+3. Leave **"Export for sharing externally" turned OFF**. Our dashboards reference a `$datasource` template variable and are wired up by the observability operator, so the datasource must stay as it is. Turning the toggle on rewrites datasources into `__inputs`/`__requires`, which we do not want here.
+4. **Save to file** and commit it under the correct team sub-chart and folder path (see [directory structure](#dashboard-directory-structure)).
+
+This produces a complete file: either the full v2 resource (with the `apiVersion` / `kind` / `metadata` / `spec` envelope) or the full classic v1 model.
+
+#### The common mistake: the "JSON Model" view
+
+Do **not** copy the JSON shown under **Dashboard settings → JSON Model**. For a v2 dashboard that view shows only the dashboard *spec* with the `apiVersion` / `kind` / `metadata` / `spec` envelope stripped off — you get top-level `elements` and `layout` but no `apiVersion` and no `schemaVersion`. Grafana cannot import that form, so it is neither a valid v1 nor a valid v2 dashboard and it must not be committed.
+
+#### How this is enforced
+
+The `check-dashboard-schema` check fails any dashboard that is neither v1 nor v2 — which is exactly what catches a file pasted from the JSON Model view. It runs in CI on every pull request that touches dashboards, and you can run it locally:
+
+```sh
+make check-dashboard-schema
+```
+
+If a dashboard is rejected, re-export it with **Export as JSON** as described above.
+
 ### Linting
 
 Atlas introduced a dashboard linter to ensure some basic dashboard rules are followed (e.g. always have a datasource present) to help with the migration to Mimir. 

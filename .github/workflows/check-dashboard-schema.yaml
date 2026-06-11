@@ -1,0 +1,95 @@
+name: Check dashboard schema
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'helm/dashboards/**/*.json'
+
+permissions: {}
+
+jobs:
+  # Fails if any dashboard is neither classic "v1" nor "v2"
+  # (apiVersion dashboard.grafana.app/v2*). In particular this rejects the
+  # unwrapped "JSON model" from a dashboard's Settings -> JSON model view.
+  check-dashboard-schema:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      fragment: ${{ steps.check.outputs.fragment }}
+    steps:
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+    - name: Check dashboard schema
+      id: check
+      run: |
+        # Capture the script's exit code without aborting (so we can still build
+        # the PR-comment fragment), then re-exit with it at the end to fail the job.
+        set +e
+        ./scripts/check-dashboard-schema.sh | tee check-schema.log
+        status=${PIPESTATUS[0]}
+        set -e
+        problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' check-schema.log | sed '1d;$d')"
+        if [ -n "$problems" ]; then
+          echo "::error::Dashboard schema check found issues. See how to export dashboards correctly: https://github.com/giantswarm/dashboards/blob/main/README.md#exporting-dashboards-from-grafana (details in the PR comment or job log)."
+          max=50
+          total=$(printf '%s\n' "$problems" | wc -l)
+          {
+            echo "fragment<<DASHBOARD_FRAGMENT_EOF"
+            echo "### Schema — \`check-dashboard-schema\`"
+            echo
+            printf '%s\n' "$problems" | head -n "$max"
+            if [ "$total" -gt "$max" ]; then
+              echo
+              echo "_…and $((total - max)) more line(s) truncated. See the \`check-dashboard-schema\` job log for the full list._"
+            fi
+            echo "DASHBOARD_FRAGMENT_EOF"
+          } >> "$GITHUB_OUTPUT"
+        fi
+        exit "$status"
+
+  # Surfaces the check result as a single sticky PR comment so the failures are
+  # visible in the PR timeline alongside the red check.
+  report:
+    needs: [check-dashboard-schema]
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+      SCHEMA_FRAGMENT: ${{ needs.check-dashboard-schema.outputs.fragment }}
+    steps:
+    - name: Upsert dashboard-schema-check comment
+      run: |
+        marker='<!-- dashboard-schema-check -->'
+        body=""
+        if [ -n "$SCHEMA_FRAGMENT" ]; then
+          body+="$marker"$'\n'
+          body+='## ❌ Dashboard schema check failed'$'\n\n'
+          body+="$SCHEMA_FRAGMENT"$'\n\n'
+          body+='_These dashboards use an unsupported schema. See [Exporting dashboards from Grafana](https://github.com/giantswarm/dashboards/blob/main/README.md#exporting-dashboards-from-grafana) for the correct export procedure (use **Export as JSON**, not Settings → JSON Model), then push again._'
+        fi
+
+        # Find a previous sticky comment by its hidden marker.
+        existing="$(gh api "repos/$REPO/issues/$PR/comments" \
+          --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n1)"
+
+        if [ -n "$body" ]; then
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$existing" -f body="$body" >/dev/null
+            echo "Updated dashboard-schema-check comment."
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -f body="$body" >/dev/null
+            echo "Created dashboard-schema-check comment."
+          fi
+        elif [ -n "$existing" ]; then
+          gh api -X DELETE "repos/$REPO/issues/comments/$existing" >/dev/null
+          echo "Check clean — removed previous dashboard-schema-check comment."
+        else
+          echo "Check clean — nothing to report."
+        fi
