@@ -63,6 +63,10 @@ To that end, we advise the following tags:
 - `component:component_name`: Name of the component this dashboard is about
 - `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
 
+### Exporting dashboards from Grafana
+
+Dashboards must be committed as a **complete** v1 or v2 Grafana dashboard. See [Exporting dashboards from Grafana](CONTRIBUTING.md#exporting-dashboards-from-grafana) in `CONTRIBUTING.md` for the correct export procedure (use **Export as code**, preferably as a **V2 Resource**) and the common pitfall to avoid (the unimportable "JSON Model" view).
+
 ### Linting
 
 Atlas introduced a dashboard linter to ensure some basic dashboard rules are followed (e.g. always have a datasource present) to help with the migration to Mimir. 
