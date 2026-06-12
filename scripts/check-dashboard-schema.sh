@@ -37,11 +37,14 @@ record() {
 while read -r dashboardFile; do
     # Must be valid JSON before we can classify it.
     if ! schema=$(jq -r '
-        if (.apiVersion // "" | startswith("dashboard.grafana.app/v2")) then
-            (if (.spec | type) == "object" then "v2" else "v2-no-spec" end)
-        elif (.schemaVersion | type) == "number" then
+        # "// false" guards each test: when a field is absent the type filter
+        # (strings/numbers/objects) yields empty, which would otherwise void the
+        # whole if-expression and misclassify the dashboard. Default it to false.
+        if (.apiVersion | strings | startswith("dashboard.grafana.app/v2")) // false then
+            (if (.spec | objects) // false then "v2" else "v2-no-spec" end)
+        elif (.schemaVersion | numbers) // false then
             "v1"
-        elif (.elements | type) == "object" then
+        elif (.elements | objects) // false then
             "json-model"
         else
             "unknown"
