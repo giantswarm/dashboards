@@ -32,8 +32,8 @@ function tune_dashboard {
 
     # Dashboard ownership.
     case $(basename "${dashboardFile}") in
-        cluster-total.json|namespace-by-pod.json|namespace-by-workload.json|pod-total.json|workload-total.json)
-            sed -i 's/"owner:team-.*"/"owner:team-cabbage"/g' "${dashboardFile}"
+        cluster-total.json|namespace-by-pod.json|namespace-by-workload.json|pod-total.json|workload-total.json|statefulset.json)
+            sed -i 's/"owner:team-.*"/"owner:team-tenet"/g' "${dashboardFile}"
             ;;
     esac
 }
