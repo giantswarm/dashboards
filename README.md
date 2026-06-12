@@ -55,13 +55,6 @@ charts/<team>/dashboards/provider/<kind>/<Organization>/<Folder>/dashboard.json
 
 These are only included when `provider.kind` matches in the Helm values.
 
-#### Legacy sub-charts (pending migration)
-
-The following sub-charts are still active until dashboards are migrated to the new team-based structure:
-- `helm/dashboards/charts/public_dashboards` - Public dashboards (legacy)
-- `helm/dashboards/charts/private_dashboards_al` - Private dashboards A-L (legacy)
-- `helm/dashboards/charts/private_dashboards_mz` - Private dashboards M-Z (legacy)
-
 ### Dashboard format
 
 All dashboards should have proper tags to facilitate their discovery.
