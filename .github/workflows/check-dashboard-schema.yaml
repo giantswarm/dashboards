@@ -40,6 +40,8 @@ jobs:
         problems="$(sed -n '/^BEGIN_DASHBOARD_PROBLEMS$/,/^END_DASHBOARD_PROBLEMS$/p' check-schema.log | sed '1d;$d')"
         if [ -n "$problems" ]; then
           echo "::error::${SCHEMA_ERROR_MSG}"
+          # Cap how many problem lines go into the PR comment: keeps it readable and
+          # under GitHub's comment size limit. The full list is always in the job log.
           max=50
           total=$(printf '%s\n' "$problems" | wc -l)
           {
