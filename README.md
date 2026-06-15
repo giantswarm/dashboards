@@ -55,13 +55,6 @@ charts/<team>/dashboards/provider/<kind>/<Organization>/<Folder>/dashboard.json
 
 These are only included when `provider.kind` matches in the Helm values.
 
-#### Legacy sub-charts (pending migration)
-
-The following sub-charts are still active until dashboards are migrated to the new team-based structure:
-- `helm/dashboards/charts/public_dashboards` - Public dashboards (legacy)
-- `helm/dashboards/charts/private_dashboards_al` - Private dashboards A-L (legacy)
-- `helm/dashboards/charts/private_dashboards_mz` - Private dashboards M-Z (legacy)
-
 ### Dashboard format
 
 All dashboards should have proper tags to facilitate their discovery.
@@ -69,6 +62,10 @@ To that end, we advise the following tags:
 - `owner:team-name`: Team that owns the dashboard
 - `component:component_name`: Name of the component this dashboard is about
 - `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
+
+### Exporting dashboards from Grafana
+
+Dashboards must be committed as a **complete** v1 or v2 Grafana dashboard. See [Exporting dashboards from Grafana](CONTRIBUTING.md#exporting-dashboards-from-grafana) in `CONTRIBUTING.md` for the correct export procedure (use **Export as code**, preferably as a **V2 Resource**) and the common pitfall to avoid (the unimportable "JSON Model" view).
 
 ### Linting
 

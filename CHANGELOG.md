@@ -7,8 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-### Add
+### Added
 
+- CI checks to validate dashboards supported version (v1 or v2)
+- CI checks to validate dashboards have an "owner" tag
+- Make Observability dashboards public
+- Move observability related dashboards under Observability folder
 - Add CODEOWNERS for each team sub chart
 
 ### Changed
@@ -16,6 +20,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Update cluster-overview with organization selector
 - Update generated configmap names to use the same pattern
 - Rename Cloud folder to Cloud Provider
+- Improved dashboard validation scripts
+- Replace "Shared Org/Kubernetes" dashboards copy with a symlink
+- Move dashboards from public_dashboards to their respective team
+- Move private dashboards to their respective team under the "Giant Swarm" organization folder
+  - Replace "Giant Swarm/Kubernetes" with "Giant Swarm/Kubernetes-dev" folder
+- Fixed `owner` tag for all dashboards
+
+### Fixed
+
+- Fixed Alloy Metrics Targets datasource
 
 ## [4.24.0] - 2026-06-04
 
