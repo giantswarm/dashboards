@@ -70,8 +70,8 @@ items:
 {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
 {{- $org := regexReplaceAll "^dashboards/([^/]+)/.*$" $path "${1}" }}
 {{- $folder := "" }}
-{{- if regexMatch "^dashboards/[^/]+/.+/[^/]+\\.json$" $path }}
-{{- $folder = regexReplaceAll "^dashboards/[^/]+/(.*)/[^/]+\\.json$" $path "${1}" }}
+{{- if regexMatch "^dashboards/[^/]+/(.+)/[^/]+\\.json$" $path }}
+{{- $folder = regexReplaceAll "^dashboards/[^/]+/(.+)/[^/]+\\.json$" $path "${1}" }}
 {{- end }}
 {{- include "dashboards.configMap" (dict "teamName" $.teamName "org" $org "folder" $folder "dashboardName" $dashboardName "path" $path "ctx" $.ctx) }}
 {{- end }}
@@ -101,8 +101,8 @@ items:
 {{- $relativePath := trimPrefix $providerPrefix $path }}
 {{- $org := regexReplaceAll "^([^/]+)/.*$" $relativePath "${1}" }}
 {{- $folder := "" }}
-{{- if regexMatch "^[^/]+/.+/[^/]+\\.json$" $relativePath }}
-{{- $folder = regexReplaceAll "^[^/]+/(.*)/[^/]+\\.json$" $relativePath "${1}" }}
+{{- if regexMatch "^[^/]+/(.+)/[^/]+\\.json$" $relativePath }}
+{{- $folder = regexReplaceAll "^[^/]+/(.+)/[^/]+\\.json$" $relativePath "${1}" }}
 {{- end }}
 {{- include "dashboards.configMap" (dict "teamName" $.teamName "org" $org "folder" $folder "dashboardName" $dashboardName "path" $path "providerKind" $providerKind "ctx" $.ctx) }}
 {{- end }}
