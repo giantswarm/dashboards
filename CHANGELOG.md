@@ -7,22 +7,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.25.0] - 2026-06-22
+
 ### Added
 
-- CI checks to validate dashboards supported version (v1 or v2)
-- CI checks to validate dashboards have an "owner" tag
+- Add CI checks to validate dashboards supported version (v1 or v2)
+- Add CI checks to validate dashboards have an "owner" tag
 - Make Observability dashboards public
-- Move observability related dashboards under Observability folder
+- Move Observability related dashboards under Observability folder
 
 ### Changed
 
-- Update cluster-overview with organization selector
+- Update Cluster Overview dashboard with organization selector
 - Update generated configmap names to use the same pattern
 - Rename Cloud folder to Cloud Provider
 - Improved dashboard validation scripts
 - Replace "Shared Org/Kubernetes" dashboards copy with a symlink
-- Move dashboards from public_dashboards to their respective team
-- Move private dashboards to their respective team under the "Giant Swarm" organization folder
+- Move dashboards from public_dashboards to their respective team under the "Shared Org" organization folder
+- Move dashboards from private_dashboards to their respective team under the "Giant Swarm" organization folder
   - Replace "Giant Swarm/Kubernetes" with "Giant Swarm/Kubernetes-dev" folder
 - Fixed `owner` tag for all dashboards
 - Add Envoy Logs dashboard to Team Cabbage
@@ -1651,7 +1653,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.24.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.25.0...HEAD
+[4.25.0]: https://github.com/giantswarm/dashboards/compare/v4.24.0...v4.25.0
 [4.24.0]: https://github.com/giantswarm/dashboards/compare/v4.23.0...v4.24.0
 [4.23.0]: https://github.com/giantswarm/dashboards/compare/v4.22.0...v4.23.0
 [4.22.0]: https://github.com/giantswarm/dashboards/compare/v4.21.3...v4.22.0
