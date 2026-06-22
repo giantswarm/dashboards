@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Fixed Alloy Metrics Targets datasource
+- Fixed broken `folder` annotation for organization-root dashboards
 
 ## [4.24.0] - 2026-06-04
 

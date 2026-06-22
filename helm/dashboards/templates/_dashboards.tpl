@@ -69,7 +69,29 @@ items:
 {{- if not (hasPrefix "dashboards/provider/" $path) }}
 {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
 {{- $org := regexReplaceAll "^dashboards/([^/]+)/.*$" $path "${1}" }}
-{{- $folder := regexReplaceAll "^dashboards/[^/]+/(.*)/[^/]+\\.json$" $path "${1}" }}
+{{/*
+Extract the Grafana folder from the path. Expected path layout is
+  dashboards/<organization>/<folder...>/<dashboard>.json
+where <folder...> is optional and may itself contain nested segments
+(e.g. "Observability/Mimir"). A dashboard can sit directly at the
+organization root (dashboards/<organization>/<dashboard>.json), then its
+folder resolves to an empty string.
+
+For the folder:
+- regexMatch is the guard: it is true only when a <folder...> segment
+  exists between the organization and the file name.
+- regexReplaceAll extracts that segment via the "${1}" capture group.
+
+The guard is required because regexReplaceAll returns the input string
+*unchanged* when the pattern does not match. Without it, an org-root
+path would not match and $folder would be set to the whole path instead
+of "". Both patterns are identical so the gate and the extraction stay
+in sync.
+*/}}
+{{- $folder := "" }}
+{{- if regexMatch "^dashboards/[^/]+/(.+)/[^/]+\\.json$" $path }}
+{{- $folder = regexReplaceAll "^dashboards/[^/]+/(.+)/[^/]+\\.json$" $path "${1}" }}
+{{- end }}
 {{- include "dashboards.configMap" (dict "teamName" $.teamName "org" $org "folder" $folder "dashboardName" $dashboardName "path" $path "ctx" $.ctx) }}
 {{- end }}
 {{- end }}
@@ -97,7 +119,29 @@ items:
 {{- $providerPrefix := printf "dashboards/provider/%s/" $providerKind }}
 {{- $relativePath := trimPrefix $providerPrefix $path }}
 {{- $org := regexReplaceAll "^([^/]+)/.*$" $relativePath "${1}" }}
-{{- $folder := regexReplaceAll "^[^/]+/(.*)/[^/]+\\.json$" $relativePath "${1}" }}
+{{/*
+Extract the Grafana folder from the path. Expected path layout is
+  dashboards/<organization>/<folder...>/<dashboard>.json
+where <folder...> is optional and may itself contain nested segments
+(e.g. "Observability/Mimir"). A dashboard can sit directly at the
+organization root (dashboards/<organization>/<dashboard>.json), then its
+folder resolves to an empty string.
+
+For the folder:
+- regexMatch is the guard: it is true only when a <folder...> segment
+  exists between the organization and the file name.
+- regexReplaceAll extracts that segment via the "${1}" capture group.
+
+The guard is required because regexReplaceAll returns the input string
+*unchanged* when the pattern does not match. Without it, an org-root
+path would not match and $folder would be set to the whole path instead
+of "". Both patterns are identical so the gate and the extraction stay
+in sync.
+*/}}
+{{- $folder := "" }}
+{{- if regexMatch "^[^/]+/(.+)/[^/]+\\.json$" $relativePath }}
+{{- $folder = regexReplaceAll "^[^/]+/(.+)/[^/]+\\.json$" $relativePath "${1}" }}
+{{- end }}
 {{- include "dashboards.configMap" (dict "teamName" $.teamName "org" $org "folder" $folder "dashboardName" $dashboardName "path" $path "providerKind" $providerKind "ctx" $.ctx) }}
 {{- end }}
 {{- end }}
