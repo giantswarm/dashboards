@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Move private dashboards to their respective team under the "Giant Swarm" organization folder
   - Replace "Giant Swarm/Kubernetes" with "Giant Swarm/Kubernetes-dev" folder
 - Fixed `owner` tag for all dashboards
+- Add Envoy Logs dashboard to Team Cabbage
 
 ### Fixed
 
