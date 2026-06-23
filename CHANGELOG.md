@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add Teleport dashboard for Teleport (on EKS), deployed only when `provider.kind` is `teleport`.
+
 ## [4.25.0] - 2026-06-22
 
 ### Added
