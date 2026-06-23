@@ -18,7 +18,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add CI checks to validate dashboards supported version (v1 or v2)
 - Add CI checks to validate dashboards have an "owner" tag
 - Make Observability dashboards public
-- Move observability related dashboards under Observability folder
 - Move Observability related dashboards under Observability folder
 
 ### Changed
