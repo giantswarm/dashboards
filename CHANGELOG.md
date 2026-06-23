@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Rename team sub-charts to the capability they represent (`team_atlas` → `observability`, `team_tenet` → `kubernetes`, `team_phoenix` → `cloud`, `team_shield` → `security`, `team_cabbage` → `networking`, `team_honeybadger` → `app_platform`)
 
+## [4.25.1] - 2026-06-23
+
+### Added
+
+- Add Teleport dashboard for Teleport (on EKS), deployed only when `provider.kind` is `teleport`.
+
 ## [4.25.0] - 2026-06-22
 
 ### Added
@@ -1661,7 +1667,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.25.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.25.1...HEAD
+[4.25.1]: https://github.com/giantswarm/dashboards/compare/v4.25.0...v4.25.1
 [4.25.0]: https://github.com/giantswarm/dashboards/compare/v4.24.0...v4.25.0
 [4.24.0]: https://github.com/giantswarm/dashboards/compare/v4.23.0...v4.24.0
 [4.23.0]: https://github.com/giantswarm/dashboards/compare/v4.22.0...v4.23.0
