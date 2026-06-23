@@ -16,7 +16,7 @@ TOOLS_DIR="$SCRIPT_DIR/../../tools"
 TMPDIR="$(mktemp -d -t giantswarm-dashboards-XXXXXX)"
 trap 'rm -rf $TMPDIR' EXIT
 
-helm_dir="$SCRIPT_DIR/../../helm/dashboards/charts/team_atlas/dashboards/Shared Org/Observability/Tempo"
+helm_dir="$SCRIPT_DIR/../../helm/dashboards/charts/observability/dashboards/Shared Org/Observability/Tempo"
 
 set -x
 cd "$SCRIPT_DIR"

@@ -12,7 +12,7 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
-DEST_DIR="$SCRIPT_DIR/../helm/dashboards/charts/team_atlas/dashboards/Shared Org/Kafka"
+DEST_DIR="$SCRIPT_DIR/../helm/dashboards/charts/observability/dashboards/Shared Org/Kafka"
 
 echo "====> Syncing Strimzi dashboards from giantswarm/strimzi-kafka-operator@main"
 

@@ -11,21 +11,21 @@ The "public" ones are accessible by the customer, and the "private" ones are onl
 
 ### Sub-charts
 
-Dashboards are organized into **team-based sub-charts**, each containing dashboards owned by that team:
+Dashboards are organized into **capability-based sub-charts**, each containing dashboards owned by the responsible team:
 
-- [`helm/dashboards/charts/team_atlas`](helm/dashboards/charts/team_atlas) - Team Atlas (Observability)
-- [`helm/dashboards/charts/team_tenet`](helm/dashboards/charts/team_tenet) - Team Tenet (Kubernetes)
-- [`helm/dashboards/charts/team_phoenix`](helm/dashboards/charts/team_phoenix) - Team Phoenix (Cloud)
-- [`helm/dashboards/charts/team_shield`](helm/dashboards/charts/team_shield) - Team Shield (Security)
-- [`helm/dashboards/charts/team_cabbage`](helm/dashboards/charts/team_cabbage) - Team Cabbage (Networking)
-- [`helm/dashboards/charts/team_honeybadger`](helm/dashboards/charts/team_honeybadger) - Team Honeybadger
+- [`helm/dashboards/charts/observability`](helm/dashboards/charts/observability) - Observability (Team Atlas)
+- [`helm/dashboards/charts/kubernetes`](helm/dashboards/charts/kubernetes) - Kubernetes (Team Tenet)
+- [`helm/dashboards/charts/cloud`](helm/dashboards/charts/cloud) - Cloud (Team Phoenix)
+- [`helm/dashboards/charts/security`](helm/dashboards/charts/security) - Security (Team Shield)
+- [`helm/dashboards/charts/networking`](helm/dashboards/charts/networking) - Networking (Team Cabbage)
+- [`helm/dashboards/charts/app_platform`](helm/dashboards/charts/app_platform) - App Platform (Team Honeybadger)
 
 #### Dashboard directory structure
 
-Within each team sub-chart, dashboards are placed in a directory hierarchy that determines their Grafana **organization** and **folder**:
+Within each sub-chart, dashboards are placed in a directory hierarchy that determines their Grafana **organization** and **folder**:
 
 ```
-charts/<team>/dashboards/<Organization>/<Folder>/<Subfolder>/dashboard.json
+charts/<capability>/dashboards/<Organization>/<Folder>/<Subfolder>/dashboard.json
 ```
 
 - `<Organization>` is the Grafana organization name (e.g., `Giant Swarm`, `Shared Org`), used as the `observability.giantswarm.io/organization` annotation.
@@ -35,7 +35,7 @@ Both annotations are **derived automatically** from the filesystem path by the H
 
 Example:
 ```
-charts/team_atlas/dashboards/
+charts/observability/dashboards/
 ├── Giant Swarm/
 │   ├── Observability/Mimir/mimir-overview.json
 │   ├── Observability/Loki/loki-overview.json
@@ -50,7 +50,7 @@ charts/team_atlas/dashboards/
 Dashboards that should only be deployed for a specific infrastructure provider go under a `provider/<kind>/` prefix:
 
 ```
-charts/<team>/dashboards/provider/<kind>/<Organization>/<Folder>/dashboard.json
+charts/<capability>/dashboards/provider/<kind>/<Organization>/<Folder>/dashboard.json
 ```
 
 These are only included when `provider.kind` matches in the Helm values.
@@ -119,8 +119,8 @@ To upload a dashboard while editing, run:
 
 Mixin dashboards are auto-generated from upstream and placed in the team sub-chart that owns the component:
 
-- **Observability components** (Alloy, Loki, Memcached, Mimir, Tempo) → `helm/dashboards/charts/team_atlas/dashboards/Giant Swarm/Observability/<Component>/`
-- **Kubernetes** → `helm/dashboards/charts/team_tenet/dashboards/Giant Swarm/Kubernetes/Mixin/`
+- **Observability components** (Alloy, Loki, Memcached, Mimir, Tempo) → `helm/dashboards/charts/observability/dashboards/Giant Swarm/Observability/<Component>/`
+- **Kubernetes** → `helm/dashboards/charts/kubernetes/dashboards/Giant Swarm/Kubernetes/Mixin/`
 
 ### Automatic updates
 

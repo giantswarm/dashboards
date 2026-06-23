@@ -11,7 +11,7 @@ set -e
 
 BRANCH="mimir-2.17.6"
 MIXIN_URL=https://github.com/grafana/mimir/operations/mimir-mixin@$BRANCH
-helmDir="$(pwd)/helm/dashboards/charts/team_atlas/dashboards/Shared Org/Observability/Mimir"
+helmDir="$(pwd)/helm/dashboards/charts/observability/dashboards/Shared Org/Observability/Mimir"
 
 set -x
 cd mixins/mimir
