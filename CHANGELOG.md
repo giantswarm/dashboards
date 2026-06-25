@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.26.0] - 2026-06-25
+
 ### Added
 
 - Add CODEOWNERS for each team sub chart
@@ -1667,7 +1669,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.25.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.26.0...HEAD
+[4.26.0]: https://github.com/giantswarm/dashboards/compare/v4.25.1...v4.26.0
 [4.25.1]: https://github.com/giantswarm/dashboards/compare/v4.25.0...v4.25.1
 [4.25.0]: https://github.com/giantswarm/dashboards/compare/v4.24.0...v4.25.0
 [4.24.0]: https://github.com/giantswarm/dashboards/compare/v4.23.0...v4.24.0
