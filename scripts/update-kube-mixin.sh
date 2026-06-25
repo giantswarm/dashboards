@@ -72,8 +72,8 @@ while read -r file; do
 done < <(find "$TMPDIR" -type f -name \*.json)
 
 # Add dashboards to private Shared Org organization
-mkdir --parents helm/dashboards/charts/team_tenet/dashboards/Shared\ Org/Kubernetes/Mixin
-cp "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/charts/team_tenet/dashboards/Shared\ Org/Kubernetes/Mixin
+mkdir --parents helm/dashboards/charts/kubernetes/dashboards/Shared\ Org/Kubernetes/Mixin
+cp "${TMPDIR}"/mixins/files/dashboards/* helm/dashboards/charts/kubernetes/dashboards/Shared\ Org/Kubernetes/Mixin
 
 echo -e "\nSynced mixin repo at commit: ${MIXIN_VER}\n"
 

@@ -16,7 +16,7 @@ trap "rm -rf $TMPDIR" EXIT
 
 alloy_mixin_dir="$TMPDIR/alloy/operations/alloy-mixin"
 ALLOY_VERSION="v1.15.0"
-helm_dir="$SCRIPT_DIR/../../helm/dashboards/charts/team_atlas/dashboards/Shared Org/Observability/Alloy"
+helm_dir="$SCRIPT_DIR/../../helm/dashboards/charts/observability/dashboards/Shared Org/Observability/Alloy"
 
 set -x
 git clone https://github.com/grafana/alloy.git --depth 1 --branch "$ALLOY_VERSION" "$TMPDIR/alloy"

@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add CODEOWNERS for each team sub chart
+
+### Changed
+
+- Rename team sub-charts to the capability they represent (`team_atlas` → `observability`, `team_tenet` → `kubernetes`, `team_phoenix` → `cloud`, `team_shield` → `security`, `team_cabbage` → `networking`, `team_honeybadger` → `app_platform`)
+
 ## [4.25.1] - 2026-06-23
 
 ### Added
