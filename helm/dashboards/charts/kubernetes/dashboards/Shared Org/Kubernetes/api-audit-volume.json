@@ -1,0 +1,1265 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "api-audit-volume",
+    "namespace": "default",
+    "uid": "api-audit-volume",
+    "labels": {},
+    "annotations": {
+      "grafana.app/folder": ""
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "builtIn": true,
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "query": {
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "group": "grafana",
+            "kind": "DataQuery",
+            "spec": {},
+            "version": "v0"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "description": "Kubernetes apiserver audit-log volume per workload cluster. Source metric: k8s_api_audit_requests_total, exported by k8s-audit-metrics.",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 1,
+          "links": [],
+          "title": "",
+          "vizConfig": {
+            "group": "text",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "code": {
+                  "language": "plaintext",
+                  "showLineNumbers": false,
+                  "showMiniMap": false
+                },
+                "content": "Kubernetes apiserver audit-log volume per workload cluster. Source metric: `k8s_api_audit_requests_total`, exported by [k8s-audit-metrics](https://github.com/giantswarm/k8s-audit-metrics) running on every workload cluster. Use the **Per-cluster drill-down** link below to open the single-cluster `API audit` dashboard.",
+                "mode": "markdown"
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval]))",
+                        "legendFormat": "events/sec",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Total audit events emitted per second across the selected clusters.",
+          "id": 2,
+          "links": [],
+          "title": "Audit rate (events/sec)",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])) * 86400",
+                        "legendFormat": "events/day",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Estimated total audit events emitted across the selected clusters per day at the current rate.",
+          "id": 3,
+          "links": [],
+          "title": "Events/day (projected)",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])) * 86400 * 1600",
+                        "legendFormat": "bytes/day",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Estimated total audit-log bytes/day written across the selected clusters, using 1600 B/event as the average event size (measured 1.2\u20132.2 KB per event across Giant Swarm workload clusters).",
+          "id": 4,
+          "links": [],
+          "title": "Audit log/day (est.)",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "decbytes"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "count(sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])))",
+                        "legendFormat": "clusters",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Number of clusters currently emitting audit events for the current selection.",
+          "id": 5,
+          "links": [],
+          "title": "Clusters reporting",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval]))",
+                        "legendFormat": "{{cluster_id}}",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Audit-event rate by cluster. Pick clusters with the Cluster variable.",
+          "id": 6,
+          "links": [],
+          "title": "Audit events/sec by cluster",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 1,
+                  "mappings": [],
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true,
+                  "sortBy": "Max",
+                  "sortDesc": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])) * 86400 * 1600",
+                        "legendFormat": "{{cluster_id}}",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Estimated audit-log bytes/day per cluster. Calculated as: rate \u00d7 86400 \u00d7 1600 B/event.",
+          "id": 7,
+          "links": [],
+          "title": "Estimated audit log volume/day by cluster",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 1,
+                  "mappings": [],
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "decbytes"
+                },
+                "overrides": []
+              },
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true,
+                  "sortBy": "Max",
+                  "sortDesc": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval]))",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "events_per_sec"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])) * 86400",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "events_per_day"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])) * 86400 * 1600",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "bytes_per_day"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "9 * 1024 * 1024 * 1024 / (sum by(cluster_id) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval])) * 86400 * 1600)",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "retention_days"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "joinByField",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "byField": "cluster_id",
+                      "mode": "outer"
+                    }
+                  }
+                },
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {
+                        "Time 1": true,
+                        "Time 2": true,
+                        "Time 3": true,
+                        "Time 4": true
+                      },
+                      "indexByName": {
+                        "cluster_id": 0,
+                        "Value #events_per_sec": 1,
+                        "Value #events_per_day": 2,
+                        "Value #bytes_per_day": 3,
+                        "Value #retention_days": 4
+                      },
+                      "renameByName": {
+                        "cluster_id": "Cluster",
+                        "Value #events_per_sec": "events/sec",
+                        "Value #events_per_day": "events/day",
+                        "Value #bytes_per_day": "bytes/day",
+                        "Value #retention_days": "retention_days"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "Per-cluster snapshot at the end of the selected time range. The Retention column estimates how many days the local on-disk audit log covers given the standard --audit-log-maxbackup=30 \u00d7 --audit-log-maxsize=100MB rotation (9 GB of rotated logs per cluster across 3 control-plane nodes, divided by the cluster's daily write rate).",
+          "id": 8,
+          "links": [],
+          "title": "Per-cluster snapshot",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "inspect": false
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "events/sec"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "short"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "events/day"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "short"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "bytes/day"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "decbytes"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 1
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "gradient",
+                          "type": "gauge"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "retention_days"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "d"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 1
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Retention (est.)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Cluster"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "pill"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": true
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "bytes/day"
+                  }
+                ]
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "gs-mimir"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(user) (rate(k8s_api_audit_requests_total{organization=~\"$organization\",cluster_id=~\"$cluster_id\",cluster_id=~\"$cluster_id\"}[$__rate_interval]))",
+                        "legendFormat": "{{user}}",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Top users (subjects) driving audit volume across the selected clusters. Useful for spotting noisy controllers, sidecars or external integrations.",
+          "id": 9,
+          "links": [],
+          "title": "Top users driving audit volume",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 1,
+                  "mappings": [],
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true,
+                  "sortBy": "Max",
+                  "sortDesc": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              }
+            },
+            "version": "13.1.0-local"
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              },
+              "height": 3,
+              "width": 24,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              },
+              "height": 4,
+              "width": 6,
+              "x": 0,
+              "y": 3
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              },
+              "height": 4,
+              "width": 6,
+              "x": 6,
+              "y": 3
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              },
+              "height": 4,
+              "width": 6,
+              "x": 12,
+              "y": 3
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              },
+              "height": 4,
+              "width": 6,
+              "x": 18,
+              "y": 3
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              },
+              "height": 10,
+              "width": 24,
+              "x": 0,
+              "y": 7
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              },
+              "height": 10,
+              "width": 24,
+              "x": 0,
+              "y": 17
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              },
+              "height": 12,
+              "width": 24,
+              "x": 0,
+              "y": 27
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-9"
+              },
+              "height": 10,
+              "width": 24,
+              "x": 0,
+              "y": 39
+            }
+          }
+        ]
+      }
+    },
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Per-cluster drill-down (API audit)",
+        "tooltip": "Open the single-cluster API audit dashboard",
+        "type": "link",
+        "url": "/d/zFUtlNp7z/api-audit"
+      }
+    ],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "owner:team-tenet"
+    ],
+    "timeSettings": {
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "fiscalYearStartMonth": 0,
+      "from": "now-24h",
+      "hideTimepicker": false,
+      "timezone": "UTC",
+      "to": "now"
+    },
+    "title": "API audit volume",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allValue": "",
+          "allowCustomValue": false,
+          "current": {
+            "text": "giantswarm",
+            "value": "giantswarm"
+          },
+          "definition": "label_values(up{app=\"node-exporter\"}, organization)",
+          "description": "Organization label to filter clusters by.",
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Organization",
+          "multi": false,
+          "name": "organization",
+          "options": [],
+          "query": {
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(up{app=\"node-exporter\"}, organization)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "alphabeticalAsc"
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allValue": ".*",
+          "allowCustomValue": true,
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "definition": "label_values(k8s_api_audit_requests_total{organization=~\"$organization\"}, cluster_id)",
+          "description": "Workload cluster (multi-select).",
+          "hide": "dontHide",
+          "includeAll": true,
+          "label": "Cluster",
+          "multi": true,
+          "name": "cluster_id",
+          "options": [],
+          "query": {
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(k8s_api_audit_requests_total{organization=~\"$organization\"}, cluster_id)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "alphabeticalAsc"
+        }
+      }
+    ]
+  }
+}
