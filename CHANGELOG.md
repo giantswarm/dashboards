@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.28.0] - 2026-07-01
+
 ### Changed
 
 - Update Kafka dashboards to reload variable on time range changes and use shared crosshair.
@@ -1679,7 +1681,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.27.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.28.0...HEAD
+[4.28.0]: https://github.com/giantswarm/dashboards/compare/v4.27.0...v4.28.0
 [4.27.0]: https://github.com/giantswarm/dashboards/compare/v4.26.0...v4.27.0
 [4.26.0]: https://github.com/giantswarm/dashboards/compare/v4.25.1...v4.26.0
 [4.25.1]: https://github.com/giantswarm/dashboards/compare/v4.25.0...v4.25.1
