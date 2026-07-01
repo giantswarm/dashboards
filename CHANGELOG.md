@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Update Kafka dashboards to reload variable on time range changes and use shared crosshair.
+
 ## [4.27.0] - 2026-07-01
 
 ### Added
