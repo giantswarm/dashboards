@@ -10,10 +10,10 @@
     "url": "/d/Iuahg6J7z/app-status",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2022-01-20T17:22:49Z",
-    "updated": "2024-05-16T16:08:25Z",
-    "updatedBy": "Anonymous",
+    "updated": "2026-06-03T00:03:23Z",
+    "updatedBy": "zach@giantswarm.io",
     "createdBy": "Anonymous",
-    "version": 22,
+    "version": 23,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -37,7 +37,7 @@
         {
           "builtIn": 1,
           "datasource": {
-            "type": "datasource",
+            "type": "grafana",
             "uid": "grafana"
           },
           "enable": true,
@@ -54,12 +54,10 @@
         }
       ]
     },
-    "description": "",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": 374,
-    "links": [],
     "liveNow": true,
     "panels": [
       {
@@ -78,16 +76,18 @@
                 "type": "auto"
               },
               "filterable": true,
+              "footer": {
+                "reducers": []
+              },
               "inspect": false,
               "minWidth": 100
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
                 {
                   "color": "green",
-                  "value": null
+                  "value": 0
                 }
               ]
             }
@@ -126,7 +126,7 @@
                     "steps": [
                       {
                         "color": "red",
-                        "value": null
+                        "value": 0
                       }
                     ]
                   }
@@ -144,7 +144,7 @@
               },
               "properties": [
                 {
-                  "id": "custom.hidden",
+                  "id": "custom.hideFrom.viz",
                   "value": false
                 },
                 {
@@ -173,7 +173,8 @@
                   "value": 1
                 },
                 {
-                  "id": "custom.filterable"
+                  "id": "custom.filterable",
+                  "value": null
                 }
               ]
             },
@@ -212,6 +213,20 @@
                   "value": 372
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "custom.footer.reducers",
+                  "value": [
+                    "count"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -224,16 +239,6 @@
         "id": 2,
         "options": {
           "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": [
-              "Value #A"
-            ],
-            "reducer": [
-              "count"
-            ],
-            "show": true
-          },
           "frameIndex": 5,
           "showHeader": true,
           "sortBy": [
@@ -243,7 +248,7 @@
             }
           ]
         },
-        "pluginVersion": "11.1.0-70724",
+        "pluginVersion": "13.1.0-26564065169",
         "targets": [
           {
             "datasource": {
@@ -273,8 +278,9 @@
                   "name",
                   "namespace",
                   "status",
+                  "team",
                   "version",
-                  "team"
+                  "customer"
                 ]
               }
             }
@@ -287,18 +293,20 @@
               },
               "includeByName": {},
               "indexByName": {
-                "app": 4,
-                "cluster_id": 0,
-                "name": 3,
-                "namespace": 1,
-                "status": 6,
-                "team": 2,
-                "version": 5
+                "app": 5,
+                "cluster_id": 1,
+                "customer": 0,
+                "name": 4,
+                "namespace": 2,
+                "status": 7,
+                "team": 3,
+                "version": 6
               },
               "renameByName": {
                 "Value #A": "Total",
                 "app": "App",
                 "cluster_id": "Cluster / MC",
+                "customer": "Customer",
                 "name": "Name",
                 "namespace": "Namespace / WC",
                 "status": "Status",
@@ -311,10 +319,6 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "000000006"
-        },
         "gridPos": {
           "h": 10,
           "w": 6,
@@ -331,22 +335,15 @@
           "content": "This dashbard show the current status of applications across clusters.\n\nBecause App CR live on MCs, make sure you select the correct combination of cluster and namespace to view the correct set of App CRs. which matches with the cluster.\n\nExamples:\n\n* all apps on gauss : `cluster=gauss` `namespace=giantswarm`\n\n* all apps on gauss/abc12 : `cluster=gauss` `namespace=abc12`\n\n* prometheus-rules app on all MCs : `app=prometheus-rules` `namespace=giantswarm`",
           "mode": "markdown"
         },
-        "pluginVersion": "11.1.0-70724",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "000000006"
-            },
-            "refId": "A"
-          }
-        ],
+        "pluginVersion": "13.1.0-26564065169",
+        "targets": [],
         "title": "Description",
         "type": "text"
       }
     ],
+    "preload": false,
     "refresh": "",
-    "schemaVersion": 39,
+    "schemaVersion": 42,
     "tags": [
       "owner:team-honeybadger"
     ],
@@ -354,8 +351,8 @@
       "list": [
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "giantswarm"
             ],
@@ -380,14 +377,15 @@
           },
           "refresh": 1,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
-          "sort": 5,
+          "sort": 0,
           "type": "query"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "All"
             ],
@@ -412,14 +410,15 @@
           },
           "refresh": 1,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
-          "sort": 5,
+          "sort": 0,
           "type": "query"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "All"
             ],
@@ -444,14 +443,15 @@
           },
           "refresh": 1,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
-          "sort": 5,
+          "sort": 0,
           "type": "query"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "All"
             ],
@@ -476,14 +476,15 @@
           },
           "refresh": 2,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
-          "sort": 5,
+          "sort": 0,
           "type": "query"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "All"
             ],
@@ -508,14 +509,15 @@
           },
           "refresh": 1,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
-          "sort": 5,
+          "sort": 0,
           "type": "query"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "All"
             ],
@@ -541,14 +543,15 @@
           },
           "refresh": 1,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
-          "sort": 5,
+          "sort": 0,
           "type": "query"
         },
         {
           "allValue": ".*",
+          "allowCustomValue": true,
           "current": {
-            "selected": true,
             "text": [
               "All"
             ],
@@ -574,6 +577,7 @@
           },
           "refresh": 1,
           "regex": "",
+          "regexApplyTo": "value",
           "skipUrlSync": false,
           "sort": 1,
           "type": "query"
@@ -584,7 +588,6 @@
       "from": "now-1h",
       "to": "now"
     },
-    "timeRangeUpdatedDuringEditOrView": false,
     "timepicker": {
       "refresh_intervals": [
         "5s",
@@ -597,10 +600,9 @@
         "1h"
       ]
     },
-    "timezone": "",
+    "timezone": "browser",
     "title": "App status",
     "uid": "Iuahg6J7z",
-    "version": 22,
-    "weekStart": ""
+    "version": 23
   }
 }
