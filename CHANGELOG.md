@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Anchor the `etcd-health` dashboard cluster selector to `etcd_server_id` instead of `up`, so clusters with a managed control plane (aks, eks) no longer appear as empty options.
 
+### Fixed
+
+- Fix the worker count expression on the `Nodes Overview` dashboard.
+
 ## [4.28.0] - 2026-07-01
 
 ### Changed
