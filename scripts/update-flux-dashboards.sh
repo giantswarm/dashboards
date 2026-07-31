@@ -48,6 +48,12 @@ FLUX_REF="${1:-main}"
 
 TAGS='["flux","component:flux","topic:gitops","owner:team-honeybadger"]'
 
+# Flux controller deployment names, anchored. Workload clusters prefix them with
+# `flux-`. Used to tell Flux's pods apart from every other controller-runtime
+# operator that exposes the same generic workqueue metrics.
+FLUX_CONTROLLERS='source|kustomize|helm|notification|image-automation|image-reflector'
+FLUX_CONTROLLER_PODS="(flux-)?($FLUX_CONTROLLERS)-controller-.*"
+
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
@@ -105,6 +111,13 @@ gs_common() {
         | del(.id, .version, .iteration, .__inputs, .__requires, .__elements)
         # Drop upstream'"'"'s datasource-picker variables; we add our own.
         | .templating.list |= map(select(.type != "datasource"))
+        # Point every Prometheus reference at the $datasource variable. Upstream
+        # hardcodes `uid: "prometheus"` on some *targets* while their panel uses
+        # the variable; no datasource with that uid exists in our Grafana, and the
+        # target-level datasource wins, so those panels would query nothing. The
+        # linter only inspects panel-level datasources and cannot catch it.
+        | (.. | objects | select(.uid? == "prometheus" and .type? == "prometheus"))
+              |= {"type": "prometheus", "uid": "$datasource"}
     '
 }
 
@@ -132,10 +145,20 @@ patch_cluster() {
 
         # For the duration panels, add an `or` fallback so the namespace filter
         # works on management clusters (exported_namespace) and on workload
-        # clusters (namespace) alike. Only one branch ever returns series.
+        # clusters (namespace) alike.
+        #
+        # The fallback branch is pinned to `exported_namespace=""` so the two
+        # branches stay mutually exclusive. Without it the branches overlap on a
+        # management cluster: there `namespace` is the *controller* namespace
+        # (flux-giantswarm), which is also one of the object namespaces the
+        # dropdown offers, and `or` only suppresses right-hand series whose exact
+        # label set already exists on the left. Selecting flux-giantswarm then
+        # pulled in objects from every other namespace (205 series, not 52).
         def dual_namespace:
             if test("gotk_reconcile_duration_seconds") and test("exported_namespace")
-            then "(" + . + ")\nor\n(" + gsub("exported_namespace=~"; "namespace=~") + ")"
+            then "(" + . + ")\nor\n("
+                 + gsub("exported_namespace=~"; "exported_namespace=\"\",namespace=~")
+                 + ")"
             else . end;
 
         (.. | objects | select(has("expr")) | .expr) |= (patch_expr | dual_namespace)
@@ -171,30 +194,50 @@ patch_control_plane() {
                    "{cluster_id=\"$cluster\", namespace=\"$namespace\", ")
             # 3. Our scrape interval is 60s, so upstream'"'"'s `[1m]` range windows
             #    contain at most one sample and rate()/increase() return nothing.
+            #    Widening the window is not enough for the `increase()` panels:
+            #    they are titled "ops/min" with unit `opm`, so the value must stay
+            #    per-minute. `increase(m[$__rate_interval])` would report the count
+            #    over 4m+ (and grow as the time range widens), reading several
+            #    times high. Convert those to a per-second rate scaled to a minute.
+            #    The `by (...)` clause belongs to the aggregation, so it has to
+            #    stay before the multiplication -- hence the two passes.
+            | gsub("sum\\(increase\\((?<body>[^\\[]*)\\[1m\\]\\)\\)\\s*by\\s*\\((?<grp>[^)]*)\\)";
+                   "sum(rate(\(.body)[$__rate_interval])) by (\(.grp)) * 60")
+            | gsub("sum\\(increase\\((?<body>[^\\[]*)\\[1m\\]\\)\\)";
+                   "sum(rate(\(.body)[$__rate_interval])) * 60")
             | gsub("\\[1m\\]"; "[$__rate_interval]");
 
         (.. | objects | select(has("expr")) | .expr) |= patch_expr
         # The namespace variable must list the *controller* namespace, which
         # differs by cluster type (flux-giantswarm on MCs, flux-system on WCs).
         # workqueue metrics are scraped from the controller pods, so their
-        # `namespace` label is the controller namespace on both.
+        # `namespace` label is the controller namespace on both -- but they are
+        # generic controller-runtime metrics, and a loose `.*-controller-.*` pod
+        # match also selects unrelated operators (on a management cluster it
+        # returns external-secrets, giantswarm and kube-system alongside
+        # flux-giantswarm, and Grafana would auto-select the alphabetically first).
+        # Anchoring on the Flux controller deployment names yields exactly one
+        # namespace per cluster type.
         | (.templating.list[] | select(.name == "namespace")) |= (
               .datasource = {"type": "prometheus", "uid": "$datasource"}
-            | .definition = "label_values(workqueue_work_duration_seconds_count{cluster_id=\"$cluster\", pod=~\".*-controller-.*\"}, namespace)"
-            | .query = {"query": "label_values(workqueue_work_duration_seconds_count{cluster_id=\"$cluster\", pod=~\".*-controller-.*\"}, namespace)", "refId": "StandardVariableQuery"}
+            | .definition = $q
+            | .query = {"query": $q, "refId": "StandardVariableQuery"}
             | .label = "Flux namespace"
             | .refresh = 2
+            | .sort = 1
             | .current = {"selected": false, "text": "", "value": ""}
           )
-    '
+    ' --arg q "label_values(workqueue_work_duration_seconds_count{cluster_id=\"\$cluster\", pod=~\"$FLUX_CONTROLLER_PODS\"}, namespace)"
 }
 
 # --- logs.json ---------------------------------------------------------------
 
 patch_logs() {
     local selector='{service_name=~"flux-app|flux-operator", cluster_id="$cluster", pod=~"$controller.*"}'
+    local caveat
+    caveat="Only management-cluster Flux logs are ingested. Workload clusters run Flux in the flux-system namespace, which has no tenant assignment, so their controller logs are dropped before reaching Loki and this dashboard will be empty for them."
 
-    jq --arg selector "$selector" '
+    jq --arg selector "$selector" --arg caveat "$caveat" '
         # Replace upstream'"'"'s stream selector wholesale: `stream` is dropped by
         # our Alloy config and `app` names the Helm release, not the controller.
         (.. | objects | select(has("expr")) | .expr) |=
@@ -206,6 +249,12 @@ patch_logs() {
              else {"type": "loki", "uid": "gs-loki"} end)
         # `namespace` and `stream` no longer parameterise anything.
         | .templating.list |= map(select(.name != "namespace" and .name != "stream"))
+        # The Cluster dropdown lists every cluster running Flux, but only
+        # management-cluster logs are ingested, so state that where a customer
+        # picking a workload cluster will actually see it rather than only in the
+        # docs.
+        | .description = $caveat
+        | (.. | objects | select(has("targets")) | .description) |= $caveat
         # Controller identity comes from the pod name prefix.
         | (.templating.list[] | select(.name == "controller")) |= (
               {
@@ -235,33 +284,57 @@ fetch() {
 assert_scoped() {
     local file="$1" require_namespace="$2" bad rc=0
 
-    bad=$(jq -r '[.. | objects | select(has("expr")) | .expr
-                  | select(test("\\{") and (test("cluster_id") | not))] | .[]' "$file")
-    if [[ -n "$bad" ]]; then
-        echo "ERROR: $(basename "$file") has expressions with no cluster_id filter:" >&2
-        echo "$bad" >&2
+    fail() {
+        echo "ERROR: $(basename "$file") $1:" >&2
+        echo "$2" >&2
         rc=1
-    fi
+    }
+
+    # Every *selector* must be cluster-scoped -- checked per selector rather than
+    # per expression, so `count(a{cluster_id=...}) / count(b{})` cannot slip by.
+    bad=$(jq -r '[.. | objects | select(has("expr")) | .expr
+                  | [match("\\{[^}]*\\}"; "g").string]
+                  | map(select(test("cluster_id") | not)) | .[]] | unique | .[]' "$file")
+    [[ -n "$bad" ]] && fail "has selectors with no cluster_id filter" "$bad"
+
+    # A bare metric name with no selector at all is neither patched nor caught by
+    # the check above, and would query the whole fleet.
+    bad=$(jq -r --arg fams "gotk_|controller_runtime_|workqueue_|rest_client_|go_|process_|container_" '
+              [.. | objects | select(has("expr")) | .expr
+               | select(test("(^|[^a-z_{\"])(\($fams))[a-z0-9_]*\\s*(\\[|\\)|$|\\s)"))] | unique | .[]' "$file")
+    [[ -n "$bad" ]] && fail "has metrics used without a label selector" "$bad"
 
     # Every selector on the control-plane dashboard must be namespace-scoped,
     # otherwise generic controller-runtime metrics from other operators leak in.
     if [[ "$require_namespace" == "yes" ]]; then
         bad=$(jq -r '[.. | objects | select(has("expr")) | .expr
-                      | select(test("\\{(?![^}]*namespace)"))] | .[]' "$file")
-        if [[ -n "$bad" ]]; then
-            echo "ERROR: $(basename "$file") has selectors with no namespace filter:" >&2
-            echo "$bad" >&2
-            rc=1
-        fi
+                      | [match("\\{[^}]*\\}"; "g").string]
+                      | map(select(test("namespace") | not)) | .[]] | unique | .[]' "$file")
+        [[ -n "$bad" ]] && fail "has selectors with no namespace filter" "$bad"
     fi
 
     # 60s scrape interval: a [1m] window cannot hold two samples.
-    bad=$(jq -r '[.. | objects | select(has("expr")) | .expr | select(test("\\[1m\\]"))] | .[]' "$file")
-    if [[ -n "$bad" ]]; then
-        echo "ERROR: $(basename "$file") still has [1m] range windows:" >&2
-        echo "$bad" >&2
-        rc=1
-    fi
+    bad=$(jq -r '[.. | objects | select(has("expr")) | .expr | select(test("\\[1m\\]"))] | unique | .[]' "$file")
+    [[ -n "$bad" ]] && fail "still has [1m] range windows" "$bad"
+
+    # `increase()` over $__rate_interval is not a per-minute value; the ops/min
+    # panels must use rate() * 60.
+    bad=$(jq -r '[.. | objects | select(has("expr")) | .expr | select(test("increase\\("))] | unique | .[]' "$file")
+    [[ -n "$bad" ]] && fail "still uses increase() (ops/min panels need rate() * 60)" "$bad"
+
+    # Every $variable referenced must actually exist. This is what catches an
+    # upstream rename: the text-anchored rewrites above would silently no-op while
+    # the variable they depend on has already been dropped, leaving a dead panel.
+    bad=$(jq -r '
+        (.templating.list | map(.name)) as $defined
+        | ["__rate_interval", "__interval", "__interval_ms", "__auto", "__all",
+           "__range", "__from", "__to", "__timeFilter", "__dashboard", "__user", "__org"] as $builtin
+        | [.. | objects | (.expr?, .query?, .definition?) | select(type == "string")]
+          + [.. | objects | .query? | objects | .query? | select(type == "string")]
+        | map([match("\\$\\{?([a-zA-Z_][a-zA-Z0-9_]*)"; "g").captures[0].string]) | add // []
+        | unique | map(select(. as $v | ($defined | index($v)) == null and ($builtin | index($v)) == null)) | .[]
+    ' "$file")
+    [[ -n "$bad" ]] && fail "references undefined dashboard variables" "$bad"
 
     if [[ $rc -ne 0 ]]; then
         echo "Upstream likely changed. Update the patch functions in $(basename "${BASH_SOURCE[0]}")." >&2

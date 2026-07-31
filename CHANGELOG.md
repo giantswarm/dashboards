@@ -43,7 +43,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   emitted by `dex-operator` and `team-stamper`).
 - Widen the `Flux Control Plane` range windows from `[1m]` to
   `[$__rate_interval]`. With our 60s scrape interval a one-minute window cannot
-  hold two samples, so the reconciliation and API-request panels were empty.
+  hold two samples, so the reconciliation and API-request panels were empty. The
+  `ops/min` panels use `rate(...) * 60` so they stay per-minute rather than
+  reporting the count over the whole (range-dependent) window.
+- Point the `Flux Cluster Stats` targets at the `$datasource` variable. Seven of
+  them were pinned to a `prometheus` datasource uid that does not exist here,
+  and the target-level datasource overrides the panel.
+- Restrict the `Flux namespace` selector on `Flux Control Plane` to the Flux
+  controller pods. It was derived from a generic controller-runtime metric, so on
+  a management cluster it also offered `external-secrets`, `giantswarm` and
+  `kube-system`, and the dashboard could open on another operator's data.
 - Fix the worker count expression on the `Nodes Overview` dashboard.
 - Fix the monthly dashboard-update workflow, which called a `make update-mixin`
   target that no longer exists (it was renamed to `update-all-mixin`), so the
