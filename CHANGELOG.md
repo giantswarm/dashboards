@@ -7,13 +7,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Publish the `Flux Logs` dashboard to `Shared Org / GitOps`. It covers the Flux
+  controllers on the management cluster; workload-cluster Flux logs are not
+  ingested yet, because the `flux-system` namespace there has no tenant
+  assignment and Alloy drops untenanted pod logs.
+- Add `scripts/update-flux-dashboards.sh` (`make update-flux-dashboards`), which
+  syncs the Flux dashboards from
+  [fluxcd/flux2-monitoring-example](https://github.com/fluxcd/flux2-monitoring-example)
+  and re-applies our patches. It runs in the monthly dashboard-update workflow
+  and fails loudly if a patch stops applying.
+- Add `Organization` and `Cluster` selectors to both Flux dashboards. They are
+  deployed to the management cluster's Grafana, whose Mimir holds metrics for
+  every workload cluster, so until now every panel aggregated across a
+  customer's whole fleet.
+
 ### Changed
 
+- Synced Flux dashboards from [fluxcd/flux2-monitoring-example@7ab65dc](https://github.com/fluxcd/flux2-monitoring-example/tree/7ab65dc8b90f7a6751d88f18bbb4e1bee33bf334/monitoring/configs/dashboards).
 - Anchor the `etcd-health` dashboard cluster selector to `etcd_server_id` instead of `up`, so clusters with a managed control plane (aks, eks) no longer appear as empty options.
 
 ### Fixed
 
+- Fix the `Flux Cluster Stats` dashboard, which showed no data at all: every
+  panel queried `gotk_reconcile_condition`, a metric the Flux controllers no
+  longer expose. It now uses `gotk_resource_info`, the same metric our Flux
+  alerting rules use, and gains upstream's `Suspended Objects` panel.
+- De-duplicate `gotk_resource_info` on the `Flux Cluster Stats` dashboard. On
+  management clusters both `flux-ksm` and `kube-state-metrics` export identical
+  series, so the resource counts read exactly double.
+- Scope the `Flux Control Plane` dashboard to the Flux namespace. Its
+  `controller_runtime_*` panels matched any operator exposing the same
+  `controller` label values (for example `controller="helmrelease"` is also
+  emitted by `dex-operator` and `team-stamper`).
+- Widen the `Flux Control Plane` range windows from `[1m]` to
+  `[$__rate_interval]`. With our 60s scrape interval a one-minute window cannot
+  hold two samples, so the reconciliation and API-request panels were empty.
 - Fix the worker count expression on the `Nodes Overview` dashboard.
+- Fix the monthly dashboard-update workflow, which called a `make update-mixin`
+  target that no longer exists (it was renamed to `update-all-mixin`), so the
+  automation failed instead of opening a PR.
 
 ## [4.28.0] - 2026-07-01
 

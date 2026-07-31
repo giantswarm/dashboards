@@ -3,25 +3,41 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafana"
-        },
+        "datasource": "-- Grafana --",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
         "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "iconColor": "red",
+        "name": "flux events",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [
+            "flux"
+          ],
+          "type": "tags"
+        }
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "",
@@ -29,6 +45,7 @@
         "defaults": {
           "decimals": 0,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -65,19 +82,23 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
+        "text": {},
+        "textMode": "value"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "expr": "count(gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"True\",kind=~\"Kustomization|HelmRelease\"})\n-\nsum(gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"Deleted\",kind=~\"Kustomization|HelmRelease\"})",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", customresource_kind=~\"Kustomization|HelmRelease\"}))",
+          "instant": true,
           "interval": "",
           "legendFormat": "",
+          "range": false,
           "refId": "A"
         }
       ],
@@ -86,6 +107,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "",
@@ -93,6 +115,7 @@
         "defaults": {
           "decimals": 0,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -125,19 +148,23 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
+        "text": {},
+        "textMode": "value"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "expr": "sum(gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"Kustomization|HelmRelease\"})",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", customresource_kind=~\"Kustomization|HelmRelease\", ready=\"False\"}))",
+          "instant": true,
           "interval": "",
           "legendFormat": "",
+          "range": false,
           "refId": "A"
         }
       ],
@@ -146,6 +173,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "",
@@ -153,6 +181,7 @@
         "defaults": {
           "decimals": 0,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -189,19 +218,23 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
+        "text": {},
+        "textMode": "value"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "expr": "count(gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"True\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"})\n-\nsum(gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"Deleted\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"})",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", customresource_kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}))",
+          "instant": true,
           "interval": "",
           "legendFormat": "",
+          "range": false,
           "refId": "A"
         }
       ],
@@ -210,6 +243,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "",
@@ -217,6 +251,7 @@
         "defaults": {
           "decimals": 0,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -249,19 +284,23 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
+        "text": {},
+        "textMode": "value"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "expr": "sum(gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"})",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", customresource_kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\", ready=\"False\"}))",
+          "instant": true,
           "interval": "",
           "legendFormat": "",
+          "range": false,
           "refId": "A"
         }
       ],
@@ -269,9 +308,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -306,10 +343,8 @@
       "id": 8,
       "options": {
         "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -319,16 +354,14 @@
           "values": false
         },
         "showUnfilled": true,
-        "sizing": "auto",
+        "text": {},
         "valueMode": "color"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "expr": "  sum(rate(gotk_reconcile_duration_seconds_sum{namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)",
+          "exemplar": true,
+          "expr": "(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind))\nor\n(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind))",
           "interval": "",
           "legendFormat": "{{kind}}",
           "refId": "A"
@@ -338,9 +371,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -375,10 +406,8 @@
       "id": 31,
       "options": {
         "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -388,16 +417,14 @@
           "values": false
         },
         "showUnfilled": true,
-        "sizing": "auto",
+        "text": {},
         "valueMode": "color"
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "expr": "  sum(rate(gotk_reconcile_duration_seconds_sum{namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"}[5m])) by (kind)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"}[5m])) by (kind)",
+          "exemplar": true,
+          "expr": "(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind))\nor\n(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind))",
           "interval": "",
           "legendFormat": "{{kind}}",
           "refId": "A"
@@ -408,9 +435,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -419,25 +444,19 @@
       },
       "id": 15,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Status",
       "type": "row"
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {
+            "align": "auto",
             "cellOptions": {
               "type": "auto"
             },
@@ -447,11 +466,15 @@
           "mappings": [
             {
               "options": {
-                "0": {
-                  "text": "Ready"
-                },
-                "1": {
+                "False": {
+                  "color": "red",
+                  "index": 1,
                   "text": "Not Ready"
+                },
+                "True": {
+                  "color": "blue",
+                  "index": 0,
+                  "text": "Ready"
                 }
               },
               "type": "value"
@@ -461,16 +484,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "transparent",
                 "value": null
-              },
-              {
-                "color": "blue",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           }
@@ -478,14 +493,14 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "Status"
+              "id": "byType",
+              "options": "string"
             },
             "properties": [
               {
                 "id": "custom.cellOptions",
                 "value": {
-                  "mode": "gradient",
+                  "mode": "basic",
                   "type": "color-background"
                 }
               }
@@ -494,7 +509,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 22,
         "w": 12,
         "x": 0,
         "y": 10
@@ -510,15 +525,24 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Status"
+          }
+        ]
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "expr": "gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"Kustomization|HelmRelease\"}",
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", customresource_kind=~\"Kustomization|HelmRelease\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -532,27 +556,67 @@
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "app": true,
-              "container": true,
-              "endpoint": true,
-              "exported_namespace": true,
-              "instance": true,
-              "job": true,
-              "kubernetes_namespace": true,
-              "kubernetes_pod_name": true,
-              "pod": true,
-              "pod_template_hash": true,
-              "status": true,
-              "type": true
+              "Time": false,
+              "Value": false,
+              "__name__": false,
+              "app": false,
+              "chart_name": false,
+              "chart_source_name": false,
+              "container": false,
+              "customresource_group": false,
+              "customresource_kind": false,
+              "customresource_version": false,
+              "endpoint": false,
+              "exported_namespace": false,
+              "gotk_type": false,
+              "instance": false,
+              "job": false,
+              "kubernetes_namespace": false,
+              "kubernetes_pod_name": false,
+              "namespace": false,
+              "pod": false,
+              "pod_template_hash": false,
+              "revision": false,
+              "service": false,
+              "source_name": false,
+              "status": false,
+              "suspended": false,
+              "type": false
             },
-            "indexByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value": 15,
+              "__name__": 1,
+              "container": 2,
+              "customresource_group": 4,
+              "customresource_kind": 5,
+              "customresource_version": 6,
+              "endpoint": 7,
+              "exported_namespace": 3,
+              "instance": 8,
+              "job": 9,
+              "name": 10,
+              "namespace": 11,
+              "pod": 12,
+              "ready": 13,
+              "service": 14
+            },
             "renameByName": {
-              "Value": "Status",
+              "Value": "",
+              "customresource_kind": "Kind",
+              "exported_namespace": "Namespace",
               "kind": "Kind",
               "name": "Name",
-              "namespace": "Namespace"
+              "namespace": "Operator Namespace",
+              "ready": "Status"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "(Namespace|Kind|Name|Status)"
             }
           }
         }
@@ -561,12 +625,17 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "custom": {
+            "align": "auto",
             "cellOptions": {
               "type": "auto"
             },
@@ -576,11 +645,15 @@
           "mappings": [
             {
               "options": {
-                "0": {
-                  "text": "Ready"
-                },
-                "1": {
+                "False": {
+                  "color": "red",
+                  "index": 1,
                   "text": "Not Ready"
+                },
+                "True": {
+                  "color": "blue",
+                  "index": 0,
+                  "text": "Ready"
                 }
               },
               "type": "value"
@@ -590,16 +663,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "transparent",
                 "value": null
-              },
-              {
-                "color": "blue",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           }
@@ -607,15 +672,34 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "Status"
+              "id": "byType",
+              "options": "string"
             },
             "properties": [
               {
                 "id": "custom.cellOptions",
                 "value": {
-                  "mode": "gradient",
+                  "mode": "basic",
                   "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "noValue",
+                "value": "Ready"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -623,7 +707,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 11,
         "w": 12,
         "x": 12,
         "y": 10
@@ -639,15 +723,24 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Status"
+          }
+        ]
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "expr": "gotk_reconcile_condition{namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"}",
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", customresource_kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -661,27 +754,227 @@
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "app": true,
-              "container": true,
-              "endpoint": true,
-              "exported_namespace": true,
-              "instance": true,
-              "job": true,
-              "kubernetes_namespace": true,
-              "kubernetes_pod_name": true,
-              "pod": true,
-              "pod_template_hash": true,
-              "status": true,
-              "type": true
+              "Time": false,
+              "Value": false,
+              "__name__": false,
+              "app": false,
+              "bucket_name": false,
+              "container": false,
+              "customresource_group": false,
+              "customresource_kind": false,
+              "customresource_version": false,
+              "endpoint": false,
+              "exported_namespace": false,
+              "gotk_type": false,
+              "instance": false,
+              "job": false,
+              "kubernetes_namespace": false,
+              "kubernetes_pod_name": false,
+              "namespace": false,
+              "pod": false,
+              "pod_template_hash": false,
+              "ready": false,
+              "revision": false,
+              "service": false,
+              "status": false,
+              "suspended": false,
+              "type": false,
+              "url": false
             },
-            "indexByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value": 15,
+              "__name__": 1,
+              "container": 2,
+              "customresource_group": 5,
+              "customresource_kind": 6,
+              "customresource_version": 7,
+              "endpoint": 8,
+              "exported_namespace": 4,
+              "instance": 9,
+              "job": 10,
+              "name": 11,
+              "namespace": 3,
+              "pod": 12,
+              "ready": 13,
+              "service": 14
+            },
             "renameByName": {
-              "Value": "Status",
+              "Value": "",
+              "customresource_kind": "Kind",
+              "exported_namespace": "Namespace",
               "kind": "Kind",
               "name": "Name",
-              "namespace": "Namespace"
+              "namespace": "Operator Namespace",
+              "ready": "Status"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "(Namespace|Kind|Name|Status)"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "string"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 21
+      },
+      "id": 36,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Namespace"
+          }
+        ]
+      },
+      "pluginVersion": "10.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "max by (exported_namespace, customresource_kind, name, ready, suspended) (gotk_resource_info{cluster_id=\"$cluster\", exported_namespace=~\"$namespace\", suspended=\"true\"})",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Suspended Objects",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": false,
+              "Value": false,
+              "__name__": false,
+              "app": false,
+              "bucket_name": false,
+              "container": false,
+              "customresource_group": false,
+              "customresource_kind": false,
+              "customresource_version": false,
+              "endpoint": false,
+              "exported_namespace": false,
+              "gotk_type": false,
+              "instance": false,
+              "job": false,
+              "kubernetes_namespace": false,
+              "kubernetes_pod_name": false,
+              "namespace": false,
+              "pod": false,
+              "pod_template_hash": false,
+              "ready": false,
+              "revision": false,
+              "service": false,
+              "source_name": false,
+              "status": false,
+              "suspended": false,
+              "type": false,
+              "url": false
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 15,
+              "__name__": 1,
+              "container": 2,
+              "customresource_group": 5,
+              "customresource_kind": 6,
+              "customresource_version": 7,
+              "endpoint": 8,
+              "exported_namespace": 4,
+              "instance": 9,
+              "job": 10,
+              "name": 11,
+              "namespace": 3,
+              "pod": 12,
+              "ready": 13,
+              "service": 14
+            },
+            "renameByName": {
+              "customresource_kind": "Kind",
+              "exported_namespace": "Namespace",
+              "name": "Name"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "(Namespace|Name|Kind)"
             }
           }
         }
@@ -690,32 +983,20 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 32
       },
       "id": 17,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Timing",
       "type": "row"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -723,7 +1004,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -737,7 +1017,6 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -817,7 +1096,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 33
       },
       "id": 27,
       "options": {
@@ -830,18 +1109,15 @@
           "showLegend": true
         },
         "tooltip": {
-          "maxHeight": 600,
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "10.0.3",
       "targets": [
         {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "expr": "  sum(rate(gotk_reconcile_duration_seconds_sum{namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name)",
+          "exemplar": true,
+          "expr": "(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name))\nor\n(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{kind}}/{{name}}",
@@ -852,106 +1128,145 @@
       "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "autoMigrateFrom": "graph",
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "allIsZero",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "allIsNull",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 41
       },
-      "hiddenSeries": false,
       "id": 35,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": false,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "7.2.1",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.0.3",
       "targets": [
         {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "expr": "  sum(rate(gotk_reconcile_duration_seconds_sum{namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"}[5m])) by (kind, name)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|HelmChart|Bucket\"}[5m])) by (kind, name)",
+          "exemplar": true,
+          "expr": "(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind, name)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind, name))\nor\n(sum(rate(gotk_reconcile_duration_seconds_sum{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind, name)\n/\n  sum(rate(gotk_reconcile_duration_seconds_count{cluster_id=\"$cluster\",namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket|OCIRepository\"}[5m])) by (kind, name))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{kind}}/{{name}}",
           "refId": "B"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Source acquisition duration",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "timeseries",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "s",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     }
   ],
-  "refresh": "10s",
-  "schemaVersion": 39,
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "light",
   "tags": [
     "flux",
+    "component:flux",
+    "topic:gitops",
     "owner:team-honeybadger"
   ],
   "templating": {
@@ -975,28 +1290,90 @@
         "type": "datasource"
       },
       {
-        "allValue": ".*",
         "current": {
           "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "text": "",
+          "value": ""
         },
         "datasource": {
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "gotk_reconcile_condition",
+        "definition": "label_values(gotk_reconcile_duration_seconds_count, organization)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(gotk_reconcile_duration_seconds_count, organization)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(gotk_reconcile_duration_seconds_count{organization=\"$organization\"}, cluster_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(gotk_reconcile_duration_seconds_count{organization=\"$organization\"}, cluster_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(gotk_resource_info{cluster_id=\"$cluster\"}, exported_namespace)",
         "hide": 0,
         "includeAll": true,
-        "multi": false,
+        "label": "Namespace",
+        "multi": true,
         "name": "namespace",
         "options": [],
-        "query": "gotk_reconcile_condition",
+        "query": {
+          "query": "label_values(gotk_resource_info{cluster_id=\"$cluster\"}, exported_namespace)",
+          "refId": "StandardVariableQuery"
+        },
         "refresh": 2,
-        "regex": "/.*namespace=\"([^\"]*).*/",
+        "regex": "",
         "skipUrlSync": false,
-        "sort": 5,
+        "sort": 0,
         "tagValuesQuery": "",
+        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -1007,7 +1384,6 @@
     "from": "now-15m",
     "to": "now"
   },
-  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {
     "refresh_intervals": [
       "10s",
@@ -1024,6 +1400,5 @@
   "timezone": "UTC",
   "title": "Flux Cluster Stats",
   "uid": "flux-cluster",
-  "version": 1,
   "weekStart": ""
 }

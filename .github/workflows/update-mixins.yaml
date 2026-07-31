@@ -23,7 +23,12 @@ jobs:
       run: echo "$(pwd)/tools" >> $GITHUB_PATH
 
     - name: Update mixins
-      run: make update-mixin
+      run: make update-all-mixin
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update Flux dashboards
+      run: make update-flux-dashboards
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,7 +41,12 @@ jobs:
         author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
         commit-message: "Update mixin dashboards"
         body: |
-          Automated monthly update of Tempo, Mimir, Loki and Alloy mixin dashboards.
+          Automated monthly update of Tempo, Mimir, Loki and Alloy mixin dashboards,
+          plus the Flux dashboards from fluxcd/flux2-monitoring-example.
 
           Version pins are derived from the appVersion in the corresponding
           giantswarm/*-app repositories.
+
+          The Flux dashboards carry Giant Swarm patches (multi-cluster variables,
+          exporter de-duplication, namespace scoping). `update-flux-dashboards.sh`
+          asserts those patches still applied, so review that diff with care.
