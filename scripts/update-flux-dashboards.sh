@@ -116,7 +116,9 @@ gs_common() {
         # the variable; no datasource with that uid exists in our Grafana, and the
         # target-level datasource wins, so those panels would query nothing. The
         # linter only inspects panel-level datasources and cannot catch it.
-        | (.. | objects | select(.uid? == "prometheus" and .type? == "prometheus"))
+        # Rewriting every prometheus-typed reference (not just uid=="prometheus")
+        # means a different hardcoded uid upstream cannot reintroduce this.
+        | (.. | objects | select(.type? == "prometheus" and has("uid")))
               |= {"type": "prometheus", "uid": "$datasource"}
     '
 }
@@ -234,10 +236,25 @@ patch_control_plane() {
 
 patch_logs() {
     local selector='{service_name=~"flux-app|flux-operator", cluster_id="$cluster", pod=~"$controller.*"}'
-    local caveat
+    local caveat banner
     caveat="Only management-cluster Flux logs are ingested. Workload clusters run Flux in the flux-system namespace, which has no tenant assignment, so their controller logs are dropped before reaching Loki and this dashboard will be empty for them."
+    banner=$(cat <<'EOF'
+{
+  "type": "text",
+  "title": "",
+  "gridPos": {"h": 3, "w": 24, "x": 0, "y": 0},
+  "id": 1000,
+  "transparent": true,
+  "options": {
+    "mode": "markdown",
+    "code": {"language": "plaintext", "showLineNumbers": false, "showMiniMap": false},
+    "content": "> **Management cluster only.** Flux controller logs are ingested for the management cluster. Workload clusters run Flux in the `flux-system` namespace, which has no tenant assignment, so their logs are dropped before reaching Loki -- selecting a workload cluster below will show no data even when Flux is running there."
+  }
+}
+EOF
+)
 
-    jq --arg selector "$selector" --arg caveat "$caveat" '
+    jq --arg selector "$selector" --arg caveat "$caveat" --argjson banner "$banner" '
         # Replace upstream'"'"'s stream selector wholesale: `stream` is dropped by
         # our Alloy config and `app` names the Helm release, not the controller.
         (.. | objects | select(has("expr")) | .expr) |=
@@ -250,11 +267,12 @@ patch_logs() {
         # `namespace` and `stream` no longer parameterise anything.
         | .templating.list |= map(select(.name != "namespace" and .name != "stream"))
         # The Cluster dropdown lists every cluster running Flux, but only
-        # management-cluster logs are ingested, so state that where a customer
-        # picking a workload cluster will actually see it rather than only in the
-        # docs.
+        # management-cluster logs are ingested. A panel description only shows on
+        # hover, which is no help to someone looking at two empty panels, so push
+        # the existing panels down and put a visible banner on top.
         | .description = $caveat
         | (.. | objects | select(has("targets")) | .description) |= $caveat
+        | .panels |= (map(.gridPos.y += 3) | [$banner] + .)
         # Controller identity comes from the pod name prefix.
         | (.templating.list[] | select(.name == "controller")) |= (
               {
