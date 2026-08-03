@@ -192,7 +192,11 @@ patch_control_plane() {
             #    (`controller="helmrelease"` is also emitted by dex-operator and
             #    team-stamper). Without this the panels silently mix in other
             #    operators. The lookahead skips selectors already scoped.
-            | gsub("\\{cluster_id=\"\\$cluster\", (?![^}]*namespace)";
+            #    It must match the `namespace=` label, not the bare substring:
+            #    `exported_namespace=` contains "namespace" and would otherwise
+            #    look already-scoped, so an exported_namespace-only selector would
+            #    silently keep a fleet-wide generic metric.
+            | gsub("\\{cluster_id=\"\\$cluster\", (?![^}]*(?<![a-z_])namespace=)";
                    "{cluster_id=\"$cluster\", namespace=\"$namespace\", ")
             # 3. Our scrape interval is 60s, so upstream'"'"'s `[1m]` range windows
             #    contain at most one sample and rate()/increase() return nothing.
@@ -312,7 +316,7 @@ assert_scoped() {
     # per expression, so `count(a{cluster_id=...}) / count(b{})` cannot slip by.
     bad=$(jq -r '[.. | objects | select(has("expr")) | .expr
                   | [match("\\{[^}]*\\}"; "g").string]
-                  | map(select(test("cluster_id") | not)) | .[]] | unique | .[]' "$file")
+                  | map(select(test("(?<![a-z_])cluster_id=") | not)) | .[]] | unique | .[]' "$file")
     [[ -n "$bad" ]] && fail "has selectors with no cluster_id filter" "$bad"
 
     # A bare metric name with no selector at all is neither patched nor caught by
@@ -327,7 +331,7 @@ assert_scoped() {
     if [[ "$require_namespace" == "yes" ]]; then
         bad=$(jq -r '[.. | objects | select(has("expr")) | .expr
                       | [match("\\{[^}]*\\}"; "g").string]
-                      | map(select(test("namespace") | not)) | .[]] | unique | .[]' "$file")
+                      | map(select(test("(?<![a-z_])namespace=") | not)) | .[]] | unique | .[]' "$file")
         [[ -n "$bad" ]] && fail "has selectors with no namespace filter" "$bad"
     fi
 
