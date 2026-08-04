@@ -22,6 +22,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   deployed to the management cluster's Grafana, whose Mimir holds metrics for
   every workload cluster, so until now every panel aggregated across a
   customer's whole fleet.
+- Replace the Cilium dashboards with a set of four: `Cilium | Overview` for
+  triage, `Cilium | Agent`, `Cilium | Datapath & Policy` and `Cilium | Operator`.
+  Rows load collapsed and the per-agent panels use `topk`, so the entry point is
+  no longer a 355 kB dashboard that fires 75 queries at once.
+- Add `Cilium | Operator`. The cilium-operator PodMonitor has always been
+  enabled, but none of its metrics were graphed: identity garbage collection,
+  workqueues, unmanaged pods and LB-IPAM.
 
 ### Changed
 
@@ -57,6 +64,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fix the monthly dashboard-update workflow, which called a `make update-mixin`
   target that no longer exists (it was renamed to `update-all-mixin`), so the
   automation failed instead of opening a PR.
+
+### Removed
+
+- Remove the `Cilium Metrics` and `Cilium performance` dashboards, replaced by
+  the set above. 16 of their panels queried metrics Cilium no longer exposes
+  (the kvstore and BPF syscall sections, the L7 proxy counters and the policy
+  trigger panels), and `Cilium performance` duplicated the Overview.
 
 ## [4.28.0] - 2026-07-01
 
