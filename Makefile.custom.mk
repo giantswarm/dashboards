@@ -1,4 +1,4 @@
-.PHONY: install-tools lint-dashboards check-dashboard-schema update-all-dashboards update-alloy-mixin update-kafka-dashboardsn update-kubernetes-mixin update-loki-mixi update-memcached-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
+.PHONY: install-tools lint-dashboards check-dashboard-schema update-all-dashboards update-all-mixin update-alloy-mixin update-flux-dashboards update-kafka-dashboards update-kubernetes-mixin update-loki-mixin update-memcached-mixin update-mimir-mixin update-tempo-mixin update-mixin-versions
 
 SHELL:=/bin/bash -O globstar
 
@@ -11,12 +11,15 @@ install-tools: ## Install dependencies tools
 
 ##@ Dashboards update
 
-update-all-dashboards: update-mixin update-kafka-dashboards ## Update all dashboards (mixins and Kafka)
+update-all-dashboards: update-all-mixin update-kafka-dashboards update-flux-dashboards ## Update all dashboards (mixins, Kafka and Flux)
 
 update-all-mixin: update-mixin-versions update-alloy-mixin update-kubernetes-mixin update-loki-mixin update-memcached-mixin update-mimir-mixin update-tempo-mixin ## Update all mixins dashboards (fetches latest app versions first)
 
 update-alloy-mixin: install-tools ## Update Alloy mixin dashboards
 	./mixins/alloy/update.sh
+
+update-flux-dashboards: ## Update Flux dashboards from the upstream fluxcd/flux2-monitoring-example
+	./scripts/update-flux-dashboards.sh
 
 update-kafka-dashboards: ## Update Strimzi/Kafka dashboards from the giantswarm strimzi-kafka-operator fork
 	./scripts/update-kafka-dashboards.sh
