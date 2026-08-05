@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.29.0] - 2026-08-05
+
 ### Added
 
 - Add the `Envoy Gateway | Overview` dashboard: a lean single-pane health view
@@ -1761,7 +1763,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.28.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.29.0...HEAD
+[4.29.0]: https://github.com/giantswarm/dashboards/compare/v4.28.0...v4.29.0
 [4.28.0]: https://github.com/giantswarm/dashboards/compare/v4.27.0...v4.28.0
 [4.27.0]: https://github.com/giantswarm/dashboards/compare/v4.26.0...v4.27.0
 [4.26.0]: https://github.com/giantswarm/dashboards/compare/v4.25.1...v4.26.0
