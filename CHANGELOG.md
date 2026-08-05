@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Add the `Envoy Gateway | Overview` dashboard: a lean single-pane health view
+  (traffic, latency, error rate, saturation) that avoids duplicating the detail
+  boards.
+- Add a downstream request-latency heatmap to `Envoy Gateway | Clusters`.
+- Add an Envoy Gateway controller logs panel to the Control Plane dashboard.
+
 - Publish the `Flux Logs` dashboard to `Shared Org / GitOps`. It covers the Flux
   controllers on the management cluster; workload-cluster Flux logs are not
   ingested yet, because the `flux-system` namespace there has no tenant
@@ -32,8 +38,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
+- Consolidate the Envoy / Gateway API dashboards down to four: `Overview`,
+  `Clusters`, `Access Logs` and `Control Plane`. The `Control Plane` board
+  (formerly `Global`) absorbs the config push status panels, and `Logs` is
+  renamed to `Access Logs`.
 - Synced Flux dashboards from [fluxcd/flux2-monitoring-example@7ab65dc](https://github.com/fluxcd/flux2-monitoring-example/tree/7ab65dc8b90f7a6751d88f18bbb4e1bee33bf334/monitoring/configs/dashboards).
 - Anchor the `etcd-health` dashboard cluster selector to `etcd_server_id` instead of `up`, so clusters with a managed control plane (aks, eks) no longer appear as empty options.
+
+### Removed
+
+- Remove the redundant `Envoy Gateway | Proxy Global` and
+  `Envoy Gateway | Configuration` dashboards, folded into the boards above.
 
 ### Fixed
 
