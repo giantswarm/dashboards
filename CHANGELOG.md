@@ -7,10 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add a nav bar between the four Envoy Gateway dashboards, like the Cilium ones
+  have.
+
 ### Fixed
 
 - Give `Cilium | Agent` its own uid instead of reusing the retired Cilium
   metrics dashboard's, which kept it from being created.
+- Give `Envoy Gateway | Control Plane` its own uid instead of reusing the
+  retired Global dashboard's, which kept it from being created.
 
 ## [4.29.0] - 2026-08-05
 
