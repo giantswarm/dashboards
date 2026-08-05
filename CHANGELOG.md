@@ -12,6 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add a nav bar between the four Envoy Gateway dashboards, like the Cilium ones
   have.
 
+### Changed
+
+- Give `Envoy Gateway | Clusters` a readable uid. Links to its old random uid
+  stop resolving.
+
 ### Fixed
 
 - Give `Cilium | Agent` its own uid instead of reusing the retired Cilium
