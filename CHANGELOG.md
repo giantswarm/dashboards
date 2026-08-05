@@ -18,6 +18,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   stop resolving.
 - Rename the cluster variable on `Cilium Agent logs` to `cluster_id`, matching
   the other Cilium dashboards so the selection carries across links.
+- Rename `workload_cluster` to `cluster_id` on the Envoy Gateway dashboards, so
+  the selection carries when moving between them. On `Clusters` its label is
+  `K8s Cluster`, to tell it apart from the Envoy cluster selector.
 - Hide the datasource selector on the Cilium and Envoy Gateway dashboards and
   point it at the default datasource, instead of the exported uids that only
   resolved in the Grafana a board came from.
