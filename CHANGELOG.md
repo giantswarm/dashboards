@@ -25,6 +25,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   point it at the default datasource, instead of the exported uids that only
   resolved in the Grafana a board came from.
 
+### Removed
+
+- Drop the `Cluster` selector from `Envoy Gateway | Clusters`. Every panel also
+  matched on the namespace, resource and rule selectors, which compose the same
+  Envoy cluster name.
+
 ### Fixed
 
 - Give `Cilium | Agent` its own uid instead of reusing the retired Cilium
