@@ -39,7 +39,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<div style=\"display:grid; justify-content:center;align-items: center;\">\n  <div style=\"text-align: center;\">\n  <img src=\"https://upload.wikimedia.org/wikipedia/commons/3/39/Kubernetes_logo_without_workmark.svg\" \n   style=\"max-height:50px; float:right; margin-top:20px\"/>\n  <p >\n   Cluster ID: <b>${cluster}</b><br/>\n   K8S Version: <b>${k8sversion}</b><br/>\n  </p>\n   \n</div>\n<div style=\"text-align: center;\">\n<img src=\"https://cilium.io/static/cilium-dark-1-8c7358e82e52a0ccab8d1d056de00c50.svg\" \n   style=\"max-height:50px; float:right; margin-top:20px\"/>\n  <p>\n   Cilium Version: <b>${ciliumversion}</b><br/>\n  </p>\n</div>\n</div>",
+        "content": "<div style=\"display:grid; justify-content:center;align-items: center;\">\n  <div style=\"text-align: center;\">\n  <img src=\"https://upload.wikimedia.org/wikipedia/commons/3/39/Kubernetes_logo_without_workmark.svg\" \n   style=\"max-height:50px; float:right; margin-top:20px\"/>\n  <p >\n   Cluster ID: <b>${cluster_id}</b><br/>\n   K8S Version: <b>${k8sversion}</b><br/>\n  </p>\n   \n</div>\n<div style=\"text-align: center;\">\n<img src=\"https://cilium.io/static/cilium-dark-1-8c7358e82e52a0ccab8d1d056de00c50.svg\" \n   style=\"max-height:50px; float:right; margin-top:20px\"/>\n  <p>\n   Cilium Version: <b>${ciliumversion}</b><br/>\n  </p>\n</div>\n</div>",
         "mode": "html"
       },
       "pluginVersion": "12.0.0",
@@ -165,7 +165,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (level) (count_over_time({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level =~ `error|warning`[$__auto]))",
+          "expr": "sum by (level) (count_over_time({service_name=\"cilium-agent\", cluster_id=\"$cluster_id\"} | logfmt | level =~ `error|warning`[$__auto]))",
           "legendFormat": "{{ level }}",
           "queryType": "range",
           "refId": "A"
@@ -210,7 +210,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level =~ `error|warning` | line_format \"pod={{.pod}} msg={{.msg}} error={{.error}} endpoint={{.ciliumEndpointName}}\"",
+          "expr": "{service_name=\"cilium-agent\", cluster_id=\"$cluster_id\"} | logfmt | level =~ `error|warning` | line_format \"pod={{.pod}} msg={{.msg}} error={{.error}} endpoint={{.ciliumEndpointName}}\"",
           "queryType": "range",
           "refId": "A"
         }
@@ -300,7 +300,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (msg) (count_over_time({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level = `error`[$__auto]))",
+          "expr": "sum by (msg) (count_over_time({service_name=\"cilium-agent\", cluster_id=\"$cluster_id\"} | logfmt | level = `error`[$__auto]))",
           "legendFormat": "{{ msg }}",
           "queryType": "range",
           "refId": "A"
@@ -434,7 +434,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (msg) (count_over_time({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | level = `warning`[$__auto]))",
+          "expr": "sum by (msg) (count_over_time({service_name=\"cilium-agent\", cluster_id=\"$cluster_id\"} | logfmt | level = `warning`[$__auto]))",
           "legendFormat": "{{ msg }}",
           "queryType": "range",
           "refId": "A"
@@ -548,7 +548,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (k8sNamespace, ciliumNetworkPolicyName) (rate({service_name=\"cilium-agent\", cluster_id=\"$cluster\"} | logfmt | msg = `Unable to add CiliumNetworkPolicy` | level =~ `error|warning`[$__auto]))",
+          "expr": "sum by (k8sNamespace, ciliumNetworkPolicyName) (rate({service_name=\"cilium-agent\", cluster_id=\"$cluster_id\"} | logfmt | msg = `Unable to add CiliumNetworkPolicy` | level =~ `error|warning`[$__auto]))",
           "queryType": "instant",
           "refId": "A"
         }
@@ -593,7 +593,7 @@
         },
         "definition": "label_values(kubernetes_build_info,cluster_id)",
         "label": "Cluster",
-        "name": "cluster",
+        "name": "cluster_id",
         "options": [],
         "query": {
           "qryType": 1,
@@ -609,14 +609,14 @@
           "text": "v1.30.11",
           "value": "v1.30.11"
         },
-        "definition": "label_values(kubernetes_build_info{cluster_id=\"$cluster\"},git_version)",
+        "definition": "label_values(kubernetes_build_info{cluster_id=\"$cluster_id\"},git_version)",
         "hide": 2,
         "label": "k8sversion",
         "name": "k8sversion",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(kubernetes_build_info{cluster_id=\"$cluster\"},git_version)",
+          "query": "label_values(kubernetes_build_info{cluster_id=\"$cluster_id\"},git_version)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -628,14 +628,14 @@
           "text": "",
           "value": ""
         },
-        "definition": "label_values(cilium_version{cluster_id=\"$cluster\"},version)",
+        "definition": "label_values(cilium_version{cluster_id=\"$cluster_id\"},version)",
         "hide": 2,
         "label": "ciliumversion",
         "name": "ciliumversion",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(cilium_version{cluster_id=\"$cluster\"},version)",
+          "query": "label_values(cilium_version{cluster_id=\"$cluster_id\"},version)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

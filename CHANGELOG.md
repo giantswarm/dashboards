@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Give `Envoy Gateway | Clusters` a readable uid. Links to its old random uid
   stop resolving.
+- Rename the cluster variable on `Cilium Agent logs` to `cluster_id`, matching
+  the other Cilium dashboards so the selection carries across links.
 - Hide the datasource selector on the Cilium and Envoy Gateway dashboards and
   point it at the default datasource, instead of the exported uids that only
   resolved in the Grafana a board came from.
