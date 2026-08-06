@@ -7,6 +7,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add a nav bar between the four Envoy Gateway dashboards, like the Cilium ones
+  have.
+
+### Changed
+
+- Give `Envoy Gateway | Clusters` a readable uid. Links to its old random uid
+  stop resolving.
+- Rename the cluster variable on `Cilium Agent logs` to `cluster_id`, matching
+  the other Cilium dashboards so the selection carries across links.
+- Rename `workload_cluster` to `cluster_id` on the Envoy Gateway dashboards, so
+  the selection carries when moving between them. On `Clusters` its label is
+  `K8s Cluster`, to tell it apart from the Envoy cluster selector.
+- Hide the datasource selector on the Cilium and Envoy Gateway dashboards and
+  point it at the default datasource, instead of the exported uids that only
+  resolved in the Grafana a board came from.
+
+### Removed
+
+- Drop the `Cluster` selector from `Envoy Gateway | Clusters`. Every panel also
+  matched on the namespace, resource and rule selectors, which compose the same
+  Envoy cluster name.
+
+### Fixed
+
+- Give `Cilium | Agent` its own uid instead of reusing the retired Cilium
+  metrics dashboard's, which kept it from being created.
+- Give `Envoy Gateway | Control Plane` its own uid instead of reusing the
+  retired Global dashboard's, which kept it from being created.
+
 ## [4.29.0] - 2026-08-05
 
 ### Added

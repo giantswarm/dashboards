@@ -19,7 +19,44 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "links": [],
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Clusters",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/envoy-clusters"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Access Logs",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/envoy-gateway-logs"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Control Plane",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/envoy-gateway-control-plane"
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -82,7 +119,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(envoy_server_live{cluster_id=\"$workload_cluster\"})",
+          "expr": "sum(envoy_server_live{cluster_id=\"$cluster_id\"})",
           "legendFormat": "Live servers",
           "range": true,
           "refId": "A"
@@ -151,7 +188,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\"}) - sum(envoy_cluster_membership_healthy{cluster_id=\"$workload_cluster\"})",
+          "expr": "sum(envoy_cluster_membership_total{cluster_id=\"$cluster_id\"}) - sum(envoy_cluster_membership_healthy{cluster_id=\"$cluster_id\"})",
           "legendFormat": "Unhealthy endpoints",
           "range": true,
           "refId": "A"
@@ -226,7 +263,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(envoy_cluster_membership_healthy{cluster_id=\"$workload_cluster\"}) / avg(envoy_cluster_membership_total{cluster_id=\"$workload_cluster\"})",
+          "expr": "avg(envoy_cluster_membership_healthy{cluster_id=\"$cluster_id\"}) / avg(envoy_cluster_membership_total{cluster_id=\"$cluster_id\"})",
           "legendFormat": "Endpoint health",
           "range": true,
           "refId": "A"
@@ -300,7 +337,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$workload_cluster\", envoy_response_code_class=\"5\"}[$__rate_interval])) / sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$workload_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$cluster_id\", envoy_response_code_class=\"5\"}[$__rate_interval])) / sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "legendFormat": "5xx rate",
           "range": true,
           "refId": "A"
@@ -412,7 +449,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(envoy_http_downstream_rq_total{cluster_id=\"$workload_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate(envoy_http_downstream_rq_total{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "legendFormat": "Downstream RPS",
           "range": true,
           "refId": "A"
@@ -511,7 +548,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum by(le) (rate(envoy_http_downstream_rq_time_bucket{cluster_id=\"$workload_cluster\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.50, sum by(le) (rate(envoy_http_downstream_rq_time_bucket{cluster_id=\"$cluster_id\"}[$__rate_interval])))",
           "legendFormat": "p50",
           "range": true,
           "refId": "A"
@@ -522,7 +559,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by(le) (rate(envoy_http_downstream_rq_time_bucket{cluster_id=\"$workload_cluster\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by(le) (rate(envoy_http_downstream_rq_time_bucket{cluster_id=\"$cluster_id\"}[$__rate_interval])))",
           "legendFormat": "p95",
           "range": true,
           "refId": "B"
@@ -533,7 +570,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum by(le) (rate(envoy_http_downstream_rq_time_bucket{cluster_id=\"$workload_cluster\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(envoy_http_downstream_rq_time_bucket{cluster_id=\"$cluster_id\"}[$__rate_interval])))",
           "legendFormat": "p99",
           "range": true,
           "refId": "C"
@@ -663,7 +700,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by(envoy_response_code_class) (rate(envoy_http_downstream_rq_xx{cluster_id=\"$workload_cluster\"}[$__rate_interval]))",
+          "expr": "sum by(envoy_response_code_class) (rate(envoy_http_downstream_rq_xx{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "legendFormat": "{{envoy_response_code_class}}xx",
           "range": true,
           "refId": "A"
@@ -775,7 +812,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$workload_cluster\", envoy_response_code_class=\"5\"}[$__rate_interval])) / sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$workload_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$cluster_id\", envoy_response_code_class=\"5\"}[$__rate_interval])) / sum(rate(envoy_http_downstream_rq_xx{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "legendFormat": "5xx rate",
           "range": true,
           "refId": "A"
@@ -874,7 +911,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(envoy_listener_downstream_cx_overflow{cluster_id=\"$workload_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate(envoy_listener_downstream_cx_overflow{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "legendFormat": "listener cx overflow",
           "range": true,
           "refId": "A"
@@ -973,7 +1010,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(envoy_cluster_upstream_cx_overflow{cluster_id=\"$workload_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate(envoy_cluster_upstream_cx_overflow{cluster_id=\"$cluster_id\"}[$__rate_interval]))",
           "legendFormat": "upstream cx overflow",
           "range": true,
           "refId": "A"
@@ -995,10 +1032,10 @@
       {
         "current": {
           "selected": false,
-          "text": "Prometheus",
-          "value": "prometheus"
+          "text": "default",
+          "value": "default"
         },
-        "hide": 0,
+        "hide": 2,
         "includeAll": false,
         "multi": false,
         "name": "datasource",
@@ -1021,9 +1058,9 @@
         "definition": "label_values(kubernetes_build_info, cluster_id)",
         "hide": 0,
         "includeAll": false,
-        "label": "Workload Cluster",
+        "label": "Cluster",
         "multi": false,
-        "name": "workload_cluster",
+        "name": "cluster_id",
         "options": [],
         "query": {
           "query": "label_values(kubernetes_build_info, cluster_id)",
