@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Move the private Falco dashboard to the new `Giant Swarm Security`
+  organization and rename it to `Anomaly Detection`, to include other data sources.
+
+### Removed
+
+- Drop the `Security: Falco Dashboard` and `Falco public dashboard` boards, so
+  no Falco dashboards remain outside the `Giant Swarm Security` organization.
+
 ## [4.29.1] - 2026-08-06
 
 ### Added
