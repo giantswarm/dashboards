@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.29.1] - 2026-08-06
+
 ### Added
 
 - Add a nav bar between the four Envoy Gateway dashboards, like the Cilium ones
@@ -1794,7 +1796,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.29.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.29.1...HEAD
+[4.29.1]: https://github.com/giantswarm/dashboards/compare/v4.29.0...v4.29.1
 [4.29.0]: https://github.com/giantswarm/dashboards/compare/v4.28.0...v4.29.0
 [4.28.0]: https://github.com/giantswarm/dashboards/compare/v4.27.0...v4.28.0
 [4.27.0]: https://github.com/giantswarm/dashboards/compare/v4.26.0...v4.27.0
