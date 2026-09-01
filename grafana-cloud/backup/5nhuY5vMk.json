@@ -10,10 +10,10 @@
     "url": "/d/5nhuY5vMk/billing-usage",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2020-09-03T12:03:22Z",
-    "updated": "2026-05-27T17:43:57Z",
+    "updated": "2026-08-10T16:48:20Z",
     "updatedBy": "Anonymous",
     "createdBy": "Anonymous",
-    "version": 222,
+    "version": 225,
     "hasAcl": false,
     "isFolder": false,
     "apiVersion": "v0alpha1",
@@ -1036,7 +1036,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "avg without(monetary) ((grafanacloud_org_logs_overage{org_id=\"$org_id\"} + grafanacloud_org_logs_process_overage{org_id=\"$org_id\"}) or grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n > 0",
+            "expr": "sum({__name__=~\"grafanacloud_org_logs_overage|grafanacloud_org_logs_process_overage|grafanacloud_org_logs_query_overage\",org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n > 0",
             "instant": true,
             "legendFormat": "Logs",
             "refId": "logs"
@@ -1046,7 +1046,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "avg without(monetary) ((grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"} + grafanacloud_org_logs_process_bill_fraction{org_id=\"$org_id\"}) or grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n > 0",
+            "expr": "sum({__name__=~\"grafanacloud_org_logs_bill_fraction|grafanacloud_org_logs_process_bill_fraction|grafanacloud_org_logs_query_bill_fraction\",org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n > 0",
             "instant": true,
             "legendFormat": "Logs fraction",
             "refId": "logs_fraction"
@@ -2230,9 +2230,12 @@
             "fieldConfig": {
               "defaults": {
                 "custom": {
-                  "fillOpacity": 10
+                  "fillOpacity": 10,
+                  "stacking": {
+                    "mode": "normal"
+                  }
                 },
-                "unit": "si:/s"
+                "unit": "cpm"
               }
             },
             "gridPos": {
@@ -2256,7 +2259,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(max(grafanacloud_instance_samples_discarded_per_second{id=~\"$metrics_id\"}) by (id, reason)) by (id, reason) * on(id) group_left(name) topk by (id) (1, grafanacloud_instance_info{id=~\"$metrics_id\"})",
+                "expr": "sum(max(grafanacloud_instance_samples_discarded_per_second{id=~\"$metrics_id\"} * 60) by (id, reason)) by (id, reason) * on(id) group_left(name) topk by (id) (1, grafanacloud_instance_info{id=~\"$metrics_id\"})",
                 "legendFormat": "{{ name }} - {{reason}}"
               }
             ],
@@ -2661,7 +2664,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "avg without(monetary) ((grafanacloud_org_logs_overage{org_id=\"$org_id\"} + grafanacloud_org_logs_process_overage{org_id=\"$org_id\"}) or grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "expr": "sum({__name__=~\"grafanacloud_org_logs_overage|grafanacloud_org_logs_process_overage|grafanacloud_org_logs_query_overage\",org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
             "instant": true,
             "legendFormat": "Current Logs Usage Cost"
           },
@@ -2670,7 +2673,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "avg without(monetary) ((grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"} + grafanacloud_org_logs_process_bill_fraction{org_id=\"$org_id\"}) or grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "expr": "sum({__name__=~\"grafanacloud_org_logs_bill_fraction|grafanacloud_org_logs_process_bill_fraction|grafanacloud_org_logs_query_bill_fraction\",org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
             "instant": true,
             "legendFormat": "Current fraction of cost due to Logs"
           }
@@ -2754,7 +2757,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
             "instant": true,
             "legendFormat": "Current Logs Write Usage Cost"
           },
@@ -2763,7 +2766,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
             "instant": true,
             "legendFormat": "Current fraction of cost due to Logs Write/Query Usage"
           },
@@ -2772,7 +2775,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+            "expr": "(sum(grafanacloud_org_logs_query_overage{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})))\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
             "instant": true,
             "legendFormat": "Current Logs Query Usage Cost"
           },
@@ -2781,7 +2784,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+            "expr": "(sum(grafanacloud_org_logs_query_bill_fraction{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})))\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
             "instant": true,
             "legendFormat": "Current fraction of cost due to Logs Query Usage"
           }
@@ -2835,7 +2838,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
+            "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
             "instant": true,
             "legendFormat": "Current Billable Logs Write Usage"
           },
@@ -2844,7 +2847,7 @@
               "type": "prometheus",
               "uid": "grafanacloud-usage"
             },
-            "expr": "sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"})",
+            "expr": "(sum(grafanacloud_org_logs_query_usage{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"})))",
             "instant": true,
             "legendFormat": "Current Billable Logs Query Usage"
           }
@@ -3645,7 +3648,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "instant": true,
                 "legendFormat": "Current Logs Write Usage Cost"
               },
@@ -3654,7 +3657,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "instant": true,
                 "legendFormat": "Current fraction of cost due to Logs Write Usage"
               }
@@ -3699,7 +3702,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
+                "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
                 "instant": true,
                 "legendFormat": "Current Billable Logs Write Usage"
               }
@@ -3796,7 +3799,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
+                "expr": "max(grafanacloud_org_logs_usage{org_id=\"$org_id\"} - sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or grafanacloud_org_logs_usage{org_id=\"$org_id\"})",
                 "instant": false,
                 "legendFormat": "Billable Usage"
               },
@@ -3805,7 +3808,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "instant": false,
                 "legendFormat": "Additional Usage Amount"
               },
@@ -3814,7 +3817,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) - sum (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"})) / sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "instant": false,
                 "legendFormat": "Cost fraction"
               },
@@ -3831,7 +3834,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Additional Usage Amount write - {{ name }}"
               },
               {
@@ -3839,7 +3842,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "\n(sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}) - sum by (id) (grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) > 0 or sum by (id) (grafanacloud_logs_instance_usage{org_id=\"$org_id\"}))/ ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n\n\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "legendFormat": "Cost fraction write - {{ name }}"
               }
             ],
@@ -3905,7 +3908,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_query_overage{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})))\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "instant": true,
                 "legendFormat": "Current Logs Query Usage Cost"
               },
@@ -3914,7 +3917,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_query_bill_fraction{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})))\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "instant": true,
                 "legendFormat": "Current fraction of cost due to Logs Query Usage"
               }
@@ -3959,7 +3962,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"})",
+                "expr": "(sum(grafanacloud_org_logs_query_usage{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"})))",
                 "instant": true,
                 "legendFormat": "Current Billable Logs Query Usage"
               }
@@ -4056,7 +4059,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum by (org_id)(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"})",
+                "expr": "(sum(grafanacloud_org_logs_query_usage{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"})))",
                 "instant": false,
                 "legendFormat": "Billable Usage"
               },
@@ -4065,7 +4068,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_query_overage{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_overage{org_id=\"$org_id\"})))\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "instant": false,
                 "legendFormat": "Additional Usage Amount"
               },
@@ -4074,7 +4077,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
+                "expr": "(sum(grafanacloud_org_logs_query_bill_fraction{org_id=\"$org_id\"}) or (sum(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) /  sum(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) * sum(grafanacloud_org_logs_bill_fraction{org_id=\"$org_id\"})))\n# Hide fractional for customer of grafana\n- (2 * $is_customer_of_grafana) >= 0\n",
                 "instant": false,
                 "legendFormat": "Cost fraction"
               },
@@ -4083,7 +4086,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "max(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"}) * on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
+                "expr": "(max(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary=\"true\"}) by (id)\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n or (max(grafanacloud_logs_instance_query_overage{org_id=\"$org_id\",monetary!=\"true\"}) by (id) / ignoring(id) group_left() max(grafanacloud_org_logs_usage{org_id=\"$org_id\"}) by (id) * ignoring(id,org_id,cluster) group_left() avg without(monetary) (grafanacloud_org_logs_overage{org_id=\"$org_id\"})\n# joining instance information to the query\n* on (id) group_left(name) topk by (id) (1, grafanacloud_logs_instance_info{org_id=\"$org_id\"})\n))\n# Hide monetary for customer of partner\n- (9999999999 * $is_customer_of_partner) >= 0\n",
                 "legendFormat": "Query Additional Usage Amount - {{ name }}"
               }
             ],
@@ -9088,7 +9091,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(grafanacloud_profiles_instance_bytes_received_per_second{id=~\"$profiles_id\"}) by (id) * on(id) group_left(name) topk by(id)(1, (grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name!~\"(.*)-traces$\"} or label_replace(grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name=~\"(.*)-traces$\"},\"name\",\"$1-profiles\",\"name\",\"(.*)-traces$\")))",
+                "expr": "sum(grafanacloud_profiles_instance_billable_bytes_received_per_second{id=~\"$profiles_id\"}) by (id) * on(id) group_left(name) topk by(id)(1, (grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name!~\"(.*)-traces$\"} or label_replace(grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name=~\"(.*)-traces$\"},\"name\",\"$1-profiles\",\"name\",\"(.*)-traces$\")))",
                 "legendFormat": "{{ name }}"
               }
             ],
@@ -9161,7 +9164,7 @@
                   "type": "prometheus",
                   "uid": "grafanacloud-usage"
                 },
-                "expr": "sum(sum_over_time((grafanacloud_profiles_instance_bytes_received_per_second{id=~\"$profiles_id\"}  offset -1d * 60)[1d:1m])) by (id) * on(id) group_left(name) topk by(id)(1, (grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name!~\"(.*)-traces$\"} or label_replace(grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name=~\"(.*)-traces$\"},\"name\",\"$1-profiles\",\"name\",\"(.*)-traces$\"))) or vector(0)",
+                "expr": "sum(sum_over_time((grafanacloud_profiles_instance_billable_bytes_received_per_second{id=~\"$profiles_id\"}  offset -1d * 60)[1d:1m])) by (id) * on(id) group_left(name) topk by(id)(1, (grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name!~\"(.*)-traces$\"} or label_replace(grafanacloud_profiles_instance_info{id=~\"$profiles_id\",name=~\"(.*)-traces$\"},\"name\",\"$1-profiles\",\"name\",\"(.*)-traces$\"))) or vector(0)",
                 "interval": "1d",
                 "legendFormat": "{{ name }}"
               }
@@ -12080,6 +12083,6 @@
     "timezone": "utc",
     "title": "Billing/Usage",
     "uid": "5nhuY5vMk",
-    "version": 222
+    "version": 225
   }
 }
