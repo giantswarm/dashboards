@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add an `agent_platform` sub-chart (Team Bumblebee) and its first dashboard,
+  `Giant Swarm / Agent Platform / LLM usage`: tokens, estimated cost and
+  latency for every model call that goes through the Agent Platform's
+  agentgateway LLM listener, broken down by agent, agent namespace and model.
+  It reads the GenAI metrics the agentgateway data plane emits. Empty until an
+  installation enables `llmRouting` in the Agent Platform values and points its
+  agents at the listener.
+
 ### Changed
 
 - Move the private Falco dashboard to the new `Giant Swarm Security`
