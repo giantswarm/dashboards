@@ -365,7 +365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Non-2xx responses on the LLM listener. Provider errors and rate limits land here.",
+      "description": "Non-2xx responses on the `$listener` listener. Provider errors and rate limits land here.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -765,6 +765,7 @@
           },
           "editorMode": "code",
           "expr": "sum by (agent_namespace, agent) (increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -777,6 +778,7 @@
           },
           "editorMode": "code",
           "expr": "sum by (agent_namespace, agent) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -785,6 +787,10 @@
       ],
       "title": "Tokens and cost by agent, over the window",
       "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
         {
           "id": "organize",
           "options": {
@@ -1549,7 +1555,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Rates from the data plane's HTTP metrics, scoped to the LLM listener. Provider errors and rate limits show up as non-2xx.",
+      "description": "Rates from the data plane's HTTP metrics, scoped to the `$listener` listener. Provider errors and rate limits show up as non-2xx.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1641,7 +1647,7 @@
           "refId": "A"
         }
       ],
-      "title": "Requests and errors on the LLM listener",
+      "title": "Requests and errors on the $listener listener",
       "type": "timeseries"
     },
     {
@@ -1867,6 +1873,7 @@
           },
           "editorMode": "code",
           "expr": "sum by (gen_ai_request_model, gen_ai_response_model, status) (increase(agentgateway_cost_catalog_lookups_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", status!=\"Exact\"}[$__range])) > 0",
+          "format": "table",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -1947,10 +1954,10 @@
           "uid": "${datasource}"
         },
         "definition": "label_values(agentgateway_requests_total,listener)",
-        "description": "The Gateway listener carrying inference traffic. `llm` is the platform chart's name for it; every other listener carries MCP and UI traffic, not model calls.",
-        "includeAll": true,
+        "description": "The Gateway listener carrying inference traffic. `llm` is the platform chart's name for it; every other listener carries MCP and UI traffic, not model calls. Single-select on purpose: the request and error panels below are titled for this listener, and folding in MCP or UI traffic would misreport them.",
+        "includeAll": false,
         "label": "LLM listener",
-        "multi": true,
+        "multi": false,
         "name": "listener",
         "options": [],
         "query": {
