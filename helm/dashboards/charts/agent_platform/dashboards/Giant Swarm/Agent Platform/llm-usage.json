@@ -436,6 +436,753 @@
         "x": 0,
         "y": 5
       },
+      "id": 25,
+      "panels": [],
+      "title": "Cost accounting",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Total spend over the dashboard's time range, so it follows the time picker: set the range to a day, a week or a month to get that period's bill. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 6
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Total cost, selected period",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Every token the gateway proxied over the dashboard's time range, all types and models. Unlike cost this needs no catalog, so it is the number to trust when pricing is incomplete.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 6
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Total tokens, selected period",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Total cost divided by total tokens over the range, scaled to a million tokens. A blend across models and token types, not a list price: cache reads and writes are counted as tokens here, so heavy cache use pushes this below any single model's headline rate.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range])) / clamp_min(sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range])), 1) * 1e6",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Blended cost per 1M tokens",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "One bar per Cost bucket, stacked by agent, so the bar width follows the time picker. The legend's Total column sums the bars, giving each agent's spend across the whole range. increase() extrapolates at bucket edges, so read these as accounting estimates rather than invoice lines. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.9,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 29,
+      "interval": "$period",
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__interval]))",
+          "instant": false,
+          "legendFormat": "{{agent}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost per period by agent",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "One bar per Cost bucket, stacked by model, so the bar width follows the time picker. The legend's Total column gives each model's spend across the whole range, which is the figure to compare against a provider invoice. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.9,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "id": 30,
+      "interval": "$period",
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__interval]))",
+          "instant": false,
+          "legendFormat": "{{gen_ai_response_model}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost per period by model",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Totals per model for the selected range, highest spend first. The footer row sums the columns, so it is the period's whole bill. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #tokens"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cost (USD)"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gen_ai_response_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Model"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 31,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Cost (USD)"
+          }
+        ]
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "tokens"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "cost"
+        }
+      ],
+      "title": "Cost and tokens by model, over the period",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Totals for the selected range broken down by agent and the model it called, highest spend first: this is the panel that answers which agent spent what on which model. The footer row sums the columns. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #tokens"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cost (USD)"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "agent_namespace"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Namespace"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "agent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Agent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gen_ai_response_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Model"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 32,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Cost (USD)"
+          }
+        ]
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent_namespace, agent, gen_ai_response_model) (increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "tokens"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent_namespace, agent, gen_ai_response_model) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "cost"
+        }
+      ],
+      "title": "Cost and tokens by agent and model, over the period",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
       "id": 8,
       "panels": [],
       "title": "Usage by agent",
@@ -505,7 +1252,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 6
+        "y": 27
       },
       "id": 9,
       "options": {
@@ -606,7 +1353,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 27
       },
       "id": 10,
       "options": {
@@ -740,7 +1487,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 35
       },
       "id": 11,
       "options": {
@@ -808,7 +1555,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 43
       },
       "id": 12,
       "panels": [],
@@ -879,7 +1626,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 23
+        "y": 44
       },
       "id": 13,
       "options": {
@@ -979,7 +1726,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 23
+        "y": 44
       },
       "id": 14,
       "options": {
@@ -1079,7 +1826,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 31
+        "y": 52
       },
       "id": 15,
       "options": {
@@ -1180,7 +1927,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 52
       },
       "id": 16,
       "options": {
@@ -1222,7 +1969,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 60
       },
       "id": 17,
       "panels": [],
@@ -1292,7 +2039,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 61
       },
       "id": 18,
       "options": {
@@ -1403,7 +2150,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 61
       },
       "id": 19,
       "options": {
@@ -1514,7 +2261,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 69
       },
       "id": 20,
       "options": {
@@ -1614,7 +2361,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 69
       },
       "id": 21,
       "options": {
@@ -1656,7 +2403,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 77
       },
       "id": 22,
       "panels": [],
@@ -1727,7 +2474,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 57
+        "y": 78
       },
       "id": 23,
       "options": {
@@ -1848,7 +2595,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 57
+        "y": 78
       },
       "id": 24,
       "options": {
@@ -2049,6 +2796,54 @@
         "regex": "",
         "sort": 1,
         "type": "query"
+      },
+      {
+        "auto": false,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "current": {
+          "selected": true,
+          "text": "1h",
+          "value": "1h"
+        },
+        "description": "Bucket width for the cost-per-period bars, and therefore the period each bar totals. It sets those panels' minimum interval, so over a long range Grafana may widen the buckets past this to keep the bar count sane; it never narrows them below it.",
+        "label": "Cost bucket",
+        "name": "period",
+        "options": [
+          {
+            "selected": false,
+            "text": "15m",
+            "value": "15m"
+          },
+          {
+            "selected": true,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          }
+        ],
+        "query": "15m,1h,6h,12h,1d,7d",
+        "refresh": 2,
+        "type": "interval"
       }
     ]
   },

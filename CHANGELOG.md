@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   It reads the GenAI metrics the agentgateway data plane emits. Empty until an
   installation enables `llmRouting` in the Agent Platform values and points its
   agents at the listener.
+- Add a `Cost accounting` row to the `LLM usage` dashboard, for attributing
+  spend rather than watching it: totals for the selected time range, cost per
+  bucket stacked by agent and by model over a selectable `Cost bucket` period,
+  and per-model and per-agent-and-model tables with column totals.
 
 ### Changed
 
