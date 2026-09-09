@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.30.0] - 2026-09-09
+
 ### Added
 
 - Add an `agent_platform` sub-chart (Team Bumblebee) and its first dashboard,
@@ -1820,7 +1822,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.29.1...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.30.0...HEAD
+[4.30.0]: https://github.com/giantswarm/dashboards/compare/v4.29.1...v4.30.0
 [4.29.1]: https://github.com/giantswarm/dashboards/compare/v4.29.0...v4.29.1
 [4.29.0]: https://github.com/giantswarm/dashboards/compare/v4.28.0...v4.29.0
 [4.28.0]: https://github.com/giantswarm/dashboards/compare/v4.27.0...v4.28.0
