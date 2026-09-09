@@ -1,0 +1,2859 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "description": "Model usage for the Giant Swarm Agent Platform: tokens, estimated cost and latency for every call that goes through the agentgateway LLM listener. Needs llmRouting enabled in the platform values, and agents pointed at the listener. Agents that call the provider directly are invisible here.",
+  "editable": false,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "panels": [],
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Every token the gateway proxied, all types and models.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "tokens/s",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens / s",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Estimated spend, from the gateway's price catalog. Zero can also mean unpriced: check the catalog lookup panel.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])) * 3600",
+          "instant": false,
+          "legendFormat": "USD/h",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost / hour",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Model calls the gateway proxied.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(agentgateway_gen_ai_server_request_duration_count{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "req/s",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Requests / s",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Distinct agents that made a model call in the window.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "count(count by (agent) (rate(agentgateway_gen_ai_client_token_usage_count{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]) > 0))",
+          "instant": false,
+          "legendFormat": "agents",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Agents calling",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Distinct models answered in the window.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "count(count by (gen_ai_response_model) (rate(agentgateway_gen_ai_client_token_usage_count{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]) > 0))",
+          "instant": false,
+          "legendFormat": "models",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Models in use",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Non-2xx responses on the `$listener` listener. Provider errors and rate limits land here.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", listener=~\"$listener\", status!~\"2..\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "errors/s",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Errors / s",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 25,
+      "panels": [],
+      "title": "Cost accounting",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Total spend over the dashboard's time range, so it follows the time picker: set the range to a day, a week or a month to get that period's bill. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 6
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Total cost, selected period",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Every token the gateway proxied over the dashboard's time range, all types and models. Unlike cost this needs no catalog, so it is the number to trust when pricing is incomplete.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 6
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Total tokens, selected period",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Total cost divided by total tokens over the range, scaled to a million tokens. A blend across models and token types, not a list price: cache reads and writes are counted as tokens here, so heavy cache use pushes this below any single model's headline rate.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range])) / clamp_min(sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range])), 1) * 1e6",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Blended cost per 1M tokens",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "One bar per Cost bucket, stacked by agent, so the bar width follows the time picker. The legend's Total column sums the bars, giving each agent's spend across the whole range. increase() extrapolates at bucket edges, so read these as accounting estimates rather than invoice lines. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.9,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 29,
+      "interval": "$period",
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__interval]))",
+          "instant": false,
+          "legendFormat": "{{agent}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost per period by agent",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "One bar per Cost bucket, stacked by model, so the bar width follows the time picker. The legend's Total column gives each model's spend across the whole range, which is the figure to compare against a provider invoice. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.9,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "id": 30,
+      "interval": "$period",
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__interval]))",
+          "instant": false,
+          "legendFormat": "{{gen_ai_response_model}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost per period by model",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Totals per model for the selected range, highest spend first. The footer row sums the columns, so it is the period's whole bill. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #tokens"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cost (USD)"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gen_ai_response_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Model"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 31,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Cost (USD)"
+          }
+        ]
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "tokens"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "cost"
+        }
+      ],
+      "title": "Cost and tokens by model, over the period",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Totals for the selected range broken down by agent and the model it called, highest spend first: this is the panel that answers which agent spent what on which model. The footer row sums the columns. Priced from the gateway's model catalog, so an unpriced model reads as zero spend rather than as an error. Read this next to the Price catalog row: any lookup status other than Exact means this understates the bill.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #tokens"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cost (USD)"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "agent_namespace"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Namespace"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "agent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Agent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gen_ai_response_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Model"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 32,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Cost (USD)"
+          }
+        ]
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent_namespace, agent, gen_ai_response_model) (increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "tokens"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent_namespace, agent, gen_ai_response_model) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "cost"
+        }
+      ],
+      "title": "Cost and tokens by agent and model, over the period",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Usage by agent",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The `agent` label is the calling pod's ServiceAccount, resolved by source IP from the agentgateway controller's workload store. It is an accounting identity, not a verified one. `unknown` means the caller IP matched no known Pod.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent) (rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{agent}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens per second by agent",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Priced from the gateway's model catalog. An unpriced model contributes nothing here, so read this next to the catalog lookup panel.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 3,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent) (rate(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])) * 3600",
+          "instant": false,
+          "legendFormat": "{{agent}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Estimated cost per hour by agent",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Totals for the selected time range, per agent and namespace.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #tokens"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cost (USD)"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "agent_namespace"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Namespace"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "agent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Agent"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 11,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent_namespace, agent) (increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "tokens"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (agent_namespace, agent) (increase(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "cost"
+        }
+      ],
+      "title": "Tokens and cost by agent, over the window",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 12,
+      "panels": [],
+      "title": "Usage by model",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "`gen_ai_response_model` is what the provider answered with. There is no alias layer: it is the model the agent asked for.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{gen_ai_response_model}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens per second by model",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Priced from the gateway's model catalog.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 3,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 44
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_response_model) (rate(agentgateway_gen_ai_client_cost_usd_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])) * 3600",
+          "instant": false,
+          "legendFormat": "{{gen_ai_response_model}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Estimated cost per hour by model",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "input, output, input_cache_read and input_cache_write. Anthropic counts the three input types separately, so input excludes cache traffic. A high cache-read share is prompt caching paying off: it is priced at a fraction of input.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 52
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_token_type) (rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{gen_ai_token_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens per second by type",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Cache reads over all cache-eligible input tokens. It falls to zero when prompt caching stops working.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 52
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\", gen_ai_token_type=\"input_cache_read\"}[$__rate_interval])) / clamp_min(sum(rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\", gen_ai_token_type=~\"input|input_cache_read|input_cache_write\"}[$__rate_interval])), 1)",
+          "instant": false,
+          "legendFormat": "cache read share",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cache read share of input tokens",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 60
+      },
+      "id": 17,
+      "panels": [],
+      "title": "Latency",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "How long the provider takes to start answering. A rise here is what a user feels as a hanging agent. Streaming only: the gateway emits this metric for a streamed response, so the panel stays empty while every caller asks for a whole completion at once (a kagent agent turn does).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 61
+      },
+      "id": 18,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.50, sum by (gen_ai_response_model, le) (rate(agentgateway_gen_ai_server_time_to_first_token_bucket{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])))",
+          "instant": false,
+          "legendFormat": "p50 {{gen_ai_response_model}}",
+          "range": true,
+          "refId": "p50"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (gen_ai_response_model, le) (rate(agentgateway_gen_ai_server_time_to_first_token_bucket{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])))",
+          "instant": false,
+          "legendFormat": "p95 {{gen_ai_response_model}}",
+          "range": true,
+          "refId": "p95"
+        }
+      ],
+      "title": "Time to first token by model (p50 / p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Whole model call, first byte of the request to last byte of the response. Streamed completions run long by design.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 61
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.50, sum by (gen_ai_response_model, le) (rate(agentgateway_gen_ai_server_request_duration_bucket{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])))",
+          "instant": false,
+          "legendFormat": "p50 {{gen_ai_response_model}}",
+          "range": true,
+          "refId": "p50"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (gen_ai_response_model, le) (rate(agentgateway_gen_ai_server_request_duration_bucket{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])))",
+          "instant": false,
+          "legendFormat": "p95 {{gen_ai_response_model}}",
+          "range": true,
+          "refId": "p95"
+        }
+      ],
+      "title": "Request duration by model (p50 / p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Streaming throughput after the first token. Streaming only, like Time to first token: empty when no caller streams.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 69
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (gen_ai_response_model, le) (rate(agentgateway_gen_ai_server_time_per_output_token_bucket{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", gen_ai_response_model=~\"$model\"}[$__rate_interval])))",
+          "instant": false,
+          "legendFormat": "p95 {{gen_ai_response_model}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Time per output token by model (p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Rates from the data plane's HTTP metrics, scoped to the `$listener` listener. Provider errors and rate limits show up as non-2xx.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 69
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (status) (rate(agentgateway_requests_total{gateway=~\"$gateway\", listener=~\"$listener\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{status}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Requests and errors on the $listener listener",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 77
+      },
+      "id": 22,
+      "panels": [],
+      "title": "Price catalog",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Exact \u2014 the model is priced. Unpriced \u2014 the model is in the catalog with no rate for a token type. Missing \u2014 the model is not in the catalog. NoCatalog \u2014 no catalog is configured at all, and no cost is recorded. Anything but Exact means the cost panels understate spend; fix it in llmRouting.modelCatalog.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 78
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (status) (rate(agentgateway_cost_catalog_lookups_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{status}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost catalog lookups by status",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Every model whose lookup did not resolve. Empty is the healthy state. Add the model to llmRouting.modelCatalog in the platform values.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lookups"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gen_ai_request_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Requested model"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gen_ai_response_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Answered model"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 78
+      },
+      "id": 24,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (gen_ai_request_model, gen_ai_response_model, status) (increase(agentgateway_cost_catalog_lookups_total{gateway=~\"$gateway\", agent_namespace=~\"$agent_namespace\", agent=~\"$agent\", status!=\"Exact\"}[$__range])) > 0",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Models with no usable price",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 41,
+  "tags": [
+    "owner:team-bumblebee",
+    "component:agentgateway",
+    "topic:agents"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "default",
+          "value": "default"
+        },
+        "label": "Data source",
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(agentgateway_gen_ai_client_token_usage_count,gateway)",
+        "description": "The agentgateway Gateway the call went through.",
+        "includeAll": true,
+        "label": "Gateway",
+        "multi": true,
+        "name": "gateway",
+        "options": [],
+        "query": {
+          "query": "label_values(agentgateway_gen_ai_client_token_usage_count,gateway)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "llm",
+          "value": "llm"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(agentgateway_requests_total,listener)",
+        "description": "The Gateway listener carrying inference traffic. `llm` is the platform chart's name for it; every other listener carries MCP and UI traffic, not model calls. Single-select on purpose: the request and error panels below are titled for this listener, and folding in MCP or UI traffic would misreport them.",
+        "includeAll": false,
+        "label": "LLM listener",
+        "multi": false,
+        "name": "listener",
+        "options": [],
+        "query": {
+          "query": "label_values(agentgateway_requests_total,listener)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(agentgateway_gen_ai_client_token_usage_count,agent_namespace)",
+        "description": "Namespace of the calling pod, from the agent attribution labels.",
+        "includeAll": true,
+        "label": "Agent namespace",
+        "multi": true,
+        "name": "agent_namespace",
+        "options": [],
+        "query": {
+          "query": "label_values(agentgateway_gen_ai_client_token_usage_count,agent_namespace)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(agentgateway_gen_ai_client_token_usage_count,agent)",
+        "description": "ServiceAccount of the calling pod. `unknown` means the caller IP matched no known Pod.",
+        "includeAll": true,
+        "label": "Agent",
+        "multi": true,
+        "name": "agent",
+        "options": [],
+        "query": {
+          "query": "label_values(agentgateway_gen_ai_client_token_usage_count,agent)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(agentgateway_gen_ai_client_token_usage_count,gen_ai_response_model)",
+        "description": "The model the provider answered with.",
+        "includeAll": true,
+        "label": "Model",
+        "multi": true,
+        "name": "model",
+        "options": [],
+        "query": {
+          "query": "label_values(agentgateway_gen_ai_client_token_usage_count,gen_ai_response_model)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "auto": false,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "current": {
+          "selected": true,
+          "text": "1h",
+          "value": "1h"
+        },
+        "description": "Bucket width for the cost-per-period bars, and therefore the period each bar totals. It sets those panels' minimum interval, so over a long range Grafana may widen the buckets past this to keep the bar count sane; it never narrows them below it.",
+        "label": "Cost bucket",
+        "name": "period",
+        "options": [
+          {
+            "selected": false,
+            "text": "15m",
+            "value": "15m"
+          },
+          {
+            "selected": true,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          }
+        ],
+        "query": "15m,1h,6h,12h,1d,7d",
+        "refresh": 2,
+        "type": "interval"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "LLM usage",
+  "uid": "agent-platform-llm-usage",
+  "version": 1
+}

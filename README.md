@@ -19,6 +19,7 @@ Dashboards are organized into **capability-based sub-charts**, each containing d
 - [`helm/dashboards/charts/security`](helm/dashboards/charts/security) - Security (Team Shield)
 - [`helm/dashboards/charts/networking`](helm/dashboards/charts/networking) - Networking (Team Cabbage)
 - [`helm/dashboards/charts/app_platform`](helm/dashboards/charts/app_platform) - App Platform (Team Honeybadger)
+- [`helm/dashboards/charts/agent_platform`](helm/dashboards/charts/agent_platform) - Agent Platform (Team Bumblebee)
 
 #### Dashboard directory structure
 
