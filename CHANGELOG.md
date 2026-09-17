@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add `Giant Swarm / Agent Platform / Usage by person`: requests, errors,
+  duration and response bytes per person on the routes agentgateway verifies a
+  bearer on — the kagent controller route first, where one request is one
+  agent turn (klaus-gateway for Slack, the Dev Portal, a CLI) — with Gateway,
+  Route, Caller (the calling workload) and Person variables. Reads the `user`
+  label the Agent Platform's data plane adds from the verified JWT
+  (agent-platform-connectivity `gateway.userMetricLabel`, giantswarm/agent-platform#528);
+  empty until an installation runs that connectivity chart with the kagent
+  controller route on. Tokens and cost per person are not on it: the model
+  calls carry no person.
+
 ## [4.30.0] - 2026-09-09
 
 ### Added
