@@ -15,20 +15,20 @@
       {
         "kind": "AnnotationQuery",
         "spec": {
-          "builtIn": true,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "spec": {}
+          },
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
           "name": "Annotations & Alerts",
-          "query": {
-            "datasource": {
-              "name": "-- Grafana --"
-            },
-            "group": "grafana",
-            "kind": "DataQuery",
-            "spec": {},
-            "version": "v0"
-          }
+          "builtIn": true
         }
       }
     ],
@@ -36,626 +36,6 @@
     "description": "Who uses the Agent Platform's agents, and how it goes for them: requests, errors, duration and response bytes per person on the routes agentgateway verifies a bearer on — the kagent controller route first, where one request is one agent turn (klaus-gateway for Slack, the Dev Portal, a CLI). The person is the `user` label the data plane's metrics policy adds from the verified JWT (agent-platform-connectivity, gateway.userMetricLabel). Tokens per person are not possible: the model calls carry no person, so the last row shows the models' tokens for every person together — total, cached input, uncached input, cache writes, output — and LLM usage has them by agent and model, with cost.",
     "editable": false,
     "elements": {
-      "panel-2": {
-        "kind": "Panel",
-        "spec": {
-          "id": 2,
-          "title": "Requests / s",
-          "description": "Requests per second on the selected routes, for the selected people. On the kagent controller route one request is one agent turn: klaus-gateway sends a Slack message as one `SendStreamingMessage` stream, the portal its turns the same way.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
-                        "instant": false,
-                        "range": true,
-                        "legendFormat": ""
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqps"
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "none",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            }
-          }
-        }
-      },
-      "panel-3": {
-        "kind": "Panel",
-        "spec": {
-          "id": 3,
-          "title": "People active",
-          "description": "People with at least one request on the selected routes in the selected time range. Every request there carries the caller's verified identity claim (the `user` label); `unknown` is not a person and is not counted.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "count(count by (user) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\", user!=\"unknown\"}[$__range]) > 0))",
-                        "instant": true,
-                        "range": false,
-                        "legendFormat": ""
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "none"
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "none",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            }
-          }
-        }
-      },
-      "panel-4": {
-        "kind": "Panel",
-        "spec": {
-          "id": 4,
-          "title": "Callers",
-          "description": "Distinct calling workloads (the `agent` label: the ServiceAccount the request came from). `klaus-gateway` is the Slack, CLI and web channels; the portal's backend is the Dev Portal.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "count(count by (agent) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__range]) > 0))",
-                        "instant": true,
-                        "range": false,
-                        "legendFormat": ""
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "none"
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "none",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            }
-          }
-        }
-      },
-      "panel-5": {
-        "kind": "Panel",
-        "spec": {
-          "id": 5,
-          "title": "Errors / s",
-          "description": "Requests the gateway answered with a non-2xx status: a refused or expired token (401), a token without the identity claim (403), an unreachable controller (5xx). A gRPC error inside a turn rides a 200 and is not counted here.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\", status!~\"2..\"}[$__rate_interval]))",
-                        "instant": false,
-                        "range": true,
-                        "legendFormat": ""
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqps"
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "none",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            }
-          }
-        }
-      },
-      "panel-6": {
-        "kind": "Panel",
-        "spec": {
-          "id": 6,
-          "title": "p95 request duration",
-          "description": "On the kagent controller route the request is the whole streamed turn, so this is how long the slowest turns take end to end.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "histogram_quantile(0.95, sum by (le) (rate(agentgateway_request_duration_seconds_bucket{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval])))",
-                        "instant": false,
-                        "range": true,
-                        "legendFormat": ""
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "s"
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "none",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            }
-          }
-        }
-      },
-      "panel-7": {
-        "kind": "Panel",
-        "spec": {
-          "id": 7,
-          "title": "Unattributed share",
-          "description": "Share of the requests on the selected routes that carry no person (`user=\"unknown\"`): a route whose JWT policy is `Optional`, or a call that reached the route without a bearer. Should stay at zero on the controller route, whose policy is `Strict`.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=\"unknown\"}[$__rate_interval])) / sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\"}[$__rate_interval]))",
-                        "instant": false,
-                        "range": true,
-                        "legendFormat": ""
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "percentunit"
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "none",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            }
-          }
-        }
-      },
-      "panel-9": {
-        "kind": "Panel",
-        "spec": {
-          "id": 9,
-          "title": "Requests per second by person",
-          "description": "Stacked; on the controller route this is turns per second per person.",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "refId": "A",
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${datasource}"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "sum by (user) (rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
-                        "instant": false,
-                        "range": true,
-                        "legendFormat": "{{user}}"
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "timeseries",
-            "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 30,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "never",
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "normal"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqps",
-                  "min": 0
-                },
-                "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
-              }
-            }
-          }
-        }
-      },
       "panel-10": {
         "kind": "Panel",
         "spec": {
@@ -670,8 +50,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -683,24 +61,53 @@
                         "editorMode": "code",
                         "expr": "sum by (user) (rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\", status!~\"2..\"}[$__rate_interval]))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{user}}"
+                        "legendFormat": "{{user}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "reqps",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -736,37 +143,9 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqps",
-                  "min": 0
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -786,8 +165,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -799,24 +176,53 @@
                         "editorMode": "code",
                         "expr": "histogram_quantile(0.95, sum by (le, user) (rate(agentgateway_request_duration_seconds_bucket{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval])))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{user}}"
+                        "legendFormat": "{{user}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "s",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -852,37 +258,9 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "s",
-                  "min": 0
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -902,8 +280,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -915,24 +291,53 @@
                         "editorMode": "code",
                         "expr": "sum by (user) (rate(agentgateway_response_bytes_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{user}}"
+                        "legendFormat": "{{user}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "Bps",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -968,37 +373,9 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "Bps",
-                  "min": 0
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -1018,8 +395,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "requests",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1030,19 +405,19 @@
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum by (user) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__range]))",
+                        "format": "table",
                         "instant": true,
-                        "range": false,
                         "legendFormat": "",
-                        "format": "table"
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "requests",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "errors",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1053,19 +428,19 @@
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum by (user) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\", status!~\"2..\"}[$__range]))",
+                        "format": "table",
                         "instant": true,
-                        "range": false,
                         "legendFormat": "",
-                        "format": "table"
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "errors",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "time",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1076,19 +451,19 @@
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum by (user) (increase(agentgateway_request_duration_seconds_sum{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__range]))",
+                        "format": "table",
                         "instant": true,
-                        "range": false,
                         "legendFormat": "",
-                        "format": "table"
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "time",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "bytes",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1099,16 +474,17 @@
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum by (user) (increase(agentgateway_response_bytes_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__range]))",
+                        "format": "table",
                         "instant": true,
-                        "range": false,
                         "legendFormat": "",
-                        "format": "table"
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "bytes",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
               "transformations": [
                 {
                   "kind": "Transformation",
@@ -1128,32 +504,50 @@
                     }
                   }
                 }
-              ]
+              ],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "table",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": true
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Requests"
+                  }
+                ]
+              },
               "fieldConfig": {
                 "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
                   "custom": {
                     "align": "auto",
                     "cellOptions": {
                       "type": "auto"
                     },
                     "inspect": false
-                  },
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
                   }
                 },
                 "overrides": [
@@ -1250,24 +644,6 @@
                     ]
                   }
                 ]
-              },
-              "options": {
-                "cellHeight": "sm",
-                "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                    "sum"
-                  ],
-                  "show": true
-                },
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Requests"
-                  }
-                ]
               }
             }
           }
@@ -1287,8 +663,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1300,24 +674,53 @@
                         "editorMode": "code",
                         "expr": "sum by (agent) (rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{agent}}"
+                        "legendFormat": "{{agent}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "reqps",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -1353,37 +756,9 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqps",
-                  "min": 0
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -1403,8 +778,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1416,24 +789,53 @@
                         "editorMode": "code",
                         "expr": "sum by (route) (rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{route}}"
+                        "legendFormat": "{{route}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "reqps",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -1469,37 +871,9 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqps",
-                  "min": 0
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -1519,8 +893,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "requests",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1531,16 +903,17 @@
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum by (user, agent) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__range]))",
+                        "format": "table",
                         "instant": true,
-                        "range": false,
                         "legendFormat": "",
-                        "format": "table"
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "requests",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
               "transformations": [
                 {
                   "kind": "Transformation",
@@ -1560,32 +933,50 @@
                     }
                   }
                 }
-              ]
+              ],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "table",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Requests"
+                  }
+                ]
+              },
               "fieldConfig": {
                 "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
                   "custom": {
                     "align": "auto",
                     "cellOptions": {
                       "type": "auto"
                     },
                     "inspect": false
-                  },
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
                   }
                 },
                 "overrides": [
@@ -1634,24 +1025,6 @@
                     ]
                   }
                 ]
-              },
-              "options": {
-                "cellHeight": "sm",
-                "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                    "sum"
-                  ],
-                  "show": false
-                },
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Requests"
-                  }
-                ]
               }
             }
           }
@@ -1671,8 +1044,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1684,24 +1055,53 @@
                         "editorMode": "code",
                         "expr": "sum by (status) (rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{status}}"
+                        "legendFormat": "{{status}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "reqps",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -1737,37 +1137,92 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Requests / s",
+          "description": "Requests per second on the selected routes, for the selected people. On the kagent controller route one request is one agent turn: klaus-gateway sends a Slack message as one `SendStreamingMessage` stream, the portal its turns the same way.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
+                        "instant": false,
+                        "legendFormat": "",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "colorMode": "none",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "reqps",
                   "decimals": 2,
-                  "mappings": [],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "green",
-                        "value": 0
+                        "value": 0,
+                        "color": "text"
                       }
                     ]
                   },
-                  "unit": "reqps",
-                  "min": 0
+                  "color": {
+                    "mode": "thresholds"
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -1787,8 +1242,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1800,17 +1253,17 @@
                         "editorMode": "code",
                         "expr": "histogram_quantile(0.50, sum by (le) (rate(agentgateway_request_duration_seconds_bucket{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval])))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "p50"
+                        "legendFormat": "p50",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "B",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1822,24 +1275,53 @@
                         "editorMode": "code",
                         "expr": "histogram_quantile(0.95, sum by (le) (rate(agentgateway_request_duration_seconds_bucket{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval])))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "p95"
+                        "legendFormat": "p95",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "B",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "s",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -1875,37 +1357,9 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "decimals": 2,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "s",
-                  "min": 0
+                  }
                 },
                 "overrides": []
-              },
-              "options": {
-                "legend": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "desc"
-                }
               }
             }
           }
@@ -1925,8 +1379,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -1938,42 +1390,24 @@
                         "editorMode": "code",
                         "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\"}[$__range]))",
                         "instant": true,
-                        "range": false,
-                        "legendFormat": ""
+                        "legendFormat": "",
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
               "options": {
                 "colorMode": "none",
                 "graphMode": "none",
@@ -1990,6 +1424,25 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2009,8 +1462,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -2022,42 +1473,24 @@
                         "editorMode": "code",
                         "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", gen_ai_token_type=\"input\"}[$__range]))",
                         "instant": true,
-                        "range": false,
-                        "legendFormat": ""
+                        "legendFormat": "",
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
               "options": {
                 "colorMode": "none",
                 "graphMode": "none",
@@ -2074,6 +1507,25 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2093,8 +1545,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -2106,42 +1556,24 @@
                         "editorMode": "code",
                         "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", gen_ai_token_type=\"input_cache_read\"}[$__range]))",
                         "instant": true,
-                        "range": false,
-                        "legendFormat": ""
+                        "legendFormat": "",
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
               "options": {
                 "colorMode": "none",
                 "graphMode": "none",
@@ -2158,6 +1590,25 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2177,8 +1628,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -2190,42 +1639,24 @@
                         "editorMode": "code",
                         "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", gen_ai_token_type=\"input_cache_write\"}[$__range]))",
                         "instant": true,
-                        "range": false,
-                        "legendFormat": ""
+                        "legendFormat": "",
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
               "options": {
                 "colorMode": "none",
                 "graphMode": "none",
@@ -2242,6 +1673,25 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2261,8 +1711,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -2274,42 +1722,24 @@
                         "editorMode": "code",
                         "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", gen_ai_token_type=\"output\"}[$__range]))",
                         "instant": true,
-                        "range": false,
-                        "legendFormat": ""
+                        "legendFormat": "",
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
               "options": {
                 "colorMode": "none",
                 "graphMode": "none",
@@ -2326,6 +1756,25 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2345,8 +1794,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -2358,42 +1805,24 @@
                         "editorMode": "code",
                         "expr": "sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", gen_ai_token_type=\"input_cache_read\"}[$__range])) / clamp_min(sum(increase(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\", gen_ai_token_type=~\"input|input_cache_read|input_cache_write\"}[$__range])), 1)",
                         "instant": true,
-                        "range": false,
-                        "legendFormat": ""
+                        "legendFormat": "",
+                        "range": false
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "decimals": 1,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "text",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "percentunit"
-                },
-                "overrides": []
-              },
               "options": {
                 "colorMode": "none",
                 "graphMode": "none",
@@ -2410,6 +1839,25 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percentunit",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2429,8 +1877,6 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
-                    "refId": "A",
                     "query": {
                       "kind": "DataQuery",
                       "group": "prometheus",
@@ -2442,24 +1888,53 @@
                         "editorMode": "code",
                         "expr": "sum by (gen_ai_token_type) (rate(agentgateway_gen_ai_client_token_usage_sum{gateway=~\"$gateway\"}[$__rate_interval]))",
                         "instant": false,
-                        "range": true,
-                        "legendFormat": "{{gen_ai_token_type}}"
+                        "legendFormat": "{{gen_ai_token_type}}",
+                        "range": true
                       }
-                    }
+                    },
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
+            "version": "",
             "spec": {
-              "pluginVersion": "12.1.0",
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "unit": "short",
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -2495,23 +1970,472 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "People active",
+          "description": "People with at least one request on the selected routes in the selected time range. Every request there carries the caller's verified identity claim (the `user` label); `unknown` is not a person and is not counted.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "count(count by (user) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\", user!=\"unknown\"}[$__range]) > 0))",
+                        "instant": true,
+                        "legendFormat": "",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
                   "decimals": 0,
-                  "mappings": [],
-                  "min": 0,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "green",
-                        "value": 0
+                        "value": 0,
+                        "color": "text"
                       }
                     ]
                   },
-                  "unit": "short"
+                  "color": {
+                    "mode": "thresholds"
+                  }
                 },
                 "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Callers",
+          "description": "Distinct calling workloads (the `agent` label: the ServiceAccount the request came from). `klaus-gateway` is the Slack, CLI and web channels; the portal's backend is the Dev Portal.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "count(count by (agent) (increase(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__range]) > 0))",
+                        "instant": true,
+                        "legendFormat": "",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
               },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Errors / s",
+          "description": "Requests the gateway answered with a non-2xx status: a refused or expired token (401), a token without the identity claim (403), an unreachable controller (5xx). A gRPC error inside a turn rides a 200 and is not counted here.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\", status!~\"2..\"}[$__rate_interval]))",
+                        "instant": false,
+                        "legendFormat": "",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "colorMode": "none",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "reqps",
+                  "decimals": 2,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "p95 request duration",
+          "description": "On the kagent controller route the request is the whole streamed turn, so this is how long the slowest turns take end to end.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "histogram_quantile(0.95, sum by (le) (rate(agentgateway_request_duration_seconds_bucket{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval])))",
+                        "instant": false,
+                        "legendFormat": "",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "colorMode": "none",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s",
+                  "decimals": 2,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Unattributed share",
+          "description": "Share of the requests on the selected routes that carry no person (`user=\"unknown\"`): a route whose JWT policy is `Optional`, or a call that reached the route without a bearer. Should stay at zero on the controller route, whose policy is `Strict`.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=\"unknown\"}[$__rate_interval])) / sum(rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\"}[$__rate_interval]))",
+                        "instant": false,
+                        "legendFormat": "",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "colorMode": "none",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percentunit",
+                  "decimals": 2,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "text"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "id": 9,
+          "title": "Requests per second by person",
+          "description": "Stacked; on the controller route this is turns per second per person.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by (user) (rate(agentgateway_requests_total{gateway=~\"$gateway\", route=~\"$route\", agent=~\"$caller\", user=~\"$user\"}[$__rate_interval]))",
+                        "instant": false,
+                        "legendFormat": "{{user}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
               "options": {
                 "legend": {
                   "calcs": [
@@ -2526,6 +2450,59 @@
                   "mode": "multi",
                   "sort": "desc"
                 }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "reqps",
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 30,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
               }
             }
           }
@@ -2915,18 +2892,18 @@
     },
     "links": [
       {
-        "asDropdown": true,
+        "title": "Agent Platform",
+        "type": "dashboards",
         "icon": "external link",
-        "includeVars": false,
-        "keepTime": true,
+        "tooltip": "The other Agent Platform boards",
+        "url": "",
         "tags": [
           "topic:agents"
         ],
+        "asDropdown": true,
         "targetBlank": false,
-        "title": "Agent Platform",
-        "tooltip": "The other Agent Platform boards",
-        "type": "dashboards",
-        "url": ""
+        "includeVars": false,
+        "keepTime": true
       }
     ],
     "liveNow": false,
@@ -2937,6 +2914,9 @@
       "topic:agents"
     ],
     "timeSettings": {
+      "timezone": "utc",
+      "from": "now-24h",
+      "to": "now",
       "autoRefresh": "1m",
       "autoRefreshIntervals": [
         "5s",
@@ -2950,11 +2930,8 @@
         "2h",
         "1d"
       ],
-      "fiscalYearStartMonth": 0,
-      "from": "now-24h",
-      "to": "now",
       "hideTimepicker": false,
-      "timezone": "utc"
+      "fiscalYearStartMonth": 0
     },
     "title": "Usage by person",
     "variables": [
@@ -2962,7 +2939,6 @@
         "kind": "DatasourceVariable",
         "spec": {
           "name": "datasource",
-          "label": "Data source",
           "pluginId": "prometheus",
           "refresh": "onDashboardLoad",
           "regex": "",
@@ -2973,6 +2949,7 @@
           "options": [],
           "multi": false,
           "includeAll": false,
+          "label": "Data source",
           "hide": "dontHide",
           "skipUrlSync": false,
           "allowCustomValue": true
@@ -2982,11 +2959,17 @@
         "kind": "QueryVariable",
         "spec": {
           "name": "gateway",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
           "label": "Gateway",
-          "description": "The agentgateway data-plane Gateway.",
           "hide": "dontHide",
           "refresh": "onTimeRangeChanged",
           "skipUrlSync": false,
+          "description": "The agentgateway data-plane Gateway.",
           "query": {
             "kind": "DataQuery",
             "group": "prometheus",
@@ -3007,24 +2990,24 @@
           "options": [],
           "multi": true,
           "includeAll": true,
-          "allowCustomValue": true,
-          "current": {
-            "text": "All",
-            "value": [
-              "$__all"
-            ]
-          }
+          "allowCustomValue": true
         }
       },
       {
         "kind": "QueryVariable",
         "spec": {
           "name": "route",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
           "label": "Route",
-          "description": "Routes of the Gateway whose requests carry a person: the ones behind a JWT policy. `<namespace>/<name>`; `…/kagent-controller` is the agents' API.",
           "hide": "dontHide",
           "refresh": "onTimeRangeChanged",
           "skipUrlSync": false,
+          "description": "Routes of the Gateway whose requests carry a person: the ones behind a JWT policy. `<namespace>/<name>`; `…/kagent-controller` is the agents' API.",
           "query": {
             "kind": "DataQuery",
             "group": "prometheus",
@@ -3045,24 +3028,24 @@
           "options": [],
           "multi": true,
           "includeAll": true,
-          "allowCustomValue": true,
-          "current": {
-            "text": "All",
-            "value": [
-              "$__all"
-            ]
-          }
+          "allowCustomValue": true
         }
       },
       {
         "kind": "QueryVariable",
         "spec": {
           "name": "caller",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
           "label": "Caller",
-          "description": "The calling workload (its ServiceAccount): `klaus-gateway` is Slack, the portal's backend is the Dev Portal.",
           "hide": "dontHide",
           "refresh": "onTimeRangeChanged",
           "skipUrlSync": false,
+          "description": "The calling workload (its ServiceAccount): `klaus-gateway` is Slack, the portal's backend is the Dev Portal.",
           "query": {
             "kind": "DataQuery",
             "group": "prometheus",
@@ -3083,24 +3066,24 @@
           "options": [],
           "multi": true,
           "includeAll": true,
-          "allowCustomValue": true,
-          "current": {
-            "text": "All",
-            "value": [
-              "$__all"
-            ]
-          }
+          "allowCustomValue": true
         }
       },
       {
         "kind": "QueryVariable",
         "spec": {
           "name": "user",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
           "label": "Person",
-          "description": "The identity claim of the verified bearer (`email`), as the kagent controller acts on it. `All` is every person seen, never `unknown`.",
           "hide": "dontHide",
           "refresh": "onTimeRangeChanged",
           "skipUrlSync": false,
+          "description": "The identity claim of the verified bearer (`email`), as the kagent controller acts on it. `All` is every person seen, never `unknown`.",
           "query": {
             "kind": "DataQuery",
             "group": "prometheus",
@@ -3121,13 +3104,7 @@
           "options": [],
           "multi": true,
           "includeAll": true,
-          "allowCustomValue": true,
-          "current": {
-            "text": "All",
-            "value": [
-              "$__all"
-            ]
-          }
+          "allowCustomValue": true
         }
       }
     ]
