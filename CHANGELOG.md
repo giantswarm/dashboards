@@ -17,8 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   label the Agent Platform's data plane adds from the verified JWT
   (agent-platform-connectivity `gateway.userMetricLabel`, giantswarm/agent-platform#528);
   empty until an installation runs that connectivity chart with the kagent
-  controller route on. Tokens and cost per person are not on it: the model
-  calls carry no person.
+  controller route on. Tokens per person are not possible — the model calls
+  carry no person — so a last row shows the models' tokens for every person
+  together: total, cached input, uncached input, cache writes and output over
+  the selected time range, and tokens per second by type.
 
 ## [4.30.0] - 2026-09-09
 
