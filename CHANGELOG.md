@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Removed
+
+- Remove the `agent_platform` sub-chart and its `LLM usage` dashboard. The Agent Platform's boards ship from the `agent-platform` chart itself (giantswarm/agent-platform#620), into `Shared Org / Agent Platform`, so the folder customers reach carries them and this chart no longer loads a copy into the `Giant Swarm` organization.
+
 ## [4.30.0] - 2026-09-09
 
 ### Added
