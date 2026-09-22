@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add `Giant Swarm / Agent Platform / Usage by person`: requests, errors,
+  duration and response bytes per person on the routes agentgateway verifies a
+  bearer on, plus the models' tokens for everyone together.
+
 ## [4.30.0] - 2026-09-09
 
 ### Added
