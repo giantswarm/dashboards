@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [4.31.0] - 2026-09-23
 
+## [4.31.0] - 2026-09-23
+
 ### Removed
 
 - Remove the `agent_platform` sub-chart and its `LLM usage` dashboard.
@@ -1829,6 +1831,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add public grafana dashboards.
 
 [Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.31.0...HEAD
+[4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.31.0
 [4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.30.0...v4.31.0
 [4.30.0]: https://github.com/giantswarm/dashboards/compare/v4.29.1...v4.30.0
 [4.29.1]: https://github.com/giantswarm/dashboards/compare/v4.29.0...v4.29.1
