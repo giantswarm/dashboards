@@ -9,8 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [4.31.0] - 2026-09-23
 
-## [4.31.0] - 2026-09-23
-
 ### Removed
 
 - Remove the `agent_platform` sub-chart and its `LLM usage` dashboard.
