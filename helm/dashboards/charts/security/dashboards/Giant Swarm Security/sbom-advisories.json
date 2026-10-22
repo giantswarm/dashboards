@@ -1,0 +1,129 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Images whose SBOM fails an advisory evaluated by sbom-advisory-operator (e.g. the eMudhra CA compromise, October 2026), grouped by the fix. Images are shown as kubescape SBOM slugs (registry/repo:tag with / : @ _ replaced by -, plus a short digest suffix). Workloads are not mapped yet.",
+  "editable": false,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [],
+  "preload": false,
+  "refresh": "5m",
+  "schemaVersion": 41,
+  "tags": [
+    "owner:team-shield",
+    "component:sbom-advisory-operator",
+    "topic:security",
+    "topic:management-cluster",
+    "topic:workload-cluster"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "Mimir (all tenants)",
+          "value": "gs-mimir"
+        },
+        "label": "Data source",
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "text": "emudhra-2026-10",
+          "value": "emudhra-2026-10"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(policy_report_result{source=\"sbom-advisory-operator\", policy!=\"sbom-advisory-operator\"}, policy)",
+        "description": "Advisory evaluated by sbom-advisory-operator. The built-in one is the eMudhra intermediate CA compromise (October 2026).",
+        "includeAll": false,
+        "label": "Advisory",
+        "multi": false,
+        "name": "advisory",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(policy_report_result{source=\"sbom-advisory-operator\", policy!=\"sbom-advisory-operator\"}, policy)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(policy_report_result{source=\"sbom-advisory-operator\"}, cluster_id)",
+        "includeAll": true,
+        "label": "Cluster",
+        "multi": true,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(policy_report_result{source=\"sbom-advisory-operator\"}, cluster_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "description": "Substring of the kubescape SBOM slug. Write giantswarm-app-operator, not giantswarm/app-operator: slashes, colons and underscores are dashes in the slug.",
+        "label": "Image contains",
+        "name": "image",
+        "options": [],
+        "query": "",
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "SBOM Advisories",
+  "uid": "sbom-advisories",
+  "version": 1
+}
