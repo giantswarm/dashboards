@@ -136,14 +136,15 @@
         }
       ],
       "title": "Images fixed",
-      "type": "stat"
+      "type": "stat",
+      "description": "Images with at least one passing rule and no failing or unknown rule for the selected advisory."
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Images with a rule whose verdict is unknown: no fixed version is known for that distro or runtime series, or the version could not be parsed.",
+      "description": "Images with a rule whose verdict is unknown (no fixed version is known for that distro or runtime series, or the version could not be parsed) and no failing rule. Images that also fail a rule count as affected; every unknown verdict is listed under \"Needs a look\".",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -305,7 +306,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "count(count by (cluster_id) (up{job=\"kyverno-policy-reporter\", cluster_id=~\"$cluster\"} == 1))",
+          "expr": "count(count by (cluster_id) (up{instance=\"policy-reporter\", cluster_id=~\"$cluster\"} == 1))",
           "instant": true,
           "range": false,
           "legendFormat": "__auto",
@@ -605,9 +606,6 @@
             "fields": {},
             "sort": [
               {
-                "field": "Cluster"
-              },
-              {
                 "field": "Image"
               }
             ]
@@ -812,9 +810,6 @@
             "fields": {},
             "sort": [
               {
-                "field": "Cluster"
-              },
-              {
                 "field": "Image"
               }
             ]
@@ -987,9 +982,6 @@
             "fields": {},
             "sort": [
               {
-                "field": "Cluster"
-              },
-              {
                 "field": "Image"
               }
             ]
@@ -1079,7 +1071,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum by (cluster_id, name, rule) (policy_report_result{source=\"sbom-advisory-operator\", kind=\"SBOMSyft\", cluster_id=~\"$cluster\", name=~\".*$image.*\", policy=\"$advisory\", status=\"pass\"})",
+              "expr": "sum by (cluster_id, name, rule) (policy_report_result{source=\"sbom-advisory-operator\", kind=\"SBOMSyft\", cluster_id=~\"$cluster\", name=~\".*$image.*\", policy=\"$advisory\", status=\"pass\"}) unless on (cluster_id, name) sum by (cluster_id, name) (policy_report_result{source=\"sbom-advisory-operator\", kind=\"SBOMSyft\", cluster_id=~\"$cluster\", name=~\".*$image.*\", policy=\"$advisory\", status=~\"fail|warn\"})",
               "instant": true,
               "range": false,
               "legendFormat": "__auto",
@@ -1125,16 +1117,14 @@
                 "fields": {},
                 "sort": [
                   {
-                    "field": "Cluster"
-                  },
-                  {
                     "field": "Image"
                   }
                 ]
               }
             }
           ],
-          "type": "table"
+          "type": "table",
+          "description": "Images with at least one passing rule and no failing or unknown rule for the selected advisory. Same set as the \"Images fixed\" tile."
         }
       ],
       "title": "Already fixed",
