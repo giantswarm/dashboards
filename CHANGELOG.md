@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add `SBOM Advisories` dashboard to the Giant Swarm Security organization: images still failing an sbom-advisory-operator advisory (eMudhra CA compromise by default), grouped by the fix.
+
 ## [4.32.0] - 2026-10-13
 
 ### Added
