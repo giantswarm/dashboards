@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.33.0] - 2026-10-22
+
 ### Added
 
 - Add `SBOM Advisories` dashboard to the Giant Swarm Security organization: images still failing an sbom-advisory-operator advisory (eMudhra CA compromise by default), grouped by the fix.
@@ -1839,7 +1841,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.32.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.33.0...HEAD
+[4.33.0]: https://github.com/giantswarm/dashboards/compare/v4.32.0...v4.33.0
 [4.32.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.32.0
 [4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.31.0
 [4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.30.0...v4.31.0
