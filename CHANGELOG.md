@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- `Kubernetes`, `Mixin / StatefulSet` and `AWS cluster info` dashboards: CPU and network rate panels now use `$__rate_interval` instead of a fixed 3m window, so they stay smooth whatever the cAdvisor scrape interval.
+
 ### Removed
 
 - Remove Kong dashboards.
