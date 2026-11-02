@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix Grafana Cloud dashboard backup scripts failing with newer curl versions.
+
 ### Removed
 
 - Remove Kong dashboards.
