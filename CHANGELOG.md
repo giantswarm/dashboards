@@ -13,6 +13,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   duration and response bytes per person on the routes agentgateway verifies a
   bearer on, plus the models' tokens for everyone together.
 
+### Fixed
+
+- Fix Grafana Cloud dashboard backup scripts failing with newer curl versions.
+
+### Removed
+
+- Remove Kong dashboards.
+
+## [4.33.0] - 2026-10-22
+
+### Added
+
+- Add `SBOM Advisories` dashboard to the Giant Swarm Security organization: images still failing an sbom-advisory-operator advisory (eMudhra CA compromise by default), grouped by the fix.
+
+## [4.32.0] - 2026-10-13
+
+### Added
+
+- Add `AWS NLB Metrics` dashboard to the Envoy Gateway folder.
+- Add `Log export` dashboard to the Observability folder.
+
+## [4.31.0] - 2026-09-23
+
+### Removed
+
+- Remove the `agent_platform` sub-chart and its `LLM usage` dashboard.
+
 ## [4.30.0] - 2026-09-09
 
 ### Added
@@ -1828,7 +1855,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.30.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.33.0...HEAD
+[4.33.0]: https://github.com/giantswarm/dashboards/compare/v4.32.0...v4.33.0
+[4.32.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.32.0
+[4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.31.0
+[4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.30.0...v4.31.0
 [4.30.0]: https://github.com/giantswarm/dashboards/compare/v4.29.1...v4.30.0
 [4.29.1]: https://github.com/giantswarm/dashboards/compare/v4.29.0...v4.29.1
 [4.29.0]: https://github.com/giantswarm/dashboards/compare/v4.28.0...v4.29.0
