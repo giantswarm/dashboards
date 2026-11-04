@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.34.0] - 2026-11-04
+
 ### Changed
 
 - `Kubernetes` and `AWS cluster info` dashboards: CPU and network rate panels now use `$__rate_interval` instead of a fixed 3m window, so they stay smooth whatever the cAdvisor scrape interval.
@@ -1854,7 +1856,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.33.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.34.0...HEAD
+[4.34.0]: https://github.com/giantswarm/dashboards/compare/v4.33.0...v4.34.0
 [4.33.0]: https://github.com/giantswarm/dashboards/compare/v4.32.0...v4.33.0
 [4.32.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.32.0
 [4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.31.0
