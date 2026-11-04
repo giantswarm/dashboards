@@ -71,17 +71,9 @@ This repository is the source of truth for the dashboards under `helm/dashboards
 - Grafana blocks saving the dashboard from the UI.
 - Each dashboard has a `giantswarm/dashboards` link button pointing to this repository.
 
-To change a dashboard:
+To keep unsaved edits, click **Copy JSON to clipboard** in the blocked Save dialog. The copied JSON uses the v2 dashboard schema. It can contain server metadata such as `resourceVersion`, `generation`, `creationTimestamp`, `uid`, `labels` and `annotations`. Commit it as is: the operator drops this metadata when it provisions the dashboard.
 
-1. Edit the dashboard in Grafana.
-2. Click **Save**. The Save dialog says the dashboard is provisioned from another source.
-3. Click **Copy JSON to clipboard** (or **Save JSON to file**).
-4. Paste the JSON into the dashboard's file in this repository, replacing its whole content.
-5. Open a pull request.
-
-The copied JSON uses the v2 dashboard schema. It can contain server metadata such as `resourceVersion`, `generation`, `creationTimestamp`, `uid`, `labels` and `annotations`. Commit it as is: the operator drops this metadata when it provisions the dashboard.
-
-The change reaches Grafana once a new release of this repository rolls out (see [Release of these dashboards](#release-of-these-dashboards)).
+See [Exporting dashboards from Grafana](CONTRIBUTING.md#exporting-dashboards-from-grafana) for the export procedure.
 
 ### Exporting dashboards from Grafana
 
