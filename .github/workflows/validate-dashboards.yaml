@@ -7,7 +7,7 @@ on:
     paths:
       - 'helm/dashboards/**/*.json'
       - 'scripts/validate-dashboards.sh'
-      - 'github/workflows/validate-dashboards.yaml'
+      - '.github/workflows/validate-dashboards.yaml'
 
 permissions: {}
 
@@ -22,10 +22,20 @@ jobs:
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+    - name: Mint a token to read giantswarm/github
+      id: app-token
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      with:
+        client-id: ${{ secrets.HERALD_CLIENT_ID }}
+        private-key: ${{ secrets.HERALD_APP_KEY }}
+        owner: giantswarm
+        repositories: github
+        permission-contents: read
+
     - name: Validate owner tags and uids
       id: validate
       env:
-        GH_TOKEN: ${{ secrets.ISSUE_AUTOMATION }}
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         # Capture the script's exit code without aborting (so we can still build
         # the PR-comment fragment), then re-exit with it at the end to fail the job.
