@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [4.34.0] - 2026-11-04
+
 ### Fixed
 
 - `validate-dashboards` reads the team list from giantswarm/github with a read-only token of the heraldbot App instead of architectbot's expired `ISSUE_AUTOMATION` token, and runs on changes to its own workflow file (the path filter missed the leading dot).
@@ -1850,7 +1852,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add public grafana dashboards.
 
-[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.33.0...HEAD
+[Unreleased]: https://github.com/giantswarm/dashboards/compare/v4.34.0...HEAD
+[4.34.0]: https://github.com/giantswarm/dashboards/compare/v4.33.0...v4.34.0
 [4.33.0]: https://github.com/giantswarm/dashboards/compare/v4.32.0...v4.33.0
 [4.32.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.32.0
 [4.31.0]: https://github.com/giantswarm/dashboards/compare/v4.31.0...v4.31.0
