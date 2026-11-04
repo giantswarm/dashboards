@@ -63,6 +63,26 @@ To that end, we advise the following tags:
 - `component:component_name`: Name of the component this dashboard is about
 - `topic:topic`: The topic that this dashboard is about (observability, security, networking, kubernetes, ...)
 
+### Changing a dashboard
+
+This repository is the source of truth for the dashboards under `helm/dashboards`. The observability-operator provisions them into Grafana as **managed** dashboards:
+
+- Grafana shows a **Managed by: Kubectl** badge on each dashboard.
+- Grafana blocks saving the dashboard from the UI.
+- Each dashboard has a `giantswarm/dashboards` link button pointing to this repository.
+
+To change a dashboard:
+
+1. Edit the dashboard in Grafana.
+2. Click **Save**. The Save dialog says the dashboard is provisioned from another source.
+3. Click **Copy JSON to clipboard** (or **Save JSON to file**).
+4. Paste the JSON into the dashboard's file in this repository, replacing its whole content.
+5. Open a pull request.
+
+The copied JSON uses the v2 dashboard schema. It can contain server metadata such as `resourceVersion`, `generation`, `creationTimestamp`, `uid`, `labels` and `annotations`. Commit it as is: the operator drops this metadata when it provisions the dashboard.
+
+The change reaches Grafana once a new release of this repository rolls out (see [Release of these dashboards](#release-of-these-dashboards)).
+
 ### Exporting dashboards from Grafana
 
 Dashboards must be committed as a **complete** v1 or v2 Grafana dashboard. See [Exporting dashboards from Grafana](CONTRIBUTING.md#exporting-dashboards-from-grafana) in `CONTRIBUTING.md` for the correct export procedure (use **Export as code**, preferably as a **V2 Resource**) and the common pitfall to avoid (the unimportable "JSON Model" view).

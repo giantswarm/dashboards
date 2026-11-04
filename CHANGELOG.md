@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add README instructions to change a dashboard that Grafana shows as managed by the observability-operator.
+
 ### Fixed
 
 - `validate-dashboards` reads the team list from giantswarm/github with a read-only token of the heraldbot App instead of architectbot's expired `ISSUE_AUTOMATION` token, and runs on changes to its own workflow file (the path filter missed the leading dot).
