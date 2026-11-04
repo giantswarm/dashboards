@@ -71,13 +71,9 @@ This repository is the source of truth for the dashboards under `helm/dashboards
 - Grafana blocks saving the dashboard from the UI.
 - Each dashboard has a `giantswarm/dashboards` link button pointing to this repository.
 
-To keep unsaved edits, click **Copy JSON to clipboard** in the blocked Save dialog. The copied JSON uses the v2 dashboard schema. It can contain server metadata such as `resourceVersion`, `generation`, `creationTimestamp`, `uid`, `labels` and `annotations`. Commit it as is: the operator drops this metadata when it provisions the dashboard.
-
-See [Exporting dashboards from Grafana](CONTRIBUTING.md#exporting-dashboards-from-grafana) for the export procedure.
-
-### Exporting dashboards from Grafana
-
 Dashboards must be committed as a **complete** v1 or v2 Grafana dashboard. See [Exporting dashboards from Grafana](CONTRIBUTING.md#exporting-dashboards-from-grafana) in `CONTRIBUTING.md` for the correct export procedure (use **Export as code**, preferably as a **V2 Resource**) and the common pitfall to avoid (the unimportable "JSON Model" view).
+
+To keep unsaved edits on a managed dashboard, click **Copy JSON to clipboard** in the blocked Save dialog. The copied JSON uses the v2 dashboard schema. It can contain server metadata such as `resourceVersion`, `generation`, `creationTimestamp`, `uid`, `labels` and `annotations`. Commit it as is: the operator drops this metadata when it provisions the dashboard.
 
 ### Linting
 
