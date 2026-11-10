@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add a `<capability>.enabled` value per dashboard capability (`observability`, `kubernetes`, `cloud`, `security`, `networking`, `app_platform`). All default to `true`, so the rendered dashboards don't change.
+- Add a helm-unittest suite for the capability values.
+
 ## [4.34.0] - 2026-11-04
 
 ### Changed
