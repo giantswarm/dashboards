@@ -20,6 +20,8 @@ Dashboards are organized into **capability-based sub-charts**, each containing d
 - [`helm/dashboards/charts/networking`](helm/dashboards/charts/networking) - Networking (Team Cabbage)
 - [`helm/dashboards/charts/app_platform`](helm/dashboards/charts/app_platform) - App Platform (Team Honeybadger)
 
+Each sub-chart renders only while `<capability>.enabled` is `true`, the default. Set `cloud.enabled: false` to drop the Cloud dashboards.
+
 #### Dashboard directory structure
 
 Within each sub-chart, dashboards are placed in a directory hierarchy that determines their Grafana **organization** and **folder**:
