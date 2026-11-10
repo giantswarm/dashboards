@@ -22,6 +22,8 @@ Dashboards are organized into **capability-based sub-charts**, each containing d
 
 Each sub-chart renders only while `<capability>.enabled` is `true`, the default. Set `cloud.enabled: false` to drop the Cloud dashboards.
 
+`global.organizations.include` lists the organization directories to render. Empty renders all of them, the default. `global.organizationMap` maps an organization directory to the Grafana organization its dashboards target, for example `{"Shared Org": "Main Org."}`. The map changes only the organization annotation.
+
 #### Dashboard directory structure
 
 Within each sub-chart, dashboards are placed in a directory hierarchy that determines their Grafana **organization** and **folder**:
