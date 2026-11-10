@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add `<capability>.enabled` values to toggle each dashboard capability.
+
 ### Fixed
 
 - Loki dashboards: fix distributed mode compatibility.
