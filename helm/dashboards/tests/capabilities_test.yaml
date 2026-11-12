@@ -1,0 +1,259 @@
+# Each capability subchart renders one ConfigMapList. Its dashboards carry the
+# capability's team annotation, so a team missing from the render means the
+# capability rendered nothing. A disabled subchart drops out of the glob.
+suite: dashboard capabilities
+templates:
+  - charts/*/templates/configmap-dashboards.yaml
+release:
+  name: dashboards
+  namespace: monitoring
+tests:
+
+  - it: renders the dashboards of every capability by default
+    asserts:
+      - isKind:
+          of: ConfigMapList
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - equal:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: atlas
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isKind:
+          of: ConfigMapList
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - equal:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: tenet
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isKind:
+          of: ConfigMapList
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - equal:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: phoenix
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isKind:
+          of: ConfigMapList
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - equal:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: shield
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isKind:
+          of: ConfigMapList
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - equal:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: cabbage
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - isKind:
+          of: ConfigMapList
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+      - equal:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: honeybadger
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+
+  - it: renders no observability dashboards with observability.enabled false
+    set:
+      observability.enabled: false
+    asserts:
+      - notEqual:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: atlas
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+
+  - it: renders no kubernetes dashboards with kubernetes.enabled false
+    set:
+      kubernetes.enabled: false
+    asserts:
+      - notEqual:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: tenet
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+
+  - it: renders no cloud dashboards with cloud.enabled false
+    set:
+      cloud.enabled: false
+    asserts:
+      - notEqual:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: phoenix
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+
+  - it: renders no security dashboards with security.enabled false
+    set:
+      security.enabled: false
+    asserts:
+      - notEqual:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: shield
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+
+  - it: renders no networking dashboards with networking.enabled false
+    set:
+      networking.enabled: false
+    asserts:
+      - notEqual:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: cabbage
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/app_platform/templates/configmap-dashboards.yaml
+
+  - it: renders no app_platform dashboards with app_platform.enabled false
+    set:
+      app_platform.enabled: false
+    asserts:
+      - notEqual:
+          path: items[0].metadata.annotations["application.giantswarm.io/team"]
+          value: honeybadger
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/observability/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/kubernetes/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/cloud/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/security/templates/configmap-dashboards.yaml
+      - isNotNullOrEmpty:
+          path: items
+        documentIndex: 0
+        template: charts/networking/templates/configmap-dashboards.yaml
