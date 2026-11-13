@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Add README instructions to change a dashboard that Grafana shows as managed by the observability-operator.
 - Add `<capability>.enabled` values to toggle each dashboard capability.
 
 ### Fixed
