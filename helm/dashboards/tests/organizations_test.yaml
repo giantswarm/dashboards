@@ -1,0 +1,102 @@
+# The default render matches the render without these values: tests/capabilities_test.yaml
+# covers every capability, and the annotation tests below cover the defaults.
+suite: organization allow-list and map
+templates:
+  - charts/*/templates/configmap-dashboards.yaml
+release:
+  name: dashboards
+  namespace: monitoring
+tests:
+
+  - it: keeps every organization by default
+    template: charts/security/templates/configmap-dashboards.yaml
+    documentIndex: 0
+    asserts:
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm")]
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm Security")]
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Shared Org")]
+
+  - it: renders only the organizations in the allow-list
+    set:
+      global.organizations.include: ["Shared Org"]
+    documentIndex: 0
+    asserts:
+      - notExists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm")]
+      - notExists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm Security")]
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Shared Org")]
+
+  - it: applies the allow-list to provider-specific dashboards
+    set:
+      global.provider.kind: capa
+      global.organizations.include: ["Giant Swarm"]
+    template: charts/cloud/templates/configmap-dashboards.yaml
+    documentIndex: 1
+    asserts:
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm")]
+      - notExists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Shared Org")]
+
+  - it: renders no provider-specific list when the allow-list drops all of its dashboards
+    set:
+      global.provider.kind: teleport
+      global.organizations.include: ["Shared Org"]
+    template: charts/security/templates/configmap-dashboards.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+
+  - it: rewrites the organization annotation with the map
+    set:
+      global.organizationMap:
+        Shared Org: Main Org.
+    template: charts/kubernetes/templates/configmap-dashboards.yaml
+    documentIndex: 0
+    asserts:
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Main Org.")]
+      - notExists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Shared Org")]
+
+  - it: keeps the name of an organization absent from the map
+    set:
+      global.organizationMap:
+        Shared Org: Main Org.
+    template: charts/kubernetes/templates/configmap-dashboards.yaml
+    documentIndex: 0
+    asserts:
+      - exists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm")]
+
+  - it: matches directory names in the allow-list before the map applies
+    set:
+      global.organizations.include: ["Shared Org"]
+      global.organizationMap:
+        Shared Org: Main Org.
+    template: charts/kubernetes/templates/configmap-dashboards.yaml
+    documentIndex: 0
+    asserts:
+      - isNotNullOrEmpty:
+          path: items
+      - notExists:
+          path: items[?(@.metadata.annotations["observability.giantswarm.io/organization"] == "Giant Swarm")]
+
+  - it: keeps the ConfigMap name of a mapped organization
+    set:
+      global.organizationMap:
+        Shared Org: Main Org.
+    template: charts/kubernetes/templates/configmap-dashboards.yaml
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: items[?(@.metadata.name == "grafana-2ad000f5-apiserver-dashboard")].metadata.annotations["observability.giantswarm.io/organization"]
+          value: Main Org.
+      - equal:
+          path: items[?(@.metadata.name == "grafana-2ad000f5-apiserver-dashboard")].metadata.annotations["observability.giantswarm.io/folder"]
+          value: Kubernetes/Mixin
