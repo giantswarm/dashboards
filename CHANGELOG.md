@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Add `<capability>.enabled` values to toggle each dashboard capability.
+- Add `global.organizations.include` and `global.organizationMap` values to filter and rename dashboard organizations.
 
 ### Fixed
 
