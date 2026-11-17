@@ -25,6 +25,12 @@ When you add a new dashboard or update an existing one, the JSON committed here 
 
 This produces a complete file: with **V2 Resource** the full v2 resource (the `apiVersion` / `kind` / `metadata` / `spec` envelope), or with **Classic** the full v1 model.
 
+### Managed dashboards: exporting unsaved edits
+
+The observability operator provisions the dashboards from this repository as managed dashboards, so Grafana blocks **Save** on them. To keep unsaved edits, click **Save** anyway: the Save dialog offers **Copy JSON to clipboard**.
+
+The copied JSON is a complete v2 resource. It may contain server metadata (`resourceVersion`, `generation`, `creationTimestamp`, `uid`, `labels`, `annotations`). Commit it as is: the operator drops that metadata when it provisions the dashboard.
+
 ### The common mistake: the "JSON Model" view
 
 Do **not** copy the JSON shown under **Dashboard settings → JSON Model**. For a v2 dashboard that view shows only the dashboard *spec* with the `apiVersion` / `kind` / `metadata` / `spec` envelope stripped off — you get top-level `elements` and `layout` but no `apiVersion` and no `schemaVersion`. Grafana cannot import that form, so it is neither a valid v1 nor a valid v2 dashboard and it must not be committed.
