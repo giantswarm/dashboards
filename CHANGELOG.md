@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Update actions/create-github-app-token to v3.4.0 (giantswarm/dashboards#1051)
+
 ## [4.35.0] - 2026-11-17
 
 ### Added
